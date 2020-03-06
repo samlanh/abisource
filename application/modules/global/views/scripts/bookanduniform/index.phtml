@@ -1,0 +1,38 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	echo $this->headTitle($tr->translate("PRODUCT"));
+?>	
+<?php $frm =  $this->frm_search;?>
+
+<form id="list" name="list" action="<?php echo $this->url(array('module'=>'global','controller'=>'bookanduniform','action'=>'index')); ?>" dojoType="dijit.form.Form" method="post">
+	<table style="width:70%">
+		<tr> 
+			<td>
+				<input dojoType="dijit.form.TextBox" class="fullside" id="txtsearch" name="txtsearch" placeholder="Search....." value="<?php echo $this->adv_search['txtsearch']; ?>" type="text">
+			</td>
+			<td>
+				<select type="text" class="fullside" dojoType="dijit.form.FilteringSelect" name="product_type" id="product_type" >
+					<option value="">ប្រភេទផលិតផល</option>
+					<option value="1" <?php if($this->adv_search['product_type']==1){echo "selected='selected'";}?>>ឯកសណ្ឋាន</option>
+					<option value="2" <?php if($this->adv_search['product_type']==2){echo "selected='selected'";}?>>សៀវភៅពុម្ភ</option>
+					<option value="3" <?php if($this->adv_search['product_type']==3){echo "selected='selected'";}?>>សម្ភារះសិក្សា</option>
+					<option value="4" <?php if($this->adv_search['product_type']==4){echo "selected='selected'";}?>>ផ្សេងៗ</option>
+				</select>
+			</td>
+			<td>
+				<select dojoType="dijit.form.FilteringSelect" id="status" name="status" class="fullside" >
+					<option value="-1" <?php if($this->adv_search['status']==-1){echo "selected='selected'";}?>>ស្ថានការណ៍</option>
+					<option value="1" <?php if($this->adv_search['status']==1){echo "selected='selected'";}?>>ប្រើប្រាស់</option>
+					<option value="0" <?php if($this->adv_search['status']==0){echo "selected='selected'";}?>>មិនប្រើប្រាស់</option>
+				</select>
+			</td>
+			<td>
+				<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
+			</td>
+		</tr>
+	</table>
+</form>
+<?php echo $this->list;?>
+
+
+

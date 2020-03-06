@@ -1,0 +1,98 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	echo $this->headTitle($tr->translate("REPORT_FIXED_ASSET_DETAIL")); 
+ 
+   //print_r($this->row);
+?>	
+<div style="width: 28cm;margin: 0 auto;">
+ 
+</div>
+<div style="border: 1px dotted #000;background: #fff;width: 27cm;margin: 0 auto;min-height: 27cm;padding: 0.5cm;">
+	<div id="divPrint">
+		<div id="exportExcel" >
+			<table  style="background:#fff; margin: 0 auto;width: 100%;">
+				<tr>
+					<td width="28%" align="left">
+						<img style="width:50%;" src="<?php echo $this->baseUrl().'/images/logo.png'?>"><br />
+					</td>
+					<td align="center" width="44%">
+						<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate("REPORT_FIXED_ASSET_DETAIL")?></strong><br />
+						<span style="font-weight: bold;font-size: 14px;"><?php echo $tr->translate("START_DATE");?> &nbsp;<?php echo date("d-M-Y",strtotime($this->row[0]['start_date']));?>   &nbsp;<?php echo $tr->translate("END_DATE");?>&nbsp;<?php echo date("d-M-Y",strtotime($this->row[0]['end_date']));?></span><br />
+						 
+					</td>
+					<td width="28%" align="right">
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3">
+						<table cellpadding="5"​ style="margin:0 auto;border: 1px solid #000;width:100%; border-collapse: collapse;white-space: nowrap;font-family: Khmer OS Battambang,Times New Roman;"  border="1" >
+							<tr style="font-size:13px; height: 20px;border: 1px solid #000;background-color: #ccc;line-height: 30px;font-weight: bold;" align="center" >
+								<td style="border: 1px solid #000;"><?php echo $tr->translate("N_O");?></td>
+								<td style="border: 1px solid #000;"><?php echo $tr->translate("BRANCH_NAME");?></td>
+								<td style="border: 1px solid #000;"><?php echo $tr->translate("ASSET_CODE");?></td>
+								<td style="border: 1px solid #000;"><?php echo $tr->translate("FIXED_ASSETNAME");?></td>
+								<td style="border: 1px solid #000;"><?php echo $tr->translate("PAID_PER_MONTH");?></td>
+								 
+								<td style="border: 1px solid #000;"><?php echo $tr->translate("PAID_DATE");?></td>
+								<td style="border: 1px solid #000;"><?php echo $tr->translate("STATUS");?></td>
+								<td style="border: 1px solid #000;"><?php echo $tr->translate("USER");?></td>
+							</tr>
+						 <?php $total=0;$i=1;if(!empty($this->row)) foreach ($this->row As $key=>$rs){
+						        if($rs['is_closing']==0){
+						        	$is_close=$tr->translate("PAID");
+						        }else{
+						        	$is_close=$tr->translate("NOT_PAID");
+						        }
+						 	?>
+							<tr style="font-size:12px; height: 20px;border: 1px solid #000;" align="center" >
+								<td style="border: 1px solid #000;"><?php echo $key+$i;?></td>
+								<td style="border: 1px solid #000;"> <?php echo $rs['branch_name'];?> </td>
+								<td style="border: 1px solid #000;">&nbsp;<?php echo $rs['asset_code'];?>  </td>
+								<td style="border: 1px solid #000;">&nbsp;<?php echo $rs['fixed_assetname'];?>  </td>
+								<td style="border: 1px solid #000;"><?php if($rs['total_after']!=0)echo '$&nbsp;'.number_format($rs['total_after'],2);?>  </td>
+								<td style="border: 1px solid #000;">&nbsp;<?php echo date("d-M-Y",strtotime( $rs['for_month']));?>  </td>
+								<td style="border: 1px solid #000;<?php if($rs['is_closing']==0){echo "color:red";}?>">&nbsp;<?php echo $is_close;?>  </td>
+								<td style="border: 1px solid #000;">&nbsp;<?php echo $rs['USER'];?>  </td>
+							</tr>
+						 <?php $total=$total+$rs['total_after'];
+						 }?>
+						 <tr align="center" >
+							<td colspan="4" align="right" style="border-bottom:1px solid #fff;border-right:1px solid #fff;border-left:1px solid #fff;"><?php echo $tr->translate("TOTAL");?>:</td>
+							<td style="border-bottom:1px solid #fff;border-right:1px solid #fff;border-left:1px solid #fff;font-family:'Times New Roman';font-weight: 900;">$&nbsp;<?php echo number_format($total,2)?></td>
+							<td colspan="3" style="border-bottom:1px solid #fff;border-right:1px solid #fff;border-left:1px solid #fff;"> </td>
+						</tr>
+						</table>	
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3">&nbsp;</td>
+				</tr>
+				<tr >
+					<td colspan="3" align="center" >
+						<table width="100%" style="font-family: Khmer OS Battambang,Times New Roman;">
+							<tr>
+								<td align="center" width="25%">
+									<span style="font-size: 14px;"><?php echo $tr->translate("APPROVED_BY"); ?></span>
+								</td>
+								<td align="center" width="25%">
+									<span style="font-size: 14px;"><?php echo $tr->translate("VERIFIED_BY"); ?></span>
+								</td>
+								<td align="center" width="25%">
+									<span style="font-size: 14px;"><?php echo $tr->translate("CHECKED_BY"); ?></span>
+								</td>
+								<td align="center"  width="25%">
+									<span style="font-size: 14px;text-align: right;"><?php echo $tr->translate("PREPARED_BY"); ?></span>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+		</div> 				
+	</div>		
+</div>
+
+
+
+
+

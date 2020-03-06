@@ -1,0 +1,16 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	echo $this->headTitle($tr->translate("RENTAL_INFORMATION"));
+	$frm =  $this->form_search;
+?>	
+<form action="" dojoType="dijit.form.Form" method="post">
+	<table style="width:60%">
+		<tr> 
+			<td> <?php echo $frm->getElement("title");?></td>
+			<td> <?php echo $frm->getElement("branch");?></td>
+			<td> <?php echo $frm->getElement("status_search");?></td>
+			<td> <button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
+		</tr>
+    </table>
+</form>
+<?php echo $this->list;?>

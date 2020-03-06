@@ -1,0 +1,153 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$this->headTitle($tr->translate("RPR_PRODUCT_FEE")); 
+	echo $this->headTitle(''); 
+	$frm=$this->form_search;
+	
+	//echo 'test';exit();
+	
+?>	
+<div style="width: 28cm;margin: 0 auto;">
+<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-material-fee')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+	<table style="width: 80%">	
+		<tr>
+			<td>	
+				<input dojoType="dijit.form.TextBox" class="fullside" id="txtsearch" name="txtsearch" placeholder="Search....." value="<?php echo $this->search['txtsearch'];?>" type="text">
+			</td>
+			<td>
+				<select type="text" class="fullside" dojoType="dijit.form.FilteringSelect" name="product_type" id="product_type" >
+					<option value="">ប្រភេទផលិតផល</option>
+					<option value="1" <?php if($this->search['product_type']==1){echo "selected='selected'";}?>>ឯកសណ្ឋាន</option>
+					<option value="2" <?php if($this->search['product_type']==2){echo "selected='selected'";}?>>សៀវភៅពុម្ភ</option>
+					<option value="3" <?php if($this->search['product_type']==3){echo "selected='selected'";}?>>សម្ភារះសិក្សា</option>
+					<option value="4" <?php if($this->search['product_type']==4){echo "selected='selected'";}?>>ផ្សេងៗ</option>
+				</select>
+			</td>
+			<td>
+				<select dojoType="dijit.form.FilteringSelect" id="status" name="status" class="fullside" >
+					<option value="-1" <?php if($this->search['status']==-1){echo "selected='selected'";}?>>ស្ថានការណ៍</option>
+					<option value="1" <?php if($this->search['status']==1){echo "selected='selected'";}?>>ប្រើប្រាស់</option>
+					<option value="0" <?php if($this->search['status']==0){echo "selected='selected'";}?>>មិនប្រើប្រាស់</option>
+				</select>
+			</td>
+			<td>
+				<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
+			</td>
+		</tr>
+	</table>	
+</form>		
+</div>
+
+<style>
+	.hover:hover{background: #ddd;}
+	.row_control {
+	    display: table-row !important;
+	}
+</style>
+
+<div style="border: 1px dotted #000;background: #fff;width: 27cm;margin: 0 auto;min-height: 27cm;padding: 0.5cm;">
+	<form  action="<?php echo $this->url(array('module'=>'allreport','controller'=>'submitdailyincome','action'=>'other-income')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+	
+	<script type="dojo/method" event="onSubmit">   
+
+		if(this.validate()) {
+			shift = dijit.byId('shift_id').get('value');
+			if(shift>0){
+				return true;
+			}else{
+				alert("Please select shift !!!");
+				dijit.byId('shift').focus();
+    			return false;
+			}
+    	}else {
+    		return false;
+    	}
+	</script>
+	
+	<div id="divPrint">
+		<div id="exportExcel">
+		
+			<table  style="background:#fff; margin: 0 auto; ;white-space: nowrap;width: 100%">
+				<tr >
+					<td width="22%" align="center">
+						<img style="width: 50%;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>">
+					</td>
+					
+					
+					<td width="56%" align="center">
+						<strong style="padding-left: 30px;font-weight:bold;font-family: Arial Black;color:#000; font-size: 18px;font-family:'Khmer MEF2';"><?php echo $tr->translate('RPR_PRODUCT_FEE')?></strong><br />
+					</td>
+					<td align="center" width="22%" style="white-space: nowrap;">
+						&nbsp;
+					</td>
+				</tr>
+				
+				<style>
+					table tr th{background-color: #ccc;}	
+					.style_tr{
+						font-size:12px;
+						height: 20px;
+						border: 1px solid #000;"
+					}									
+				</style>
+				
+				<tr>
+					<td colspan="3" id="exportExcel">
+						<table cellpadding="5"​ style="font-family:'Khmer OS Battambang';margin:0 auto;border: 1px solid #000;width:100%; border-collapse: collapse;"  border="1" >
+							<tr style="font-size:13px; height: 20px;border: 1px solid #000;background-color: #ccc;line-height: 30px;font-weight: bold;" align="center" >
+								<td style="border: 1px solid #000;"><?php echo $tr->translate('N_O')?></td>
+								<td style="border: 1px solid #000;"><?php echo $tr->translate('NAME')?></td>
+								<td style="border: 1px solid #000;"><?php echo $tr->translate('PRODUCT_TYPE')?></td>
+								<td style="border: 1px solid #000;"><?php echo $tr->translate('PRICE')?></td>
+								<td style="border: 1px solid #000;"><?php echo $tr->translate('NOTE')?></td>
+								<td style="border: 1px solid #000;"><?php echo $tr->translate('STATUS')?></td>
+							</tr>
+						<?php $i=0;$total_income_dollar=0;$total_income_riel=0;if(!empty($this->row)){ foreach ($this->row AS $row) { $i++;?>
+							<tr class="hover style_tr"  align="center" >
+								<td style="border: 1px solid #000;"><?php echo $i;?></td>
+								<td style="border: 1px solid #000;text-align: left;">&nbsp;&nbsp;&nbsp;<?php echo $row['name'];?></td>
+								<td style="border: 1px solid #000;"><?php echo $row['product_type'];?></td>
+								<td style="border: 1px solid #000;"><?php echo "$ ".$row['price'];?></td>
+								<td style="border: 1px solid #000;"><?php echo $row['note'];?></td>	
+								<td style="border: 1px solid #000;"><?php echo $row['status'];?></td>	
+							</tr>
+						<?php 
+							}}
+						?>	
+							
+						</table>	
+						
+				<tr>
+					<td colspan="3">&nbsp;</td>
+				</tr>
+				<tr>
+					<td colspan="3">&nbsp;</td>
+				</tr>
+				<tr >
+					<td colspan="3" width="100%">
+						<table width="100%" style="font-family:'Khmer OS Battambang';">
+							<tr>
+								<td align="center" width="25%">
+									<span style="font-size: 14px;"><?php echo $tr->translate("APPROVED_BY"); ?></span>
+								</td>
+								<td align="center" width="25%">
+									<span style="font-size: 14px;"><?php echo $tr->translate("VERIFIED_BY"); ?></span>
+								</td>
+								<td align="center" width="25%">
+									<span style="font-size: 14px;"><?php echo $tr->translate("CHECKED_BY"); ?></span>
+								</td>
+								<td align="center"  width="25%">
+									<span style="font-size: 14px;"><?php echo $tr->translate("PREPARED_BY"); ?></span>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>	
+	</form>	
+</div>
+
+
+

@@ -1,0 +1,448 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$frm =  $this->form_search;
+	//print_r($this->rs);
+?>	
+<title><?php echo $tr->translate('Income Statement');?></title>
+	<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-income-statement')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+		<table width="100%">
+		    <tr>
+		    	<td> <?php echo $frm->getElement("start_date");?></td>
+	   	  	    <td> <?php echo $frm->getElement("end_date");?></td>
+		    	<td><?php echo $frm->getElement('branch');?></td>
+		    	<td><?php echo $frm->getElement('user');?></td>
+		    	<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button> </td>
+		    </tr>
+		</table>
+	</form>	
+	
+	<style>
+		.hover:hover{background: #ddd;}
+	</style>
+	
+	<div style="border: 1px dotted #000;background: #fff; margin: 0 auto;min-height: 27cm; padding: 0.5cm;">
+		<div id="divPrint">
+		<style>
+			table{ page-break-inside:auto }
+		    tr{ page-break-inside:avoid; page-break-after:auto }
+			#header {
+				display: table-header-group;
+				page-break-inside:avoid; page-break-after:auto;
+			}
+			.bor{
+				border-right: 1px solid #000;	
+				border-bottom: 1px solid #000;
+				font-size:13px;
+			}
+			.bor_r{
+				border-right: 1px solid #000;	
+				font-size:13px;
+			}
+			.padd{
+				padding: 3px;	
+			}
+			#row{ font-size:12px; height: 30px;border: 1px solid #000;font-family:'Khmer OS Battambang';  }
+		</style>
+		
+		<table style="background:#fff;width:90%; margin: 0 auto;width: 100%;font-family:'Khmer OS Battambang';">
+			<tr>
+				<td width="22%" align="center">
+					<img style="width:50%;" src="<?php echo $this->baseUrl().'/images/logo.png'?>">
+				</td>
+				<td align="center" width="56%" style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';​">
+					<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 20px;font-family:'Khmer MEF2';​"><?php echo $tr->translate("Income Statement"); ?></strong><br />
+					<strong  style="font-weight:bold;color:#000; font-size: 13px;font-family:'Khmer OS Muol';​">From <?php echo date('d-m-Y',strtotime($this->search['start_date']));?> To <?php echo date('d-m-Y',strtotime($this->search['end_date']));?></strong><br />
+				</td>
+				<td width="22%" align="center" style="white-space: nowrap;">
+					<?php if(!empty($this->branch)){echo "Branch : ".$this->branch."</br>";}?>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="3" id="exportExcel">
+					<table cellpadding="8"​ style="margin:0 auto;width:100%; border-collapse: collapse;white-space: nowrap;font-family:'Khmer OS Battambang';"  border="1" >
+						<thead>
+							<tr style="font-size:12px;height: 20px;line-height: 30px;font-weight: bold;background: rgba(67, 200, 207, 0.82);" align="center" ><!-- rgba(101, 177, 70, 0.82) -->
+								<td class="bor"><?php echo $tr->translate("លេខគណនី"); ?>/Account Code</td>
+								<td class="bor" ><?php echo $tr->translate("ឈ្មោះគណនីជាខ្មែរ"); ?>/Account in Khmer</td>
+								<td class="bor"  ><?php echo $tr->translate("ឈ្មោះគណនីជាអង់គ្គេស"); ?>/Account in English</td>
+								<td class="bor"><?php echo $tr->translate("សរុប"); ?>/Amount</td>
+						    </tr>
+						</thead>
+	 					<tr id="row" align="center" >
+							<td> </td>
+							<td  class="padd"  style="background:#4682B4;">ចំណូល</td>
+							<td  class="padd"  style="background:#81BEF7;">Revenue</td>
+							<td colspan="1"> </td>
+	 					</tr>
+	 					
+	 					<?php 	$i=0;
+	 							$category_id=0;
+	 							$account_no=""; 
+	 							$title="";
+	 							$total_by_category=0; 
+	 							$total_kft=0;
+	 							$grand_total = 0;
+	 							$grand_total_in_dollar = 0;
+	 							$grand_total_in_riel = 0;
+	 							$total_tuition_fee=0;
+	 					?>
+	 					
+	 					
+	 		<?php ////////////////////////////////// eft //////////////////////////////////////////////////////////////////// ?>			
+	 					<?php 	$total_eft=0;
+	 						if(!empty($this->eft)){ foreach($this->eft as $eft){
+		 						$total_eft = $total_eft + $eft['grand_total_paid_amount'];
+	 							$account_no = $eft['account_no'];
+	 							$title = $eft['category'];
+	 							
+	 						}} 
+	 					?>
+	 					
+	 					<?php if($total_eft>0){?>
+		 					<tr>
+								<td align="center">&nbsp;&nbsp;<?php echo "001";?></td>
+								<td>&nbsp;&nbsp;<?php echo "អង់គ្លេសពេញម៉ោង";?></td>
+								<td>&nbsp;&nbsp;<?php echo "English Fulltime";?></td>
+								<td align="center">&nbsp;&nbsp;<?php if(!empty($total_eft)){echo "$ ".number_format($total_eft,2);}?></td>
+							</tr>
+	 					<?php }?>
+	 								
+	 					
+	 		<?php ////////////////////////////////// ept //////////////////////////////////////////////////////////////////// ?>			
+	 					<?php 	$total_ept=0;
+	 						if(!empty($this->ept)){ foreach($this->ept as $ept){
+		 						$total_ept = $total_ept + $ept['grand_total_paid_amount'];
+	 							$account_no = $ept['account_no'];
+	 							$title = $ept['category'];
+	 							
+	 						}} 
+	 					?>
+	 					
+	 					<?php if($total_ept>0){?>
+		 					<tr>
+								<td align="center">&nbsp;&nbsp;<?php echo "002";?></td>
+								<td>&nbsp;&nbsp;<?php echo "អង់គ្លេសក្រៅម៉ោង";?></td>
+								<td>&nbsp;&nbsp;<?php echo "English Parttime";?></td>
+								<td align="center">&nbsp;&nbsp;<?php if(!empty($total_ept)){echo "$ ".number_format($total_ept,2);}?></td>
+							</tr>
+	 					<?php }?>
+	 								
+	 					
+	 		<?php /////////////////////////////// kft /////////////////////////////////////////////////////////////////////// ?>					
+	 					<?php 		
+	 						if(!empty($this->kft)){ foreach($this->kft as $kft){
+		 						$total_kft = $total_kft + $kft['grand_total_paid_amount'];
+	 							$account_no = $kft['account_no'];
+	 							$title = $kft['category'];
+	 						}} 
+	 					?>
+	 					
+	 					<?php if($total_kft>0){?>
+		 					<tr>
+								<td align="center">&nbsp;&nbsp;<?php echo "003";?></td>
+								<td>&nbsp;&nbsp;<?php echo "ខ្មែរពេញម៉ោង";?></td>
+								<td>&nbsp;&nbsp;<?php echo "Khmer Fulltime";?></td>
+								<td align="center">&nbsp;&nbsp;<?php if(!empty($total_kft)){echo "$ ".number_format($total_kft,2);}?></td>
+							</tr>
+	 					<?php }?>
+	 					
+	 		
+	 					
+	 		
+	 					
+	 		<?php ////////////////////////////////// total tuition fee /////////////////////////////////////////////////////////////////////////// ?>			
+	 					
+	 					<?php /*
+	 						$total_tuition_fee = $total_kft + $total_eft + $total_ept;
+	 						$total_tuition_fee_in_dollar = $total_khmerft_in_dolar + $total_englishft_in_dolar + $total_englishpt_in_dolar;
+	 						$total_tuition_fee_in_riel = $total_khmerft_in_riel + $total_englishft_in_riel + $total_englishpt_in_riel;
+	 						
+	 						if($total_tuition_fee>0){?>
+		 					<tr>
+								<td align="center">&nbsp;&nbsp;<?php echo $account_no;?></td>
+								<td>&nbsp;&nbsp;<?php echo $title;?></td>
+								<td>&nbsp;&nbsp;<?php echo $title;?></td>
+								<td align="center">&nbsp;&nbsp;<?php if(!empty($total_tuition_fee)){echo "$ ".number_format($total_tuition_fee,2);}?></td>
+								<td align="center">&nbsp;&nbsp;<?php if(!empty($total_tuition_fee_in_dollar)){echo "$ ".number_format($total_tuition_fee_in_dollar,2);}?></td>
+								<td align="center">&nbsp;&nbsp;<?php if(!empty($total_tuition_fee_in_riel)){echo number_format($total_tuition_fee_in_riel,2)." ៛";}?></td>
+							</tr>
+	 					<?php }*/?>		
+	 						
+	 		
+	 		<?php ////////////////////////////////// product //////////////////////////////////////////////////////////////////// ?>			
+	 					<?php 	$total_product=0;
+	 						if(!empty($this->product)){ foreach($this->product as $product){
+		 						$total_product = $total_product + $product['subtotal'];
+	 							$account_no = $product['account_no'];
+	 							$title = $product['category'];
+	 						}} 
+	 					?>
+	 					
+	 					<?php 
+	 						if($total_product>0){?>
+		 					<tr>
+								<td align="center">&nbsp;&nbsp;<?php echo "004";?></td>
+								<td>&nbsp;&nbsp;<?php echo "សម្ភារៈសិក្សា";?></td>
+								<td>&nbsp;&nbsp;<?php echo "Material";?></td>
+								<td align="center">&nbsp;&nbsp;<?php if(!empty($total_product)){echo "$ ".number_format($total_product,2);}?></td>
+							</tr>
+	 					<?php }?>				
+	 						
+	 						
+	 						
+	 		<?php ////////////////////////////////// transport //////////////////////////////////////////////////////////////////// ?>			
+	 					<?php 	$total_car=0;
+	 						if(!empty($this->car)){ foreach($this->car as $car){
+		 						$total_car = $total_car + $car['grand_total_paid_amount'];
+	 							$account_no = $car['account_no'];
+	 							$title = $car['category'];
+	 						}} 
+	 					?>
+	 					
+	 					<?php 
+	 						if($total_car>0){?>
+		 					<tr>
+								<td align="center">&nbsp;&nbsp;<?php echo "005";?></td>
+								<td>&nbsp;&nbsp;<?php echo "សេវាដឹកជញ្ជួន";?></td>
+								<td>&nbsp;&nbsp;<?php echo "Transportation";?></td>
+								<td align="center">&nbsp;&nbsp;<?php if(!empty($total_car)){echo "$ ".number_format($total_car,2);}?></td>
+							</tr>
+	 					<?php }?>
+	 					
+	 		<?php ////////////////////////////////// food //////////////////////////////////////////////////////////////////// ?>			
+	 					<?php 	$total_food=0;
+	 						if(!empty($this->food)){ foreach($this->food as $food){
+		 						$total_food = $total_food + $food['grand_total_paid_amount'];
+	 							$account_no = $food['account_no'];
+	 							$title = $food['category'];
+	 						}} 
+	 					?>
+	 					
+	 					<?php 
+	 						if($total_food>0){?>
+		 					<tr>
+								<td align="center">&nbsp;&nbsp;<?php echo "006";?></td>
+								<td>&nbsp;&nbsp;<?php echo "សេវាកម្មអាហារ និង ស្នាក់នៅ";?></td>
+								<td>&nbsp;&nbsp;<?php echo "Food & Stay Service";?></td>
+								<td align="center">&nbsp;&nbsp;<?php if(!empty($total_food)){echo "$ ".number_format($total_food,2);}?></td>
+							</tr>
+	 					<?php }?>	
+	 					
+	 		<?php ////////////////////////////////// parking //////////////////////////////////////////////////////////////////// ?>	
+	 					
+	 					<?php 
+	 						$total_parking_payment = 0;$i=0;
+	 					?>
+	 					<?php if(!empty($this->parking_payment)){foreach ($this->parking_payment as $parking){
+		 							if($parking['status']==1){
+		 								$total_parking_payment = $total_parking_payment + $parking['total_fee'];
+		 							}
+	 						  }}
+	 					?>
+	 					
+	 					
+	 					<?php if($total_parking_payment>0){?>
+		 					<tr>
+								<td align="center">&nbsp;&nbsp;<?php echo "007";?></td>
+								<td>&nbsp;&nbsp;ចំណូលពីផ្ញើរកង់ ម៉ូតូ និង លក់អេតចាយ</td>
+								<td>&nbsp;&nbsp;Parking and Sell broken thing Fee</td>
+								<td align="center">&nbsp;&nbsp;<?php echo "$ ".number_format($total_parking_payment,2);?></td>
+							</tr>
+						<?php }?>
+						
+												
+	 		
+	 		<?php ////////////////////////////////// rental //////////////////////////////////////////////////////////////////// ?>	
+	 					
+	 					<?php 
+	 						$total_rent_payment = 0;$i=0;
+	 					?>
+	 					<?php if(!empty($this->rent_payment)){foreach ($this->rent_payment as $rent){
+		 						  	if($rent['status']==1){	  	
+		 								$total_rent_payment = $total_rent_payment + $rent['paid'];
+		 						  	}
+	 						  }}
+	 					?>
+	 					
+	 					<?php if($total_rent_payment>0){?>
+		 					<tr>
+								<td align="center">&nbsp;&nbsp;<?php echo "008";?></td>
+								<td>&nbsp;&nbsp;ចំណូលពីការជួលតូប</td>
+								<td>&nbsp;&nbsp;Canteen Rental Fee</td>
+								<td align="center">&nbsp;&nbsp;<?php echo "$ ".number_format($total_rent_payment,2);?></td>
+							</tr>
+						<?php }?>
+			
+						
+			
+						
+						
+						
+				<?php ////////////////////////////////// student test //////////////////////////////////////////////////////////////////// ?>	
+						
+						<?php 
+	 						$total_student_test_payment = 0;
+	 					?>
+	 					<?php if(!empty($this->student_test)){foreach ($this->student_test as $student_test){
+		 							if($student_test['status']==1){
+		 								$total_student_test_payment = $total_student_test_payment + $student_test['total_price'];
+		 							}
+	 						  }}
+	 					?>
+	 					
+	 					
+	 					<?php if($total_student_test_payment>0){?>
+		 					<tr>
+								<td align="center">&nbsp;&nbsp;<?php echo "009";?></td>
+								<td>&nbsp;&nbsp;ចំណូលពីសិស្សធ្វើតេស្ត</td>
+								<td>&nbsp;&nbsp;Student Test Fee</td>
+								<td align="center">&nbsp;&nbsp;<?php echo "$ ".number_format($total_student_test_payment,2);?></td>
+							</tr>
+						<?php }?>		
+						
+				<?php ////////////////////////////////// other income //////////////////////////////////////////////////////////////////// ?>	
+						
+						<?php 
+	 						$total_other_income_dollar = 0;
+	 						$total_other_income_riel = 0;
+	 						$other_income_riel = 0;
+	 						$i=0;
+	 					?>
+	 					<?php if(!empty($this->other_income)){foreach ($this->other_income as $income){
+		 							if($income['status']==1){	
+		 								if($income['curr_type']==1){
+		 									$total_other_income_dollar = $total_other_income_dollar + $income['total_amount'];
+		 								}else{
+		 									$total_other_income_riel = $total_other_income_riel + $income['total_amount'];
+		 								}
+		 							}
+	 						  }}
+	 						  
+	 					?>
+	 					<?php if($total_other_income_riel>0 || $total_other_income_dollar>0){?>
+		 					<tr>
+								<td align="center">&nbsp;&nbsp;<?php echo "010";?></td>
+								<td>&nbsp;&nbsp;ចំណូលផ្សេងៗ</td>
+								<td>&nbsp;&nbsp;Other Income</td>
+								<td align="center">&nbsp;&nbsp;<?php echo " $ ".number_format($total_other_income_dollar,2);?></td>
+							</tr>
+						<?php }?>	
+						
+						
+						
+				<?php ////////////////////////////////// other expense //////////////////////////////////////////////////////////////////// ?>	
+						
+						<?php 
+	 						$total_expense = 0;
+	 						$i=0;
+	 					?>
+	 					<?php if(!empty($this->expense)){foreach ($this->expense as $expense){
+		 							if($expense['status']==1){	
+	 									$total_expense = $total_expense + $expense['total_amount'];
+		 							}
+	 						  }}
+	 						  
+	 					?>
+	 					<?php if($total_expense>0){?>
+		 					<tr>
+								<td align="center">&nbsp;&nbsp;<?php echo "011";?></td>
+								<td>&nbsp;&nbsp;ចំណាយ</td>
+								<td>&nbsp;&nbsp;Expense</td>
+								<td align="center">&nbsp;&nbsp;<?php echo " $ ".number_format($total_expense,2);?></td>
+							</tr>
+						<?php }?>			
+						
+						
+		<?php ////////////////////////////////////////////// grand total ////////////////////////////////////////////////////////////////////////////////////////?>				
+						
+						<?php 
+							$grand_total = $total_kft + $total_eft + $total_ept + $total_car + $total_food + $total_product + $total_rent_payment + $total_parking_payment + $total_other_income_dollar + $total_student_test_payment - $total_expense;
+						?>
+						<tr style="font-size: 20px;font-weight: bold;background: #dadada;">
+	 						<td align="center" colspan="3">Grand Total</td>
+	 						<td align="center">&nbsp;&nbsp;<?php echo "$ ".number_format($grand_total,2);?></td>
+	 					</tr>
+						
+					</table>	
+					
+					
+					<table width="100%">
+						<tr><td colspan="3">&nbsp;</td></tr>
+						<tr >
+							<td align="center" width="25%">
+								<span style="font-size: 14px;"><?php echo $tr->translate("បានឃើញនិង ឯកភាព"); ?></span><br/>
+								<span style="font-weight:bold;color:#000; font-size: 14px;font-family:'Khmer OS Muol';​">លោកអគ្គនាយក</span>
+							</td>
+							<td  width="20%">
+								&nbsp;
+							</td>
+							<td align="center"  width="30%">
+								<span style="font-size: 14px;text-align: right;"><?php echo $tr->translate("VERIFIED_BY"); ?></span><br/>
+								<span style="font-size: 14px;text-align: right;"><?php echo $tr->translate("ប្រធានគណនេយ្យ"); ?></span>
+							</td>
+							<td align="center"  width="25%">
+								<span style="font-size: 14px;text-align: right;">ភ្នំពេញ, ថ្ងៃទី…..ខែ…..ឆ្នាំ……..</span><br/>
+								<span style="font-size: 14px;text-align: right;"><?php echo $tr->translate("គណនេយ្យករ"); ?></span>
+							</td>
+						</tr>
+					</table>
+					</td>
+				</tr>
+			</table>
+		</div>		
+	</div>
+		
+<script type="text/javascript">
+	dojo.ready(function(){
+		document.getElementById('hide_amount_usd').style.display="none";
+	});
+	
+	function calculateRemainReil(){
+		total_amount = '<?php echo number_format($grand_total,2);?>';
+		other_income_riel = '<?php echo $other_income_riel;?>';
+		amount_usd = dijit.byId("amount_usd").get('value');
+		exchange_rate = '<?php echo $this->rate?>';
+		total_reil = (total_amount - amount_usd)*exchange_rate;
+		//alert(total_amount - amount_usd).toFixed(2);
+		
+		var total_reil = total_reil.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
+		
+		dojo.byId("lb_amount_usd").innerHTML = "&nbsp;&nbsp;$ " + amount_usd;
+		dojo.byId("lb_amount_reil").innerHTML = "&nbsp;&nbsp;៛ " + total_reil;
+	}
+	 					
+	function doPrint() {
+		document.getElementById('hide_amount_usd').style.display="block";
+		document.getElementById('amount_usd').style.display="none";
+		
+		window.frames["print_frame"].document.body.innerHTML=dojo.byId('divPrint').innerHTML;
+	    window.frames["print_frame"].window.focus();
+	    window.frames["print_frame"].window.print();
+	    //hideDialog();
+	    //alert(1);
+	    document.getElementById('amount_usd').style.display="block";
+	    document.getElementById('hide_amount_usd').style.display="none";
+	}
+	function preview()
+	{ 
+	  var disp_setting="toolbar=no,status=no,resizable=no,location=no,directories=yes,menubar=no,"; 
+	      disp_setting+="scrollbars=no,width=1200, height=700, left=100, top=25"; 
+	  var content_vlue = document.getElementById("divPrint").innerHTML; 
+	  
+	  var docprint=window.open("","",disp_setting); 
+	   docprint.document.open(); 
+	   docprint.document.write('<html><head>'); 
+	   docprint.document.write('</head><div style=" font-size:16px !important; margin:0px; font-family:Verdana;"><style>table th {font-size:14px !important;} table td{font-size:12px !important;}</style><center>');          
+	   docprint.document.write(content_vlue);          
+	   docprint.document.write('</center></div></html>'); 
+	   docprint.document.close(); 
+	   docprint.focus(); 
+	}
+	function exportExcel(){
+		$('#exportExcel').tableExport({type:'excel',escape:'false'});
+	}
+</script>
+
+
+
+

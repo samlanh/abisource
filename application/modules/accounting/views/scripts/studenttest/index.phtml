@@ -1,0 +1,25 @@
+<?php 
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	echo $this->headTitle($tr->translate('STUDENT_TEST'));
+	$frm =  $this->form_search;
+?>
+<script>
+	dojo.require('dijit.form.Button');
+	dojo.require("dijit.form.DateTextBox");
+</script>
+<form id="list" name="list" action="<?php echo $this->url(array('module'=>'accounting','controller'=>'studenttest','action'=>'index')); ?>" dojoType="dijit.form.Form" method="post">
+	<table width="100%">
+	   <tr>  
+	        <td>
+	        	<input type="text" name="txtsearch" id="txtsearch" dojoType="dijit.form.TextBox" value="<?php echo $this->adv_search['txtsearch']; ?>" placeholder="search here" class="fullside" />
+	        </td>
+	        <td> <?php echo $frm->getElement("branch");?></td>
+	   		<td> <?php echo $frm->getElement("start_date");?></td>
+		   	<td> <?php echo $frm->getElement("end_date");?></td>
+	   		<td> <?php echo $frm->getElement("status_search");?></td>
+	   		
+	   		<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
+	   </tr>
+	</table>
+</form>
+ <?php echo $this->list;?>

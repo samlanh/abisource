@@ -1,0 +1,166 @@
+<title>List Report</title>
+
+  <style>
+  ul.link-rpt li a {
+	color: #3A3939;
+    height: 50px;
+  	width:180px;
+    display: block;
+    padding: 10px;
+    background: #D6D6D6;
+  	font-family: 'Kh Battambang','Khmer Battambang' !important;
+  	text-align: center;
+  	word-wrap: break-word;
+  } 
+    ul.link-rpt li {
+	float:left; margin:10px;
+    list-style: none;
+    border:1px solid #B1B0AF;
+    word-wrap: break-word;
+    
+  } 
+  .dijitReset, .dijitInline  ,.dijitButton {
+	width: 200px !important;
+  }
+  </style>
+  <?php 
+  
+  $tr = Application_Form_FrmLanguages::getCurrentlanguage();
+  $rpt_fee=$this->url(array('module'=>'allreport','controller'=>'fee','action'=>'rpt-fee'), null, true);
+  $rpt_servicecharge=$this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-service-charge'), null, true);
+  $rpt_student_balance=$this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rptstudentbalance'), null, true);
+  $rpt_tuitionfee=$this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-fee'), null, true);
+  $rpt_studentpayment=$this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-studentpayment'), null, true);
+  $rpt_studentpaymentdetail=$this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-studentpaymentdetail'), null, true);
+  $rpt_student_nearly_end_service=$this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rptstudentnearlyendservice'), null, true);
+  $rpt_student_drop=$this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-student-drop'), null, true);
+  $rpt_student_payment_late=$this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rptstudentpaymentlate'), null, true);
+  
+  $rpt_car_att = $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-att-car'), null, true);
+  $rpt_lunch_att = $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-att-lunch'), null, true);
+  $rpt_study_att = $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-att-study'), null, true);
+  
+  $rpt_all_student=$this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-all-student'), null, true);
+  $rpt_all_amount_student=$this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-all-amount-student'), null, true);
+  ?>
+  
+  <div style=" width: 100%;height: 410px;">
+    <h3  style="font-family:Times New Roman,'khmer os muol light';font-size:18px;text-align: center;border-bottom:2px solid #F1F1F1;color: #666;padding:2px 0;"><?php echo $tr->translate("របាយការណ៍ចំណូលប្រចំាំថ្ងៃ និងប្រចំាខែ");?></h3><hr>
+  	<ul class="link-rpt">
+  	    <li><a target="_blank" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-daily-income-english-fulltime'), null, true);?>"><?php echo $tr->translate('DIALY_INCOME_ENGLISH_FULLTIME');?></a></li>
+  		<li><a target="_blank" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-daily-income-khmer-fulltime'), null, true);?>"><?php echo $tr->translate('DIALY_INCOME_KHMER_FULLTIME');?></a></li>
+  		<li><a target="_blank" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-daily-income-english-parttime'), null, true);?>"><?php echo $tr->translate('DIALY_INCOME_ENGLISH_PARTTIME');?></a></li>
+  		
+  		<li><a target="_blank" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-daily-income-studenttest'), null, true);?>"><?php echo $tr->translate('Daily Income Test');?></a></li>
+  		<li><a target="_blank" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-daily-income-material'), null, true);?>"><?php echo $tr->translate('DIALY_INCOME_STUDY_MATERIAL');?></a></li>
+  		
+  		
+  		<li><a target="_blank" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-daily-income-transport'), null, true);?>"><?php echo $tr->translate('DIALY_INCOME_TRANSPORTATION');?></a></li>
+  		<li><a target="_blank" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-daily-income-foodandstay'), null, true);?>"><?php echo $tr->translate('DIALY_INCOME_FOOD_AND_STAY');?></a></li>
+  		
+  		<li><a target="_blank" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-parking-payment'), null, true);?>"><?php echo $tr->translate('PARKING_PAYMENT_REPORT');?></a></li>
+  		<li><a target="_blank" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-daily-income-parking-canteen'), null, true);?>"><?php echo $tr->translate('Daily Income Canteen');?></a></li>
+  		
+  		<li><a target="_blank" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-summary-total-income'), null, true);?>"><?php echo $tr->translate('SUMMARY_TOTAL_INCOME');?></a></li>
+  		
+		<li><a target="_blank" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-submit-daily-income'), null, true);?>"><?php echo $tr->translate('របាយការណ៍បិទបញ្ជីលុយខ្មែរ និង ដុល្លា');?></a></li>
+		  		
+		<li><a target="_blank" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-fixed-asset'), null, true);?>"><?php echo $tr->translate('REPORT_FIXED_ASSET');?></a></li>  		
+		  		
+		<li><a target="_blank" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-other-income'), null, true);?>"><?php echo $tr->translate('RPT_OTHER_INCOME');?></a></li>
+  		<li><a target="_blank" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-other-expense'), null, true);?>"><?php echo $tr->translate('RPT_OTHER_EXPENSE');?></a></li>		
+		  		
+  		<li><a target="_blank" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-result-income'), null, true);?>"><?php echo $tr->translate('RESULT_INCOME_RPT');?></a></li>
+  		
+  		<li><a target="_blank" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-income-statement'), null, true);?>"><?php echo $tr->translate('Income Statement (All AR)');?></a></li>
+
+  		<li><a target="_blank" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-daily-income-all'), null, true);?>"><?php echo $tr->translate('របាយការណ៌បានបង់ប្រាក់របស់សិស្ស');?></a></li>
+  	</ul>
+  </div>
+  
+  <div style=" width: 100%;height: 220px;">
+    <h3  style="font-family:Times New Roman,'khmer os muol light';font-size:18px;text-align: center;border-bottom:2px solid #F1F1F1;color: #666;padding:2px 0;"><?php echo $tr->translate("របាយការណ៍តាមដានព័ត៌មានប្រវត្តបង់ប្រាក់របស់សិស្ស");?></h3><hr>
+  	<ul class="link-rpt">
+  	    <li><a target="_blank" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-english-fulltime-payment-list'), null, true);?>"><?php echo $tr->translate('ENGLISH_FULLTIME_PAYMENT_LIST');?></a></li>
+  		<li><a target="_blank" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-kh-fulltime-payment-list'), null, true);?>"><?php echo $tr->translate('KHMER_FULLTIME_PAYMENT_LIST');?></a></li>
+  		<li><a target="_blank" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-english-parttime-payment-list'), null, true);?>"><?php echo $tr->translate('ENGLISH_PARTTIME_PAYMENT_LIST');?></a></li>
+  		<li><a target="_blank" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-transport-payment-list'), null, true);?>"><?php echo $tr->translate('TRANSPORT_PAYMENT_LIST');?></a></li>
+  		<li><a target="_blank" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-stay-and-lunch-payment-list'), null, true);?>"><?php echo $tr->translate('STAY_AND_LUNCH_PAYMENT_LIST');?></a></li>
+  		
+  		<li><a target="_blank" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-rent-and-payment-list'), null, true);?>"><?php echo $tr->translate('RENTAL_PAYMENT_LIST');?></a></li>
+  		
+  		<li><a target="_blank" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-invoice-parttime'), null, true);?>"><?php echo $tr->translate('INVOICE_PARTTIME_REPORT');?></a></li>
+  		<li><a target="_blank" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-invoice-transport'), null, true);?>"><?php echo $tr->translate('INVOICE_TRANSPORT_REPORT');?></a></li>
+  		
+  	</ul>
+  </div>
+  
+  <div style=" width: 100%;margin-top: 15px;height: 120px;">
+    <h3  style="font-family:Times New Roman,'khmer os muol light';font-size:18px;text-align: center;border-bottom:2px solid #F1F1F1;color: #666;padding:2px 0;"><?php echo $tr->translate("របាយការណ៍បូកសរុបទិន្នន័យសិស្សជិតដល់ថ្ងៃបង់ប្រាក់ និង បង់ប្រាក់យឺត");?></h3><hr>
+  	<ul class="link-rpt">
+  	    <li><a target="_blank" href="<?php echo $rpt_student_nearly_end_service;?>"><?php echo $tr->translate('STUDENT_NEARLY_END_SERVICE_REPORT');?></a></li>
+  	    <li><a target="_blank" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-cus-nearly-end-service'), null, true);?>"><?php echo $tr->translate('RENTAL_NEARLY_END_CONTRACT_RPT');?></a></li>
+  		<li><a target="_blank" href="<?php echo $rpt_student_balance;?>"><?php echo $tr->translate('STUDENT_BALANCE_REPORT');?></a></li>
+  		<?php /*?>
+  		<li><a target="_blank" href="<?php echo $rpt_student_payment_late;?>"><?php echo $tr->translate('RPT_STUDENT_PAYMENT_LATE');?></a></li>
+  		<?php */?>
+  	</ul>
+  </div>
+  
+  
+  
+  
+  <div style=" width: 100%;margin-top: 15px;height: 120px;">
+    <h3  style="font-family:Times New Roman,'khmer os muol light';font-size:18px;text-align: center;border-bottom:2px solid #F1F1F1;color: #666;padding:2px 0;"><?php echo $tr->translate("របាយការណ៍បូកសរុបសិស្សដែលមិនទាន់បង់ប្រាក់");?></h3><hr>
+  	<ul class="link-rpt">
+  	    <li><a target="_blank" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-payable-nextmonth-eng-fulltime'), null, true);?>"><?php echo $tr->translate('ENGLISH_FULLTIME_PAYMENT_PAYABLE_REPORT');?></a></li>
+  		<li><a target="_blank" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-payable-nextmonth-kh-fulltime'), null, true);?>"><?php echo $tr->translate('KHMER_FULLTIME_PAYMENT_PAYABLE_REPORT');?></a></li>
+  		<li><a target="_blank" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-payable-nextmonth-eng-parttime'), null, true);?>"><?php echo $tr->translate('ENGLISH_PARTTIME_PAYMENT_PAYABLE_REPORT');?></a></li>
+  		
+  		<li><a target="_blank" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-payable-nextmonth-transport'), null, true);?>"><?php echo $tr->translate('TRANSPORT_PAYMENT_PAYABLE_REPORT');?></a></li>
+  		<li><a target="_blank" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-payable-nextmonth-lunch'), null, true);?>"><?php echo $tr->translate('LUNCH_AND_STAY_PAYMENT_PAYABLE_REPORT');?></a></li>
+  	</ul>
+  </div>
+  
+  
+  <div style=" width: 100%;margin-top: 15px;height: 120px;">
+    <h3  style="font-family:Times New Roman,'khmer os muol light';font-size:18px;text-align: center;border-bottom:2px solid #F1F1F1;color: #666;padding:2px 0;"><?php echo $tr->translate("របាយការណ៍ទិន្នន័យសិស្សឈប់");?></h3><hr>
+  	<ul class="link-rpt">
+  	    <li><a target="_blank" href="<?php echo $rpt_student_drop;?>"><?php echo $tr->translate('RPT_STUDENT_DROP');?></a></li>
+  		<li><a target="_blank" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-student-drop-transport'), null, true);?>"><?php echo $tr->translate('STUDENT_DROP_TRANSPORT_REPORT');?></a></li>
+  		<li><a target="_blank" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-student-drop-lunch-and-stay'), null, true);?>"><?php echo $tr->translate('STUDENT_DROP_LUNCH_AND_STAY_REPORT');?></a></li>
+  		
+  	</ul>
+  </div>
+  
+  
+  <div style=" width: 100%;margin-top: 15px;height: 120px;">
+    <h3  style="font-family:Times New Roman,'khmer os muol light';font-size:18px;text-align: center;border-bottom:2px solid #F1F1F1;color: #666;padding:2px 0;"><?php echo $tr->translate("របាយការណ៍សង្ខេបតម្លៃសិក្សា និងតម្លៃសេវាកម្មផ្សេងៗ");?></h3><hr>
+  	<ul class="link-rpt">
+  		<li><a target="_blank" href="<?php echo $rpt_tuitionfee;?>"><?php echo $tr->translate('RPT_FEE');?></a></li>
+  		<li><a target="_blank" href="<?php echo $rpt_servicecharge;?>"><?php echo $tr->translate('SERVICE_CHARGE_RPT');?></a></li>
+  		<li><a target="_blank" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-material-fee'), null, true);?>"><?php echo $tr->translate('RPR_PRODUCT_FEE');?></a></li>
+  	</ul>
+  </div>
+  
+  <div style=" width: 100%;margin-top: 15px;height: 120px;">
+    <h3  style="font-family:Times New Roman,'khmer os muol light';font-size:18px;text-align: center;border-bottom:2px solid #F1F1F1;color: #666;padding:2px 0;"><?php echo $tr->translate("របាយការណ៍បញ្ជីវត្តមានសិស្ស");?></h3><hr>
+  	<ul class="link-rpt">
+  		<li><a target="_blank" href="<?php echo $rpt_study_att;?>"><?php echo $tr->translate('STUDY_ATT_RPT');?></a></li>
+  		<li><a target="_blank" href="<?php echo $rpt_car_att;?>"><?php echo $tr->translate('CAR_ATT_RPT');?></a></li>
+  		<li><a target="_blank" href="<?php echo $rpt_lunch_att;?>"><?php echo $tr->translate('LUNCH_ATT_RPT');?></a></li>
+  		<li><a target="_blank" href="<?php echo $rpt_all_student;?>"><?php echo $tr->translate('RPT_ALL_STUDENT');?></a></li>
+  	</ul>
+  </div>
+  
+
+  
+  
+  <div style="clear: both;"></div>
+  
+  
+  
+  
+  
+  
+  

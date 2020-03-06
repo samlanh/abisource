@@ -1,0 +1,89 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	echo $this->headTitle($tr->translate('FOOD_SERVICE')); 
+?>
+<form id="add_car" action="<?php echo $this->url(array('module'=>'foundation','controller'=>'food','action'=>'edit')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+	<table cellspacing="20" style="margin: 0 auto; width: 50%">
+		<tr>
+			<td>
+				<fieldset>
+					<legend align="center"><strong><?php echo $tr->translate("FOOD_SERVICE");?></strong></legend>
+					<table cellspacing="20" width="100%" >
+						<tr>
+							<td align="center" valign="top">
+								<table cellspacing="10" width="100%"​>
+									<tr>
+										<td><?php echo $tr->translate("STUDENT_NAME")?></td>
+										<td>
+											<input type="text" name="stu_name" id="stu_name" class="fullside" value="<?php echo $this->row['stu_khname']."-".$this->row['stu_enname'];?>" readonly dojoType="dijit.form.TextBox" />
+										</td>
+									</tr>
+									
+									<tr>
+										<td><?php echo $tr->translate("STUDENT_CODE")?></td>
+										<td>
+											<input type="text" name="stu_code" id="stu_code" class="fullside" value="<?php echo $this->row['stu_code'];?>" dojoType="dijit.form.TextBox" />
+										</td>
+									</tr>
+									
+									<tr>
+										<td><?php echo $tr->translate("SERVICE")?></td>
+										<td>
+											<select name="service" id="service" dojoType="dijit.form.FilteringSelect"  class="fullside" >
+												<option value="-1">No Service</option>
+												<?php if(!empty($this->food_service)){foreach ($this->food_service as $food){?>
+													<option value="<?php echo $food['id']?>" <?php if($food['id']==$this->row['service_id']){echo "selected='selected'";}?>><?php echo $food['name']?></option>
+												<?php }}?>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<td colspan="2" align="center">
+											<input type="submit" value="save_close" name="save_close" label="<?php echo $tr->translate('GO_EDIT');?>" dojoType="dijit.form.Button" 
+											iconClass="dijitEditorIcon dijitEditorIconSave" />
+										</td>
+									</tr>					
+								</table>
+							</td>							
+						</tr>
+					</table>	
+				</fieldset>
+			</td>			
+		</tr>
+		
+	</table>	
+</form>
+<script type="text/javascript">
+var url_student = '<?php echo $this->url(array('module'=>'foundation','controller'=>'studentchangecar','action'=>'get-student')); ?>';
+
+dojo.ready(function(){
+	getStudentInfo();
+});
+function getStudentInfo(){
+			studentid = dijit.byId('studentid').get('value');
+			dojo.xhrPost({
+				url:url_student,
+				content:{
+					'studentid':studentid
+					},
+				handleAs:"json",
+				load: function(data) {
+					dijit.byId("phone").attr("value",data.tel);
+					//dijit.byId("gender").attr("value",data.sex);
+					dijit.byId("service").attr("value",data.service);
+					/*
+					if(data.car_id == undefined){
+						//alert(1);
+						dijit.byId("old_car_id").attr("value",-1);
+					}else{
+						//alert(2);
+						dijit.byId("old_car_id").attr("value",data.car_id);
+					}
+					*/
+				},
+				error: function(err) {
+					alert(err);
+				}
+			});
+}
+</script>

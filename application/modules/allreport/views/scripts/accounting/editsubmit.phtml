@@ -1,0 +1,114 @@
+<title>Delete Record</title>
+
+<?php $type = array(
+			1=>"ខ្មែរពេញម៉ោង",
+			6=>"Englist Fulltime",
+			2=>"Englist Parttime and Other",
+			3=>"Transportation",
+			4=>"Food and Stay",
+			5=>"Product",
+			10=>"សិស្សធ្វើតេស្ត",
+			8=>"ផ្ញើរកង់ ម៉ូតូ និង អេតចាយ",
+			7=>"ជួលតូប",
+			9=>"ចំណូលផ្សេងៗ",
+		);
+?>
+
+<form  id='acc_item' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+	<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style="height:10cm;font-family: 'Khmer OS Battambang' !important;font-size:16px !important;white-space:nowrap;">
+		<tr>
+			<td width="30%">
+			</td>
+			<td width="40%">
+				<table width="100%" style="white-space: nowrap;font-size: 16px;">
+					<tr>
+						<td >បិទសម្រាប់</td>
+						<td >
+							<input type="text" class="fullside" readonly name="type" id="type" dojoType="dijit.form.TextBox" value="<?php echo $type[$this->row['payfor_type']]?>" >
+						</td>
+					</tr>
+					<tr>
+						<td width="40%">ទឹកប្រាក់សរុប($)</td>
+						<td width="60%">
+							<input type="text" readonly class="fullside" name="total_amount" id="total_amount" dojoType="dijit.form.TextBox" value="<?php echo $this->row['total_amount']?>" >
+						</td>
+					</tr>
+					<tr>
+						<td >ទឹកប្រាក់ជាដុល្លា($)</td>
+						<td >
+							<input type="text" class="fullside" name="amount_usd" id="amount_usd" onkeyup="calculateDollarRiel();" dojoType="dijit.form.TextBox" value="<?php echo $this->row['amount_usd']?>" >
+						</td>
+					</tr>
+					<tr>
+						<td >ទឹកប្រាក់ជារៀល(៛)</td>
+						<td >
+							<input type="text" class="fullside" name="amount_riel" id="amount_riel" dojoType="dijit.form.TextBox" value="<?php echo $this->row['amount_riel']?>" >
+						</td>
+					</tr>
+					<tr>
+						<td >សម្រាប់ថ្ងៃ</td>
+						<td >
+							<input type="text" class="fullside" name="for_date" id="for_date" dojoType="dijit.form.DateTextBox" value="<?php echo $this->row['for_date']?>" constraints="{datePattern:'dd/MM/yyyy'}" >
+						</td>
+					</tr>
+					<tr>
+						<td >វេនទី</td>
+						<td >
+							<input type="text" class="fullside" name="shift" id="shift" dojoType="dijit.form.TextBox" value="<?php echo $this->row['shift']?>" >
+						</td>
+					</tr>
+					<tr>
+						<td >អ្នកប្រើប្រាស់</td>
+						<td >
+							<input type="text" readonly class="fullside" name="user_id" id="user_id" dojoType="dijit.form.TextBox" value="<?php echo $this->row['user_name']?>" >
+						</td>
+					</tr>
+				</table>
+			</td>
+			<td width="30%">
+			</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td align="center" style="font-size: ">
+				<input type="checkbox" name="delete" id="delete" dojoType="dijit.form.CheckBox" value="1" /> លុបទិន្នន័យ​
+			</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td align="center">
+				<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconSave"
+					type="submit" >កែប្រែទិន្នន័យ</button>
+			</td>
+			<td></td>
+		</tr>
+	</table>
+</form>
+
+<script>
+	function calculateDollarRiel(){
+		total_amount = Number(dijit.byId("total_amount").get("value"));
+		amount_usd = Number(dijit.byId("amount_usd").get("value"));
+		amount_riel = dijit.byId("amount_riel").get("value");
+
+		exchange_rate = "<?php echo $this->exchange_rate?>";
+
+		if(total_amount<amount_usd){
+			alert("Amount dollar can not bigger than total amount !!! ");
+			dijit.byId("amount_usd").attr("value",total_amount);
+			dijit.byId("amount_riel").attr("value",0);
+			return false;
+		}
+		
+		reamin_amount = total_amount - amount_usd;
+
+		total_riel = (reamin_amount * exchange_rate).toFixed(0);
+		//alert(total_riel);
+		dijit.byId("amount_riel").attr("value",total_riel);
+		
+	}
+
+</script>
+
+

@@ -1,0 +1,130 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	echo $this->headTitle($tr->translate('EDIT_STUDENT_CHANGE_CAR')); 
+?>
+<form id="add_car" action="<?php echo $this->url(array('module'=>'foundation','controller'=>'studentchangecar','action'=>'edit')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+	<table cellspacing="20" style="margin: 0 auto; width: 100%">
+		<tr>
+			<td>
+				<fieldset>
+					<legend align="center"><strong><?php echo $tr->translate("EDIT_STUDENT_CHANGE_CAR");?></strong></legend>
+					<table cellspacing="20" width="100%" >
+						<tr>
+							<td align="center" valign="top">
+								<table cellspacing="10" width="100%"​>
+									<tr>
+										<td><?php echo $tr->translate("STUDENT_ID")?></td><input type="hidden" name="id" value="<?php echo $this->row['id'];?>" />
+										<td>
+											<select readonly="readonly" class="fullside" name="studentid" id="studentid" autoComplete="false" queryExpr="*${0}*" dojoType="dijit.form.FilteringSelect" onchange="getStudentInfo();" >
+										    	<?php if(!empty($this->stu_id))foreach ($this->stu_id as $row){?>
+													<option value="<?php echo $row['stu_id']?>"<?php if($row['stu_id']==$this->row['student_id']) echo 'selected="selected"';?>><?php echo $row['stu_code']?></option>
+												<?php }?>
+											</select>
+										</td>
+										<td><?php echo $tr->translate("STUDENT_NAME")?></td>
+										<td>
+											<select class="fullside" name="studentname" id="studentname" autoComplete="false" queryExpr="*${0}*" readonly="readonly" dojoType="dijit.form.FilteringSelect"  >
+										    	<?php if(!empty($this->stu_name))foreach ($this->stu_name as $row){?>
+													<option value="<?php echo $row['stu_id']?>"<?php if($row['stu_id']==$this->row['student_id']) echo 'selected="selected"';?>><?php echo $row['name']?></option>
+												<?php }?>
+											</select>
+										</td>
+										
+										<td><?php echo $tr->translate("PHONE")?></td>
+										<td>
+											<input dojoType="dijit.form.TextBox" readonly="readonly" class="fullside" id="phone" name="phone" value="" type="text">
+										</td>
+									</tr>
+									<tr>
+										
+										
+										<td><?php echo $tr->translate("SERVICE")?></td>
+										<td>
+											<select name="service" id="service" dojoType="dijit.form.FilteringSelect" readOnly class="fullside" >
+												<option value="-1">No Service</option>
+												<?php if(!empty($this->transport_service)){foreach ($this->transport_service as $transport){?>
+													<option value="<?php echo $transport['id']?>"><?php echo $transport['name']?></option>
+												<?php }}?>
+											</select>
+										</td>
+										
+										<td><?php echo $tr->translate("CAR_ID")?></td>
+										<td>
+											<select name="old_car_id" id="old_car_id" dojoType="dijit.form.FilteringSelect" required="false" readOnly class="fullside" >
+												<option value="-1">No Car ID</option>
+												<?php if(!empty($this->all_car)){foreach ($this->all_car as $all_car){?>
+													<option value="<?php echo $all_car['id']?>" <?php if($all_car['id']==$this->row['old_car_id']){echo "selected='selected'";}?>><?php echo $all_car['name']?></option>
+												<?php }}?>
+											</select>
+										</td>
+										
+										<td><?php echo $tr->translate("NEW_CAR_ID")?></td>
+										<td>
+											<select name="new_car_id" id="new_car_id" dojoType="dijit.form.FilteringSelect"  class="fullside" >
+												<option value="-1">No Car ID</option>
+												<?php if(!empty($this->all_car)){foreach ($this->all_car as $all_car){?>
+													<option value="<?php echo $all_car['id']?>" <?php if($all_car['id']==$this->row['new_car_id']){echo "selected='selected'";}?>><?php echo $all_car['name']?></option>
+												<?php }}?>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<td><?php echo $tr->translate("CHANGE_DATE")?></td>
+										<td><input dojoType="dijit.form.DateTextBox" constraints="{datePattern:'dd/MM/yyyy'}" class="fullside" id="change_date" name="change_date" value="<?php echo $this->row['change_date']?>" type="text"></td>
+									
+										<td><?php echo $tr->translate("NOTE")?></td>
+										<td colspan="3"><input dojoType="dijit.form.TextBox" class="fullside" id="note" name="note" value="<?php echo $this->row['note']?>" type="text"></td>
+									
+									</tr>
+									<tr>
+										<td colspan="6" align="center">
+											<input type="button" label="<?php echo $tr->translate('GO_BACK');?>" id="back" dojoType="dijit.form.Button" 
+									 		iconClass="dijitIconUndo" onclick="window.location = '<?php echo $this->url(array('module'=>'foundation','controller'=>"studentdroptransport",'action'=>'index'),null,true); ?>';" />
+											<input type="submit" value="save_close" name="save_close" label="<?php echo $tr->translate('GO_EDIT');?>" dojoType="dijit.form.Button" 
+											iconClass="dijitEditorIcon dijitEditorIconSave" />
+										</td>
+									</tr>					
+								</table>
+							</td>							
+						</tr>
+					</table>	
+				</fieldset>
+			</td>			
+		</tr>
+		
+	</table>	
+</form>
+<script type="text/javascript">
+var url_student = '<?php echo $this->url(array('module'=>'foundation','controller'=>'studentchangecar','action'=>'get-student')); ?>';
+
+dojo.ready(function(){
+	getStudentInfo();
+});
+function getStudentInfo(){
+			studentid = dijit.byId('studentid').get('value');
+			dojo.xhrPost({
+				url:url_student,
+				content:{
+					'studentid':studentid
+					},
+				handleAs:"json",
+				load: function(data) {
+					dijit.byId("phone").attr("value",data.tel);
+					//dijit.byId("gender").attr("value",data.sex);
+					dijit.byId("service").attr("value",data.service);
+					/*
+					if(data.car_id == undefined){
+						//alert(1);
+						dijit.byId("old_car_id").attr("value",-1);
+					}else{
+						//alert(2);
+						dijit.byId("old_car_id").attr("value",data.car_id);
+					}
+					*/
+				},
+				error: function(err) {
+					alert(err);
+				}
+			});
+}
+</script>

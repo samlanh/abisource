@@ -1,0 +1,225 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$frm =  $this->form_search;
+?>	
+<title><?php echo $tr->translate('បញ្ជីសិស្សចុះឈ្មោះចូលរៀនភាសាខ្មែរ និង តាមដានការបង់ប្រាក់');?></title>
+<form  id='frm_search' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-kh-fulltime-payment-list')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+	<table width="100%">
+	    <tr>
+	    	<td><input type="text" name="txtsearch" id="txtsearch" class="fullside" value="<?php echo $this->search['txtsearch'];?>" dojoType="dijit.form.TextBox" /> </td>
+	    	<td><?php echo $frm->getElement('branch');?></td>
+	    	<td><?php echo $frm->getElement('degree_kh_ft');?></td>
+	    	<td><?php echo $frm->getElement('grade_kh_ft');?></td>
+	    	<td><?php echo $frm->getElement('room');?></td>
+	    	
+	    <?php /*?>	
+	    	<td>
+	    		<select name="for_month" id="for_month" dojoType="dijit.form.FilteringSelect" class="fullside" >
+	    			<option value="0"> select month </option>
+	    			<?php if(!empty($this->all_month)){foreach ($this->all_month as $month){?>
+	    				<option value="<?php echo $month['id']?>" <?php if($month['id']==$this->search1['for_month']){echo "selected='selected'";}?>> <?php echo $month['name']?> </option>
+	    			<?php }}?>
+	    		</select>
+	    	</td>
+	    	<td>
+	    		<select name="for_year" id="for_year" dojoType="dijit.form.FilteringSelect" class="fullside" >
+	    			<?php for($i=2016;$i<=date("Y")+1;$i++){?>
+	    				<option value="<?php echo $i;?>" <?php if($i==$this->search1['for_year']){echo "selected='selected'";}?>> <?php echo $i;?> </option>
+	    			<?php }?>
+	    		</select>
+	    	</td>
+	    <?php */?>	
+	    	<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="button" onclick="getKhmerData();"><?php echo $tr->translate("SEARCH");?></button> </td>
+	    </tr>
+	</table>
+</form>	
+
+<style>
+.hover:hover{background: #ddd;}
+</style>
+
+<div style="border: 1px dotted #000;background: #fff; margin: 0 auto;min-height: 27cm; padding: 0.5cm;">
+<div id="divPrint">
+<style>
+	table{ page-break-inside:auto }
+    tr{ page-break-inside:avoid; page-break-after:auto }
+	#header {
+		display: table-header-group;
+		page-break-inside:avoid; page-break-after:auto;
+	}
+	.bor{
+		border-right: 1px solid #000;	
+		border-bottom: 1px solid #000;
+		font-size:13px;
+	}
+	.bor_r{
+		border-right: 1px solid #000;	
+		font-size:13px;
+	}
+	.padd{
+		padding: 3px;	
+	}
+	#row{ font-size:12px; height: 30px;border: 1px solid #000;font-family:'Khmer OS Battambang';  }
+</style>
+		<table style="background:#fff;width:90%; margin: 0 auto;width: 100%;font-family:'Khmer OS Battambang';">
+			<tr>
+				<td width="22%" align="center">
+					<img style="width:50%;" src="<?php echo $this->baseUrl().'/images/logo.png'?>">
+				</td>
+				<td align="center" width="56%" style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';​">
+					<strong  style="font-weight:bold;color:#000; font-size: 16px;font-family:'Khmer OS Muol';​"><?php echo $tr->translate("បញ្ជីសិស្សចុះឈ្មោះចូលរៀនភាសាខ្មែរ និង តាមដានការបង់ប្រាក់");?></strong><br />
+				</td>
+				<td align="center" width="22%" style="white-space: nowrap;">
+					<?php if($this->search['branch']>0 && !empty($this->rs)){echo "Branch : ".$this->rs[0]['branch_name'];}?>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="3" id="exportExcel">
+
+					<label id="khmer_data"></label>
+					
+					<label id="khmer_total_student"></label>
+					
+					<label id="khmer_student_by_grade"></label>
+
+					<table width="100%">
+						<tr><td colspan="3">&nbsp;</td></tr>
+						<tr><td colspan="3">&nbsp;</td></tr>
+						<tr >
+							<td align="center" width="25%">
+								<span style="font-size: 14px;"><?php echo $tr->translate("APPROVED_BY"); ?></span>
+							</td>
+							<td align="center" width="25%">
+								<span style="font-size: 14px;"><?php echo $tr->translate("VERIFIED_BY"); ?></span>
+							</td>
+							<td align="center" width="25%">
+								<span style="font-size: 14px;"><?php echo $tr->translate("CHECKED_BY"); ?></span>
+							</td>
+							<td align="center"  width="25%">
+								<span style="font-size: 14px;text-align: right;"><?php echo $tr->translate("PREPARED_BY"); ?></span>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+	</div>		
+</div>
+
+<div class="overlay">
+	<div class="overlay-load">
+		<div class="overlay-msg">
+	    </div>
+	</div>
+</div>	
+<style>
+.overlay {display: none;position: absolute;width: 100%;height: 150%;top: 0px;left: 0px;background: #FCFCFC;z-index: 1001;opacity: .5;}
+.overlay-load {width: 350px;height: 100px;margin: auto;top: 0px;bottom: 0px;position: absolute;left: 0px;right: 0px;
+           text-align: center;
+           background: #fff url("<?php echo $this->baseUrl()?>/images/loading.gif") 50% 25%;
+           background-repeat: no-repeat;          
+}
+.overlay-msg{margin-bottom: 10px;bottom: 0px;position: absolute;font-style: italic;color: rgb(19, 19, 19);} 
+</style>
+
+<script type="text/javascript">
+
+dojo.ready(function(){
+	getKhmerData();
+});
+
+var url_get_data = '<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'get-khmerdata')); ?>';
+function getKhmerData(){
+	branch_id = dijit.byId("branch").get("value");
+	//if(branch_id>0){
+		loading();
+		dojo.xhrPost({
+			url:url_get_data,
+			form: dojo.byId("frm_search"),
+			//handleAs:"json",
+			load: function(data) {
+				 if(data){
+					document.getElementById('khmer_data').innerHTML = data;
+				 }else{
+					 document.getElementById('khmer_data').innerHTML = "";
+				 }
+				 getKhmerTotalStudent();
+			},
+			error: function(err) {
+				alert(err);
+			}
+		});
+	//}
+}
+
+var url_get_total_student = '<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'get-khmertotalstudent')); ?>';
+function getKhmerTotalStudent(){
+	dojo.xhrPost({
+		url:url_get_total_student,
+		form: dojo.byId("frm_search"),
+		//handleAs:"json",
+		load: function(data1) {
+			 if(data1){
+				document.getElementById('khmer_total_student').innerHTML = data1;
+			 }else{
+				 document.getElementById('khmer_total_student').innerHTML = "";
+			 }
+			 getKhmerStudentByGrade();
+		},
+		error: function(err) {
+			alert(err);
+		}
+	});
+}
+
+var url_get_student_by_grade = '<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'get-khmerstudentbygrade')); ?>';
+function getKhmerStudentByGrade(){
+	dojo.xhrPost({
+		url:url_get_student_by_grade,
+		form: dojo.byId("frm_search"),
+		//handleAs:"json",
+		load: function(data2) {
+			 if(data2){
+				document.getElementById('khmer_student_by_grade').innerHTML = data2;
+			 }else{
+				 document.getElementById('khmer_student_by_grade').innerHTML = "";
+			 }
+			 document.getElementsByClassName("overlay")[0].style.display="none";	
+		},
+		error: function(err) {
+			alert(err);
+		}
+	});
+}
+
+function loading(){
+    document.getElementsByClassName("overlay")[0].style.display="block";
+}
+
+
+function doPrint() {
+	window.frames["print_frame"].document.body.innerHTML=dojo.byId('divPrint').innerHTML;
+    window.frames["print_frame"].window.focus();
+    window.frames["print_frame"].window.print();
+    hideDialog();
+}
+function preview()
+{ 
+  var disp_setting="toolbar=no,status=no,resizable=no,location=no,directories=yes,menubar=no,"; 
+      disp_setting+="scrollbars=no,width=1200, height=700, left=100, top=25"; 
+  var content_vlue = document.getElementById("divPrint").innerHTML; 
+  
+  var docprint=window.open("","",disp_setting); 
+   docprint.document.open(); 
+   docprint.document.write('<html><head>'); 
+   docprint.document.write('</head><div style=" font-size:16px !important; margin:0px; font-family:Verdana;"><style>table th {font-size:14px !important;} table td{font-size:12px !important;}</style><center>');          
+   docprint.document.write(content_vlue);          
+   docprint.document.write('</center></div></html>'); 
+   docprint.document.close(); 
+   docprint.focus(); 
+}
+function exportExcel(){
+	$('#exportExcel').tableExport({type:'excel',escape:'false'});
+}
+</script>
+ 

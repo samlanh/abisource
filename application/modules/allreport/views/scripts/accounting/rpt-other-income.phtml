@@ -1,0 +1,357 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$this->headTitle('Report Other Income'); 
+	echo $this->headTitle(''); 
+	$frm=$this->form_search;
+	
+	//echo 'test';exit();
+	
+?>	
+<div style="width: 28cm;margin: 0 auto;">
+<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-other-income')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+	<table style="width: 100%">	
+		<tr>
+			<td>	
+				<input dojoType="dijit.form.TextBox" class="fullside" id="txtsearch" name="txtsearch" placeholder="Search....." value="<?php echo $this->search['txtsearch'];?>" type="text">
+			</td>
+			<td> <?php echo $frm->getElement("branch");?></td>
+			<td>
+			 	<select name="shift"  id="shift" dojoType="dijit.form.FilteringSelect" class="fullside" >
+			 		<option value="0" <?php if($this->search['shift']==0){echo 'selected="selected"';}?>>Shift</option>
+			 		<option value="1" <?php if($this->search['shift']==1){echo 'selected="selected"';}?>>10:30am</option>
+			 		<option value="2" <?php if($this->search['shift']==2){echo 'selected="selected"';}?>>04:30pm</option>
+			 		<option value="3" <?php if($this->search['shift']==3){echo 'selected="selected"';}?>>07:00pm</option>
+			 	</select>
+			</td>
+			<td> <?php echo $frm->getElement("user");?></td>
+			<td>
+				<select name="cate_income" id="cate_income" dojoType="dijit.form.FilteringSelect" class="fullside" >
+					<option value="">select category</option>
+					<?php if(!empty($this->income_category)){foreach ($this->income_category as $category){?>
+						<option value="<?php echo $category['id']?>" <?php if($category['id']==$this->search['cate_income']){echo "selected='selected'";}?>><?php echo $category['name']?></option>	
+					<?php }}?>
+				</select>
+			</td>
+		</tr>
+		<tr>	
+			<td> <?php echo $frm->getElement("start_date");?></td>
+	   	  	<td> <?php echo $frm->getElement("end_date");?></td>
+	   	  	<td> <?php echo $frm->getElement("from_receipt");?></td>
+	   	  	<td> <?php echo $frm->getElement("to_receipt");?></td>
+			<td>
+				<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
+			</td>
+		</tr>
+	</table>	
+</form>		
+</div>
+
+<style>
+	.hover:hover{background: #ddd;}
+	.row_control {
+	    display: table-row !important;
+	}
+</style>
+
+<div style="border: 1px dotted #000;background: #fff;width: 27cm;margin: 0 auto;min-height: 27cm;padding: 0.5cm;">
+	<form  action="<?php echo $this->url(array('module'=>'allreport','controller'=>'submitdailyincome','action'=>'other-income')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+	
+	<script type="dojo/method" event="onSubmit">   
+
+		if(this.validate()) {
+			shift = dijit.byId('shift_id').get('value');
+			if(shift>0){
+				return true;
+			}else{
+				alert("Please select shift !!!");
+				dijit.byId('shift').focus();
+    			return false;
+			}
+    	}else {
+    		return false;
+    	}
+	</script>
+	
+	<div id="divPrint">
+		<div id="exportExcel">
+		
+			<table  style="background:#fff; margin: 0 auto; ;white-space: nowrap;width: 100%">
+				<tr >
+					<td width="22%" align="center">
+						<img style="width: 50%;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>">
+					</td>
+					
+					<?php 
+						$shift = array(1=>"10:30am",2=>"04:30pm",3=>"07:00pm");
+					?>
+					
+					<td width="56%" align="center">
+						<strong style="padding-left: 30px;font-weight:bold;font-family: Arial Black;color:#000; font-size: 18px;font-family:'Khmer MEF2';"><?php echo $tr->translate('RPT_OTHER_INCOME')?></strong><br />
+						<strong style="padding-left: 15px;font-weight:bold;font-family: Arial Black;color:#000; font-size: 13px;font-family:'Khmer MEF2';">For Date <?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> to <?php echo date("d-M-Y",strtotime($this->search["end_date"]));?></strong><br />   
+						<?php if($this->search['shift']>0){echo "Time : ".$shift[$this->search['shift']]." , "."Shift : ".$this->search['shift'];}?>
+					</td>
+					<td align="center" width="22%" style="white-space: nowrap;">
+						<?php if($this->search['branch']>0 && !empty($this->row)){echo "Branch : ".$this->row[0]['branch'];}?>
+					</td>
+				</tr>
+				
+				<style>
+					table tr th{background-color: #ccc;}	
+					.style_tr{
+						font-size:12px;
+						height: 20px;
+						border: 1px solid #000;"
+					}									
+				</style>
+				
+				<tr>
+					<td colspan="3" id="exportExcel">
+						<table cellpadding="5"​ style="font-family:'Khmer OS Battambang';margin:0 auto;border: 1px solid #000;width:100%; border-collapse: collapse;"  border="1" >
+							<tr style="font-size:13px; height: 20px;border: 1px solid #000;background-color: #ccc;line-height: 30px;font-weight: bold;" align="center" >
+								<td style="border: 1px solid #000;"><?php echo $tr->translate('N_O')?></td>
+								<td style="border: 1px solid #000;"><?php echo $tr->translate('BRANCH')?></td>
+								<td style="border: 1px solid #000;"><?php echo $tr->translate('RECEIPT_NO')?></td>
+								<td style="border: 1px solid #000;"><?php echo $tr->translate('NAME')?></td>
+								<td style="border: 1px solid #000;"><?php echo $tr->translate('PHONE')?></td>
+								
+								<td style="border: 1px solid #000;"><?php echo $tr->translate('បរិយាយចំណូល')?></td>
+								
+								<td style="border: 1px solid #000;"><?php echo $tr->translate('ប្រភេទចំណូល')?></td>
+								<td style="border: 1px solid #000;"><?php echo $tr->translate('TOTAL')?></td>
+								<td style="border: 1px solid #000;"><?php echo $tr->translate('NOTE')?></td>
+								<td style="border: 1px solid #000;"><?php echo $tr->translate('USER')?></td>
+								<td style="border: 1px solid #000;"><?php echo $tr->translate('CREATE_DATE')?></td>
+								<td style="border: 1px solid #000;"><?php echo $tr->translate('STATUS')?></td>
+							</tr>
+						<?php $i=0;$total_income_dollar=0;$total_income_riel=0; foreach ($this->row AS $row) { $i++;?>
+							<tr class="hover style_tr"  align="center" <?php if($row['status']==0){echo "style='color:red;'";}?>>
+								<td style="border: 1px solid #000;"><?php echo $i;?></td>
+								<td style="border: 1px solid #000;"><?php echo $row['branch'];?></td>
+								<td style="border: 1px solid #000;"><?php echo $row['invoice'];?></td>
+								<td align="left" style="border: 1px solid #000;">&nbsp;&nbsp;<?php echo $row['name'];?></td>
+								<td align="left" style="border: 1px solid #000;">&nbsp;&nbsp;<?php echo $row['phone'];?></td>
+								<td align="left" style="border: 1px solid #000;">&nbsp;&nbsp;<?php echo $row['title'];?></td>
+								
+								<td align="center" style="border: 1px solid #000;"><?php echo $row['income_category'];?></td>	
+								<td style="border: 1px solid #000;"><?php echo $row['total_amount'];?><?php if($row['curr_type']==1){echo ' $';}else{echo ' រៀល';}?></td>
+								<td align="left" style="border: 1px solid #000;">&nbsp;&nbsp;<?php echo $row['desc'];?></td>
+								<td style="border: 1px solid #000;"><?php echo $row['user'];?></td>
+								<td style="border: 1px solid #000;"><?php echo date('d-m-Y',strtotime($row['create_date']));?></td>
+								<td class="padd"><?php if($row['status']==0){echo "Void";};?></td>
+							</tr>
+							
+							<?php 
+								if($row['status']==1){
+									if($row['curr_type']==1){
+										$total_income_dollar = $total_income_dollar + $row['total_amount'];
+									}else{
+										$total_income_riel = $total_income_riel + $row['total_amount'];
+									}
+								}
+							?>
+						<?php } 
+							$grand_total = $total_income_dollar;
+						?>	
+							
+						</table>	
+						
+					<?php if(!empty($this->row)){?>
+						<table width="60%" border="1" style="white-space: nowrap;margin: 0 auto; text-align: center;margin-top: 20px;border-collapse: collapse;border: 1px solid #000;font-family: Khmer OS Battambang,Times New Roman;">
+							<tr style="background: #c1d0f3;">
+								<td align="center">
+									<?php echo $tr->translate("GRAND_TOTAL");?>&nbsp;&nbsp;&nbsp;
+								</td>
+								<td width="25%">
+									Rate
+								</td>
+								<td width="25%">
+									Amount in USD
+								</td>
+								<td width="25%">
+									Amount in Riel
+									
+									<input type="hidden" name="total_amount" id="total_amount" value="<?php echo $grand_total;?>" dojoType="dijit.form.TextBox" />
+									<input type="hidden" name="amount_riel" id="amount_riel" dojoType="dijit.form.TextBox" />
+									<input type="hidden" name="shift_id" id="shift_id" value="<?php echo $this->search['shift'];?>" dojoType="dijit.form.TextBox" />
+									<input type="hidden" name="branch_id" id="branch_id" value="<?php echo $this->search['branch'];?>" dojoType="dijit.form.TextBox" />
+									<input type="hidden" name="user_id" id="user_id" value="<?php echo $this->search['user'];?>" dojoType="dijit.form.TextBox" />
+								</td>
+								
+							</tr>
+							<tr>
+								<td style="border: 1px solid #000;">
+									<?php echo "&nbsp;$ ".number_format($grand_total,2)?>
+								</td>
+								
+								<td>
+									<?php echo $this->rate." ៛";?>
+								</td>
+								
+								<td style="border: 1px solid #000;">
+									<div id="input_usd">
+										<input type="text" name="amount_usd" id="amount_usd" value="0" class="fullside" onkeyup="calculateRemainReil();" dojoType="dijit.form.TextBox" />
+									</div>
+									<div id="hide_amount_usd">
+										<label id="lb_amount_usd"></label>
+									</div>
+								</td>
+								
+								<td style="border: 1px solid #000;">
+									<label id="lb_amount_reil"></label>
+								</td>
+							</tr>
+							<tr class="row_control" style="display: none;" >
+								<td colspan="4" align="center">
+									<input type="text" name="for_date" id="for_date" dojoType="dijit.form.DateTextBox" value="now" constraints="{datePattern:'dd/MM/yyyy'}"/>	
+									<input type="submit" name="save_close" id="save_close"  value="រក្សាទុក" label="<?php echo $tr->translate('SAVE_CLOSE');?>"  dojoType="dijit.form.Button" 
+										iconClass="dijitEditorIcon dijitEditorIconSave" />	
+								</td>
+							</tr>
+						</table>
+					<?php }?>
+						
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3">&nbsp;</td>
+				</tr>
+				<tr>
+					<td colspan="3">&nbsp;</td>
+				</tr>
+				<tr >
+					<td colspan="3" width="100%">
+						<table width="100%" style="font-family:'Khmer OS Battambang';">
+							<tr align="center">
+								<td width="15%">Auditor</td>
+								<td width="18%">Senior Accountant</td>
+								<td width="18%">Accountant Income</td>
+								<td width="16%">Madam</td>
+								<td width="18%">School Principal</td>
+								<td width="15%">Cashier</td>
+							</tr>
+							<tr>
+								<td colspan="6">&nbsp;</td>
+							</tr>
+							<tr align="center">
+								<td>
+									<div style="font-size: 13px;line-height: 20px;">
+										Name:..............................<br />
+										Date:........../........../..........
+									</div>
+								</td>
+								<td>
+									<div style="font-size: 13px;line-height: 20px;">
+										Name:..............................<br />
+										Date:........../........../..........
+									</div>
+								</td>
+								<td>
+									<div style="font-size: 13px;line-height: 20px;">
+										Name:..............................<br />
+										Date:........../........../..........
+									</div>
+								</td>
+								<td>
+									<div style="font-size: 13px;line-height: 20px;">
+										Name:..............................<br />
+										Date:........../........../..........
+									</div>
+								</td>
+								<td>
+									<div style="font-size: 13px;line-height: 20px;">
+										Name:..............................<br />
+										Date:........../........../..........
+									</div>
+								</td>
+								<td>
+									<div style="font-size: 13px;line-height: 20px;">
+										Name:..............................<br />
+										Date:........../........../..........
+									</div>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>	
+	</form>	
+</div>
+
+<script type="text/javascript">
+
+	dojo.ready(function(){
+		document.getElementById('hide_amount_usd').style.display="none";
+		calculateRemainReil();
+	});
+							
+	function calculateRemainReil(){
+		total_amount = <?php echo $grand_total;?>;
+		
+		amount_usd = dijit.byId("amount_usd").get('value');
+	
+		exchange_rate = <?php echo $this->rate?>;
+		
+		dollar_to_convert = (total_amount - amount_usd).toFixed(2);
+		//alert(dollar_to_convert);
+		
+		total_reil = dollar_to_convert*exchange_rate;
+		
+		//alert("total="+total_amount+",usd="+amount_usd+",exchange_rate="+exchange_rate+",riel="+total_reil);
+	
+		var result = 100 * Math.ceil(total_reil / 100);
+		
+		//alert(rounded);
+		var total_reil = result.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
+	
+		dijit.byId('amount_riel').attr('value',result);
+		
+		dojo.byId("lb_amount_usd").innerHTML = " $ " + amount_usd;
+		dojo.byId("lb_amount_reil").innerHTML = " ៛ " + total_reil;
+		
+	}
+
+	function doPrint() {
+		//alert(1);
+		
+		document.getElementById('hide_amount_usd').style.display="block";
+		document.getElementById('amount_usd').style.display="none";
+		
+		window.frames["print_frame"].document.body.innerHTML=dojo.byId('divPrint').innerHTML;
+	    window.frames["print_frame"].window.focus();
+	    window.frames["print_frame"].window.print();
+	    //hideDialog();
+	    //alert(1);
+	    document.getElementById('amount_usd').style.display="block";
+	    document.getElementById('hide_amount_usd').style.display="none";
+	}
+
+	function preview()
+	{ 
+	  var disp_setting="toolbar=no,status=no,resizable=no,location=no,directories=yes,menubar=no,"; 
+	      disp_setting+="scrollbars=no,width=1200, height=700, left=100, top=25"; 
+	  var content_vlue = document.getElementById("divPrint").innerHTML; 
+	  
+	  var docprint=window.open("","",disp_setting); 
+	   docprint.document.open(); 
+	   docprint.document.write('<html><head>'); 
+	   docprint.document.write('</head><div style=" font-size:16px !important; margin:0px; font-family:Verdana;"><style>table th {font-size:14px !important;} table td{font-size:12px !important;}</style><center>');          
+	   docprint.document.write(content_vlue);          
+	   docprint.document.write('</center></div></html>'); 
+	   docprint.document.close(); 
+	   docprint.focus(); 
+	}
+	function exportExcel(){
+		$('#exportExcel').tableExport({type:'excel',escape:'false'});
+	}
+	
+</script>
+
+
+
+
+
+
+
+

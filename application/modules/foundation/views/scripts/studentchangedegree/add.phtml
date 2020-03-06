@@ -1,0 +1,282 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	echo $this->headTitle($tr->translate('ADD_STUDENT_CHANGE_DEGREE')); 
+?>
+<script type="text/javascript">
+dojo.require("dojo.data.ItemFileWriteStore");  
+dojo.require("dijit.form.NumberTextBox");
+dojo.require("dijit.form.Textarea");
+dojo.require("dijit.form.DateTextBox");
+dojo.require("dijit.form.CheckBox");
+</script>
+
+
+
+<form id="add_car" action="<?php echo $this->url(array('module'=>'foundation','controller'=>'studentchangedegree','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+	<script type="dojo/method" event="onSubmit">
+		if(this.validate()) {
+			old_degree = dijit.byId('old_degree_id').get('value');
+			new_degree = dijit.byId('degree').get('value');
+			if(old_degree>=new_degree){
+				alert("Can not change to lower or equal degree !!!")
+				dijit.byId('degree').focus();
+				return false;
+			}
+			return true;
+		} else {
+			return false;
+		}
+	</script>
+	<table cellspacing="20" style="margin: 0 auto; width: 100%">
+		<tr>
+			<td>
+				<fieldset>
+					<legend align="center"><strong><?php echo $tr->translate("ADD_STUDENT_CHANGE_DEGREE");?></strong></legend>
+					<table cellspacing="20" width="100%" >
+						<tr>
+							<td align="center" valign="top">
+								<table cellspacing="10" width="100%"​>
+									<tr>
+										<td width="50%" valign="top">
+											<table width="100%" style="white-space:nowrap;">
+												<tr>
+													<td width="20%"><?php echo $tr->translate("STUDENT_ID")?></td>
+													<td width="80%"> 
+														<select class="fullside"  name="studentid" id="studentid" dojoType="dijit.form.FilteringSelect" placeholder="Select student " onchange="getStudentInfo(1);" autoComplete="false" queryExpr="*${0}*">
+															<option value="-1"> </option>
+															<?php if(!empty($this->stu_id))foreach ($this->stu_id as $row){?>
+																<option value="<?php echo $row['stu_id']?>"><?php echo $row['stu_code']?></option>
+															<?php }?>
+														</select>
+													</td>
+												</tr>
+												
+												<tr>
+													<td><?php echo $tr->translate("STUDENT_NAME")?></td>
+													<td>
+														<select class="fullside"  name="studentname" id="studentname" dojoType="dijit.form.FilteringSelect" placeholder="Select student " onchange="getStudentInfo(2);" autoComplete="false" queryExpr="*${0}*">
+															<option value="-1"> </option>
+															<?php if(!empty($this->stu_name))foreach ($this->stu_name as $row){?>
+																<option value="<?php echo $row['stu_id']?>"><?php echo $row['name']?></option>
+															<?php }?>
+														</select>
+													</td>
+												</tr>
+												<tr>
+													<td><?php echo $tr->translate("BRANCH")?></td>
+													<td>
+														<select name="old_branch" id="old_branch" readonly="readonly" class="fullside" dojoType="dijit.form.FilteringSelect"  >
+															<option value="0">branch</option>
+															<?php if(!empty($this->branch)){foreach ($this->branch as $branch){?>
+																<option value="<?php echo $branch['id']?>"><?php echo $branch['name']?></option>
+															<?php }}?>
+														</select>										
+													</td>
+												</tr>
+												<input dojoType="dijit.form.TextBox" type="hidden" class="fullside" id="old_academic_year_id" name="old_academic_year_id" >
+												<input dojoType="dijit.form.TextBox" type="hidden" class="fullside" id="old_degree_id" name="old_degree_id" >
+												<input dojoType="dijit.form.TextBox" type="hidden" class="fullside" id="old_grade_id" name="old_grade_id" >
+												<input dojoType="dijit.form.TextBox" type="hidden" class="fullside" id="old_session_id" name="old_session_id" >
+												<tr>
+													<td><?php echo $tr->translate("ACADEMIC_YEAR")?></td>
+													<td>
+														<input dojoType="dijit.form.TextBox" readonly="readonly" class="fullside" id="old_academic_year" name="old_academic_year" value="" type="text">
+													</td>
+												</tr>
+												<tr>
+													<td><?php echo $tr->translate("DEGREE")?></td>
+													<td>
+														<input dojoType="dijit.form.TextBox" readonly="readonly" class="fullside" id="old_degree" name="old_degree" value="" type="text">
+														
+													</td>
+												</tr>
+												<tr>
+													<td><?php echo $tr->translate("GRADE")?></td>
+													<td>
+														<input dojoType="dijit.form.TextBox" readonly="readonly" class="fullside" id="old_grade" name="old_grade" value="" type="text">
+													</td>
+												</tr>
+												
+												<tr>
+													<td><?php echo $tr->translate("SESSION")?></td>
+													<td>
+														<input dojoType="dijit.form.TextBox" readonly="readonly" class="fullside" id="old_session" name="old_session" value="" type="text">
+													</td>
+												</tr>
+																								
+											</table>
+										</td>
+										
+										<td width="50%" valign="top">
+											<table width="100%" style="white-space:nowrap;">
+												<tr>
+													<td width="20%"><?php echo $tr->translate("STUDENT_ID")?></td>
+													<td width="80%"> 
+														<input class="fullside" name="new_student_id" id="new_student_id" dojoType="dijit.form.TextBox" readonly style="color:red;" />
+													</td>
+												</tr>
+												<tr>
+													<td><?php echo $tr->translate("ACADEMIC_YEAR")?></td>
+													<td>
+														<select class="fullside"  name="academic_year" id="academic_year" dojoType="dijit.form.FilteringSelect" placeholder="Select academic year " autoComplete="false" queryExpr="*${0}*">
+															<option value="-1"> </option>
+															<?php if(!empty($this->academic_year))foreach ($this->academic_year as $row){?>
+																<option value="<?php echo $row['id']?>"><?php echo $row['name']?></option>
+															<?php }?>
+														</select>
+													</td>
+												</tr>
+												<tr>
+													<td><?php echo $tr->translate("DEGREE")?></td>
+													<td>
+														<select class="fullside"  name="degree" id="degree" dojoType="dijit.form.FilteringSelect" placeholder="Select degree " onchange="getStudentNo();getallGrade();" autoComplete="false" queryExpr="*${0}*">
+															<option value="-1"> </option>
+															<?php if(!empty($this->degree))foreach ($this->degree as $row){?>
+																<option value="<?php echo $row['id']?>"><?php echo $row['name']?></option>
+															<?php }?>
+														</select>
+													</td>
+												</tr>
+												<tr>
+													<td><?php echo $tr->translate("GRADE")?></td>
+													<td>
+														<input id="grade" />
+													</td>
+												</tr>
+												
+												<tr>
+													<td><?php echo $tr->translate("SESSION")?></td>
+													<td>
+														<select class="fullside"  name="session" id="session" dojoType="dijit.form.FilteringSelect" placeholder="Select student " onchange="getStudentInfo(1);" autoComplete="false" queryExpr="*${0}*">
+															<?php if(!empty($this->session))foreach ($this->session as $row){?>
+																<option value="<?php echo $row['id']?>"><?php echo $row['name']?></option>
+															<?php }?>
+														</select>
+													</td>
+												</tr>
+												<tr>
+													<td><?php echo $tr->translate("NOTE")?></td>
+													<td><input dojoType="dijit.form.TextBox" class="fullside" id="note" name="note" value="" type="text"></td>
+												</tr>
+											</table>
+										</td>
+										
+									</tr>
+									<tr>
+										<td colspan="2" align="center">
+										<input iconClass="dijitIconClear" type="reset" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
+										<input type="submit" value="save_close" name="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
+											iconClass="dijitEditorIcon dijitEditorIconSave" />
+										<input type="submit" value="save_new" name="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
+											iconClass="dijitEditorIcon dijitEditorIconSave" />
+										</td>
+									</tr>					
+								</table>
+							</td>							
+						</tr>
+					</table>	
+				</fieldset>
+			</td>			
+		</tr>
+		
+	</table>	
+</form>
+<script type="text/javascript">
+
+	dojo.ready(function(){
+		new dijit.form.FilteringSelect({
+			autoComplete: true,                        
+			id: "grade",
+			name: "grade",  
+			tabindex: "16",  
+			class: 'fullside',  
+			placeHolder:"Selected Grade",          
+			onChange: function() {  
+				make_id = dijit.byId('grade').get('value');
+			}
+		}, "grade");
+	}); 
+
+	var url_student = '<?php echo $this->url(array('module'=>'foundation','controller'=>'studentchangedegree','action'=>'get-student')); ?>';
+	function getStudentInfo(type){
+
+		if(type==1){
+			studentid = dijit.byId('studentid').get('value');
+			dijit.byId("studentname").attr("value",studentid);
+		}else{
+			studentid = dijit.byId('studentname').get('value');
+			dijit.byId("studentid").attr("value",studentid);
+		}
+		if(studentid>0){
+			dojo.xhrPost({
+				url:url_student,
+				content:{
+					'studentid':studentid
+					},
+				handleAs:"json",
+				load: function(data) {
+					dijit.byId("old_branch").attr("value",data.branch_id);
+					dijit.byId("old_academic_year").attr("value",data.academic_year);
+					dijit.byId("old_degree").attr("value",data.degree);
+					dijit.byId("old_grade").attr("value",data.grade);
+					dijit.byId("old_session").attr("value",data.session);
+					
+					dijit.byId("old_academic_year_id").attr("value",data.academic_year_id);
+					dijit.byId("old_degree_id").attr("value",data.degree_id);
+					dijit.byId("old_grade_id").attr("value",data.grade_id);
+					dijit.byId("old_session_id").attr("value",data.session_id);
+
+				},
+				error: function(err) {
+					alert(err);
+				}
+			});
+		}
+	}
+	
+	var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
+	var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'get-grade')); ?>';
+	function getallGrade(){
+		dept_id = dijit.byId('degree').get('value');
+		if(dept_id>0){
+			dojo.xhrPost({
+				url:url_dept,
+				content:{
+						'dept_id':dept_id
+					},
+				handleAs:"json",
+				load: function(data) {
+					grade_store  = getDataStorefromJSON('id','name', data);
+				    dijit.byId('grade').set('store',grade_store);   
+
+				},
+				error: function(err) {
+					alert(err);
+				}
+			});
+		}
+	}
+
+	var url_getstuno = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'get-stu-no')); ?>';
+	function getStudentNo(){
+		degree = dijit.byId('degree').get('value');
+		branch = dijit.byId('old_branch').get('value');
+		if(degree>0 && branch>0){
+			dojo.xhrPost({
+				url:url_getstuno,
+				content:{
+					'degree':degree,
+					'branch':branch
+					},
+				handleAs:"json",
+				load: function(data) {
+					dijit.byId('new_student_id').attr('value',data);   
+				},
+				error: function(err) {
+					alert(err);
+				}
+			});
+		}
+	}
+	
+</script>

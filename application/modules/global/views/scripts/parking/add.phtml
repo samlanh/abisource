@@ -1,0 +1,74 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	echo $this->headTitle($tr->translate('ADD_PARKING')); 
+?>	
+<form action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+	<script type="dojo/method" event="onSubmit">			
+		if(this.validate()) {
+			branch = dijit.byId('branch').get('value');
+			if(branch==-1){
+				alert("Select Branch");
+				dijit.byId('branch').focus();
+				return false;
+			}
+			return true;
+		}else {
+			return false;
+		}
+	</script>
+	<table cellspacing="10" width="40%" style="margin: 0 auto;">
+		<tr>
+			<td>
+				<fieldset style="background-color:#d9f4fb;">
+					<legend align="center" ><strong><?php echo $tr->translate("ADD_PARKING");?></strong></legend>
+					<table style="margin: 0 auto; width: 95%;" cellspacing="10">
+						<tr>
+							<td ><?php echo $tr->translate("BRANCH");?></td>
+							<td>
+								<select name="branch" id="branch" autoComplete="false" queryExpr="*${0}*" class="fullside" dojoType="dijit.form.FilteringSelect" >
+									<option value="-1">Select branch</option>
+									<?php if(!empty($this->branch_id)){foreach ($this->branch_id as $branch){?>
+										<option value="<?php echo $branch['id'];?>"><?php echo $branch['name'];?></option>
+									<?php }}?>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td style="width: 100px"><?php echo $tr->translate("CODE")?></td>
+							<td><input type="text" name="code" id="code" dojoType="dijit.form.TextBox" class="fullside" /></td>
+						</tr>
+						<tr>
+							<td ><?php echo $tr->translate("NAME")?></td>
+							<td><input type="text" name="name" id="name" required dojoType="dijit.form.ValidationTextBox" class="fullside" /></td>
+						</tr>
+						<tr>
+							<td><?php echo $tr->translate('SEX');?></td>
+							<td>
+								<select name="sex" id="sex" dojoType="dijit.form.FilteringSelect" required="true" class="fullside">
+									<option value="1"><?php echo $tr->translate("MALE")?></option>
+									<option value="2"><?php echo $tr->translate("FEMALE")?></option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td ><?php echo $tr->translate("PHONE")?></td>
+							<td><input type="text" name="phone" id="phone" dojoType="dijit.form.TextBox" class="fullside" /></td>
+						</tr>
+						<tr>
+							<td ><?php echo $tr->translate("ADDRESS")?></td>
+							<td><input type="text" name="address" id="address" dojoType="dijit.form.TextBox" class="fullside" /></td>
+						</tr>
+						<tr>
+							<td colspan="2" align="center">
+								<input type="submit" value="save_close" name="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
+									iconClass="dijitEditorIcon dijitEditorIconSave" />
+								<input type="submit" value="save_new" name="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
+									iconClass="dijitEditorIcon dijitEditorIconSave" />
+							</td>
+						</tr>
+					</table>	
+				</fieldset>		
+			</td>
+		</tr>
+	</table>	
+</form>

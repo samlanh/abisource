@@ -1,0 +1,513 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$frm =  $this->form_search;
+?>	
+<title><?php echo $tr->translate('Transportation Payment List');?></title>
+<form  id='frm_search' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-transport-payment-list')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+	<table width="60%">
+	    <tr>
+	    	<td><input type="text" name="txtsearch" id="txtsearch" class="fullside" value="<?php echo $this->search['txtsearch'];?>" dojoType="dijit.form.TextBox" /> </td>
+	    	<td><?php echo $frm->getElement('branch');?></td>
+	    	<td><?php echo $frm->getElement('service');?></td>
+	    <?php /*?>	
+	    	<td>
+	    		<select name="for_month" id="for_month" dojoType="dijit.form.FilteringSelect" class="fullside" >
+	    			<option value="0"> select month </option>
+	    			<?php if(!empty($this->all_month)){foreach ($this->all_month as $month){?>
+	    				<option value="<?php echo $month['id']?>" <?php if($month['id']==$this->search['for_month']){echo "selected='selected'";}?>> <?php echo $month['name']?> </option>
+	    			<?php }}?>
+	    		</select>
+	    	</td>
+	    	<td>
+	    		<select name="for_year" id="for_year" dojoType="dijit.form.FilteringSelect" class="fullside" >
+	    			<?php for($i=2016;$i<=date("Y")+1;$i++){?>
+	    				<option value="<?php echo $i;?>" <?php if($i==$this->search['for_year']){echo "selected='selected'";}?>> <?php echo $i;?> </option>
+	    			<?php }?>
+	    		</select>
+	    	</td>
+	    <?php */?>	
+	    	
+	    	<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="button" onclick="getTransportData();"><?php echo $tr->translate("SEARCH");?></button> </td>
+	    </tr>
+	</table>
+</form>	
+
+<style>
+.hover:hover{background: #ddd;}
+</style>
+
+<div style="border: 1px dotted #000;background: #fff; margin: 0 auto;min-height: 27cm; padding: 0.5cm;">
+<div id="divPrint">
+<style>
+	table{ page-break-inside:auto }
+    tr{ page-break-inside:avoid; page-break-after:auto }
+	#header {
+		display: table-header-group;
+		page-break-inside:avoid; page-break-after:auto;
+	}
+	.bor{
+		border-right: 1px solid #000;	
+		border-bottom: 1px solid #000;
+		font-size:13px;
+	}
+	.bor_r{
+		border-right: 1px solid #000;	
+		font-size:13px;
+	}
+	.padd{
+		padding: 0 3px;	
+	}
+	#row{ font-size:12px; height: 30px;border: 1px solid #000;font-family:'Khmer OS Battambang';  }
+</style>
+		<table style="background:#fff;width:90%; margin: 0 auto;width: 100%;font-family:'Khmer OS Battambang';">
+		<tr>
+			<td width="22%" align="center">
+				<img style="width:50%;" src="<?php echo $this->baseUrl().'/images/logo.png'?>">
+			</td>
+			<td align="center" width="56%" style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';​">
+				<strong  style="font-weight:bold;color:#000; font-size: 14px;font-family:'Khmer OS Muol';​"><?php echo $tr->translate("បញ្ជីសិស្សចុះឈ្មោះទទួលសេវាកម្មជិះរថយន្ត និង តាមដានការបង់ប្រាក់");?></strong><br />
+			</td>
+			<td align="center" width="22%" style="white-space: nowrap;">
+				<?php if($this->search['branch']>0 && !empty($this->rs)){echo "Branch : ".$this->rs[0]['branch_name'];}?>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="3" id="exportExcel">
+			
+			<?php /*?>
+			
+				<table cellpadding="8"​ style="margin:0 auto;width:100%; border-collapse: collapse;white-space: nowrap;font-family:'Khmer OS Battambang';"  border="1" >
+
+				
+			<?php //////////////////////////////////////////////////////////////////////////////////////////////////////////////////?>	
+					
+					
+				<?php 
+					$student_id=0;
+					$i=0; 
+					$total=0; $total_amount=0; 
+					$total_admin_nOhter = 0;
+					$total_fee=0;
+					$grand_total_paid_amount = 0;
+					$grand_total_balance = 0;
+					$total_paid_amount=0;
+					$total_receive_amount=0;
+					$total_balance=0;
+				?>
+				  <?php if(!empty($this->rs)) foreach($this->rs as $key => $rs){  ?>
+				  
+				  <?php if($rs['student_id']!=$student_id){	$i++;?>
+					   <?php  if($key>0 ){?>
+					   			<tr>
+					   				<td colspan="25">&nbsp;</td>
+					   			</tr>
+					   		</table>
+					   		
+							<table cellpadding="8"​ style="margin:0 auto;width:100%; border-collapse: collapse;white-space: nowrap;font-family:'Khmer OS Battambang';"  border="1" >
+						<?php }?>
+						
+						
+					 <tr style=" font-size:12px;   line-height: 24px; font-weight: bold;background: #c1d0f3;" align="center" >
+						<td class="bor"><?php echo $tr->translate("N_O"); ?></td>
+						<td class="bor" colspan="1"><?php echo $tr->translate("STUDENT_ID"); ?></td>
+						<td class="bor" colspan="5"><?php echo $tr->translate("NAME_KH"); ?></td>
+						<td class="bor" colspan="4"><?php echo $tr->translate("NAME_EN"); ?></td>
+						<td class="bor"><?php echo $tr->translate("SEX"); ?></td>
+						<td class="bor" colspan="6"><?php echo $tr->translate("PHONE"); ?></td>
+						<td class="bor" colspan="4"><?php echo $tr->translate("សេវាកម្មបច្ចុប្បន្ន"); ?></td>
+				      </tr>
+			<?php //////////////////////////////////////////////// student info //////////////////////////////////////////////////////?>	      
+				      
+				      <tr style="font-size:12px; line-height: 24px; font-family:'Khmer OS Battambang';background: #c1d0f3;" align="center">
+						<td class="bor_r"><?php echo $i;?></td>
+						<td class="bor_r" colspan="1"><?php echo $rs['stu_code'];?> </td>
+						<td class="bor_r" colspan="5"><?php echo $rs['stu_khname'];?> </td>
+						<td class="bor_r" colspan="4"><?php echo $rs['stu_enname'];?> </td>
+						<td class="bor_r"><?php echo $rs['sex'];?> </td>
+						<td class="bor_r" colspan="6"><?php echo $rs['tel'];?> </td>
+						<td class="bor_r" colspan="4"><?php echo $rs['current_service_name'];?> </td>
+ 					 </tr>
+ 					 
+ 			<?php //////////////////////////////////////////////// //////////////////////////////////////////////////////////////////?>		 
+ 					 
+ 					 <tr id="row" align="center" style="background: #f0f07d; line-height: 16px;">
+						<td rowspan="2" class="padd">លេខ<br />រថយន្ត</td>
+						<td rowspan="2" class="padd">អាស័យដ្ឋាន</td>
+						<td rowspan="2" class="padd">សិស្សថ្មី</td>
+						<td colspan="4" class="padd">វេន</td>
+						<td colspan="8" class="padd">ការទូទាត់សេវាកម្មជិះរថយន្ត</td>
+						<td rowspan="2" class="padd">ថ្លៃផ្សេងៗ</td>
+						<td rowspan="2" class="padd">ជំពាក់</td>
+						<td rowspan="2" class="padd">ទឹកប្រាក់<br />សរុបរួម</td>
+						<td rowspan="2" class="padd">សម្គាល់</td>
+						<td rowspan="2" class="padd">សិស្សឈប់</td>
+						<td rowspan="2" class="padd">ថ្ងៃឈប់</td>
+						<td rowspan="2" class="padd">ស្ថានការណ៍</td>
+ 					 </tr>
+					 <tr id="row" align="center" style="background: #e1e29b; line-height: 14px;">
+					 	<td class="padd">7:30am</td>
+						<td class="padd">10:45am</td>
+						<td class="padd">1:30pm</td>
+						<td class="padd">4:45pm</td>
+						<td class="padd">ថ្ងៃបង់ប្រាក់</td>
+						<td class="padd">លេខបង្កាន់ដៃ</td>
+						<td class="padd">ទឹកប្រាក់</td>
+						<td class="padd">បញ្ចុះតម្លៃ</td>
+						<td class="padd">ទឹកប្រាក់សរុប</td>
+						<td class="padd">ថ្ងៃចាប់ផ្តើម</td>
+						<td class="padd">ថ្ងៃផុតកំណត់</td>
+						<td class="padd">រយះពេល</td>
+ 					 </tr>
+ 					
+				<?php 
+					 }
+					 $student_id=$rs['student_id'];
+				?>
+			
+			<?php ////////////////////////////////// value //////////////////////////////////////////////////////////////////////////////////?>
+			
+					<?php 
+						if($rs['payment_term']==1){
+							$amount_month=$rs['qty']." months";
+						}else if($rs['payment_term']==2){
+							$amount_month="3 months";
+						}else if($rs['payment_term']==3){
+							$amount_month="6 months";
+						}else if($rs['payment_term']==4){
+							$amount_month="12 months";
+						}else if($rs['payment_term']==5){
+							$amount_month=$rs['qty']." Days";
+						}
+						
+						//$study_material = $rs['grand_total_payment'] - ($rs['total_payment'] );
+						
+					?>
+			
+						<?php 
+							$style = 'style="width:12px;"';
+						 	$img_src = $this->baseUrl()."/images/Green_tick.png";
+						 	$time_for_car = $rs['time_for_car'];
+						 	$time_id = explode(',', $time_for_car);
+						 ?>
+			
+ 					<tr id="row" align="center" class="hover" <?php if($rs['is_subspend']>0){echo "style='color:red;'";}?>>
+ 					
+						<td class="padd"><?php echo $rs['car_id'];?></td>
+						<td class="padd"><?php echo $rs['service_name'];?></td>
+						<td class="padd"><?php if($rs['is_new']==1){echo date('d-m-Y',strtotime($rs['create_date']));}?></td>
+						
+						<td class="padd"><?php if(!empty($time_id)){foreach ($time_id as $id){if($id==1){echo "<img ".$style." src='".$img_src."' />" ;} }}?></td>
+					   	<td class="padd"><?php if(!empty($time_id)){foreach ($time_id as $id){if($id==2){echo "<img ".$style." src='".$img_src."' />" ;} }}?></td>
+					   	<td class="padd"><?php if(!empty($time_id)){foreach ($time_id as $id){if($id==3){echo "<img ".$style." src='".$img_src."' />" ;} }}?></td>
+					   	<td class="padd"><?php if(!empty($time_id)){foreach ($time_id as $id){if($id==4){echo "<img ".$style." src='".$img_src."' />" ;} }}?></td>
+						
+						<td class="padd"><?php echo date('d-m-Y',strtotime($rs['create_date']));?></td>
+						<td class="padd"><?php echo $rs['receipt_number'];?></td>
+						<td class="padd"><?php echo "$ ".$rs['tuition_fee'];?></td>
+						<td class="padd">
+							<?php if($rs['discount_percent']>0 && $rs['discount_fix']>0){
+									echo $rs['discount_percent']." %"." + $".$rs['discount_fix'];
+								}else if($rs['discount_percent']>0){
+									echo $rs['discount_percent']." %";
+								}else if($rs['discount_fix']>0){
+									echo "$ ".$rs['discount_fix'];
+								}
+							?>
+						</td>
+						<td class="padd"><?php echo "$ ".$rs['tuition_fee_after_discount'];?></td>
+						<td class="padd"><?php echo date('d-m-Y',strtotime($rs['start_date']));?></td>
+						<td class="padd"><?php echo date('d-m-Y',strtotime($rs['validate']));?></td>
+						<td class="padd"><?php echo $amount_month;?></td>
+						
+						<td class="padd"><?php if($rs['other_fee']>0){echo "$ ".$rs['other_fee'];}?></td>
+						
+						<td class="padd"><?php if($rs['grand_total_balance']>0){echo "$ ".$rs['grand_total_balance'];}?></td>
+						<td class="padd"><?php echo "$ ".$rs['grand_total_payment'];?></td>
+						
+						<td class="padd"><?php echo $rs['note'];?></td>
+						<td class="padd" style="color: red;"><?php if($rs['is_subspend']>0){ echo $rs['suspend_type'];}?></td>
+						<td class="padd" style="color: red;"><?php if($rs['is_subspend']>0){ echo date("d-m-Y",strtotime($rs['date_stop']));}?></td>
+ 					
+ 						<td class="padd"><?php if($rs['is_void']==1){echo $rs['void_status'];}?></td>
+ 					</tr>
+ 					
+ 				<?php }?>
+				</table>	
+				
+				<table border="1" width="20%" style="border-collapse: collapse;margin-top: 25px; text-align: center;border: 1px solid #000;">
+					<tr>
+						<td width="70%">Total Student All</td>
+						<td width="30%"><?php echo count($this->total_student);?></td>
+					</tr>
+					<tr>
+						<td>Stop Student All</td>
+						<td><?php echo count($this->student_drop);?></td>
+					</tr>
+					<tr>
+						<td style="background: #c1d0f3;"><strong>Net Total Student</strong></td>
+						<td style="background: #eaeaea;"><strong><?php echo count($this->total_student) - count($this->student_drop);?></strong></td>
+					</tr>
+				</table>
+				
+				
+				<?php if(!empty($this->amount_student_by_service)){?>	
+				
+					<?php 
+						$old_service=0;
+						$amount_student = 0;
+						$service_name = "";
+						$total_student = 0;
+					?>
+				
+					<table border="1" width="40%" style="white-space:nowrap;border-collapse: collapse;margin: 0 auto;text-align: center;">
+						<tr style="background: #c1d0f3;">
+							<td colspan="2">Summary report for <?php echo $this->search['for_month'].'-'.date("Y")?></td>
+						</tr>
+						
+						<tr style="background: #c1d0f3;">
+							<td width="50%">ឈ្មោះសេវាកម្ម</td>
+							<td width="50%">ចំនួនសិស្ស</td>
+						</tr>
+						<?php  foreach($this->amount_student_by_service as $key => $rs){?>
+							<?php if($key>0 && $old_service!=$rs['service_id']){?>
+							<tr>
+								<td><?php echo $service_name?></td>
+								<td><?php echo $amount_student;?></td>
+							</tr>
+						<?php 
+								$amount_student = 1;
+							}else{
+								$amount_student = $amount_student + 1;
+							}
+							$old_service=$rs['service_id'];
+							$service_name = $rs['service_name'];
+						?>
+						
+						<?php $total_student = $total_student+1;?>
+					<?php }?>
+						<tr>
+							<td><?php echo $service_name?></td>
+							<td><?php echo $amount_student;?></td>
+						</tr>
+						<tr>
+							<td>ចំនួនសិស្សសរុប</td>
+							<td style="background: #eaeaea;"> <?php echo $total_student;?></td>
+						</tr>
+					</table>
+				
+				<?php }?>
+				
+				
+				
+					<table border="1" width="40%" style="white-space:nowrap; border-collapse: collapse;margin: 0 auto;text-align: center;margin-top: 20px;">
+						<tr>
+							<td colspan="2" align="center">**********************</td>
+						</tr>
+						<tr style="background: #c2c2fa;">
+							<td width="75%">Total Number of Payable Students for <?php echo ($this->search['for_month']-1)."-".date("Y")?></td>
+							<td width="25%"><?php echo count($this->student_payable_last_month);?></td>
+						</tr>
+						
+						<tr style="background: #e2f6f5;">
+							<td>Total Number of Payable Students for <?php echo $this->search['for_month']."-".date("Y")?></td>
+							<td><?php echo count($this->student_payable_this_month);?></td>
+						</tr>
+					</table>
+				
+				<?php if(count($this->total_student)>0){?>
+					<table border="1" width="40%" style="white-space:nowrap;border-collapse: collapse;margin: 0 auto;text-align: center;margin-top: 20px;">
+						<tr>
+							<td colspan="2" align="center">**********************</td>
+						</tr>
+						<?php 
+							$all_amount_student = count($this->total_student);
+							$all_amount_student_drop = count($this->student_drop);
+						
+							$amount_student_new_this_month = count($this->new_student_for_month);
+							$amount_student_drop_this_month = count($this->student_drop_for_month);
+							
+	// 			///////////////////////////// calculate ////////////////////////////////////////////////////			
+							
+							$old_student_amount = $all_amount_student - $amount_student_new_this_month;
+							$old_student_drop_amount = $all_amount_student_drop - $amount_student_drop_this_month;
+							
+							$current_student = $all_amount_student - $all_amount_student_drop;
+						?>
+					
+						<tr style="background: #c2c2fa;">
+							<td align="left" width="50%">&nbsp;ចំនួនសិស្សចាស់សរុប</td>
+							<td width="50%"><?php echo $old_student_amount;?></td>
+						</tr>
+						
+						<tr style="background: #e2f6f5;">
+							<td align="left">&nbsp;ចំនួនសិស្សចាស់ ឈប់សរុប</td>
+							<td><?php echo $old_student_drop_amount;?></td>
+						</tr>
+						
+						<tr style="background: #fac9c9;">
+							<td align="left">&nbsp;ចំនួនសិស្សថ្មីក្នុងខែ <?php echo $this->search['for_month']?> សរុប</td>
+							<td><?php echo $amount_student_new_this_month;?></td>
+						</tr>
+						
+						<tr style="background: #e4e4e4;">
+							<td align="left">&nbsp;ចំនួនសិស្សឈប់ក្នុងខែ <?php echo $this->search['for_month']?> សរុប</td>
+							<td><?php echo $amount_student_drop_this_month;?></td>
+						</tr>
+						
+						<tr>
+							<td align="left">&nbsp;ចំនួនសិស្សសរុបក្នុងខែ <?php echo $this->search['for_month']."-".date("Y")?> </td>
+							<td style="background: #eaeaea;"><?php echo $current_student;?></td>
+						</tr>
+					</table>
+				<?php }?>	
+				
+				<?php */?>
+				
+					<label id="transport_data"></label>
+				
+					<label id="transport_total_student"></label>
+				
+					<label id="transport_student_by_service"></label>
+
+					<table width="100%">
+					
+						<tr><td colspan="3">&nbsp;</td></tr>
+						<tr><td colspan="3">&nbsp;</td></tr>
+						<tr >
+							<td align="center" width="25%">
+								<span style="font-size: 14px;"><?php echo $tr->translate("APPROVED_BY"); ?></span>
+							</td>
+							<td align="center" width="25%">
+								<span style="font-size: 14px;"><?php echo $tr->translate("VERIFIED_BY"); ?></span>
+							</td>
+							<td align="center" width="25%">
+								<span style="font-size: 14px;"><?php echo $tr->translate("CHECKED_BY"); ?></span>
+							</td>
+							<td align="center"  width="25%">
+								<span style="font-size: 14px;text-align: right;"><?php echo $tr->translate("PREPARED_BY"); ?></span>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+	</div>		
+</div>
+
+<div class="overlay">
+	<div class="overlay-load">
+		<div class="overlay-msg">
+	    </div>
+	</div>
+</div>	
+<style>
+.overlay {display: none;position: absolute;width: 100%;height: 150%;top: 0px;left: 0px;background: #FCFCFC;z-index: 1001;opacity: .5;}
+.overlay-load {width: 350px;height: 100px;margin: auto;top: 0px;bottom: 0px;position: absolute;left: 0px;right: 0px;
+           text-align: center;
+           background: #fff url("<?php echo $this->baseUrl()?>/images/loading.gif") 50% 25%;
+           background-repeat: no-repeat;          
+}
+.overlay-msg{margin-bottom: 10px;bottom: 0px;position: absolute;font-style: italic;color: rgb(19, 19, 19);} 
+</style>
+
+<script type="text/javascript">
+
+dojo.ready(function(){
+	getTransportData();
+});
+
+var url_get_data = '<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'get-transportdata')); ?>';
+function getTransportData(){
+	branch_id = dijit.byId("branch").get("value");
+	//if(branch_id>0){
+		loading();
+		dojo.xhrPost({
+			url:url_get_data,
+			form: dojo.byId("frm_search"),
+			//handleAs:"json",
+			load: function(data) {
+				 if(data){
+					document.getElementById('transport_data').innerHTML = data;
+				 }else{
+					 document.getElementById('transport_data').innerHTML = "";
+				 }
+				 getTransportTotalStudent();
+			},
+			error: function(err) {
+				alert(err);
+			}
+		});
+	//}
+}
+
+var url_get_total_student = '<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'get-transporttotalstudent')); ?>';
+function getTransportTotalStudent(){
+	dojo.xhrPost({
+		url:url_get_total_student,
+		form: dojo.byId("frm_search"),
+		//handleAs:"json",
+		load: function(data1) {
+			 if(data1){
+				document.getElementById('transport_total_student').innerHTML = data1;
+			 }else{
+				 document.getElementById('transport_total_student').innerHTML = "";
+			 }
+			 getTransportStudentByService();
+		},
+		error: function(err) {
+			alert(err);
+		}
+	});
+}
+
+var url_get_student_by_grade = '<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'get-transportstudentbyservice')); ?>';
+function getTransportStudentByService(){
+	dojo.xhrPost({
+		url:url_get_student_by_grade,
+		form: dojo.byId("frm_search"),
+		//handleAs:"json",
+		load: function(data2) {
+			 if(data2){
+				document.getElementById('transport_student_by_service').innerHTML = data2;
+			 }else{
+				 document.getElementById('transport_student_by_service').innerHTML = "";
+			 }
+			 document.getElementsByClassName("overlay")[0].style.display="none";	
+		},
+		error: function(err) {
+			alert(err);
+		}
+	});
+}
+
+function loading(){
+    document.getElementsByClassName("overlay")[0].style.display="block";
+}
+
+
+function doPrint() {
+	window.frames["print_frame"].document.body.innerHTML=dojo.byId('divPrint').innerHTML;
+    window.frames["print_frame"].window.focus();
+    window.frames["print_frame"].window.print();
+    hideDialog();
+}
+function preview()
+{ 
+  var disp_setting="toolbar=no,status=no,resizable=no,location=no,directories=yes,menubar=no,"; 
+      disp_setting+="scrollbars=no,width=1200, height=700, left=100, top=25"; 
+  var content_vlue = document.getElementById("divPrint").innerHTML; 
+  
+  var docprint=window.open("","",disp_setting); 
+   docprint.document.open(); 
+   docprint.document.write('<html><head>'); 
+   docprint.document.write('</head><div style=" font-size:16px !important; margin:0px; font-family:Verdana;"><style>table th {font-size:14px !important;} table td{font-size:12px !important;}</style><center>');          
+   docprint.document.write(content_vlue);          
+   docprint.document.write('</center></div></html>'); 
+   docprint.document.close(); 
+   docprint.focus(); 
+}
+function exportExcel(){
+	$('#exportExcel').tableExport({type:'excel',escape:'false'});
+}
+</script>
+ 

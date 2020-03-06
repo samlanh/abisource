@@ -1,0 +1,46 @@
+<title>Delete Record</title>
+<form  id='acc_item' action="<?php echo $this->url(array('module'=>'accounting','controller'=>'coursestudy','action'=>'delete')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+	<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style="height:10cm;color:red; font-family: 'Khmer OS Battambang' !important;font-size:20px !important;white-space:nowrap;">
+		<tr>
+			<td width="35%">
+			</td>
+			<td width="30%">
+			</td>
+			<td width="35%">
+			</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td align="left" style="background: #ccc;color: #000;" >
+				Receipt : <?php echo $this->detail['receipt_number']?><br />
+				Student : <?php echo $this->detail['stu_khname'].' - '.$this->detail['stu_enname']?>
+			</td>
+			<td></td>
+		</tr>
+		
+		<tr>
+			<td></td>
+			<td align="center" >
+				តើលោកអ្នកពិតជាចង់លុបបង្កាន់ដៃនេះ មែនទេ? <br />
+				Do you really want to delete this receipt ?
+			</td>
+			<td></td>
+		</tr>
+		
+		<tr>
+			<td></td>
+			<td align="center" >
+				<input type="checkbox" name="delete_student" id="delete_student" dojoType="dijit.form.CheckBox" value="1" /> លុបទាំងទិន្នន័យ​សិស្ស
+			</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td align="center">
+				<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel"
+					type="submit" >Delete</button>
+			</td>
+			<td></td>
+		</tr>
+	</table>
+</form>
