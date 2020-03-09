@@ -8,68 +8,76 @@ class Accounting_Model_DbTable_DbIncome extends Zend_Db_Table_Abstract
 	
 	}
 	function addIncome($data){
-		if($data['shift']==1){
-			$create_date = $data['Date']." 10:00:00" ;
-		}else if($data['shift']==2){
-			$create_date = $data['Date']." 14:00:00" ;
-		}else if($data['shift']==3){
-			$create_date = $data['Date']." 18:00:00" ;
-		}
-		$array = array(
-				'name'			=>$data['name'],
-				'sex'			=>$data['sex'],
-				'phone'			=>$data['phone'],
-				
-				'title'			=>$data['title'],
-				'invoice'		=>$data['invoice'],
-				'cat_id'		=>$data['cate_income'],
-				
-				'total_amount'	=>$data['total_amount'],
-				'desc'			=>$data['Description'],
-				
-				'for_date'		=>$data['Date'],
-				'shift'			=>$data['shift'],
-				
-				'status'		=>$data['Stutas'],
-				'branch_id'		=>$data['branch_id'],
-				'user_id'		=>$this->getUserId(),
-				
-				'create_date'	=>$create_date,
-				'reg_from'		=>1,// from accounting
-		);
-		$this->insert($array);
- 	}
-	function updateIncome($data,$id){
-		if($data['shift']==1){
-			$create_date = $data['Date']." 10:00:00" ;
-		}else if($data['shift']==2){
-			$create_date = $data['Date']." 14:00:00" ;
-		}else if($data['shift']==3){
-			$create_date = $data['Date']." 18:00:00" ;
-		}
-		$arr = array(
+		try{
+			if($data['shift']==1){
+				$create_date = $data['Date']." 10:00:00" ;
+			}else if($data['shift']==2){
+				$create_date = $data['Date']." 14:00:00" ;
+			}else if($data['shift']==3){
+				$create_date = $data['Date']." 18:00:00" ;
+			}
+			$array = array(
 					'name'			=>$data['name'],
 					'sex'			=>$data['sex'],
 					'phone'			=>$data['phone'],
-				
+					
 					'title'			=>$data['title'],
 					'invoice'		=>$data['invoice'],
 					'cat_id'		=>$data['cate_income'],
-				
+					
 					'total_amount'	=>$data['total_amount'],
 					'desc'			=>$data['Description'],
-				
+					
 					'for_date'		=>$data['Date'],
 					'shift'			=>$data['shift'],
-				
+					
 					'status'		=>$data['Stutas'],
 					'branch_id'		=>$data['branch_id'],
-					//'user_id'		=>$this->getUserId(),
-				
+					'user_id'		=>$this->getUserId(),
+					
 					'create_date'	=>$create_date,
+					'reg_from'		=>1,// from accounting
 			);
-		$where=" id = ".$id;
-		$this->update($arr, $where);
+			$this->insert($array);
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+		}
+ 	}
+	function updateIncome($data,$id){
+		try{
+			if($data['shift']==1){
+				$create_date = $data['Date']." 10:00:00" ;
+			}else if($data['shift']==2){
+				$create_date = $data['Date']." 14:00:00" ;
+			}else if($data['shift']==3){
+				$create_date = $data['Date']." 18:00:00" ;
+			}
+			$arr = array(
+						'name'			=>$data['name'],
+						'sex'			=>$data['sex'],
+						'phone'			=>$data['phone'],
+					
+						'title'			=>$data['title'],
+						'invoice'		=>$data['invoice'],
+						'cat_id'		=>$data['cate_income'],
+					
+						'total_amount'	=>$data['total_amount'],
+						'desc'			=>$data['Description'],
+					
+						'for_date'		=>$data['Date'],
+						'shift'			=>$data['shift'],
+					
+						'status'		=>$data['Stutas'],
+						'branch_id'		=>$data['branch_id'],
+						//'user_id'		=>$this->getUserId(),
+					
+						'create_date'	=>$create_date,
+				);
+			$where=" id = ".$id;
+			$this->update($arr, $where);
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+		}
 	}
 	function getIncomeById($id){
 		$db = $this->getAdapter();

@@ -7,18 +7,38 @@
 	$action=$request->getActionName();
 	$controller=$request->getControllerName();
 	$module=$request->getModuleName();
+	
+	$session_user=new Zend_Session_Namespace('auth');
+	$user_id = $session_user->user_id;
+	if(empty($user_id)){
+		Application_Form_FrmMessage::redirectUrl("/");
+		exit();
+	}
+	$t = time();
+	$t0 = $session_user->timeout;
+	$diff = $t - $t0;
+	//500 = 5 min
+	if ($diff > 500 || !isset($t0))
+	{
+		$session_user->unsetAll();
+		Application_Form_FrmMessage::redirectUrl("/");
+		exit();
+	}else{
+		$session_user->unlock();
+		$session_user->timeout = time();
+		$session_user->lock();
+	}
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
 	<script src="<?php echo $base_url;?>/js/dojo-1.6.1/dojo/dojo.js"  djConfig="isDebug: true,parseOnLoad: true"></script>
 	<link rel="stylesheet" type="text/css" href="<?php echo $base_url;?>/js/dojo-1.6.1/dijit/themes/soria/soria.css"/>
-	<!--  <link rel="stylesheet" type="text/css" href="<?php //echo $base_url;?>/js/dojo-1.6.1/dijit/themes/claro/claro.css"/>-->
-	<!--  <link rel="stylesheet" type="text/css" href="<?php //echo $base_url;?>/js/dojo-1.6.1/dijit/themes/tundra/tundra.css"/>-->
-	
 	<link rel="stylesheet" type="text/css" href="<?php echo $base_url;?>/js/dojo-1.6.1/dojox/grid/resources/tundraGrid.css"/>
+	
 	<script src="<?php echo $base_url;?>/js/help.js"  type="text/javascript"></script>
 	<script src="<?php echo $base_url;?>/js/pdbs_js.js"  type="text/javascript"></script>
+	
 	<link rel="stylesheet" href="<?php echo $base_url;?>/css/template.css"/>
 	<link rel="stylesheet" href="<?php echo $base_url;?>/css/font-awesome.min.css"/>
 	<link href="<?php echo $base_url;?>/cssmenu/template.css" media="screen" rel="stylesheet" type="text/css">
@@ -41,8 +61,8 @@
 	<link rel="shortcut icon" href="<?php echo $base_url;?>/images/icon.ico" type="image/x-icon"/>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">	
 	<style type="text/css">
-*{ padding:0;margin:0;}
-    html, body { width: 100%; height: 100%; margin: 0; }
+		*{ padding:0;margin:0;}
+    	html, body { width: 100%; height: 100%; margin: 0; }
 		.btn{
 			height: 40px;
 			min-width: 100px;	
@@ -50,14 +70,23 @@
 		.fullside{ width:98%; height: 30px;}
 		.full{ width:100%;}
 		body, html {font-size:100%; font-family:'Khmer OS Battambang'}
-body, html,table {font-size:100%; font-family:'Khmer OS Battambang'}
+		body, html,table {font-size:100%; font-family:'Khmer OS Battambang'}
         /*body, html { font-family:helvetica,arial,sans-serif; font-size:95%; }*/
 		*{ padding: 0; margin: 0;}
 		fieldset{ font-family: inherit;}
-		
-		.addsign{color: #fff;
-			    background: #008;
-			    padding: 2px 19px;}
+		.addsign{
+			color: #fff;
+		    background: #008;
+		    padding: 2px 19px;
+		}
+		/*For Loading Page*/
+		.overlay {position: fixed;width: 100%;height: 100%;top: 0px;left: 0px;background: #FCFCFC;z-index: 1001;opacity: .95;}
+		.overlay-load {width: 350px;height: 100px;margin: auto;top: 0px;bottom: 0px;position: absolute;left: 0px;right: 0px;
+		           text-align: center;
+		           background: #fff url("<?php echo $this->baseUrl()?>/images/loading.gif") 50% 25%;
+		           background-repeat: no-repeat;          
+		}
+		.overlay-msg{margin-bottom: 10px;bottom: 0px;position: absolute;font-style: italic;color: rgb(19, 19, 19);} 
 	</style>	
 </head>
 <script>
@@ -87,6 +116,12 @@ dojo.require("dojo.parser");
     $them_style='soria';
     ?>
     <body class="<?php echo $class;?>">
+    	<div class="overlay" <?php if ($action=="index"){?>style="display: none;"<?php }?>>
+			<div class="overlay-load">
+				<div class="overlay-msg">
+			    </div>
+			</div>
+		</div>
         <table style="height: 100%;" width="100%" >
             <tr height="45px" >
             	<td colspan="2" valign="top"> <?php echo $this->render('header.phtml')?>
@@ -146,6 +181,7 @@ dojo.require("dojo.parser");
     </body>
     
     <iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>
+<script type="text/javascript">
 <?php if($module=='allreport' AND $action!='index' OR $action=='allreports' OR $action=='studentnearlyendservice' OR $action=='studentpaymentlate' ){ ?>
 
 <?php if(
@@ -164,7 +200,7 @@ dojo.require("dojo.parser");
 		
 		){?>
 
-<script type="text/javascript">
+
 function doPrint() {
 	window.frames["print_frame"].document.body.innerHTML=dojo.byId('divPrint').innerHTML;
     window.frames["print_frame"].window.focus();
@@ -193,10 +229,23 @@ function exportExcel(){
 	$('#exportExcel').tableExport({type:'excel',escape:'false'});
 }
 
-</script>
 <?php }?>
 <?php  }?>
 
+function loadingBlock(){
+  document.getElementsByClassName("overlay")[0].style.display="block";
+}
+function HideloadingBlock(){
+  document.getElementsByClassName("overlay")[0].style.display="none";
+}
+$( document ).ready(function() {
+	HideloadingBlock();
+});
+jQuery(function () {
+	'use strict';
+	HideloadingBlock();
+});
+</script>
 
 </html>
 

@@ -42,7 +42,7 @@ Class Registrar_Form_Frmexpense extends Zend_Dojo_Form {
 		));
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$rows = $_db->getAllBranch();
-		$opt =array(''=>$this->tr->translate("select branch"));
+		$opt =array(''=>$this->tr->translate("SELECT_BRANCH"));
 		if(!empty($rows))foreach($rows AS $row) $opt[$row['id']]=$row['name'];
 		$_branch_id->setMultiOptions($opt);
 		$_branch_id->setValue($request->getParam("branch_id"));
@@ -95,7 +95,7 @@ Class Registrar_Form_Frmexpense extends Zend_Dojo_Form {
 		));
 		$_dbs = new Application_Model_DbTable_DbGlobal();
 		$rows = $_dbs->getCategoryName(1);
-		$opt =array(''=>$this->tr->translate("select category"),'-1'=>$this->tr->translate("ADD_NEW"));
+		$opt =array(''=>$this->tr->translate("SELECT_CATEGORY"),'-1'=>$this->tr->translate("ADD_NEW"));
 		if(!empty($rows))foreach($rows AS $row) $opt[$row['id']]=$row['name'];
 		$_category->setMultiOptions($opt);
 		$_category->setValue($request->getParam("cat_income"));

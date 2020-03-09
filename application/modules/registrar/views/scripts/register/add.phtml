@@ -3,526 +3,10 @@
 	echo $this->headTitle($tr->translate('ADD_REGISTER')); 
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 ?>	
-<script type="text/javascript"  src="<?php echo $this->baseUrl();?>/js/jquery-1.8.3.min.js"></script>
-<!-- <script type="text/javascript"  src="<?php //echo $this->baseUrl();?>/js/convertion.js"></script> -->
-<script type="text/javascript">
-	dojo.require("dojo.data.ItemFileWriteStore");  
-	dojo.require("dojo.NodeList-manipulate");
-	dojo.require("dojo.data.ObjectStore");
-	dojo.require("dojo.store.Memory");
-	
-	var dept_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->all_dept));?> );
-	dojo.ready(function(){ 
-		changControll();
-		getStudentNo(1,'');
-		//displayAmountSection(); 
-		
-		new dijit.form.FilteringSelect({
-		    store: dept_store,
-		    autoComplete: false, 
-			queryExpr: "*${0}*",			
-		    required: true,
-		    id: "dept",
-		    name: "dept",           
-		    class: 'fullside',  
-		    placeHolder:"Selected Degree",          
-		    onChange: function() {  
-		    	dept_id = dijit.byId('dept').get('value');
-		    	dijit.byId('grade').attr('value','');
-				getDegreeType(dept_id);
-		    	getallModel(dept_id,a=''); 
-		    	getStudentNo(dept_id,'');
-				
-				//oldStudentChangeDegree();
-		    }
-		}, "dept");
-		
-		new dijit.form.FilteringSelect({
-		    autoComplete: false,
-			queryExpr: "*${0}*",                       
-		    id: "grade",
-		    name: "grade",           
-		    class: 'fullside', 
-		    placeHolder:"Selected Grade",          
-		    onChange: function() {  
-		    	make_id = dijit.byId('grade').get('value');
-		    	paymentTerm();
-		    	dijit.byId('discount').attr('value','0');
-		    	dijit.byId('books').attr('value','0');
-		    	dijit.byId('addmin_fee').attr('value','0');
-		    	dijit.byId('remaining').attr('value','0');
-		    	dijit.byId('remark').attr('value','0');
-		    	//dijit.byId('char_price').attr('value','0');
-		    	dijit.byId('not').attr('value','');
-		    	getTotale();
-		    }
-		}, "grade");
-		
-		dijit.byId('dept').attr('value','<?php echo $this->degree_row['degree'];?>');
-		getDateTerm(1);
-	});	
-	
-	var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
-	var url_dept = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-grade')); ?>';
-	function getallModel(dept_id,a){
-		if(dept_id>0){
-			dojo.xhrPost({
-				url:url_dept,
-				content:{
-					'dept_id':dept_id
-					},
-				handleAs:"json",
-				load: function(data) {
-					//alert(data);
-					grade_store  = getDataStorefromJSON('id','name', data);
-				    dijit.byId('grade').set('store',grade_store);  
-				    if(a!=""){
-				    	dijit.byId('grade').attr('value',a);
-			        } 
-				},
-				error: function(err) {
-					//alert(err);
-				}
-			});
-		}
-	}
-	var url_getstuno = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-stu-no')); ?>';
-	function getStudentNo(dept_id,condition){
-		if(dept_id>0){
-			dojo.xhrPost({
-				url:url_getstuno,
-				content:{
-					'dept_id':dept_id,
-					'branch_id':0,
-					},
-				handleAs:"json",
-				load: function(data) {
-					  dijit.byId('stu_id').attr('value',data);   
-					  if(condition==1){
-						  getNewReceiptNo(data);
-					  }
-					
-				},
-				error: function(err) {
-					alert(err);
-				}
-			});
-		}
-	}
-	
-	var url_getreceiptno = '<?php echo $this->url(array('module'=>'registrar','controller'=>'coursestudy','action'=>'get-receipt-no')); ?>';
-	function getNewReceiptNo(new_stu_id){
-		degree_type = dijit.byId('degree_type').get('value');
-		//alert(degree_type);
-		if(degree_type>0){
-			if(degree_type==1){
-				type = 1; // khmer fulltime
-			}else{
-				type = 6; // english fulltime
-			}
-			dojo.xhrPost({
-				url:url_getreceiptno,
-				content:{
-					'type':type,
-					'branch_id':0,
-					},
-				handleAs:"json",
-				load: function(data) {
-					dijit.byId('reciept_no').attr('value',data);   
-					if(new_stu_id!=''){
-						printSave(new_stu_id,data);
-					}
-				},
-				error: function(err) {
-					alert(err);
-				}
-			});
-		}
-	}
-	
-	function paymentTerm(){
-		generat=dijit.byId('study_year').get('value');
-		payment_term=dijit.byId('payment_term').get('value');
-		grade=dijit.byId('grade').get('value');
-		//time=dijit.byId('time').get('value');
-		session=dijit.byId('session').get('value');
-		student_type=dijit.byId('student_type').get('value');
-		
-		if(student_type!=1){
-			if(student_type==3){
-				stu_id = dijit.byId('old_studens').get('value');
-			}else{
-				stu_id = dijit.byId('drop_studens').get('value');
-			}
-			
-			if(stu_id != -1 ){
-				getBalancePrice(4,stu_id);
-			}
-		}else{
-			if(generat!='' && payment_term !='' && grade !='' && session !=''){
-				getPaymentTerms(generat,payment_term,grade,session);
-			}
-		}
-		getDateTerm(1);
-		
-	}
-	function paymentTerms(){
-		generat=dijit.byId('study_year').get('value');
-		payment_term=dijit.byId('payment_term').get('value');
-		//payment_term=payment_term-1;
-		grade=dijit.byId('grade').get('value');
-		//time=dijit.byId('time').get('value');
-		session=dijit.byId('session').get('value');
-		if(generat!='' && payment_term !='' && grade !='' && session !=''){
-			getPaymentTerms(generat,payment_term,grade,session);
-			
-		}
-	}
-	var payment_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
-	var url_getpaymentterm = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-payment-term')); ?>';
-	function getPaymentTerms(generat,payment_term,grade,session){//time (full/part time)
-		dijit.byId('tuitionfee').attr('value',0);
-    	dijit.byId('total').attr('value',0);
-    	dijit.byId('books').attr('value',0);
-
-    	// if(payment_term==5){ // if pay by section => show amount of section 
-			// document.getElementById('amount_section').style.display="block";
-			// document.getElementById('label_amount').style.display="block";
-			
-		// }else{ // pay by other => hide amount of section
-			// document.getElementById('amount_section').style.display="none";
-			// document.getElementById('label_amount').style.display="none";
-		// }
-    	
-		dojo.xhrPost({
-			url:url_getpaymentterm,
-			content:{
-				'generat_id':generat,
-				'pay_id':payment_term,
-				'grade_id':grade,
-				//'time':time,
-				'session':session
-				},
-			handleAs:"json",
-			load: function(data) {
-				  if(data !=''){
-					 // dijit.byId('tuitionfee').attr('value',data.price_fee);
-					dijit.byId('tuitionfee').attr('value',data.tuition_fee);
-					dijit.byId('total').attr('value',data.tuition_fee);
-					dijit.byId('books').attr('value',data.tuition_fee);
-					dijit.byId('price_per_section').attr('value',data.tuition_fee);
-				  }else {
-					 dijit.byId('tuitionfee').attr('value','0'); 
-					 dijit.byId('total').attr('value','0'); 
-					 //dijit.byId('discount').attr('value','0');
-					 dijit.byId('books').attr('value','0');
-					 //dijit.byId('addmin_fee').attr('value','0');
-					 dijit.byId('remaining').attr('value','0');
-					 //dijit.byId('remark').attr('value','0');
-				 //    dijit.byId('char_price').attr('value','0');
-					 dijit.byId('not').attr('value','');
-
-					 
-				  }
-				  getTotale();
-				  netTotal();
-				  
-			 /*     a = dojo.number.format(data.tuition_fee);
-				  money_khmer=read_money_in_khmer(a);
-				  dijit.byId('char_price').attr('value',money_khmer.trim()+'ដុល្លាគត់');
-				  */
-			},
-			error: function(err) {
-				//alert(err);
-			}
-		});
-	}
-	//get price balance
-	var url_balance = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-banlance-price')); ?>';
-	function getBalancePrice(servce_id,student_id){
-		type=1; // from register (k1 - g12)
-		if(servce_id>0 && student_id>0){	
-			dojo.xhrPost({
-				url:url_balance,
-				content:{
-					'servce_id':servce_id,
-					'student_id':student_id,
-					'type':type,
-					},
-				handleAs:"json",
-				load: function(data) {
-				      if(data){
-				    	  dijit.byId('tuitionfee').attr('value',data.balance);
-				    	  dijit.byId('id_balance_record').attr('value',data.id);
-				     	  dijit.byId('total').attr('value',data.balance);
-				    	  dijit.byId('books').attr('value',data.balance);
-				    	  dijit.byId('not').attr('value',data.sms);
-				    	  dijit.byId('study_year').attr('value',data.year);
-				    	  dijit.byId('session').attr('value',data.session);
-						  dijit.byId('study_hour').attr('value',data.time);
-				    	  dijit.byId('payment_term').attr('value',data.payment_term);
-				    	  dijit.byId('start_date').attr('value',data.start_date);
-				    	  dijit.byId('end_date').attr('value',data.validate);
-				    	  setReadOnly();
-				    	  netTotal();
-						  setStartDate(data.start_date,data.validate);
-				     }else {
-				    	 dijit.byId('id_balance_record').attr('value','');
-				    	 removeReadOnly();
-				    	 paymentTerms();
-				      }
-				},
-				error: function(err) {
-					alert(err);
-				}
-			});
-		}
-	}
-
-	function setStartDate(start_date , end_date){
-		dijit.byId('start_date').attr('value',start_date);
-		dijit.byId('end_date').attr('value',end_date);
-	}
-	
-	// set field to readonly when balance>0 for get all old information of student
-	function setReadOnly(){
-		dijit.byId("start_date").set('readOnly',true);
-		dijit.byId("end_date").set('readOnly',true);
-		dijit.byId("study_year").set('readOnly',true);
-		dijit.byId("dept").set('readOnly',true);
-		dijit.byId("grade").set('readOnly',true);
-		dijit.byId("session").set('readOnly',true);
-		dijit.byId("room").set('readOnly',true);
-		dijit.byId("study_hour").set('readOnly',true);
-		dijit.byId("payment_term").set('readOnly',true);
-		dijit.byId("amount_section").set('readOnly',true);
-	}
-	// Remove field readonly when balance <= 0 for get all old information of student
-	function removeReadOnly(){
-		dijit.byId("start_date").set('readOnly',false);
-		dijit.byId("end_date").set('readOnly',false);
-		dijit.byId("study_year").set('readOnly',false);
-		dijit.byId("dept").set('readOnly',false);
-		dijit.byId("grade").set('readOnly',false);
-		dijit.byId("session").set('readOnly',false);
-		dijit.byId("room").set('readOnly',false);
-		dijit.byId("study_hour").set('readOnly',false);
-		dijit.byId("payment_term").set('readOnly',false);
-		dijit.byId("amount_section").set('readOnly',false);
-	}
-
-	
-	//set value totale 
-	function getTotale(){
-		//old % totale
-		// payment_term = dijit.byId('payment_term').get('value');
-		// if(payment_term==5){
-			// tuitionfee = dijit.byId('tuitionfee').get('value');
-			// amount_section = dijit.byId('amount_section').get('value');
-			
-			// tuitionfee = tuitionfee * amount_section;
-		// }else{
-			// tuitionfee = dijit.byId('tuitionfee').get('value');
-			// tuitionfee = isNaN(tuitionfee)?0:tuitionfee;
-		// }
-		tuitionfee = dijit.byId('tuitionfee').get('value');
-		amount_section = dijit.byId('amount_section').get('value');
-		tuitionfee = tuitionfee * amount_section;
-		
-		discount=dijit.byId('discount').get('value');
-		discount = isNaN(discount)?0:discount;
-
-		discount_fix=dijit.byId('discount_fix').get('value');
-		discount_fix = isNaN(discount_fix)?0:discount_fix;
-
-		
-		pc=discount/100;
-		ds=(tuitionfee-discount_fix)*pc;
-		old_totale=(tuitionfee-discount_fix) - ds;
-		
-		//old_totale = tuitionfee - (tuitionfee*discount/100) - discount_fix;
-		
-		//alert('hello');
-		remark=dijit.byId('remark').get('value');
-		remark=isNaN(remark)?0:remark;
-		addmin_fee=dijit.byId('addmin_fee').get('value');
-		addmin_fee=isNaN(addmin_fee)?0:addmin_fee;
-		material_fee=dijit.byId('material_fee').get('value');
-		material_fee=isNaN(material_fee)?0:material_fee;
-		totals=parseFloat(old_totale)+parseFloat(remark)+parseFloat(addmin_fee)+parseFloat(material_fee);
-		dijit.byId('total').attr('value',totals.toFixed(2));
-		dijit.byId('books').attr('value',totals.toFixed(2));
-		getRemaining();
-	}
-	//set value remaining
-	function getRemaining(){
-		  total=dijit.byId('total').get('value');
-		  total=isNaN(total)?0:total;
-		  books=dijit.byId('books').get('value');
-		  books=isNaN(books)?0:books;
-		  remaining=parseFloat(total) - parseFloat(books);
-		  if(total<books){
-			 alert('Deposit must be smaller than the total money!');
-			 dijit.byId('books').attr('value',total);
-			 dijit.byId('remaining').attr('value','0');
-		  }else{
-		     dijit.byId('remaining').attr('value',remaining.toFixed(2));
-		  }
-		  //CheckAmount();
-	}
-	function getDisccount(){
-		if(dijit.byId('discount').get('value')>100){
-			alert('No more than a hundred of disccount!');
-			dijit.byId('discount').attr('value','100');
-		}
-	}
-	
-	
-//calculator date by select term_payment
-	function getDateTerm(type) {
-		// alert(1);
-		if(type==1){
-			payment_term=dijit.byId('payment_term').get('value');
-			start_date=dijit.byId('start_date').get('value');
-			
-			amount_section = dijit.byId('amount_section').get('value');
-			
-			var a = new Date(start_date);
-			
-			if(payment_term==1){
-				 
-				 mm = a.getMonth()+(1*amount_section)+1;
-				 var dd = a.getDate();
-				 if(dd<10){
-				   dd = "0"+dd;
-				 }
-				 if(mm<10){
-				   mm = "0"+mm;
-				 }
-				 var y = a.getFullYear();
-				 var epx_date = y + '-' + mm + '-' + dd ;
-				 dijit.byId('end_date').attr('value',epx_date);
-			 }
-			 else if(payment_term==2){
-				 mm = a.getMonth()+(3*amount_section)+1;
-				 var dd = a.getDate();
-				 if(dd<10){
-				   dd = "0"+dd;
-				 }
-				 if(mm<10){
-				   mm = "0"+mm;
-				 }
-				 var y = a.getFullYear();
-				 var epx_date = y + '-' + mm + '-' + dd ;
-				 dijit.byId('end_date').attr('value',epx_date);
-			 }
-			 else if(payment_term==3){
-				 mm = a.getMonth()+(6*amount_section)+1;
-				 var dd = a.getDate();
-				 if(dd<10){
-				   dd = "0"+dd;
-				 }
-				 if(mm<10){
-				   mm = "0"+mm;
-				 }
-				 var y = a.getFullYear();
-				 var epx_date = y + '-' + mm + '-' + dd ;
-				 dijit.byId('end_date').attr('value',epx_date);
-			 }
-			 else if(payment_term==4){
-				 mm = a.getMonth()+(12*amount_section)+1;
-				 var dd = a.getDate();
-				 if(dd<10){
-				   dd = "0"+dd;
-				 }
-				 if(mm<10){
-				   mm = "0"+mm;
-				 }
-				 var y = a.getFullYear();
-				 var epx_date = y + '-' + mm + '-' + dd ;
-				 dijit.byId('end_date').attr('value',epx_date);
-			 }else if(payment_term==5){
-				 var amount_day = dijit.byId('amount_section').get('value');;
-				 var start_date = dijit.byId('start_date').get('value');
-				 var year = start_date.getFullYear();
-				 var month = start_date.getMonth();
-				 var date = start_date.getDate();
-				 for(var i=0; i<amount_day; i++){
-					  var epx_date = new Date(year, month, date + i);
-				 }
-				 dijit.byId('end_date').attr('value',epx_date); 
-			 }	
-		}else{
-			payment_term = dijit.byId('payment_term').get('value');
-			if(payment_term == 5){
-				start_date = dijit.byId('start_date').get('value');
-				end_date = dijit.byId('end_date').get('value');
-				
-				amount_day = dijit.byId('amount_section').get('value');
-				/*
-				//alert(start_date+" , "+end_date)
-				
-				//day = end_date - start_date;
-				
-				var timeDiff = (end_date.getTime() - start_date.getTime());
-				if(timeDiff>=0){
-					var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)) + 1 ; // +1 because they also count the first day that register
-					dijit.byId('amount_section').attr('value',diffDays);
-				}else{
-					dijit.byId('amount_section').attr('value',0);
-				}
-				*/
-				
-				start_day = start_date.getDate();
-				//alert(start_day);
-				
-				end_day = 30 - start_day +2;
-				//alert(end_day);
-				
-				
-				
-				
-				//calculateTotalFee();netTotal();
-			}
-		}
-	}
-	
-	var url_get_degree_type = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-degree-type')); ?>';
-	function getDegreeType(degree){
-		if(degree>0){	
-			dojo.xhrPost({
-				url:url_get_degree_type,
-				content:{
-					'degree':degree,
-					},
-				handleAs:"json",
-				load: function(data) {
-				     if(data){
-				    	  dijit.byId('degree_type').attr('value',data);
-						  
-						  if(data==1){
-							  document.getElementById('label_type').innerHTML = '- តម្លៃសិក្សាខាងលើ សម្រាប់តែសេវាសិក្សាចំណេះទូទៅភាសាខ្មែរតែប៉ុណ្ណោះ/This fee is for Khmer program service only.';
-						  }else{
-							  document.getElementById('label_type').innerHTML = '- តម្លៃសិក្សាខាងលើ សម្រាប់តែសេវាសិក្សាភាសាអង់គ្លេសពេញម៉ោងតែប៉ុណ្ណោះ/This fee is for full-time english service only.';
-						  }
-						  
-						  oldStudentChangeDegree();
-						  getNewReceiptNo("");
-				     }
-				},
-				error: function(err) {
-					alert(err);
-				}
-			});
-		}
-	}
-	
-	
-</script>
 <style>
-select{ width:100%;}
-fieldset{  background:none;}
-.red{ color: red; padding-left:5px;}
+	select{ width:100%;}
+	fieldset{  background:none;}
+	.red{ color: red; padding-left:5px;}
 </style>
 <?php $register = $this->frm_register;?>
 <form id='office_receipt' action="<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
@@ -533,6 +17,9 @@ fieldset{  background:none;}
          		dijit.byId("study_year").focus();
          		return false;
     		}
+			loadingBlock();
+			dijit.byId('save_new').set('disabled',true);
+			dijit.byId('save_close').set('disabled',true);
     		return true;
    		}else {
     		return false;
@@ -782,23 +269,487 @@ fieldset{  background:none;}
 		</tr>
 	</table>	
 </form>
+<script type="text/javascript"  src="<?php echo $this->baseUrl();?>/js/jquery-1.8.3.min.js"></script>
+<!-- <script type="text/javascript"  src="<?php //echo $this->baseUrl();?>/js/convertion.js"></script> -->
 <script type="text/javascript">
+	dojo.require("dojo.data.ItemFileWriteStore");  
+	dojo.require("dojo.NodeList-manipulate");
+	dojo.require("dojo.data.ObjectStore");
+	dojo.require("dojo.store.Memory");
+	var dept_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->all_dept));?> );
+	dojo.ready(function(){ 
+		changControll();
+		getStudentNo(1,'');
+		//displayAmountSection(); 
+		
+		new dijit.form.FilteringSelect({
+		    store: dept_store,
+		    autoComplete: false, 
+			queryExpr: "*${0}*",			
+		    required: true,
+		    id: "dept",
+		    name: "dept",           
+		    class: 'fullside',  
+		    placeHolder:"Selected Degree",          
+		    onChange: function() {  
+		    	dept_id = dijit.byId('dept').get('value');
+		    	dijit.byId('grade').attr('value','');
+				getDegreeType(dept_id);
+		    	getallModel(dept_id,a=''); 
+		    	getStudentNo(dept_id,'');
+				
+				//oldStudentChangeDegree();
+		    }
+		}, "dept");
+		
+		new dijit.form.FilteringSelect({
+		    autoComplete: false,
+			queryExpr: "*${0}*",                       
+		    id: "grade",
+		    name: "grade",           
+		    class: 'fullside', 
+		    placeHolder:"Selected Grade",          
+		    onChange: function() {  
+		    	make_id = dijit.byId('grade').get('value');
+		    	paymentTerm();
+		    	dijit.byId('discount').attr('value','0');
+		    	dijit.byId('books').attr('value','0');
+		    	dijit.byId('addmin_fee').attr('value','0');
+		    	dijit.byId('remaining').attr('value','0');
+		    	dijit.byId('remark').attr('value','0');
+		    	//dijit.byId('char_price').attr('value','0');
+		    	dijit.byId('not').attr('value','');
+		    	getTotale();
+		    }
+		}, "grade");
+		
+		dijit.byId('dept').attr('value','<?php echo $this->degree_row['degree'];?>');
+		getDateTerm(1);
+	});	
+	
+	var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
+	var url_dept = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-grade')); ?>';
+	function getallModel(dept_id,a){
+		if(dept_id>0){
+			dojo.xhrPost({
+				url:url_dept,
+				content:{
+					'dept_id':dept_id
+					},
+				handleAs:"json",
+				load: function(data) {
+					//alert(data);
+					grade_store  = getDataStorefromJSON('id','name', data);
+				    dijit.byId('grade').set('store',grade_store);  
+				    if(a!=""){
+				    	dijit.byId('grade').attr('value',a);
+			        } 
+				},
+				error: function(err) {
+					//alert(err);
+				}
+			});
+		}
+	}
+	var url_getstuno = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-stu-no')); ?>';
+	function getStudentNo(dept_id,condition){
+		if(dept_id>0){
+			dojo.xhrPost({
+				url:url_getstuno,
+				content:{
+					'dept_id':dept_id,
+					'branch_id':0,
+					},
+				handleAs:"json",
+				load: function(data) {
+					  dijit.byId('stu_id').attr('value',data);   
+					  if(condition==1){
+						  getNewReceiptNo(data);
+					  }
+					
+				},
+				error: function(err) {
+					alert(err);
+				}
+			});
+		}
+	}
+	
+	var url_getreceiptno = '<?php echo $this->url(array('module'=>'registrar','controller'=>'coursestudy','action'=>'get-receipt-no')); ?>';
+	function getNewReceiptNo(new_stu_id){
+		degree_type = dijit.byId('degree_type').get('value');
+		//alert(degree_type);
+		if(degree_type>0){
+			if(degree_type==1){
+				type = 1; // khmer fulltime
+			}else{
+				type = 6; // english fulltime
+			}
+			dojo.xhrPost({
+				url:url_getreceiptno,
+				content:{
+					'type':type,
+					'branch_id':0,
+					},
+				handleAs:"json",
+				load: function(data) {
+					dijit.byId('reciept_no').attr('value',data);   
+					if(new_stu_id!=''){
+						printSave(new_stu_id,data);
+					}
+				},
+				error: function(err) {
+					alert(err);
+				}
+			});
+		}
+	}
+	
+	function paymentTerm(){
+		generat=dijit.byId('study_year').get('value');
+		payment_term=dijit.byId('payment_term').get('value');
+		grade=dijit.byId('grade').get('value');
+		//time=dijit.byId('time').get('value');
+		session=dijit.byId('session').get('value');
+		student_type=dijit.byId('student_type').get('value');
+		
+		if(student_type!=1){
+			if(student_type==3){
+				stu_id = dijit.byId('old_studens').get('value');
+			}else{
+				stu_id = dijit.byId('drop_studens').get('value');
+			}
+			
+			if(stu_id != -1 ){
+				getBalancePrice(4,stu_id);
+			}
+		}else{
+			if(generat!='' && payment_term !='' && grade !='' && session !=''){
+				getPaymentTerms(generat,payment_term,grade,session);
+			}
+		}
+		getDateTerm(1);
+		
+	}
+	function paymentTerms(){
+		generat=dijit.byId('study_year').get('value');
+		payment_term=dijit.byId('payment_term').get('value');
+		//payment_term=payment_term-1;
+		grade=dijit.byId('grade').get('value');
+		//time=dijit.byId('time').get('value');
+		session=dijit.byId('session').get('value');
+		if(generat!='' && payment_term !='' && grade !='' && session !=''){
+			getPaymentTerms(generat,payment_term,grade,session);
+			
+		}
+	}
+	var payment_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
+	var url_getpaymentterm = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-payment-term')); ?>';
+	function getPaymentTerms(generat,payment_term,grade,session){//time (full/part time)
+		dijit.byId('tuitionfee').attr('value',0);
+    	dijit.byId('total').attr('value',0);
+    	dijit.byId('books').attr('value',0);
 
+		dojo.xhrPost({
+			url:url_getpaymentterm,
+			content:{
+				'generat_id':generat,
+				'pay_id':payment_term,
+				'grade_id':grade,
+				//'time':time,
+				'session':session
+				},
+			handleAs:"json",
+			load: function(data) {
+				  if(data !=''){
+					 // dijit.byId('tuitionfee').attr('value',data.price_fee);
+					dijit.byId('tuitionfee').attr('value',data.tuition_fee);
+					dijit.byId('total').attr('value',data.tuition_fee);
+					dijit.byId('books').attr('value',data.tuition_fee);
+					dijit.byId('price_per_section').attr('value',data.tuition_fee);
+				  }else {
+					 dijit.byId('tuitionfee').attr('value','0'); 
+					 dijit.byId('total').attr('value','0'); 
+					 //dijit.byId('discount').attr('value','0');
+					 dijit.byId('books').attr('value','0');
+					 //dijit.byId('addmin_fee').attr('value','0');
+					 dijit.byId('remaining').attr('value','0');
+					 //dijit.byId('remark').attr('value','0');
+				 //    dijit.byId('char_price').attr('value','0');
+					 dijit.byId('not').attr('value','');
 
+					 
+				  }
+				  getTotale();
+				  netTotal();
+				  
+			},
+			error: function(err) {
+				//alert(err);
+			}
+		});
+	}
+	//get price balance
+	var url_balance = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-banlance-price')); ?>';
+	function getBalancePrice(servce_id,student_id){
+		type=1; // from register (k1 - g12)
+		if(servce_id>0 && student_id>0){	
+			dojo.xhrPost({
+				url:url_balance,
+				content:{
+					'servce_id':servce_id,
+					'student_id':student_id,
+					'type':type,
+					},
+				handleAs:"json",
+				load: function(data) {
+				      if(data){
+				    	  dijit.byId('tuitionfee').attr('value',data.balance);
+				    	  dijit.byId('id_balance_record').attr('value',data.id);
+				     	  dijit.byId('total').attr('value',data.balance);
+				    	  dijit.byId('books').attr('value',data.balance);
+				    	  dijit.byId('not').attr('value',data.sms);
+				    	  dijit.byId('study_year').attr('value',data.year);
+				    	  dijit.byId('session').attr('value',data.session);
+						  dijit.byId('study_hour').attr('value',data.time);
+				    	  dijit.byId('payment_term').attr('value',data.payment_term);
+				    	  dijit.byId('start_date').attr('value',data.start_date);
+				    	  dijit.byId('end_date').attr('value',data.validate);
+				    	  setReadOnly();
+				    	  netTotal();
+						  setStartDate(data.start_date,data.validate);
+				     }else {
+				    	 dijit.byId('id_balance_record').attr('value','');
+				    	 removeReadOnly();
+				    	 paymentTerms();
+				      }
+				},
+				error: function(err) {
+					alert(err);
+				}
+			});
+		}
+	}
+
+	function setStartDate(start_date , end_date){
+		dijit.byId('start_date').attr('value',start_date);
+		dijit.byId('end_date').attr('value',end_date);
+	}
+	
+	// set field to readonly when balance>0 for get all old information of student
+	function setReadOnly(){
+		dijit.byId("start_date").set('readOnly',true);
+		dijit.byId("end_date").set('readOnly',true);
+		dijit.byId("study_year").set('readOnly',true);
+		dijit.byId("dept").set('readOnly',true);
+		dijit.byId("grade").set('readOnly',true);
+		dijit.byId("session").set('readOnly',true);
+		dijit.byId("room").set('readOnly',true);
+		dijit.byId("study_hour").set('readOnly',true);
+		dijit.byId("payment_term").set('readOnly',true);
+		dijit.byId("amount_section").set('readOnly',true);
+	}
+	// Remove field readonly when balance <= 0 for get all old information of student
+	function removeReadOnly(){
+		dijit.byId("start_date").set('readOnly',false);
+		dijit.byId("end_date").set('readOnly',false);
+		dijit.byId("study_year").set('readOnly',false);
+		dijit.byId("dept").set('readOnly',false);
+		dijit.byId("grade").set('readOnly',false);
+		dijit.byId("session").set('readOnly',false);
+		dijit.byId("room").set('readOnly',false);
+		dijit.byId("study_hour").set('readOnly',false);
+		dijit.byId("payment_term").set('readOnly',false);
+		dijit.byId("amount_section").set('readOnly',false);
+	}
+
+	
+	//set value totale 
+	function getTotale(){
+		tuitionfee = dijit.byId('tuitionfee').get('value');
+		amount_section = dijit.byId('amount_section').get('value');
+		tuitionfee = tuitionfee * amount_section;
+		
+		discount=dijit.byId('discount').get('value');
+		discount = isNaN(discount)?0:discount;
+
+		discount_fix=dijit.byId('discount_fix').get('value');
+		discount_fix = isNaN(discount_fix)?0:discount_fix;
+
+		
+		pc=discount/100;
+		ds=(tuitionfee-discount_fix)*pc;
+		old_totale=(tuitionfee-discount_fix) - ds;
+		
+		//old_totale = tuitionfee - (tuitionfee*discount/100) - discount_fix;
+		
+		//alert('hello');
+		remark=dijit.byId('remark').get('value');
+		remark=isNaN(remark)?0:remark;
+		addmin_fee=dijit.byId('addmin_fee').get('value');
+		addmin_fee=isNaN(addmin_fee)?0:addmin_fee;
+		material_fee=dijit.byId('material_fee').get('value');
+		material_fee=isNaN(material_fee)?0:material_fee;
+		totals=parseFloat(old_totale)+parseFloat(remark)+parseFloat(addmin_fee)+parseFloat(material_fee);
+		dijit.byId('total').attr('value',totals.toFixed(2));
+		dijit.byId('books').attr('value',totals.toFixed(2));
+		getRemaining();
+	}
+	//set value remaining
+	function getRemaining(){
+		  total=dijit.byId('total').get('value');
+		  total=isNaN(total)?0:total;
+		  books=dijit.byId('books').get('value');
+		  books=isNaN(books)?0:books;
+		  remaining=parseFloat(total) - parseFloat(books);
+		  if(total<books){
+			 alert('Deposit must be smaller than the total money!');
+			 dijit.byId('books').attr('value',total);
+			 dijit.byId('remaining').attr('value','0');
+		  }else{
+		     dijit.byId('remaining').attr('value',remaining.toFixed(2));
+		  }
+		  //CheckAmount();
+	}
+	function getDisccount(){
+		if(dijit.byId('discount').get('value')>100){
+			alert('No more than a hundred of disccount!');
+			dijit.byId('discount').attr('value','100');
+		}
+	}
+	
+	
+//calculator date by select term_payment
+	function getDateTerm(type) {
+		// alert(1);
+		if(type==1){
+			payment_term=dijit.byId('payment_term').get('value');
+			start_date=dijit.byId('start_date').get('value');
+			
+			amount_section = dijit.byId('amount_section').get('value');
+			
+			var a = new Date(start_date);
+			
+			if(payment_term==1){
+				 
+				 mm = a.getMonth()+(1*amount_section)+1;
+				 var dd = a.getDate();
+				 if(dd<10){
+				   dd = "0"+dd;
+				 }
+				 if(mm<10){
+				   mm = "0"+mm;
+				 }
+				 var y = a.getFullYear();
+				 var epx_date = y + '-' + mm + '-' + dd ;
+				 dijit.byId('end_date').attr('value',epx_date);
+			 }
+			 else if(payment_term==2){
+				 mm = a.getMonth()+(3*amount_section)+1;
+				 var dd = a.getDate();
+				 if(dd<10){
+				   dd = "0"+dd;
+				 }
+				 if(mm<10){
+				   mm = "0"+mm;
+				 }
+				 var y = a.getFullYear();
+				 var epx_date = y + '-' + mm + '-' + dd ;
+				 dijit.byId('end_date').attr('value',epx_date);
+			 }
+			 else if(payment_term==3){
+				 mm = a.getMonth()+(6*amount_section)+1;
+				 var dd = a.getDate();
+				 if(dd<10){
+				   dd = "0"+dd;
+				 }
+				 if(mm<10){
+				   mm = "0"+mm;
+				 }
+				 var y = a.getFullYear();
+				 var epx_date = y + '-' + mm + '-' + dd ;
+				 dijit.byId('end_date').attr('value',epx_date);
+			 }
+			 else if(payment_term==4){
+				 mm = a.getMonth()+(12*amount_section)+1;
+				 var dd = a.getDate();
+				 if(dd<10){
+				   dd = "0"+dd;
+				 }
+				 if(mm<10){
+				   mm = "0"+mm;
+				 }
+				 var y = a.getFullYear();
+				 var epx_date = y + '-' + mm + '-' + dd ;
+				 dijit.byId('end_date').attr('value',epx_date);
+			 }else if(payment_term==5){
+				 var amount_day = dijit.byId('amount_section').get('value');;
+				 var start_date = dijit.byId('start_date').get('value');
+				 var year = start_date.getFullYear();
+				 var month = start_date.getMonth();
+				 var date = start_date.getDate();
+				 for(var i=0; i<amount_day; i++){
+					  var epx_date = new Date(year, month, date + i);
+				 }
+				 dijit.byId('end_date').attr('value',epx_date); 
+			 }	
+		}else{
+			payment_term = dijit.byId('payment_term').get('value');
+			if(payment_term == 5){
+				start_date = dijit.byId('start_date').get('value');
+				end_date = dijit.byId('end_date').get('value');
+				
+				amount_day = dijit.byId('amount_section').get('value');
+				start_day = start_date.getDate();
+				//alert(start_day);
+				
+				end_day = 30 - start_day +2;
+			}
+		}
+	}
+	
+	var url_get_degree_type = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-degree-type')); ?>';
+	function getDegreeType(degree){
+		if(degree>0){	
+			dojo.xhrPost({
+				url:url_get_degree_type,
+				content:{
+					'degree':degree,
+					},
+				handleAs:"json",
+				load: function(data) {
+				     if(data){
+				    	  dijit.byId('degree_type').attr('value',data);
+						  
+						  if(data==1){
+							  document.getElementById('label_type').innerHTML = '- តម្លៃសិក្សាខាងលើ សម្រាប់តែសេវាសិក្សាចំណេះទូទៅភាសាខ្មែរតែប៉ុណ្ណោះ/This fee is for Khmer program service only.';
+						  }else{
+							  document.getElementById('label_type').innerHTML = '- តម្លៃសិក្សាខាងលើ សម្រាប់តែសេវាសិក្សាភាសាអង់គ្លេសពេញម៉ោងតែប៉ុណ្ណោះ/This fee is for full-time english service only.';
+						  }
+						  
+						  oldStudentChangeDegree();
+						  getNewReceiptNo("");
+				     }
+				},
+				error: function(err) {
+					alert(err);
+				}
+			});
+		}
+	}
+	
 
 function submitDataClose(){
 	if(dijit.byId('office_receipt').validate()) {
-		
 		dijit.byId('save_new').set('disabled',true);
 		dijit.byId('save_close').set('disabled',true);
-	
 		var url_submit = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'add')); ?>';
-		loading();
+		loadingBlock();
 		dojo.xhrPost({
 		    url: url_submit,	
 			form: dojo.byId("office_receipt"),		    
 			load: function(data) {
-				document.getElementsByClassName("overlay")[0].style.display="none";	
+				HideloadingBlock();
 				alert('<?php echo $tr->translate('INSERT_SUCCESS');?> !');
 				window.location.href ="<?php echo $this->baseUrl();?>/registrar/register";
 			},
@@ -810,17 +761,15 @@ function submitDataClose(){
 
 function submitDataAddNew(){
 	if(dijit.byId('office_receipt').validate()) {
-	
 		dijit.byId('save_new').set('disabled',true);
 		dijit.byId('save_close').set('disabled',true);
-		
 		var url_submit = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'add')); ?>';
-		loading();
+		loadingBlock();
 		dojo.xhrPost({
 		    url: url_submit,	
 			form: dojo.byId("office_receipt"),		    
 			load: function(data) {
-				document.getElementsByClassName("overlay")[0].style.display="none";		
+				HideloadingBlock();	
 				alert('<?php echo $tr->translate('INSERT_SUCCESS');?> !');
 				window.location.href ="<?php echo $this->baseUrl();?>/registrar/register/add";
 			},
@@ -828,10 +777,6 @@ function submitDataAddNew(){
 			}
 		});
 	}
-}
-
-function loading(){
-    document.getElementsByClassName("overlay")[0].style.display="block";
 }
 
 
@@ -845,9 +790,7 @@ function getStartDate(){
 		}else{
 			stu_id = dijit.byId('drop_studens').get('value');
 		}
-		
 		service_id = 4; // 4 => get validate only student register
-
 		if(stu_id>0){
 			dojo.xhrPost({
 				url:url_get_start_date,
@@ -890,11 +833,6 @@ function getMonthByNumber(m){
 }
 
 function calculateTotalFee(){
-	// price_per_sec = dijit.byId('price_per_section').get('value');
-	// amount_sec = dijit.byId('amount_section').get('value');
-
-	// total_fee = price_per_sec * amount_sec;
-	// dijit.byId('tuitionfee').attr('value',total_fee);
 	getDisccount();getTotale();
 }
 
@@ -1520,7 +1458,6 @@ function printSubmit(){
 function hideDialog(){
 	dijit.byId('terms').hide();
 }
-
 function changControll(){
 	student_type=dijit.byId('student_type').get('value');
 	//alert(student_type);
@@ -1761,19 +1698,3 @@ function oldStudentChangeDegree(){
 
 
 </script>
-
-<div class="overlay">
-	<div class="overlay-load">
-		<div class="overlay-msg">
-	    </div>
-	</div>
-</div>	
-<style>
-.overlay {display: none;position: absolute;width: 100%;height: 150%;top: 0px;left: 0px;background: #FCFCFC;z-index: 1001;opacity: .5;}
-.overlay-load {width: 350px;height: 100px;margin: auto;top: 0px;bottom: 0px;position: absolute;left: 0px;right: 0px;
-           text-align: center;
-           background: #fff url("<?php echo $this->baseUrl()?>/images/loading.gif") 50% 25%;
-           background-repeat: no-repeat;          
-}
-.overlay-msg{margin-bottom: 10px;bottom: 0px;position: absolute;font-style: italic;color: rgb(19, 19, 19);} 
-</style>

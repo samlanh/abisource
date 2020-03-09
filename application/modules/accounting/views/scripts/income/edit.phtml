@@ -16,6 +16,19 @@
 				dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 	<script type="dojo/method" event="onSubmit">			
 		if(this.validate()) {
+			branch_id = dijit.byId('branch_id').get('value');
+			if(branch_id==0 || branch_id==-1){
+				alert("<?php echo $tr->translate("PLEASE_SELECT_BRANCH")?> !!! ");
+				dijit.byId('branch_id').focus();
+				return false;
+			}
+			cate_income = dijit.byId('cate_income').get('value');
+			if(cate_income==0 || cate_income==-1){
+				alert("<?php echo $tr->translate("PLEASE_SELECT_INCOME_CATE")?> !!! ");
+				dijit.byId('cate_income').focus();
+				return false;
+			}
+			loadingBlock();
 			return true;
 		}else {
 			return false;
@@ -127,7 +140,7 @@ dojo.ready(function(){
 	    tabindex: "1",  
 	    value:0,       
 	    class: 'fullside',  
-	    placeHolder:"Selecte Category", 
+	    placeHolder:"<?php echo $tr->translate("SELECT_CATEGORY");?>", 
 	    onChange: function() {          
 		   	service_id = dijit.byId('cate_income').get('value');
 		    if(service_id==-1){

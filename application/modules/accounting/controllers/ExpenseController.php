@@ -74,10 +74,11 @@ class Accounting_ExpenseController extends Zend_Controller_Action
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_expense=$frm;
     	
+    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
     	$_dbs = new Application_Model_DbTable_DbGlobal();
     	$cate_income = $_dbs->getCategoryName(0);
-    	array_unshift($cate_income, array('id'=>'-1','name'=>'បន្ថែមថ្មី'));
-    	array_unshift($cate_income, array('id'=>'0','name'=>'Select Category'));
+    	array_unshift($cate_income, array('id'=>'-1','name'=>$tr->translate("ADD_NEW")));
+    	array_unshift($cate_income, array('id'=>'0','name'=>$tr->translate("SELECT_CATEGORY")));
     	$this->view->cate_expense = $cate_income;
     }
  
@@ -90,9 +91,10 @@ class Accounting_ExpenseController extends Zend_Controller_Action
 			$db = new Accounting_Model_DbTable_DbExpense();				
 			try {
 				$db->updateExpense($data);				
-				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/accounting/expense");
+				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/accounting/expense");
 			} catch (Exception $e) {
 				$this->view->msg = 'ការ​បញ្ចូល​មិន​ជោគ​ជ័យ';
+				Application_Form_FrmMessage::Sucessfull('EDIT_FAIL', "/accounting/expense");
 			}
 		}
 		$id = $this->getRequest()->getParam('id');
@@ -105,10 +107,11 @@ class Accounting_ExpenseController extends Zend_Controller_Action
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_expense=$frm;
 		
+    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
     	$_dbs = new Application_Model_DbTable_DbGlobal();
     	$cate_income = $_dbs->getCategoryName(0);
-    	array_unshift($cate_income, array('id'=>'-1','name'=>'បន្ថែមថ្មី'));
-    	array_unshift($cate_income, array('id'=>'0','name'=>'Select Category'));
+    	array_unshift($cate_income, array('id'=>'-1','name'=>$tr->translate("ADD_NEW")));
+    	array_unshift($cate_income, array('id'=>'0','name'=>$tr->translate("SELECT_CATEGORY")));
     	$this->view->cate_expense = $cate_income;
     }
     

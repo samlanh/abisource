@@ -72,10 +72,11 @@ class Accounting_IncomeController extends Zend_Controller_Action
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_expense=$frm;
     	
+    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
     	$_dbs = new Application_Model_DbTable_DbGlobal();
     	$cate_income = $_dbs->getCategoryName(1);
-    	array_unshift($cate_income, array('id'=>'-1','name'=>'បន្ថែមថ្មី'));
-    	array_unshift($cate_income, array('id'=>'0','name'=>'Select Category'));
+    	array_unshift($cate_income, array('id'=>'-1','name'=>$tr->translate("ADD_NEW")));
+    	array_unshift($cate_income, array('id'=>'0','name'=>$tr->translate("SELECT_CATEGORY")));
     	$this->view->cate_income = $cate_income;
     }
  
@@ -87,9 +88,10 @@ class Accounting_IncomeController extends Zend_Controller_Action
 			$db = new Accounting_Model_DbTable_DbIncome();				
 			try {
 				$db->updateIncome($data,$id);				
-				Application_Form_FrmMessage::Sucessfull('ការ​បញ្ចូល​​ជោគ​ជ័យ', "/accounting/income");		
+				Application_Form_FrmMessage::Sucessfull('EDIT_SUCCESS', "/accounting/income");		
 			} catch (Exception $e) {
-				$this->view->msg = 'ការ​បញ្ចូល​មិន​ជោគ​ជ័យ';
+				$this->view->msg = 'EDIT_FAIL';
+				Application_Form_FrmMessage::Sucessfull('EDIT_FAIL', "/accounting/income");
 			}
 		}
 		$id = $this->getRequest()->getParam('id');
@@ -102,10 +104,11 @@ class Accounting_IncomeController extends Zend_Controller_Action
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_expense=$frm;
 		
+    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
     	$_dbs = new Application_Model_DbTable_DbGlobal();
     	$cate_income = $_dbs->getCategoryName(1);
-    	array_unshift($cate_income, array('id'=>'-1','name'=>'បន្ថែមថ្មី'));
-    	array_unshift($cate_income, array('id'=>'0','name'=>'Select Category'));
+    	array_unshift($cate_income, array('id'=>'-1','name'=>$tr->translate("ADD_NEW")));
+    	array_unshift($cate_income, array('id'=>'0','name'=>$tr->translate("SELECT_CATEGORY")));
     	$this->view->cate_income = $cate_income;
     }
     public function deleteAction(){
@@ -114,7 +117,7 @@ class Accounting_IncomeController extends Zend_Controller_Action
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
     		$db->deleteRecord($data,$id);
-    		Application_Form_FrmMessage::Sucessfull("ជោគ​ជ័យ",'/accounting/income');
+    		Application_Form_FrmMessage::Sucessfull("DELETE_SUCCESS",'/accounting/income');
     	}
     	$this->view->detail = $db->getIncomeById($id);
     }

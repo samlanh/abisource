@@ -16,9 +16,13 @@ class IndexController extends Zend_Controller_Action
     {
         // action body
     	
+    	$session_user=new Zend_Session_Namespace('auth');
+    	$user_id = $session_user->user_id;
+    	if (!empty($user_id)){
+    		$this->_redirect("/home");
+    	}
     	
         /* set this to login page to change the character charset of browsers to Utf-8  ...*/    	  	
-		
     	$this->_helper->layout()->disableLayout();
 		$form=new Application_Form_FrmLogin();				
 		$form->setAction('index');		
@@ -77,7 +81,7 @@ class IndexController extends Zend_Controller_Action
 					$session_user->last_name= $user_info['last_name'];
 					$session_user->first_name= $user_info['first_name'];
 					$session_user->branch_id= $user_info['branch_id'];
-					
+					$session_user->timeout= time();
 					//$session_user->url_report = $db_user->getArrAclReport($user_info['user_type']);
 
 // 					$a_i = 0;
