@@ -40,11 +40,6 @@ class accounting_FixedAssetController extends Zend_Controller_Action {
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 	
-		// 		$fm = new Application_Form_FrmAdvanceSearch();
-		// 		$frm = $fm->AdvanceSearch();
-		// 		Application_Model_Decorator::removeAllDecorator($frm);
-		// 		$this->view->frm_search = $frm;
-	
 		$form=new Registrar_Form_FrmSearchInfor();
 		$form->FrmSearchRegister();
 		Application_Model_Decorator::removeAllDecorator($form);
@@ -58,24 +53,20 @@ class accounting_FixedAssetController extends Zend_Controller_Action {
 	}
 	
 	public function addAction(){
-		
 		if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();
-// 			ripnt_r($data);exit();
 			$db = new Accounting_Model_DbTable_DbAsset();
 			try {
 				$db->addAsset($data);
 				if(!empty($data['save_close'])){
-					Application_Form_FrmMessage::Sucessfull('ការ​បញ្ចូល​​ជោគ​ជ័យ', self::REDIRECT_URL . '/index');
+					Application_Form_FrmMessage::Sucessfull('INSERT_SUCCESS', self::REDIRECT_URL . '/index');
 				}else{
-					Application_Form_FrmMessage::Sucessfull('ការ​បញ្ចូល​​ជោគ​ជ័យ', self::REDIRECT_URL . '/add');
+					Application_Form_FrmMessage::Sucessfull('INSERT_SUCCESS', self::REDIRECT_URL . '/add');
 				}
-				Application_Form_FrmMessage::Sucessfull('ការ​បញ្ចូល​​ជោគ​ជ័យ', self::REDIRECT_URL . '/add');
-				
 			} catch (Exception $e) {
-				Application_Form_FrmMessage::message("INSERT_FAIL");
 				$err = $e->getMessage();
 				Application_Model_DbTable_DbUserLog::writeMessageError($err);
+				Application_Form_FrmMessage::message("INSERT_FAIL");
 			}
 		}
 		$fm = new Accounting_Form_Frmasset();
@@ -91,20 +82,14 @@ class accounting_FixedAssetController extends Zend_Controller_Action {
 		if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();
 			$data['id']=$id;
-			// 			ripnt_r($data);exit();
 			$db = new Accounting_Model_DbTable_DbAsset();
 			try {
 				$db->updatAsset($data);
-				if(!empty($data['save_new'])){
-					Application_Form_FrmMessage::Sucessfull('ការ​បញ្ចូល​​ជោគ​ជ័យ', self::REDIRECT_URL . '/index');
-				}else{
-					Application_Form_FrmMessage::Sucessfull('ការ​បញ្ចូល​​ជោគ​ជ័យ', self::REDIRECT_URL . '/index');
-				}
-				Application_Form_FrmMessage::Sucessfull('ការ​បញ្ចូល​​ជោគ​ជ័យ', self::REDIRECT_URL . '/index');
+				Application_Form_FrmMessage::Sucessfull('EDIT_SUCCESS', self::REDIRECT_URL . '/index');
 			} catch (Exception $e) {
-				Application_Form_FrmMessage::message("INSERT_FAIL");
 				$err = $e->getMessage();
 				Application_Model_DbTable_DbUserLog::writeMessageError($err);
+				Application_Form_FrmMessage::message("EDIT_FAIL");
 			}
 		}
 		$db = new Accounting_Model_DbTable_DbAsset();

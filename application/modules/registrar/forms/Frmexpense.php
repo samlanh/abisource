@@ -170,9 +170,16 @@ Class Registrar_Form_Frmexpense extends Zend_Dojo_Form {
 			$_stutas->setValue($data['status']);
 			$id->setValue($data['id']);
 			//$_branch_id->setValue($data['branch_id']);
-			$name->setValue($data['name']);
-			$phone->setValue($data['phone']);
-			$_sex->setValue($data['sex']);
+			if (!empty($data['name'])){
+				$name->setValue($data['name']);
+			}
+			if (!empty($data['phone'])){
+				$phone->setValue($data['phone']);
+			}
+			if (!empty($data['sex'])){
+				$_sex->setValue($data['sex']);
+			}
+			
 			//$convert_to_dollar->setValue($data['amount_in_dollar']);
 			//$_sex->setValue($data['sex']);
 			//$name->setValue($data['name']);

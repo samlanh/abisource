@@ -10,16 +10,21 @@ $frm = $this->frm_fixedasset;
 	height: 30px;
 }
 </style>
-<form id='frm_add' action="" 
-				dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-<script type="dojo/method" event="onSubmit">			
-			if(this.validate()) {
-                dijit.byId("save_close").attr("disabled",true);
-				dijit.byId("save_new").attr("disabled",true);
-				return true;
-			}else {
+<form id='frm_add' action=""  dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+	<script type="dojo/method" event="onSubmit">			
+		if(this.validate()) {
+			branch_id = dijit.byId('branch').get('value');
+			if(branch_id==0 || branch_id==-1){
+				alert("<?php echo $tr->translate("PLEASE_SELECT_BRANCH")?> !!! ");
+				dijit.byId('branch').focus();
 				return false;
 			}
+			loadingBlock();
+			dijit.byId("save_new").attr("disabled",true);
+			return true;
+		}else {
+			return false;
+		}
 </script>
 <table cellspacing="10" class='fullside'>
 	<tr>
@@ -142,9 +147,7 @@ $frm = $this->frm_fixedasset;
 						<input type="hidden" name="exchangefrom" value="2" />
 						<input type="hidden" name="inv_no" value="<?php echo $this->inv_no;?>">
 						<input iconClass="dijitEditorIcon dijitEditorIconSave"  type="reset" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>"dojoType="dijit.form.Button"/>
-						<input type="button" onclick="submitDataClose();" value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
-							iconClass="dijitEditorIcon dijitEditorIconSave" />
-						<input type="submit" value="save_new" name="save_new" id="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
+						<input type="submit" value="save_new" name="save_new" id="save_new" label="<?php echo $tr->translate('SAVE');?>" dojoType="dijit.form.Button" 
 							iconClass="dijitEditorIcon dijitEditorIconSave" />
 			</div>	`
 		</td>
@@ -159,71 +162,27 @@ dojo.require("dijit.form.NumberTextBox");
 dojo.ready(function(){	
 	
 });
-
 function calculateDepreciation(){
 	asset_cost=dijit.byId("asset_cost").get('value');
 	salvage_value=dijit.byId("salvage_value").get('value');
-	
 	if(salvage_value>asset_cost){
 		alert("The sale price can not bigger then cost price!!!");
 		dijit.byId("salvage_value").attr("value",asset_cost);
 		dijit.byId("amount").attr("value",0);
 		return false;
 	}
-	
 	usefull_life=dijit.byId("usefull_life").get('value');
 	dijit.byId("installment_amount").attr('value',(asset_cost-salvage_value).toFixed(2));
 	total_depreciation=(asset_cost-salvage_value)/usefull_life;
 	dijit.byId("amount").attr('value',total_depreciation.toFixed(2));
 }
 
-function submitDataClose(){
-	if(dijit.byId('frm_add').validate()) {
-		dijit.byId('save_close').set('disabled',true);
-		dijit.byId('save_new').set('disabled',true);
-		var url_submit = '<?php echo $this->url(array('module'=>'accounting','controller'=>'fixedasset','action'=>'add')); ?>';
-		dojo.xhrPost({
-		    url: url_submit,	
-			form: dojo.byId("frm_add"),		    
-			load: function(data) {
-				alert('<?php echo $tr->translate('INSERT_SUCCESS');?> !');
-				window.location.href ="<?php echo $this->baseUrl();?>/accounting/fixedasset/index";
-			},
-			error: function(e) {
-			}
-		});
-	}
-}
-
 function setEndDate(){
-/*
-	amount_date = dijit.byId('usefull_life').get('value');
-	//dayofweek = parseFloat(amount*7);
-	release_date = dijit.byId("start_date").get('value');//just update follow by first payment
-	if(isNaN(amount_date)){
-	}else{
-		var a = new Date(release_date);
-		dd = a.getDate();
-		var mm = a.getMonth()+(amount_date)+1;
-		 if(dd<10){
-			 dd = "0"+dd;
-		}
-		 if(mm<10){
-			 mm = "0"+mm;
-		}
-		var y = a.getFullYear();
-		var epx_date = y + '-'+ mm + '-'+dd ;
-		dijit.byId('date').attr('value',epx_date);	
-    }
-*/
-	 //pay_term = dijit.byId('collect_termtype').get('value');
 	 amount_date = dijit.byId('usefull_life').get('value');
 	 release_date = dijit.byId("start_date").get('value');
 
 	 var a = new Date(release_date);
-
 	 var month = a.getMonth()+amount_date+1;
-	 
 	 mm = month%12;
 	 var year = parseInt(month/12);
 	 var dd = a.getDate();
@@ -236,9 +195,6 @@ function setEndDate(){
 	 var y = a.getFullYear()+year;
 	 var epx_date = y + '-'+ mm + '-'+dd ;
 	 dijit.byId('date').attr('value',epx_date);
-
-
-    
 }
 
 </script>

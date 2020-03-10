@@ -283,7 +283,7 @@ fieldset{  background:none;}
 							<td><?php echo $tr->translate("BRANCH");?></td>
 							<td>
 								<select name="branch" id="branch" class="fullside" autoComplete="false" queryExpr="*${0}*" onchange="getAllNewStudentByBranch();getAllOldStudentByBranch();getAllDropStudentByBranch();getAllServiceYearByBranch();getNewReceiptNo('','');getNewLunchId('');" dojoType="dijit.form.FilteringSelect" type="text" >
-									<option value="-1">----- select branch -----</option>
+									<option value="-1"><?php echo $tr->translate("SELECT_BRANCH");?></option>
 									<?php if(!empty($this->branch_id)){foreach ($this->branch_id as $branch){?>
 									<option value="<?php echo $branch['id'];?>"><?php echo $branch['name'];?></option>
 									<?php }}?>
@@ -532,9 +532,7 @@ fieldset{  background:none;}
 		
 		<tr>
 			<td colspan="3" align="center">
-				<input type="button" name="save_close" id="save_close" onclick="submitDataClose();" value="រក្សាទុក" label="<?php echo $tr->translate('SAVE_CLOSE');?>"  dojoType="dijit.form.Button" 
-					iconClass="dijitEditorIcon dijitEditorIconSave" />
-				<input type="button" name="save_new" id="save_new" onclick="submitDataAddNew();" value="រក្សាទុក" label="<?php echo $tr->translate('SAVE_NEW');?>"  dojoType="dijit.form.Button" 
+				<input type="button" name="save_new" id="save_new" onclick="submitDataAddNew();" value="រក្សាទុក" label="<?php echo $tr->translate('SAVE');?>"  dojoType="dijit.form.Button" 
 					iconClass="dijitEditorIcon dijitEditorIconSave" />
 			</td>
 		</tr>
@@ -546,62 +544,7 @@ fieldset{  background:none;}
 
 
 <script type="text/javascript">
-
-
-function submitDataClose(){
-	
-	stu_type = dijit.byId('student_type').get('value');
-	if(stu_type==1){
-		stu_id = dijit.byId('student_name_new').get('value');
-		if(stu_id<1){
-			dijit.byId('student_name_new').focus();
-			return false;
-		}
-	}else if(stu_type==3){
-		stu_id = dijit.byId('student_name_old').get('value');
-		if(stu_id<1){
-			dijit.byId('student_name_old').focus();
-			return false;
-		}
-	}else if(stu_type==4){
-		stu_id = dijit.byId('stu_drop_name').get('value');
-		if(stu_id<1){
-			dijit.byId('stu_drop_name').focus();
-			return false;
-		}
-	}
-
-	total_payment = dijit.byId('total_payment').get('value');
-	paid_amount = dijit.byId('paid_amount').get('value');
-	if(paid_amount>total_payment){
-		alert('You can not pay more than total payment')
-		dijit.byId('paid_amount').focus();
-		return false;
-	}
-	
-	if(dijit.byId('office_receipt').validate()) {
-		
-		dijit.byId('save_new').set('disabled',true);
-		dijit.byId('save_close').set('disabled',true);
-	
-		var url_submit = '<?php echo $this->url(array('module'=>'accounting','controller'=>'studentlunchpayment','action'=>'add')); ?>';
-		loading();
-		dojo.xhrPost({
-		    url: url_submit,	
-			form: dojo.byId("office_receipt"),		    
-			load: function(data) {
-				document.getElementsByClassName("overlay")[0].style.display="none";	
-				alert('<?php echo $tr->translate('INSERT_SUCCESS');?> !');
-				window.location.href ="<?php echo $this->baseUrl();?>/accounting/studentlunchpayment";
-			},
-			error: function(e) {
-			}
-		});
-	}
-}
-
 function submitDataAddNew(){
-	
 	stu_type = dijit.byId('student_type').get('value');
 	if(stu_type==1){
 		stu_id = dijit.byId('student_name_new').get('value');
@@ -632,10 +575,8 @@ function submitDataAddNew(){
 	}
 
 	if(dijit.byId('office_receipt').validate()) {
-	
+		loadingBlock();
 		dijit.byId('save_new').set('disabled',true);
-		dijit.byId('save_close').set('disabled',true);
-		
 		var url_submit = '<?php echo $this->url(array('module'=>'accounting','controller'=>'studentlunchpayment','action'=>'add')); ?>';
 		loading();
 		dojo.xhrPost({

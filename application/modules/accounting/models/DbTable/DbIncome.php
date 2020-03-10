@@ -8,6 +8,8 @@ class Accounting_Model_DbTable_DbIncome extends Zend_Db_Table_Abstract
 	
 	}
 	function addIncome($data){
+		$_db= $this->getAdapter();
+		$_db->beginTransaction();
 		try{
 			if($data['shift']==1){
 				$create_date = $data['Date']." 10:00:00" ;
@@ -39,11 +41,15 @@ class Accounting_Model_DbTable_DbIncome extends Zend_Db_Table_Abstract
 					'reg_from'		=>1,// from accounting
 			);
 			$this->insert($array);
+			$_db->commit();
 		}catch(Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$_db->rollBack();
 		}
  	}
 	function updateIncome($data,$id){
+		$_db= $this->getAdapter();
+		$_db->beginTransaction();
 		try{
 			if($data['shift']==1){
 				$create_date = $data['Date']." 10:00:00" ;
@@ -75,8 +81,10 @@ class Accounting_Model_DbTable_DbIncome extends Zend_Db_Table_Abstract
 				);
 			$where=" id = ".$id;
 			$this->update($arr, $where);
+			$_db->commit();
 		}catch(Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$_db->rollBack();
 		}
 	}
 	function getIncomeById($id){

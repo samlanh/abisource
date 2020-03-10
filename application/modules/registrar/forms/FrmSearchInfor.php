@@ -415,14 +415,14 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form
 		
 		$_branch = new Zend_Dojo_Form_Element_FilteringSelect('branch');
 		$_branch->setAttribs(array('dojoType'=>$this->filter,
-				'placeholder'=>$this->tr->translate("----- select branch -----"),
+				'placeholder'=>$this->tr->translate("SELECT_BRANCH"),
 				'class'=>'fullside',
 				'required'=>false,
 				'autoComplete'=>'false',
 				'queryExpr'=>'*${0}*',
 		));
 		$_branch->setValue($request->getParam('branch'));
-		$opt_branch = array(''=>$this->tr->translate("----- select branch -----"));
+		$opt_branch = array(''=>$this->tr->translate("SELECT_BRANCH"));
 		$all_branch = $db_years->getAllBranch();
 		if(!empty($all_branch))foreach ($all_branch As $row)$opt_branch[$row['id']]=$row['name'];
 		$_branch->setMultiOptions($opt_branch);

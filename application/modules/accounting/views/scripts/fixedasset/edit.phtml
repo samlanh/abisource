@@ -10,15 +10,22 @@ $frm = $this->frm_fixedasset;
 	height: 30px;
 }
 </style> 
-<form id='frm_add' action="" 
-				dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-<script type="dojo/method" event="onSubmit">			
+<form id='frm_add' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+	<script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
+				branch_id = dijit.byId('branch').get('value');
+				if(branch_id==0 || branch_id==-1){
+					alert("<?php echo $tr->translate("PLEASE_SELECT_BRANCH")?> !!! ");
+					dijit.byId('branch').focus();
+					return false;
+				}
+				loadingBlock();
+				dijit.byId("save_new").attr("disabled",true);
 				return true;
 			}else {
 				return false;
 			}
-</script>
+	</script>
 <table cellspacing="10" class='fullside'>
 	<tr>
 		<td>
@@ -154,9 +161,7 @@ $frm = $this->frm_fixedasset;
 dojo.require("dijit.form.Textarea");
 dojo.require("dijit.form.NumberTextBox");
 dojo.ready(function(){	
-	
 });
-
 function calculateDepreciation(){
 	asset_cost=dijit.byId("asset_cost").get('value');
 	salvage_value=dijit.byId("salvage_value").get('value');

@@ -32,6 +32,7 @@
 				return false;
 			}
 			loadingBlock();
+			dijit.byId("savenew").attr("disabled",true);
 			return true;
 		}else {
 			return false;
@@ -112,11 +113,7 @@
 			</tr>
 			<tr>
 				<td colspan="3" align="center">
-				
-					<input type="submit" label="<?php echo $tr->translate("SAVE_CLOSE");?>" name='saveclose' value='saveclose' dojoType="dijit.form.Button"
-						 iconClass="dijitIconDelete"/>
-						 
-					<input type="submit" label="<?php echo $tr->translate("SAVE_NEW")?>" name='savenew' value='savenew' dojoType="dijit.form.Button"
+					<input type="submit" label="<?php echo $tr->translate("SAVE")?>" name='savenew' value='savenew' dojoType="dijit.form.Button"
 						 iconClass="dijitIconNewTask"/>
 						 
 				</td>
@@ -226,7 +223,6 @@ var cate_income_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Jso
 				form: dojo.byId("frm_add_cate_income"),
 				handleAs:"json",
 				load: function(data) {
-					//alert(data); 
 					var Itemmake = { 
 							id: data,
 							name: dijit.byId('cate_title').get('value')
@@ -242,12 +238,9 @@ var cate_income_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Jso
 			});
 		}
 	}
-	
 	function hidePopup(){		
 		dijit.byId("popup_cate").hide();
 	}
- 
- 
 </script>
 
 

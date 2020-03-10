@@ -19,14 +19,21 @@
 dojo.require("dojo.data.ItemFileWriteStore");
 </script>
 <form  id='frm_book' action="" dojoType="dijit.form.Form" method="post"  enctype="multipart/form-data" >
-<script type="dojo/method" event="onSubmit" enctype="multipart/form-data">			
-	if(this.validate()) {
+	<script type="dojo/method" event="onSubmit" enctype="multipart/form-data">			
+		if(this.validate()) {
+				branch_id = dijit.byId('branch').get('value');
+               	if(branch_id=='' || branch_id==-1){
+					alert("<?php echo $tr->translate("PLEASE_SELECT_BRANCH")?> !!!");
+                    dijit.byId("branch").focus();
+					return false;
+				}
+				loadingBlock();
 			    dijit.byId('save_close').set('disabled',true);
 				return true;
 			} else {
 				return false;
-			}
-</script>
+		}
+	</script>
 <table cellspacing="2" width="100%" style="margin: 0 auto; ">
 
   	<tr>
@@ -38,7 +45,7 @@ dojo.require("dojo.data.ItemFileWriteStore");
 							<td><?php echo $tr->translate("BRANCH");?></td>
 							<td>
 								<select dojoType='dijit.form.FilteringSelect' id="branch" name="branch" class="fullside" onChange="getOldCustomerByBranch();getCustomerIDByBranch();getReceiptByBranch();" ​​>
-									<option value=""><?php echo $tr->translate("Select Branch");?></option>
+									<option value=""><?php echo $tr->translate("SELECT_BRANCH");?></option>
 									<?php if(!empty($this->branch)){foreach($this->branch as $branch){?>
 										<option value="<?php echo $branch['id']?>" <?php if($branch['id']==$row['branch_id']){echo "selected='selected'";}?>><?php echo $branch['name']?></option>
 									<?php }}?>

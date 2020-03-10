@@ -10,7 +10,7 @@ class Accounting_Model_DbTable_DbAsset extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$db->beginTransaction();
 		try{	
-		$arr = array(
+			$arr = array(
 				'branch_id'			=>$data['branch'],
 				'fixed_assetname'	=>$data['asset_name'],
 				'fixed_asset_type'	=>$data['asset_type'],
@@ -37,12 +37,9 @@ class Accounting_Model_DbTable_DbAsset extends Zend_Db_Table_Abstract
 				'status'			=>$data['status'],
 				'user_id'			=>$this->getUserId(),
 				'note'				=>$data['note']
-		 );
-		
+		 	);
 		 $ass_id = $this->insert($arr);
-		 
 		 $data['tem_type']=1;
-		 
 		 $time = $data['usefull_life'];
 		 $next_payment = $data['start_date'];
 		 if($data['tem_type']==1){

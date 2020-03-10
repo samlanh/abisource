@@ -66,31 +66,31 @@ fieldset{  background:none;}
 ?>
 <form id='office_receipt' action="<?php echo $this->url(array('module'=>'accounting','controller'=>'studentlunchpayment','action'=>'edit')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 <script type="dojo/method" event="onSubmit">   
-
-	stu_type = dijit.byId('student_type').get('value');
-	if(stu_type==1){
-		stu_id = dijit.byId('student_name_new').get('value');
-		if(stu_id==-1){
-			dijit.byId('student_name_new').focus();
-			return false;
-		}
-	}else{
-		stu_id = dijit.byId('student_name_old').get('value');
-		if(stu_id==-1){
-			dijit.byId('student_name_old').focus();
-			return false;
-		}
-	}
-
-	total_payment = dijit.byId('total_payment').get('value');
-	paid_amount = dijit.byId('paid_amount').get('value');
-	if(paid_amount>total_payment){
-		alert('You can not pay more than total payment')
-		dijit.byId('paid_amount').focus();
-		return false;
-	}
     
 	if(this.validate()) {
+		stu_type = dijit.byId('student_type').get('value');
+		if(stu_type==1){
+			stu_id = dijit.byId('student_name_new').get('value');
+			if(stu_id==-1){
+				dijit.byId('student_name_new').focus();
+				return false;
+			}
+		}else{
+			stu_id = dijit.byId('student_name_old').get('value');
+			if(stu_id==-1){
+				dijit.byId('student_name_old').focus();
+				return false;
+			}
+		}
+
+		total_payment = dijit.byId('total_payment').get('value');
+		paid_amount = dijit.byId('paid_amount').get('value');
+		if(paid_amount>total_payment){
+			alert('You can not pay more than total payment')
+			dijit.byId('paid_amount').focus();
+			return false;
+		}
+		loadingBlock();
 		dijit.byId('save_close').set('disabled',true);
     	return true;
     }else {
@@ -107,7 +107,7 @@ fieldset{  background:none;}
 							<td><?php echo $tr->translate("BRANCH");?></td>
 							<td>
 								<select name="branch" id="branch" class="fullside" readOnly onchange="" dojoType="dijit.form.FilteringSelect" type="text" >
-									<option value="-1">-------- select branch ------</option>
+									<option value="-1"><?php echo $tr->translate("SELECT_BRANCH");?></option>
 									<?php if(!empty($this->branch_id)){foreach ($this->branch_id as $branch){?>
 									<option value="<?php echo $branch['id'];?>" <?php if($this->row['branch_id']==$branch['id']){echo "selected='selected'";}?>><?php echo $branch['name'];?></option>
 									<?php }}?>

@@ -29,6 +29,7 @@
 				return false;
 			}
 			loadingBlock();
+			dijit.byId("save").attr("disabled",true);
 			return true;
 		}else {
 			return false;
@@ -111,7 +112,7 @@
 			</tr>
 			<tr>
 				<td colspan="3" align="center">
-					<input type="submit" label="<?php echo $tr->translate("GO_EDIT");?>" id="submitButton" dojoType="dijit.form.Button"
+					<input type="submit" label="<?php echo $tr->translate("GO_EDIT");?>" id="save" dojoType="dijit.form.Button"
 						 iconClass="dijitEditorIcon dijitEditorIconSave"/>
 				</td>
 			</tr>	

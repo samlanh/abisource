@@ -14,7 +14,7 @@ class Accounting_CustomerPaymentController extends Zend_Controller_Action {
     			$search = $this->getRequest()->getPost();
     		}
     		else{
-    			$search=array(
+    			$search = array(
     					'title'	        =>'',
     					'cus_name'		=>0,
     					'status_search'	=> -1,
@@ -72,16 +72,13 @@ class Accounting_CustomerPaymentController extends Zend_Controller_Action {
     	}
     	
     	$this->view->cus_id=$db->getCusId();
-    	
     	$this->view->cus=$db->getOldCustomer();
     	$this->view->reil=$db->getReilMoney();
     	
     	$_db = new Registrar_Model_DbTable_DbRegister();
     	$this->view->branch = $_db->getAllBranch();
-    	
     	$db = new Registrar_Model_DbTable_DbCustomerPayment();
     	$this->view->receipt_no=$db->getReceiptNo(0);
-    	
     }
     
 	public function editAction(){
