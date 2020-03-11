@@ -23,7 +23,6 @@ class Accounting_Model_DbTable_DbCourStudey extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
     	$sql="select spd.id from rms_student_payment AS sp,rms_student_paymentdetail AS spd where
     	sp.id=spd.payment_id and is_start=1 and spd.service_id= $service_id and sp.student_id=$studentid and spd.type=$type limit 1 ";
-//     	echo $sql;exit();
     	return $db->fetchOne($sql);
     }
 	function addStudentGep($data){
@@ -44,7 +43,6 @@ class Accounting_Model_DbTable_DbCourStudey extends Zend_Db_Table_Abstract
 		}else{
 			$dob = $data['dob'];
 		}
-		
 			try{
 				if($data['student_type']==1){ // New student
 					$this->_name="rms_student";
@@ -747,20 +745,20 @@ class Accounting_Model_DbTable_DbCourStudey extends Zend_Db_Table_Abstract
     	
     	$sql=" SELECT 
 				  sp.id,
-				  (select branch_namekh from rms_branch where br_id = s.branch_id) as branch,
+				  (SELECT branch_namekh FROM rms_branch WHERE br_id = s.branch_id LIMIT 1) as branch,
 				  s.stu_code,
 				  s.stu_khname,
 				  s.stu_enname,
 				  s.sex,
 				  sp.receipt_number,
-				  (SELECT en_name FROM rms_dept WHERE dept_id=sp.degree)AS degree,
-				  (SELECT CONCAT(major_enname) FROM rms_major WHERE major_id=sp.grade ) AS grade,
+				  (SELECT en_name FROM rms_dept WHERE dept_id=sp.degree LIMIT 1)AS degree,
+				  (SELECT CONCAT(major_enname) FROM rms_major WHERE major_id=sp.grade LIMIT 1) AS grade,
 				  sp.grand_total_payment,
 			      sp.grand_total_paid_amount,
 			      sp.grand_total_balance,
 				  sp.create_date,
-				  (select CONCAT(first_name,' ',last_name) as name from rms_users where id = s.user_id) as user,
-				  (select name_en from rms_view where type=12 and key_code = sp.is_void) as void_status,
+				  (SELECT CONCAT(first_name,' ',last_name) as name FROM rms_users WHERE id = s.user_id LIMIT 1) as user,
+				  (SELECT name_en FROM rms_view WHERE type=12 and key_code = sp.is_void LIMIT 1) as void_status,
 				  'delete' 
 				FROM
 				  rms_student AS s,
@@ -798,9 +796,7 @@ class Accounting_Model_DbTable_DbCourStudey extends Zend_Db_Table_Abstract
     	if(!empty($search['user'])){
     		$where.=" AND sp.user_id=".$search['user'];
     	}
-    	//print_r($sql.$where);
     	$order=" ORDER By id DESC ";
-        //echo $sql.$where.$order;
     	return $db->fetchAll($sql.$where.$order);
     }
     function getStuentGepById($id){
@@ -815,6 +811,7 @@ class Accounting_Model_DbTable_DbCourStudey extends Zend_Db_Table_Abstract
 				  s.tel,
 				  s.address,
 				  
+				  sp.id,
 				  sp.branch_id,
 				  sp.receipt_number,
 				  sp.year as academic_year,
@@ -952,9 +949,9 @@ class Accounting_Model_DbTable_DbCourStudey extends Zend_Db_Table_Abstract
     	//return $stu_code;
     	 
     	//$result = array_merge($stu_name, $stu_code);
-    	
-    	array_unshift($stu_code, array ( 'id' => -1, 'name' => '------ select student --------') );
-    	array_unshift($stu_name, array ( 'id' => -1, 'name' => '------ select student --------') );
+    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+    	array_unshift($stu_code, array ( 'id' => -1, 'name' => $tr->translate("SELECT_STUDENT_ID")) );
+    	array_unshift($stu_name, array ( 'id' => -1, 'name' => $tr->translate("SELECT_STUDENT_NAME")) );
     	 
     	$result = array(0=>$stu_code, 1=>$stu_name);
     	return $result;
@@ -971,9 +968,9 @@ class Accounting_Model_DbTable_DbCourStudey extends Zend_Db_Table_Abstract
     	//return $stu_code;
     
     	//$result = array_merge($stu_name, $stu_code);
-    	
-    	array_unshift($stu_code, array ( 'id' => -1, 'name' => '------ select student --------') );
-    	array_unshift($stu_name, array ( 'id' => -1, 'name' => '------ select student --------') );
+    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+    	array_unshift($stu_code, array ( 'id' => -1, 'name' => $tr->translate("SELECT_STUDENT_ID") ) );
+    	array_unshift($stu_name, array ( 'id' => -1, 'name' => $tr->translate("SELECT_STUDENT_NAME") ));
     
     	$result = array(0=>$stu_code, 1=>$stu_name);
     	return $result;

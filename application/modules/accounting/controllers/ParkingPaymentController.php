@@ -82,7 +82,6 @@ class Accounting_ParkingPaymentController extends Zend_Controller_Action {
     	$id=$this->getRequest()->getParam('id');
     	if($this->getRequest()->isPost()){
     		$_data = $this->getRequest()->getPost();
-    		$_data['id']=$id;
     		try {
     			$db->editCustomerPayment($_data);
     			if(!empty($_data['save_new'])){

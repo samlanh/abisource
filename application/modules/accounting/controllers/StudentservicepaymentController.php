@@ -45,9 +45,6 @@ class Accounting_StudentservicepaymentController extends Zend_Controller_Action 
     	Application_Model_Decorator::removeAllDecorator($form);
     	$this->view->form_search=$form;
     	
-//     	$_db = new Accounting_Model_DbTable_DbStudentServicePayment();
-//     	$this->view->year = $year = $_db->getYearService();
-    	
     }
 	public function addAction()
     {
@@ -55,9 +52,6 @@ class Accounting_StudentservicepaymentController extends Zend_Controller_Action 
 	      	$_data = $this->getRequest()->getPost();
 	      	try {
 	      		$db = new Accounting_Model_DbTable_DbStudentServicePayment();
-	      		
-	      		//print_r($_data);exit();
-	      		
 	      		$exist = $db->addStudentServicePayment($_data);
 	      		if($exist==-1){
 	      			Application_Form_FrmMessage::message("RECORD_EXIST");
@@ -84,33 +78,17 @@ class Accounting_StudentservicepaymentController extends Zend_Controller_Action 
 	       $db = new Application_Model_DbTable_DbGlobal();
 	       $abc=$this->view->payment_term = $db->getAllPaymentTerm(null,null,1);
 	       $this->view->branch_id = $db->getAllBranch();
-	       //print_r($abc);exit();
 	       
 	       $db = new Accounting_Model_DbTable_DbStudentServicePayment();
 
 	       $this->view->rs = $db->getAllStudentCode();
 	       $this->view->row = $db->getAllStudentName();
 	       
-// 	       $service = $db->getAllService();
-// 	       array_unshift($service, array ( 'id' => -2, 'name' => 'បន្ថែមថ្មី') );
-// 	       array_unshift($service, array ( 'id' => -1, 'name' => 'Select Service') );
-// 	       $this->view->service = $service;
-	       
-// 	       $this->view->all_car = $db->getAllCar();
-	       
+	       $tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	       $servicetype = $db->getAllServiceType();
-	       array_unshift($servicetype, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
-	       array_unshift($servicetype, array ( 'id' => '', 'name' => 'Select Service') );
+	       array_unshift($servicetype, array ( 'id' => -1, 'name' => $tr->translate("ADD_NEW")) );
+	       array_unshift($servicetype, array ( 'id' => '', 'name' => $tr->translate("SELECT_SERVICE")) );
 	       $this->view->service_type = $servicetype;
-	       
-// 	       $this->view->new_stu_name =  $db->getAllNewStudentName();
-	//        print_r($db->getAllNewStudentName());exit();
-	       
-// 	       $this->view->old_stu_name = $db->getAllOldStudentName();
-	//        print_r($db->getAllOldStudentName());exit();
-	       
-// 	       $this->view->old_car_id = $db->getAllOldCarId();
-	//        print_r($db->getAllOldCarId());exit();
 	       
 	       
 	       $db = new Registrar_Model_DbTable_DbRegister();
@@ -121,10 +99,6 @@ class Accounting_StudentservicepaymentController extends Zend_Controller_Action 
     	$id=$this->getRequest()->getParam('id');
     	if($this->getRequest()->isPost()){
     		$_data = $this->getRequest()->getPost();
-     		$_data['payment_id']=$id;
-     		
-//      		print_r($_data);exit();
-     		
     		try {
     			$db = new Accounting_Model_DbTable_DbStudentServicePayment();
     			$db->updateStudentServicePayment($_data);
@@ -144,26 +118,23 @@ class Accounting_StudentservicepaymentController extends Zend_Controller_Action 
     	$db = new Accounting_Model_DbTable_DbStudentServicePayment();
     	
     	$this->view->user_type = $db->getUserType();
-    	
     	$payment=$this->view->row=$db->getStudentServicePaymentByID($id);
     	
     	$payment_detail=$db->getStudentServicePaymentDetailByID($id);
-    	//     	print_r($payment);exit();
     	$this->view->detail = $payment_detail;
-//     	print_r($payment);exit();
     	
     	$frm = new Accounting_Form_FrmStudentServicePayment();
     	$frm_register=$frm->FrmRegistarWU($payment);
     	Application_Model_Decorator::removeAllDecorator($frm_register);
     	$this->view->frm_register = $frm_register;
     	
+    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
     	$db = new Accounting_Model_DbTable_DbStudentServicePayment();
     	$this->view->rs = $db->getAllStudentCode();
     	$this->view->row_name = $db->getAllStudentName();
     	$service = $db->getAllService($payment['branch_id']);
-    	array_unshift($service, array ( 'id' => -1, 'name' => 'Select Service') );
+    	array_unshift($service, array ( 'id' => -1, 'name' => $tr->translate("SELECT_SERVICE")) );
     	$this->view->service = $service;
-    	
     	$this->view->all_car = $db->getAllCar($payment['branch_id']);
     	
     	$this->view->all_stu_name =  $db->getAllStudentName();
@@ -199,8 +170,6 @@ class Accounting_StudentservicepaymentController extends Zend_Controller_Action 
     		$data=$this->getRequest()->getPost();
     		$db = new Registrar_Model_DbTable_DbRegister();
     		$grade = $db->getAllGrade($data['dept_id']);
-    		//print_r($grade);exit();
-    		//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
     		print_r(Zend_Json::encode($grade));
     		exit();
     	}
@@ -211,7 +180,6 @@ class Accounting_StudentservicepaymentController extends Zend_Controller_Action 
     		$data=$this->getRequest()->getPost();
     		$db = new Accounting_Model_DbTable_DbStudentServicePayment();
     		$price = $db->getAllpriceByServiceTerm($data['studentid'],$data['service'],$data['term'],$data['year']);
-    		//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
     		print_r(Zend_Json::encode($price));
     		exit();
     	}
@@ -222,7 +190,6 @@ class Accounting_StudentservicepaymentController extends Zend_Controller_Action 
     		$data=$this->getRequest()->getPost();
     		$db = new Accounting_Model_DbTable_DbStudentServicePayment();
     		$price = $db->getAllpriceByServiceTermEdit($data['service'],$data['term'],$data['year']);
-    		//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
     		print_r(Zend_Json::encode($price));
     		exit();
     	}
@@ -233,7 +200,6 @@ class Accounting_StudentservicepaymentController extends Zend_Controller_Action 
     		$data=$this->getRequest()->getPost();
     		$db = new Accounting_Model_DbTable_DbStudentServicePayment();
     		$studentinfo = $db->getAllStudentInfo($data['studentid']);
-    		//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
     		print_r(Zend_Json::encode($studentinfo));
     		exit();
     	}
@@ -245,7 +211,6 @@ class Accounting_StudentservicepaymentController extends Zend_Controller_Action 
     		$data=$this->getRequest()->getPost();
     		$db = new Accounting_Model_DbTable_DbStudentServicePayment();
     		$year = $db->getAllService($data['year']);
-    		//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
     		print_r(Zend_Json::encode($year));
     		exit();
     	}
@@ -255,7 +220,6 @@ class Accounting_StudentservicepaymentController extends Zend_Controller_Action 
     		$data=$this->getRequest()->getPost();
     		$db = new Accounting_Model_DbTable_DbStudentServicePayment();
     		$year = $db->getStudentID($data['study_year'],$data['type']);
-    		//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
     		print_r(Zend_Json::encode($year));
     		exit();
     	}
@@ -266,7 +230,6 @@ class Accounting_StudentservicepaymentController extends Zend_Controller_Action 
     		$data=$this->getRequest()->getPost();
     		$db = new Accounting_Model_DbTable_DbStudentServicePayment();
     		$service = $db->addService($data);
-    		//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
     		print_r(Zend_Json::encode($service));
     		exit();
     	}
@@ -277,7 +240,6 @@ class Accounting_StudentservicepaymentController extends Zend_Controller_Action 
     		$data=$this->getRequest()->getPost();
     		$db = new Accounting_Model_DbTable_DbStudentServicePayment();
     		$service_cate = $db->getServiceCate($data['service_id']);
-    		//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
     		print_r(Zend_Json::encode($service_cate));
     		exit();
     	}
@@ -288,7 +250,6 @@ class Accounting_StudentservicepaymentController extends Zend_Controller_Action 
     		$data=$this->getRequest()->getPost();
     		$db = new Accounting_Model_DbTable_DbStudentServicePayment();
     		$service_start_date = $db->getServiceStartDate($data['service_id'],$data['stu_id']);
-    		//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
     		print_r(Zend_Json::encode($service_start_date));
     		exit();
     	}
@@ -299,8 +260,9 @@ class Accounting_StudentservicepaymentController extends Zend_Controller_Action 
     		$data=$this->getRequest()->getPost();
     		$db = new Accounting_Model_DbTable_DbCourStudey();
     		$year = $db->getAllYearByBranch($data['branch_id']);
-    		//print_r($grade);exit();
-    		array_unshift($year, array ( 'id' => -1, 'name' => '------ select year --------') );
+    		
+    		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+    		array_unshift($year, array ( 'id' => -1, 'name' => $tr->translate("SELECT_ACADEMIC_YEAR")) );
     		print_r(Zend_Json::encode($year));
     		exit();
     	}

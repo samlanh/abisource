@@ -39,7 +39,6 @@ class Accounting_ProductPaymentController extends Zend_Controller_Action {
     		);
     		$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('branch'=>$link,'receipt_number'=>$link,'name'=>$link,'service_name'=>$link,'code'=>$link,'delete'=>$link1));
     	}catch (Exception $e){
-    		//Application_Form_FrmMessage::message("Application Error");
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     		echo $e->getMessage();
     	}
@@ -49,9 +48,6 @@ class Accounting_ProductPaymentController extends Zend_Controller_Action {
     	$form=$forms->FrmSearchRegister();
     	Application_Model_Decorator::removeAllDecorator($form);
     	$this->view->form_search=$form;
-    	
-//     	$_db = new Accounting_Model_DbTable_DbProductPayment();
-//     	$this->view->year = $year = $_db->getYearService();
     	
     }
     
@@ -100,10 +96,6 @@ class Accounting_ProductPaymentController extends Zend_Controller_Action {
     	$id=$this->getRequest()->getParam('id');
     	if($this->getRequest()->isPost()){
     		$_data = $this->getRequest()->getPost();
-     		$_data['payment_id']=$id;
-     		
-     		//print_r($_data);exit();
-     		
     		try {
     			$db = new Accounting_Model_DbTable_DbProductPayment();
     			$db->updateProductPayment($_data);

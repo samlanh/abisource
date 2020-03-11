@@ -2,59 +2,7 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate('EDIT_STUDENT_LUNCH_PAYMENT')); 
 	$base_url = Application_Form_FrmMessage::getUrl("/");
-	// print_r($this->row);exit();
-	// print_r($this->all_stu_name);exit();
 ?>	
-<script type="text/javascript"  src="<?php echo $this->baseUrl();?>/js/jquery-1.8.3.min.js"></script>
-<script type="text/javascript"  src="<?php echo $this->baseUrl();?>/js/convertion.js"></script>
-<?php /*?><script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js"></script> <?php */ ?>
-<script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
-
-<script type="text/javascript">
-	dojo.require("dojo.data.ItemFileWriteStore");  
-	dojo.require('dojox.form.BusyButton');
-	dojo.require("dojo.NodeList-manipulate");
-	dojo.require("dojo.data.ObjectStore");
-	dojo.require("dojo.store.Memory");
-	dojo.require("dijit.form.NumberTextBox");
-	dojo.require("dijit.form.Textarea");
-	dojo.require("dijit.form.DateTextBox");
-	dojo.require("dijit.form.CheckBox");
-	
-	var service_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->service));?>);
-	dojo.ready(function(){ 
-		changeControl();
-		// getNewLunchId('');
-		// getNewReceiptNo("","");
-		
-		new dijit.form.FilteringSelect({
-			store: service_store,
-			autoComplete: true,                        
-		    id: "service",
-		    name: "service",
-			value:-1,
-		    class: 'fullside',  
-		   // placeHolder:"Selected service", 
-		    onChange: function() {  
-			    service = dijit.byId('service').get('value');
-			    if(service==-2){
-					dijit.byId('popup_add_service').show();
-			    }
-		    	//getservicefee();
-				getServiceCate(service);
-				if(dijit.byId('student_type').get('value')==2){
-					getStartDateService();
-				}
-		    } 
-		}, "service");
-		dijit.byId('service').attr('value','<?php echo $this->detail['service_id']?>');
-		getStudentInfo();
-		//getValidate();
-		setReadonlyPageEdit();
-		netTotal();
-	});	
-
-</script>
 <style>
 select{ width:100%;}
 fieldset{  background:none;}
@@ -71,14 +19,23 @@ fieldset{  background:none;}
 		stu_type = dijit.byId('student_type').get('value');
 		if(stu_type==1){
 			stu_id = dijit.byId('student_name_new').get('value');
-			if(stu_id==-1){
+			if(stu_id==-1 || stu_id==0){
+				alert("<?php echo $tr->translate("PLEASE_SELECT_STUDENT")?> !!! ");
 				dijit.byId('student_name_new').focus();
 				return false;
 			}
-		}else{
+		}else if(stu_type==3){
 			stu_id = dijit.byId('student_name_old').get('value');
-			if(stu_id==-1){
+			if(stu_id==-1 || stu_id==0){
+				alert("<?php echo $tr->translate("PLEASE_SELECT_STUDENT")?> !!! ");
 				dijit.byId('student_name_old').focus();
+				return false;
+			}
+		}else if(stu_type==4){
+			stu_id = dijit.byId('stu_drop_name').get('value');
+			if(stu_id==-1 || stu_id==0){
+				alert("<?php echo $tr->translate("PLEASE_SELECT_STUDENT")?> !!! ");
+				dijit.byId('stu_drop_name').focus();
 				return false;
 			}
 		}
@@ -86,7 +43,7 @@ fieldset{  background:none;}
 		total_payment = dijit.byId('total_payment').get('value');
 		paid_amount = dijit.byId('paid_amount').get('value');
 		if(paid_amount>total_payment){
-			alert('You can not pay more than total payment')
+			alert("<?php echo $tr->translate("You can not pay more than total payment")?> !!! ");
 			dijit.byId('paid_amount').focus();
 			return false;
 		}
@@ -112,6 +69,7 @@ fieldset{  background:none;}
 									<option value="<?php echo $branch['id'];?>" <?php if($this->row['branch_id']==$branch['id']){echo "selected='selected'";}?>><?php echo $branch['name'];?></option>
 									<?php }}?>
 								</select>
+								<input type="hidden" name="payment_id" id="payment_id" value="<?php echo $this->row['payment_id'];?>" dojoType="dijit.form.TextBox" />
 							</td>
 						</tr>
 						<tr>
@@ -132,7 +90,7 @@ fieldset{  background:none;}
 								</div>	
 								<div id="old_name">
 									<select name="student_name_old" id="student_name_old" onChange="setID();" class="fullside" dojoType="dijit.form.FilteringSelect" >
-										<option value="-1">----- select name -----</option>
+										<option value="-1"><?php echo $tr->translate("SELECT_STUDENT_NAME")?></option>
 										<?php if(!empty($this->old_stu_name)){foreach($this->old_stu_name as $old_stu_name){?>
 											<option value="<?php echo $old_stu_name['stu_id']?>" <?php if($old_stu_name['stu_id']==$this->row['student_id']){echo 'selected="selected"';}?>><?php echo $old_stu_name['stu_name']?></option>
 										<?php }}?>
@@ -149,7 +107,7 @@ fieldset{  background:none;}
 								</div>
 								<div id="old_id">
 									<select name="old_car_id" id="old_car_id" onChange="getStudentInfo(2);" class="fullside" dojoType="dijit.form.FilteringSelect" >
-										<option value="-1">----- select id -----</option>
+										<option value="-1"><?php echo $tr->translate("SELECT_STUDENT_ID")?></option>
 										<?php if(!empty($this->old_car_id)){foreach($this->old_car_id as $old_car_id){?>
 											<option value="<?php echo $old_car_id['stu_id']?>"  <?php if($old_car_id['stu_id']==$this->row['student_id']){echo 'selected="selected"';}?>><?php echo $old_car_id['stu_code']?></option>
 										<?php }}?>
@@ -189,7 +147,7 @@ fieldset{  background:none;}
 							<td><?php echo $tr->translate('ACADEMIC_YEAR');?></td>
 							<td> 
 								<select name="year" id="year" onChange="getservicefee();" class="fullside" dojoType="dijit.form.FilteringSelect" >
-									<option value="-1">----- select year -----</option>
+									<option value="-1"><?php echo $tr->translate('SELECT_ACADEMIC_YEAR');?></option>
 									<?php if(!empty($this->year)){foreach($this->year as $year){?>
 										<option value="<?php echo $year['id']?>" <?php if($year['id']==$this->row['year']){echo 'selected="selected"';}?>><?php echo $year['years']?></option>
 									<?php }}?>
@@ -386,11 +344,47 @@ fieldset{  background:none;}
 		</tr>
 	</table>	
 </form>
-
-
+<script type="text/javascript"  src="<?php echo $this->baseUrl();?>/js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript"  src="<?php echo $this->baseUrl();?>/js/convertion.js"></script>
+<script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
 
 <script type="text/javascript">
-
+	dojo.require("dojo.data.ItemFileWriteStore");  
+	dojo.require('dojox.form.BusyButton');
+	dojo.require("dojo.NodeList-manipulate");
+	dojo.require("dojo.data.ObjectStore");
+	dojo.require("dojo.store.Memory");
+	dojo.require("dijit.form.NumberTextBox");
+	dojo.require("dijit.form.Textarea");
+	dojo.require("dijit.form.DateTextBox");
+	dojo.require("dijit.form.CheckBox");
+	
+	var service_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->service));?>);
+	dojo.ready(function(){ 
+		changeControl();
+		new dijit.form.FilteringSelect({
+			store: service_store,
+			autoComplete: true,                        
+		    id: "service",
+		    name: "service",
+			value:-1,
+		    class: 'fullside',  
+		    onChange: function() {  
+			    service = dijit.byId('service').get('value');
+			    if(service==-2){
+					dijit.byId('popup_add_service').show();
+			    }
+				getServiceCate(service);
+				if(dijit.byId('student_type').get('value')==2){
+					getStartDateService();
+				}
+		    } 
+		}, "service");
+		dijit.byId('service').attr('value','<?php echo $this->detail['service_id']?>');
+		getStudentInfo();
+		setReadonlyPageEdit();
+		netTotal();
+	});	
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -464,11 +458,7 @@ fieldset{  background:none;}
 
 function printSave(new_stu_id,new_receipt_no){		
 	if(dijit.byId('office_receipt').validate()) {
-		 
-		 //degree = dijit.byId('dept').get('value');
-
 		 stu_type = dijit.byId('student_type').get('value');
-		 
 		 if(stu_type==1){
 			 dojo.byId("lb_stu_type").innerHTML = "សិស្សថ្មី/New Student";
 		 }else{

@@ -53,7 +53,6 @@ class Accounting_Model_DbTable_DbStudentServicePayment extends Zend_Db_Table_Abs
     }
     
 	function addStudentServicePayment($data){
-		//print_r($data);exit();
 		$db = $this->getAdapter();//ស្ពានភ្ជាប់ទៅកាន់Data Base
 		$db->beginTransaction();//ទប់ស្កាត់មើលការErrore , មានErrore វាមិនអោយចូល
 		
@@ -495,25 +494,25 @@ class Accounting_Model_DbTable_DbStudentServicePayment extends Zend_Db_Table_Abs
     	$_db = new Application_Model_DbTable_DbGlobal;
     	$branch_id = $_db->getAccessPermission('sp.branch_id');
     	
-    	$sql="select 
+    	$sql="SELECT 
     			sp.id,
-	    		(select branch_namekh from rms_branch where br_id = sp.branch_id) as branch,
+	    		(SELECT branch_namekh FROM rms_branch WHERE br_id = sp.branch_id) as branch,
 				ser.stu_code AS code,
 		    	CONCAT(s.stu_khname,' - ',s.stu_enname) AS name,
-		    	(select name_kh from rms_view where rms_view.type=2 and rms_view.key_code=s.sex limit 1)AS sex,
+		    	(SELECT name_kh FROM rms_view WHERE rms_view.type=2 and rms_view.key_code=s.sex limit 1)AS sex,
 		    	sp.receipt_number,
 		    	sp.grand_total_payment,
 		    	sp.grand_total_paid_amount,
 		    	sp.grand_total_balance,
 		    	sp.create_date,
-		    	(select CONCAT(last_name,' ',first_name) from rms_users where rms_users.id=sp.user_id) AS user,
-		    	(select name_en from rms_view where type=12 and key_code = sp.is_void) as void_status,
+		    	(SELECT CONCAT(last_name,' ',first_name) FROM rms_users WHERE rms_users.id=sp.user_id) AS user,
+		    	(SELECT name_en FROM rms_view WHERE type=12 and key_code = sp.is_void) as void_status,
 		    	'delete' 
-	    	from 
+	    	FROM 
 	    		rms_student_payment as sp, 
 	    		rms_service as ser,
 	    		rms_student as s
-	    	where 
+	    	WHERE 
 	    		sp.student_id = ser.stu_id
 	    		and sp.student_id = s.stu_id
 	    		and sp.payfor_type = 3 
@@ -546,14 +545,15 @@ class Accounting_Model_DbTable_DbStudentServicePayment extends Zend_Db_Table_Abs
     }
     function getStudentServicePaymentByID($id){
     	$db=$this->getAdapter();
-    	$sql="select 
+    	$sql="SELECT 
     				*,
-    				(select stu_code from rms_service where student_id = stu_id and rms_service.type=4 limit 1) as code,
-    				(select car_id from rms_service where student_id = stu_id and type=4 limit 1) as car_id  
-    			from 
+    				(SELECT stu_code FROM rms_service WHERE student_id = stu_id and rms_service.type=4 limit 1) as code,
+    				(SELECT car_id FROM rms_service WHERE student_id = stu_id and type=4 limit 1) as car_id,
+    				sp.id AS payment_id  
+    			FROM 
     				rms_student_payment AS sp,
     				rms_student_paymentdetail as spd
-    			where 
+    			WHERE 
     				sp.id = spd.payment_id	
     				and spd.type=3
     				and sp.id=".$id;

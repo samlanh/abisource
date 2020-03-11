@@ -48,11 +48,10 @@ dojo.require("dojo.data.ItemFileWriteStore");
 									<option value="<?php echo $branch['id']?>" ><?php echo $branch['name']?></option>
 								<?php }}?>
 							</select>
+							<input type="hidden" name="customer_id" class="fullside" id="customer_id" value="<?php echo $this->row['parking_id']?>"  dojoType="dijit.form.TextBox" />
+							<input type="hidden" class="fullside"  name="id" id="id" value="<?php echo $this->row['id']?>"  dojoType="dijit.form.TextBox" />
 						</td>
 					</tr>
-					
-					<td><input type="hidden" name="customer_id" class="fullside" id="customer_id" value="<?php echo $this->row['parking_id']?>"  dojoType="dijit.form.TextBox" /> </td>
-					
 					<tr>
 						<td><?php echo $tr->translate("CUS_ID");?></td>
 						<td><input type="text" name="cus_id" class="fullside" value="<?php echo $this->row['customer_code']?>" id="cus_id"  style="color:red;" dojoType="dijit.form.ValidationTextBox" required="required" /> </td> 
@@ -264,7 +263,7 @@ dojo.require("dojo.data.ItemFileWriteStore");
 var reil_exc="<?php echo $this->reil['reil']?>";
 $(document).ready(function() {
 	hidendOldCus();
-	//dijit.byId('old_cus').attr('value','<?php echo $this->row['parking_id']?>');
+	//dijit.byId('old_cus').attr('value','<?php //echo $this->row['parking_id']?>');
 	getOldCustomerInfo();
 	setValue();
 	setReadonlyPageEdit();

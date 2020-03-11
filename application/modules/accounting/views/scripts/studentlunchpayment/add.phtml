@@ -2,258 +2,7 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate('ADD_STUDENT_LUNCH_PAYMENT')); 
 	$base_url = Application_Form_FrmMessage::getUrl("/");
-// 	print_r($this->service);exit();
 ?>	
-<script type="text/javascript"  src="<?php echo $this->baseUrl();?>/js/jquery-1.8.3.min.js"></script>
-<script type="text/javascript"  src="<?php echo $this->baseUrl();?>/js/convertion.js"></script>
-<?php /*?><script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js"></script> <?php */ ?>
-<script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
-
-<script type="text/javascript">
-	dojo.require("dojo.data.ItemFileWriteStore");  
-	dojo.require('dojox.form.BusyButton');
-	dojo.require("dojo.NodeList-manipulate");
-	dojo.require("dojo.data.ObjectStore");
-	dojo.require("dojo.store.Memory");
-	dojo.require("dijit.form.NumberTextBox");
-	dojo.require("dijit.form.Textarea");
-	dojo.require("dijit.form.DateTextBox");
-	dojo.require("dijit.form.CheckBox");
-	
-	var service_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->service));?>);
-	dojo.ready(function(){ 
-		changeControl();
-		getNewLunchId('');
-		getNewReceiptNo('','');
-		
-		new dijit.form.FilteringSelect({
-			store: service_store,
-			autoComplete: false,
-			queryExpr: "*${0}*",                        
-		    id: "service",
-		    name: "service",
-			value:-1,
-		    class: 'fullside',  
-		   // placeHolder:"Selected service", 
-		    onChange: function() {  
-			    service = dijit.byId('service').get('value');
-			    if(service==-2){
-					dijit.byId('popup_add_service').show();
-			    }
-		    	getservicefee();
-				getServiceCate(service);
-		    } 
-		}, "service");
-
-
-		getValidate(1);
-		
-		
-		new dijit.form.FilteringSelect({
-		    autoComplete: false,
-			queryExpr: "*${0}*",                       
-		    id: "year",
-		    name: "year",           
-		    class: 'fullside',  
-		    required: false,
-		    placeHolder:"----- select year -----",          
-		    onChange: function() {  
-		    	getservicefee();
-		    }
-		}, "year");
-		
-////////////////////////////////////////////// get student by branch ///////////////////////////////////////////////////////////////////////////
-
-		
-		new dijit.form.FilteringSelect({
-		    autoComplete: false,
-			queryExpr: "*${0}*",                       
-		    id: "student_name_new",
-		    name: "student_name_new",           
-		    class: 'fullside',  
-		    required: false,
-		    placeHolder:"----- select student id -----",          
-		    onChange: function() {  
-		    	getStudentInfo();
-		    }
-		}, "student_name_new");
-
-		
-		new dijit.form.FilteringSelect({
-		    autoComplete: false,
-			queryExpr: "*${0}*",                      
-		    id: "student_name_old",
-		    name: "student_name_old",           
-		    class: 'fullside', 
-			required:false,			
-		    placeHolder:"----- select student name -----",          
-		    onChange: function() {  
-				setID(1);
-		    }
-		}, "student_name_old");
-		
-		
-		new dijit.form.FilteringSelect({
-		    autoComplete: false,
-			queryExpr: "*${0}*",                        
-		    id: "old_car_id",
-		    name: "old_car_id",           
-		    class: 'fullside',  
-			required:false,
-		    placeHolder:"----- select student name -----",          
-		    onChange: function() {  
-		    	getStudentInfo();
-		    }
-		}, "old_car_id");
-
-		new dijit.form.FilteringSelect({
-		    autoComplete: false,
-			queryExpr: "*${0}*",                        
-		    id: "stu_drop_name",
-		    name: "stu_drop_name",           
-		    class: 'fullside',  
-		    required: false,
-		    placeHolder:"----- select student name -----",          
-		    onChange: function() {  
-				setID(2);
-		    }
-		}, "stu_drop_name");
-
-		new dijit.form.FilteringSelect({
-		    autoComplete: false,
-			queryExpr: "*${0}*",                    
-		    id: "stu_drop_id",
-		    name: "stu_drop_id",           
-		    class: 'fullside',  
-		    required: false,
-		    placeHolder:"----- select student name -----",          
-		    onChange: function() {  
-		    	getStudentInfo();
-		    }
-		}, "stu_drop_id");
-	
-	});	
-	
-	
-		
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////		
-		
-	var year_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
-	var url_year = '<?php echo $this->url(array('module'=>'accounting','controller'=>'studentservicepayment','action'=>'get-service-year-by-branch')); ?>';
-	function getAllServiceYearByBranch(){
-		branch_id = dijit.byId('branch').get('value');
-		if(branch_id>0){
-			dojo.xhrPost({
-				url:url_year,
-				content:{
-					'branch_id':branch_id
-					},
-				handleAs:"json",
-				load: function(data) {
-					//alert(data);
-					year_store  = getDataStorefromJSON('id','name', data);
-					dijit.byId('year').set('store',year_store);   
-				},
-				error: function(err) {
-					alert(err);
-				}
-			});
-		}
-	}
-		
-		
-////////////////////////////////////////////// get student ////////////////////////////////////////////////////////////////////////////////				
-		
-	var new_student_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
-	var url_new_student = '<?php echo $this->url(array('module'=>'accounting','controller'=>'studentlunchpayment','action'=>'get-new-student-by-branch')); ?>';
-	function getAllNewStudentByBranch(){
-		
-		dijit.byId('student_name_new').attr('value','');
-		branch_id = dijit.byId('branch').get('value');
-		if(branch_id>0){
-			dojo.xhrPost({
-				url:url_new_student,
-				content:{
-					'branch_id':branch_id
-					},
-				handleAs:"json",
-				load: function(data) {
-					//alert(data);
-					new_student_store  = getDataStorefromJSON('id','name', data);
-					dijit.byId('student_name_new').set('store',new_student_store);   
-				},
-				error: function(err) {
-					alert(err);
-				}
-			});
-		}
-	}
-	
-	
-	var old_car_student_id_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
-	var old_car_student_name_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
-	
-	var url_old_student = '<?php echo $this->url(array('module'=>'accounting','controller'=>'studentlunchpayment','action'=>'get-old-student-by-branch')); ?>';
-	
-	function getAllOldStudentByBranch(){
-		
-		dijit.byId('student_name_old').attr('value','');
-		dijit.byId('old_car_id').attr('value','');
-		branch_id = dijit.byId('branch').get('value');
-		if(branch_id>0){
-			dojo.xhrPost({
-				url:url_old_student,
-				content:{
-					'branch_id':branch_id
-					},
-				handleAs:"json",
-				load: function(data) {
-					//alert(data);
-					old_car_student_name_store  = getDataStorefromJSON('id','name', data[1]);
-					dijit.byId('student_name_old').set('store',old_car_student_name_store);   
-					
-					old_car_student_id_store  = getDataStorefromJSON('id','name', data[0]);
-					dijit.byId('old_car_id').set('store',old_car_student_id_store);  
-				},
-				error: function(err) {
-					alert(err);
-				}
-			});
-		}
-	}
-
-
-	var drop_student_id_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
-	var drop_student_name_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
-	
-	var url_drop_student = '<?php echo $this->url(array('module'=>'accounting','controller'=>'studentlunchpayment','action'=>'get-drop-student-by-branch')); ?>';
-	
-	function getAllDropStudentByBranch(){
-		
-		branch_id = dijit.byId('branch').get('value');
-		if(branch_id>0){
-			dojo.xhrPost({
-				url:url_drop_student,
-				content:{
-					'branch_id':branch_id
-					},
-				handleAs:"json",
-				load: function(data) {
-					//alert(data);
-					drop_student_name_store  = getDataStorefromJSON('id','name', data[1]);
-					dijit.byId('stu_drop_name').set('store',drop_student_name_store);   
-					
-					drop_student_id_store  = getDataStorefromJSON('id','name', data[0]);
-					dijit.byId('stu_drop_id').set('store',drop_student_id_store);  
-				},
-				error: function(err) {
-					alert(err);
-				}
-			});
-		}
-	}
-
-</script>
 <style>
 select{ width:100%;}
 fieldset{  background:none;}
@@ -265,8 +14,40 @@ fieldset{  background:none;}
 ?>
 <form id='office_receipt' action="<?php echo $this->url(array('module'=>'accounting','controller'=>'studentlunchpayment','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 <script type="dojo/method" event="onSubmit">   
-
 	if(this.validate()) {
+		stu_type = dijit.byId('student_type').get('value');
+		if(stu_type==1){
+			stu_id = dijit.byId('student_name_new').get('value');
+			if(stu_id==-1 || stu_id==0){
+				alert("<?php echo $tr->translate("PLEASE_SELECT_STUDENT")?> !!! ");
+				dijit.byId('student_name_new').focus();
+				return false;
+			}
+		}else if(stu_type==3){
+			stu_id = dijit.byId('student_name_old').get('value');
+			if(stu_id==-1 || stu_id==0){
+				alert("<?php echo $tr->translate("PLEASE_SELECT_STUDENT")?> !!! ");
+				dijit.byId('student_name_old').focus();
+				return false;
+			}
+		}else if(stu_type==4){
+			stu_id = dijit.byId('stu_drop_name').get('value');
+			if(stu_id==-1 || stu_id==0){
+				alert("<?php echo $tr->translate("PLEASE_SELECT_STUDENT")?> !!! ");
+				dijit.byId('stu_drop_name').focus();
+				return false;
+			}
+		}
+
+		total_payment = dijit.byId('total_payment').get('value');
+		paid_amount = dijit.byId('paid_amount').get('value');
+		if(paid_amount>total_payment){
+			alert("<?php echo $tr->translate("You can not pay more than total payment")?> !!! ");
+			dijit.byId('paid_amount').focus();
+			return false;
+		}
+		loadingBlock();
+		dijit.byId('save_new').set('disabled',true);
     	return true;
     }else {
     	return false;
@@ -540,45 +321,282 @@ fieldset{  background:none;}
 						
 	</table>	
 </form>
-
-
+<script type="text/javascript"  src="<?php echo $this->baseUrl();?>/js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript"  src="<?php echo $this->baseUrl();?>/js/convertion.js"></script>
+<script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
 
 <script type="text/javascript">
+	dojo.require("dojo.data.ItemFileWriteStore");  
+	dojo.require('dojox.form.BusyButton');
+	dojo.require("dojo.NodeList-manipulate");
+	dojo.require("dojo.data.ObjectStore");
+	dojo.require("dojo.store.Memory");
+	dojo.require("dijit.form.NumberTextBox");
+	dojo.require("dijit.form.Textarea");
+	dojo.require("dijit.form.DateTextBox");
+	dojo.require("dijit.form.CheckBox");
+	
+	var service_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->service));?>);
+	dojo.ready(function(){ 
+		changeControl();
+		getNewLunchId('');
+		getNewReceiptNo('','');
+		
+		new dijit.form.FilteringSelect({
+			store: service_store,
+			autoComplete: false,
+			queryExpr: "*${0}*",                        
+		    id: "service",
+		    name: "service",
+			value:-1,
+		    class: 'fullside',  
+		    onChange: function() {  
+			    service = dijit.byId('service').get('value');
+			    if(service==-2){
+					dijit.byId('popup_add_service').show();
+			    }
+		    	getservicefee();
+				getServiceCate(service);
+		    } 
+		}, "service");
+
+		getValidate(1);
+		new dijit.form.FilteringSelect({
+		    autoComplete: false,
+			queryExpr: "*${0}*",                       
+		    id: "year",
+		    name: "year",           
+		    class: 'fullside',  
+		    required: false,
+		    placeHolder:"<?php echo $tr->translate("SELECT_ACADEMIC_YEAR")?>",          
+		    onChange: function() {  
+		    	getservicefee();
+		    }
+		}, "year");
+		
+////////////////////////////////////////////// get student by branch ///////////////////////////////////////////////////////////////////////////
+		
+		new dijit.form.FilteringSelect({
+		    autoComplete: false,
+			queryExpr: "*${0}*",                       
+		    id: "student_name_new",
+		    name: "student_name_new",           
+		    class: 'fullside',  
+		    required: false,
+		    placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_NAME")?>",          
+		    onChange: function() {  
+		    	getStudentInfo();
+		    }
+		}, "student_name_new");
+
+		
+		new dijit.form.FilteringSelect({
+		    autoComplete: false,
+			queryExpr: "*${0}*",                      
+		    id: "student_name_old",
+		    name: "student_name_old",           
+		    class: 'fullside', 
+			required:false,			
+		    placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_NAME")?>",          
+		    onChange: function() {  
+				setID(1);
+		    }
+		}, "student_name_old");
+		
+		
+		new dijit.form.FilteringSelect({
+		    autoComplete: false,
+			queryExpr: "*${0}*",                        
+		    id: "old_car_id",
+		    name: "old_car_id",           
+		    class: 'fullside',  
+			required:false,
+		    placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_ID")?>",          
+		    onChange: function() {  
+		    	getStudentInfo();
+		    }
+		}, "old_car_id");
+
+		new dijit.form.FilteringSelect({
+		    autoComplete: false,
+			queryExpr: "*${0}*",                        
+		    id: "stu_drop_name",
+		    name: "stu_drop_name",           
+		    class: 'fullside',  
+		    required: false,
+		    placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_NAME")?>",          
+		    onChange: function() {  
+				setID(2);
+		    }
+		}, "stu_drop_name");
+
+		new dijit.form.FilteringSelect({
+		    autoComplete: false,
+			queryExpr: "*${0}*",                    
+		    id: "stu_drop_id",
+		    name: "stu_drop_id",           
+		    class: 'fullside',  
+		    required: false,
+		    placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_ID")?>",          
+		    onChange: function() {  
+		    	getStudentInfo();
+		    }
+		}, "stu_drop_id");
+	
+	});	
+	
+		
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////		
+		
+	var year_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
+	var url_year = '<?php echo $this->url(array('module'=>'accounting','controller'=>'studentservicepayment','action'=>'get-service-year-by-branch')); ?>';
+	function getAllServiceYearByBranch(){
+		branch_id = dijit.byId('branch').get('value');
+		if(branch_id>0){
+			dojo.xhrPost({
+				url:url_year,
+				content:{
+					'branch_id':branch_id
+					},
+				handleAs:"json",
+				load: function(data) {
+					//alert(data);
+					year_store  = getDataStorefromJSON('id','name', data);
+					dijit.byId('year').set('store',year_store);   
+				},
+				error: function(err) {
+					alert(err);
+				}
+			});
+		}
+	}
+		
+////////////////////////////////////////////// get student ////////////////////////////////////////////////////////////////////////////////				
+		
+	var new_student_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
+	var url_new_student = '<?php echo $this->url(array('module'=>'accounting','controller'=>'studentlunchpayment','action'=>'get-new-student-by-branch')); ?>';
+	function getAllNewStudentByBranch(){
+		
+		dijit.byId('student_name_new').attr('value','');
+		branch_id = dijit.byId('branch').get('value');
+		if(branch_id>0){
+			dojo.xhrPost({
+				url:url_new_student,
+				content:{
+					'branch_id':branch_id
+					},
+				handleAs:"json",
+				load: function(data) {
+					//alert(data);
+					new_student_store  = getDataStorefromJSON('id','name', data);
+					dijit.byId('student_name_new').set('store',new_student_store);   
+				},
+				error: function(err) {
+					alert(err);
+				}
+			});
+		}
+	}
+	
+	
+	var old_car_student_id_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
+	var old_car_student_name_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
+	
+	var url_old_student = '<?php echo $this->url(array('module'=>'accounting','controller'=>'studentlunchpayment','action'=>'get-old-student-by-branch')); ?>';
+	
+	function getAllOldStudentByBranch(){
+		
+		dijit.byId('student_name_old').attr('value','');
+		dijit.byId('old_car_id').attr('value','');
+		branch_id = dijit.byId('branch').get('value');
+		if(branch_id>0){
+			dojo.xhrPost({
+				url:url_old_student,
+				content:{
+					'branch_id':branch_id
+					},
+				handleAs:"json",
+				load: function(data) {
+					//alert(data);
+					old_car_student_name_store  = getDataStorefromJSON('id','name', data[1]);
+					dijit.byId('student_name_old').set('store',old_car_student_name_store);   
+					
+					old_car_student_id_store  = getDataStorefromJSON('id','name', data[0]);
+					dijit.byId('old_car_id').set('store',old_car_student_id_store);  
+				},
+				error: function(err) {
+					alert(err);
+				}
+			});
+		}
+	}
+
+
+	var drop_student_id_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
+	var drop_student_name_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
+	
+	var url_drop_student = '<?php echo $this->url(array('module'=>'accounting','controller'=>'studentlunchpayment','action'=>'get-drop-student-by-branch')); ?>';
+	
+	function getAllDropStudentByBranch(){
+		
+		branch_id = dijit.byId('branch').get('value');
+		if(branch_id>0){
+			dojo.xhrPost({
+				url:url_drop_student,
+				content:{
+					'branch_id':branch_id
+					},
+				handleAs:"json",
+				load: function(data) {
+					//alert(data);
+					drop_student_name_store  = getDataStorefromJSON('id','name', data[1]);
+					dijit.byId('stu_drop_name').set('store',drop_student_name_store);   
+					
+					drop_student_id_store  = getDataStorefromJSON('id','name', data[0]);
+					dijit.byId('stu_drop_id').set('store',drop_student_id_store);  
+				},
+				error: function(err) {
+					alert(err);
+				}
+			});
+		}
+	}
 function submitDataAddNew(){
-	stu_type = dijit.byId('student_type').get('value');
-	if(stu_type==1){
-		stu_id = dijit.byId('student_name_new').get('value');
-		if(stu_id<1){
-			dijit.byId('student_name_new').focus();
-			return false;
-		}
-	}else if(stu_type==3){
-		stu_id = dijit.byId('student_name_old').get('value');
-		if(stu_id<1){
-			dijit.byId('student_name_old').focus();
-			return false;
-		}
-	}else if(stu_type==4){
-		stu_id = dijit.byId('stu_drop_name').get('value');
-		if(stu_id<1){
-			dijit.byId('stu_drop_name').focus();
-			return false;
-		}
-	}
-
-	total_payment = dijit.byId('total_payment').get('value');
-	paid_amount = dijit.byId('paid_amount').get('value');
-	if(paid_amount>total_payment){
-		alert('You can not pay more than total payment')
-		dijit.byId('paid_amount').focus();
-		return false;
-	}
-
 	if(dijit.byId('office_receipt').validate()) {
+		stu_type = dijit.byId('student_type').get('value');
+		if(stu_type==1){
+			stu_id = dijit.byId('student_name_new').get('value');
+			if(stu_id==-1 || stu_id==0){
+				alert("<?php echo $tr->translate("PLEASE_SELECT_STUDENT")?> !!! ");
+				dijit.byId('student_name_new').focus();
+				return false;
+			}
+		}else if(stu_type==3){
+			stu_id = dijit.byId('student_name_old').get('value');
+			if(stu_id==-1 || stu_id==0){
+				alert("<?php echo $tr->translate("PLEASE_SELECT_STUDENT")?> !!! ");
+				dijit.byId('student_name_old').focus();
+				return false;
+			}
+		}else if(stu_type==4){
+			stu_id = dijit.byId('stu_drop_name').get('value');
+			if(stu_id==-1 || stu_id==0){
+				alert("<?php echo $tr->translate("PLEASE_SELECT_STUDENT")?> !!! ");
+				dijit.byId('stu_drop_name').focus();
+				return false;
+			}
+		}
+
+		total_payment = dijit.byId('total_payment').get('value');
+		paid_amount = dijit.byId('paid_amount').get('value');
+		if(paid_amount>total_payment){
+			alert("<?php echo $tr->translate("You can not pay more than total payment")?> !!! ");
+			dijit.byId('paid_amount').focus();
+			return false;
+		}
 		loadingBlock();
 		dijit.byId('save_new').set('disabled',true);
 		var url_submit = '<?php echo $this->url(array('module'=>'accounting','controller'=>'studentlunchpayment','action'=>'add')); ?>';
-		loading();
 		dojo.xhrPost({
 		    url: url_submit,	
 			form: dojo.byId("office_receipt"),		    
@@ -596,10 +614,6 @@ function submitDataAddNew(){
 function loading(){
     document.getElementsByClassName("overlay")[0].style.display="block";
 }
-
-
-
-
 function setID(type){
 	if(type==1){
 		stu_id = dijit.byId('student_name_old').get('value');
@@ -664,13 +678,6 @@ function getNewLunchId(condition){
 	});
 	
 }
-
-
-
-</script>
-
-
-<script type="text/javascript">
 
 var url_get_start_date = '<?php echo $this->url(array('module'=>'accounting','controller'=>'studentlunchpayment','action'=>'get-start-date-service')); ?>';
 function getStartDateService(){

@@ -33,7 +33,6 @@ class Accounting_RegisterController extends Zend_Controller_Action {
     		$rs_rows= $db->getAllStudentRegister($search);
     		$glClass = new Application_Model_GlobalClass();
     		$rs_rows = $glClass->getGernder($rs_rows, BASE_URL );
-    		//$rs_rows = $glClass->getGetPayTerm($rs_rows, BASE_URL );
     		$list = new Application_Form_Frmtable();
     		$collumns = array("BRANCH_ID","STUDENT_ID","NAME_KH","NAME_EN","SEX","DEGREE","CLASS","RECEIPT_NO",
     				          "SUBTOTAL","PAID_AMOUNT","BALANCE","DATE_PAY","USER","STATUS","DELETE");
@@ -63,7 +62,6 @@ class Accounting_RegisterController extends Zend_Controller_Action {
       	$_data = $this->getRequest()->getPost();
       	try {
       		$db = new Accounting_Model_DbTable_DbRegister();
-      		//print_r($_data);exit();
       		$db->addRegister($_data);
       		if(isset($_data['save_new'])){
       			Application_Form_FrmMessage::message($this->tr->translate('INSERT_SUCCESS'));
@@ -98,10 +96,6 @@ class Accounting_RegisterController extends Zend_Controller_Action {
     	$id=$this->getRequest()->getParam('id');
     	if($this->getRequest()->isPost()){
     		$_data = $this->getRequest()->getPost();
-    		$_data['pay_id']=$id;
-    		
-//     		print_r($_data);exit();
-    		
     		try {
     			$db = new Accounting_Model_DbTable_DbRegister();
     			$db->updateRegister($_data);
@@ -117,16 +111,11 @@ class Accounting_RegisterController extends Zend_Controller_Action {
     		}
     	}
     	$db = new Accounting_Model_DbTable_DbRegister();
-    	
     	$this->view->user_type = $db->getUserType();
     	
         $form_row=$db->getRegisterById($id);
-        
-//         $is_start=$form_row['is_start'];
-//         if($is_start==0){
-//         	Application_Form_FrmMessage::Sucessfull($this->tr->translate('Can note Edit'), self::REDIRECT_URL . '/register/index');
-//         }
         $this->view->degree_row=$form_row;
+        
     	$frm = new Accounting_Form_FrmRegister();
     	$frm_register=$frm->FrmRegistarWU($form_row);
     	Application_Model_Decorator::removeAllDecorator($frm_register);
@@ -153,7 +142,6 @@ class Accounting_RegisterController extends Zend_Controller_Action {
     	$id=$this->getRequest()->getParam('id');
     	if($this->getRequest()->isPost()){
     		$_data = $this->getRequest()->getPost();
-    		$_data['pay_id']=$id;
     		try {
     			$db = new Accounting_Model_DbTable_DbRegister();
     			$db->addRegister($_data);
@@ -171,10 +159,6 @@ class Accounting_RegisterController extends Zend_Controller_Action {
     	$db = new Accounting_Model_DbTable_DbRegister();
     	$form_row=$db->getRegisterById($id);
     
-//     	$is_start=$form_row['is_start'];
-//     	if($is_start==0){
-//     		Application_Form_FrmMessage::Sucessfull($this->tr->translate('Can note Edit'), self::REDIRECT_URL . '/register/index');
-//     	}
     	$this->view->degree_row=$form_row;
     	$frm = new Accounting_Form_FrmRegister();
     	$frm_register=$frm->FrmRegistarWU($form_row);
@@ -223,12 +207,6 @@ class Accounting_RegisterController extends Zend_Controller_Action {
     	$frm_register=$frm->FrmRegistarWU();
     	Application_Model_Decorator::removeAllDecorator($frm_register);
     	$this->view->frm_register = $frm_register;
-    	//        $_marjor =array();
-    	//        $this->view->marjorlist = $_marjor;
-    	//        $model = new Application_Model_DbTable_DbGlobal();
-    	//        $_marjorlist = $model->getMarjorById();
-    	 
-    	//        $this->view->marjorlist = $_marjorlist;
     	 
     	$key = new Application_Model_DbTable_DbKeycode();
     	$this->view->keycode=$key->getKeyCodeMiniInv(TRUE);
@@ -236,13 +214,11 @@ class Accounting_RegisterController extends Zend_Controller_Action {
     	$this->view->footer=$model->getReceiptFooter();
     	 
     	$this->view->invoice_no = Application_Model_GlobalClass::getInvoiceNo();
-    	// echo Application_Model_GlobalClass::getInvoiceNo();
     	 
     	$__student_card = array();
     	$this->view->student_card = $__student_card;
     	$db = new Registrar_Model_DbTable_DbwuRegister();
     	$this->view->invoice_num = $db->getGaneratInvoiceWU();
-    	// echo $db->getGaneratInvoiceWU();
     }
     public function getStudentinfoallAction(){
     	if($this->getRequest()->isPost()){
@@ -257,8 +233,6 @@ class Accounting_RegisterController extends Zend_Controller_Action {
     		$data=$this->getRequest()->getPost();
     		$db = new Accounting_Model_DbTable_DbRegister();
     		$grade = $db->getAllGrade($data['dept_id']);
-    		//print_r($grade);exit();
-    		//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
     		print_r(Zend_Json::encode($grade));
     		exit();
     	}
@@ -268,8 +242,6 @@ class Accounting_RegisterController extends Zend_Controller_Action {
     		$data=$this->getRequest()->getPost();
     		$db = new Accounting_Model_DbTable_DbRegister();
     		$payment = $db->getPaymentTerm($data['generat_id'],$data['pay_id'],$data['grade_id']);
-    		//print_r($grade);exit();
-    		//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
     		print_r(Zend_Json::encode($payment));
     		exit();
     	}
@@ -288,8 +260,6 @@ class Accounting_RegisterController extends Zend_Controller_Action {
     		$data=$this->getRequest()->getPost();
     		$db = new Accounting_Model_DbTable_DbRegister();
     		$general = $db->getGeneralOldStudentById($data['student_id']);
-    		//print_r($grade);exit();
-    		//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
     		print_r(Zend_Json::encode($general));
     		exit();
     	}
@@ -300,8 +270,6 @@ class Accounting_RegisterController extends Zend_Controller_Action {
     		$data=$this->getRequest()->getPost();
     		$db = new Accounting_Model_DbTable_DbRegister();
     		$student = $db->getAllStudentByBranch($data['branch_id']);
-    		//print_r($grade);exit();
-    		//array_unshift($year, array ( 'id' => -1, 'name' => '------ select year --------') );
     		print_r(Zend_Json::encode($student));
     		exit();
     	}

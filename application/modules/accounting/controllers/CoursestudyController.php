@@ -93,10 +93,7 @@ class Accounting_CoursestudyController extends Zend_Controller_Action {
     $id=$this->getRequest()->getParam('id');
     	if($this->getRequest()->isPost()){
     		$_data = $this->getRequest()->getPost();
-    		$_data['payment_id']=$id;
-    		
-//     		print_r($_data);exit();
-    		
+//     		$_data['payment_id']=$id;
     		try {
     			$db = new Accounting_Model_DbTable_DbCourStudey();
     			if(isset($_data['save_new'])){
@@ -117,10 +114,6 @@ class Accounting_CoursestudyController extends Zend_Controller_Action {
     	$this->view->user_type = $db->getUserType();
     	
     	$row_gep=$db->getStuentGepById($id);
-//     	$is_start=$row_gep['is_start'];
-//     	if($is_start==0 ){
-//     		Application_Form_FrmMessage::Sucessfull($this->tr->translate('Can not edit!'), self::REDIRECT_URL . '/coursestudy/index');
-//     	}
     	$this->view->row_gep=$row_gep;
     	$frm = new Accounting_Form_FrmCourseStudy();
     	$frm_register=$frm->FrmRegistarWU($row_gep);
@@ -204,8 +197,6 @@ class Accounting_CoursestudyController extends Zend_Controller_Action {
     		$data=$this->getRequest()->getPost();
     		$db = new Accounting_Model_DbTable_DbCourStudey();
     		$payment = $db->getPaymentGep($data['study_year'],$data['levele'],$data['payment_term']);
-    		//print_r($grade);exit();
-    		//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
     		print_r(Zend_Json::encode($payment));
     		exit();
     	}
@@ -215,8 +206,6 @@ class Accounting_CoursestudyController extends Zend_Controller_Action {
     		$data=$this->getRequest()->getPost();
     		$db = new Registrar_Model_DbTable_DbRegister();
     		$gep = $db->getGepOldStudent($data['student_id']);
-    		//print_r($grade);exit();
-    		//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
     		print_r(Zend_Json::encode($gep));
     		exit();
     	}
@@ -235,8 +224,6 @@ class Accounting_CoursestudyController extends Zend_Controller_Action {
     		$data=$this->getRequest()->getPost();
     		$db = new Registrar_Model_DbTable_DbRegister();
     		$grade = $db->getAllGradeGEP($data['dept_id']);
-    		//print_r($grade);exit();
-    		//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
     		print_r(Zend_Json::encode($grade));
     		exit();
     	}
@@ -247,8 +234,6 @@ class Accounting_CoursestudyController extends Zend_Controller_Action {
     		$data=$this->getRequest()->getPost();
     		$db = new Registrar_Model_DbTable_DbRegister();
     		$receipt = $db->getRecieptNo();
-    		//print_r($grade);exit();
-    		//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
     		print_r(Zend_Json::encode($receipt));
     		exit();
     	}
@@ -258,9 +243,8 @@ class Accounting_CoursestudyController extends Zend_Controller_Action {
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
     		$db = new Accounting_Model_DbTable_DbCourStudey();
+    		$data['time'] = empty($data['time'])?0:$data['time'];
     		$year = $db->getAllYearByBranch($data['branch_id'],$data['time']);
-    		//print_r($grade);exit();
-    		//array_unshift($year, array ( 'id' => -1, 'name' => '------ select year --------') );
     		print_r(Zend_Json::encode($year));
     		exit();
     	}
@@ -271,8 +255,6 @@ class Accounting_CoursestudyController extends Zend_Controller_Action {
     		$data=$this->getRequest()->getPost();
     		$db = new Accounting_Model_DbTable_DbCourStudey();
     		$student = $db->getAllStudentByBranch($data['branch_id']);
-    		//print_r($grade);exit();
-    		//array_unshift($student, array ( 'id' => -1, 'name' => '------ select student --------') );
     		print_r(Zend_Json::encode($student));
     		exit();
     	}
@@ -283,8 +265,6 @@ class Accounting_CoursestudyController extends Zend_Controller_Action {
     		$data=$this->getRequest()->getPost();
     		$db = new Accounting_Model_DbTable_DbCourStudey();
     		$student = $db->getAllStudentDropByBranch($data['branch_id']);
-    		//print_r($grade);exit();
-    		//array_unshift($student, array ( 'id' => -1, 'name' => '------ select student --------') );
     		print_r(Zend_Json::encode($student));
     		exit();
     	}

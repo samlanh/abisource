@@ -15,8 +15,6 @@ class Accounting_StudentlunchpaymentController extends Zend_Controller_Action {
     		$db = new Accounting_Model_DbTable_DbStudentLunchPayment();
     		    		if($this->getRequest()->isPost()){
     		    			$search=$this->getRequest()->getPost();
-    		    			//print_r($search);exit();
-    						
     		    		}
     		    		else{
     		    			$search = array(
@@ -38,7 +36,6 @@ class Accounting_StudentlunchpaymentController extends Zend_Controller_Action {
     		);
     		$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('year'=>$link,'receipt_number'=>$link,'name'=>$link,'service_name'=>$link,'code'=>$link,'delete'=>$link1));
     	}catch (Exception $e){
-    		//Application_Form_FrmMessage::message("Application Error");
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     		echo $e->getMessage();
     	}
@@ -46,9 +43,6 @@ class Accounting_StudentlunchpaymentController extends Zend_Controller_Action {
     	$form=$forms->FrmSearchRegister();
     	Application_Model_Decorator::removeAllDecorator($form);
     	$this->view->form_search=$form;
-    	
-//     	$_db = new Accounting_Model_DbTable_DbStudentLunchPayment();
-//     	$this->view->year = $year = $_db->getYearService();
     	
     }
     public function addAction()
@@ -84,34 +78,30 @@ class Accounting_StudentlunchpaymentController extends Zend_Controller_Action {
        $db = new Application_Model_DbTable_DbGlobal();
        $abc=$this->view->payment_term = $db->getAllPaymentTerm(null,null,null);
        $this->view->branch_id = $db->getAllBranch();
-       //print_r($abc);exit();
        
+       $tr = Application_Form_FrmLanguages::getCurrentlanguage();
        $db = new Accounting_Model_DbTable_DbStudentLunchPayment();
        $this->view->rs = $db->getAllStudentCode();
        $this->view->row = $db->getAllStudentName();
        $service = $db->getAllLunchService();
-       array_unshift($service, array ( 'id' => -2, 'name' => 'បន្ថែមថ្មី') );
-       array_unshift($service, array ( 'id' => -1, 'name' => 'Select Service') );
+       array_unshift($service, array ( 'id' => -2, 'name' => $tr->translate("ADD_NEW") ));
+       array_unshift($service, array ( 'id' => -1, 'name' => $tr->translate("SELECT_SERVICE") ));
        $this->view->service = $service;
        
        $servicetype = $db->getAllServiceType();
-       array_unshift($servicetype, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
-       array_unshift($servicetype, array ( 'id' => '', 'name' => 'Select Service') );
+       array_unshift($servicetype, array ( 'id' => -1, 'name' => $tr->translate("ADD_NEW") ));
+       array_unshift($servicetype, array ( 'id' => '', 'name' => $tr->translate("SELECT_SERVICE") ));
        $this->view->service_type = $servicetype;
        
        $db = new Registrar_Model_DbTable_DbRegister();
        $this->view->all_product = $db->getAllProduct();
        $this->view->exchange_rate = $db->getExchangeRate();
-//        $_model = new Application_Model_GlobalClass();
-//        $this->view->all_service = $_model->getAllServiceItemOption(2); /// for use in add row
-       //$session_user=new Zend_Session_Namespace('auth'); $username = $session_user->first_name;
     }
     public function editAction()
     {
     	$id=$this->getRequest()->getParam('id');
     	if($this->getRequest()->isPost()){
     		$_data = $this->getRequest()->getPost();
-     		$_data['payment_id']=$id;
     		try {
     			$db = new Accounting_Model_DbTable_DbStudentLunchPayment();
     			$db->updateStudentLunchPayment($_data);
@@ -134,10 +124,8 @@ class Accounting_StudentlunchpaymentController extends Zend_Controller_Action {
     	
     	$payment=$this->view->row=$db->getStudentServicePaymentByID($id);
     	$payment_detail=$db->getStudentServicePaymentDetailByID($id);
-//     	print_r($payment);exit();
     	$this->view->detail = $payment_detail;
     	
-//     	print_r($payment);exit();
     	
     	$frm = new Accounting_Form_FrmStudentServicePayment();
     	$frm_register=$frm->FrmRegistarWU($payment);
@@ -146,11 +134,12 @@ class Accounting_StudentlunchpaymentController extends Zend_Controller_Action {
     	$key = new Application_Model_DbTable_DbKeycode();
     	$this->view->keycode=$key->getKeyCodeMiniInv(TRUE);
     	
+    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
     	$db = new Accounting_Model_DbTable_DbStudentLunchPayment();
     	$this->view->rs = $db->getAllStudentCode();
     	$this->view->row_name = $db->getAllStudentName();
     	$service = $db->getAllLunchService();
-    	array_unshift($service, array ( 'id' => -1, 'name' => 'Select Service') );
+    	array_unshift($service, array ( 'id' => -1, 'name' => $tr->translate("SELECT_SERVICE") ));
     	$this->view->service = $service;
     	
     	$this->view->old_stu_name = $db->getAllOldStudentName($payment['student_id']);

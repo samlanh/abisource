@@ -3,6 +3,303 @@
 	echo $this->headTitle($tr->translate('ADD_COURSESTUDY')); 
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 ?>	
+<style>
+select{ width:100%;}
+fieldset{  background:none;}
+.red{ color: red; padding-left:5px;}
+</style>
+<?php $register = $this->frm_register;?>
+<form id='office_receipt' action="<?php echo $this->url(array('module'=>'accounting','controller'=>'coursestudy','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+	<script type="dojo/method" event="onSubmit">   
+   		if(this.validate()) {
+			branch_id = dijit.byId('branch').get('value');
+			if(branch_id==-1 || branch_id==0){
+			 	alert("<?php echo $tr->translate("PLEASE_SELECT_BRANCH")?> !!! ");
+			 	dijit.byId("branch").focus();
+			 	return false;
+			}
+			year = dijit.byId('study_year').get('value');
+			if(year==-1 || year==0){
+				alert("<?php echo $tr->translate("PLEASE_SELECT_ACADEMIC_YEAR")?> !!! ");
+			 	dijit.byId("study_year").focus();
+			 	return false;
+			}
+			loadingBlock();
+			dijit.byId('save_new').set('disabled',true);
+			return true;
+   		}else {
+			return false;
+   		}
+	</script>
+	<table  cellspacing="10" style="margin: 0 auto; width: 100%;white-space:nowrap;">
+		<tr>
+			<td width="33%" valign="top">
+				<fieldset>
+				<legend align="center"><strong><?php echo $tr->translate("STUDENT_INFO");?></strong></legend>
+					<table style="margin: 0 auto; width: 100%;padding:0px 10px 10px 10px;" cellspacing="7" >
+						<tr>
+							<td><?php echo $tr->translate("BRANCH");?></td>
+							<td>
+								<select name="branch" id="branch" class="fullside" autoComplete="false" queryExpr="*${0}*"  onchange="getYearByBranch();getOldStuIdByBranch();getDropStuIdByBranch();getStudentNo();getNewReceiptNo('');" dojoType="dijit.form.FilteringSelect" type="text" >
+									<option value="-1"><?php echo $tr->translate("SELECT_BRANCH");?></option>
+									<?php if(!empty($this->branch)){foreach ($this->branch as $branch){?>
+									<option value="<?php echo $branch['id'];?>"><?php echo $branch['name'];?></option>
+									<?php }}?>
+								</select>
+							</td>
+						</tr>
+						
+						<tr>
+							<td>
+								<?php echo $tr->translate("STUDENT_TYPE");?>
+								<?php echo $register->getElement('ids');?>
+							</td>
+							<td><?php echo $register->getElement('student_type');?></td>
+						</tr>
+						<tr>
+							<td><?php echo $tr->translate("STUDENT_ID");?></td>
+							<td>
+								<div id="student_id"><?php echo $register->getElement('stu_id');?></div>
+								<div id="student_ids"><input id="old_studens" /></div>
+								
+								<div id="drop_stu_code"><input id="drop_studens" /></div>
+							</td>
+						</tr>
+						<tr>	
+							<td style="width: 160px"><?php echo $tr->translate("STUDENT_NAME");?></td>
+							<td>
+								<div id="student_old_name"><input id="old_stu_name" /></div>
+								<div id="name_stu"><?php echo $register->getElement('stu_name');?></div>
+								
+								<div id="drop_stu_name"><input id="drop_student_name" /></div>
+							</td>
+						</tr>
+						<tr>
+							<td width="20%"><?php echo $tr->translate("NAME_EN");?></td>
+							<td width="80%"><?php echo $register->getElement('en_name');?></td>
+						</tr>
+						<tr>	
+							<td><?php echo $tr->translate("NAME_KH");?></td>
+							<td><?php echo $register->getElement('kh_name');?></td>
+						</tr>
+						<tr>
+							<td><?php echo $tr->translate("SEX");?></td>
+							<td><?php echo $register->getElement('sex');?></td>
+						</tr>
+						<tr>	
+							<td><?php echo $tr->translate("DOB");?></td>
+							<td><input type="text"  class="fullside" name="dob" id="dob" value="now" constraints="{datePattern:'dd/MM/yyyy'}" dojoType="dijit.form.DateTextBox" /></td>
+						</tr>
+						
+						<tr>
+							<td><?php echo $tr->translate("ADDRESS");?></td>
+							<td><input type="text"  class="fullside" name="address" id="address" dojoType="dijit.form.TextBox" /></td>
+						</tr>
+						<tr>	
+							<td><?php echo $tr->translate("PHONE");?></td>
+							<td><input type="text" name="phone" id="phone" class="fullside" dojoType="dijit.form.TextBox" /></td>
+						</tr>
+					</table>	
+				</fieldset>		
+			</td>
+			
+			<td width="33%" valign="top">
+				<fieldset>
+				<legend align="center"><strong><?php echo $tr->translate("STUDY_INFO");?></strong></legend>
+					<table style="margin: 0 auto; width: 100%;padding:0px 10px 10px 10px;" cellspacing="7" >
+						<tr>
+							<td width="20%"><?php echo $tr->translate("ACADEMIC_YEAR");?></td>
+							<td width="80%"><input id="study_year" /></td>
+						</tr>
+						
+						<tr>
+							<input type="hidden" name="old_stu_code" id="old_stu_code" dojoType="dijit.form.TextBox" />
+							<input type="hidden" name="old_degree" id="old_degree" dojoType="dijit.form.TextBox" />
+							<input type="hidden" name="old_grade" id="old_grade" dojoType="dijit.form.TextBox" />
+						
+							<td><?php echo $tr->translate("DEGREE");?><label class="red">*</label></td>
+							<td><input id="dept" /></td>
+						</tr>
+						<tr>	
+							<td><?php echo $tr->translate("CLASS");?><label class="red">*</label></td>
+							<td><input id="grade" /></td>
+						</tr>
+						<tr>	
+							<td><?php echo $tr->translate("ROOM_NAME");?></td>
+							<td>
+								<select name="room" id="room" dojoType="dijit.form.FilteringSelect" class="fullside" autoComplete="false" queryExpr="*${0}*" >
+									<option value="-1"><?php echo $tr->translate("SELECT_ROOM")?></option>
+									<?php if(!empty($this->room)){foreach ($this->room as $room){?>
+										<option value="<?php echo $room['id']?>"><?php echo $room['name']?></option>
+									<?php }}?>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td title="ចាប់ពីម៉ោង"><?php echo $tr->translate("SESSION");?>*</td>
+							<td>
+								<select class="fullside"  tabindex="24" name="session" id="session" onchange="" dojoType="dijit.form.FilteringSelect" autoComplete="false" queryExpr="*${0}*"  >
+									<option value='1'><?php echo $tr->translate('MORNING')?></option>
+									<option value='2'><?php echo $tr->translate('AFTERNOON')?></option>
+									<option value='3'><?php echo $tr->translate('EVERNING')?></option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td style="white-space: nowrap;"><?php echo $tr->translate("TIME");?></td>
+							<td>
+							    <select dojoType="dijit.form.FilteringSelect" class="fullside" id="study_time" name="study_time">
+									<option value="select time">select time</option>
+									<?php if(!empty($this->all_time)){foreach($this->all_time as $time){?>
+										<option value="<?php echo $time['name']?>"><?php echo $time['name']?></option>
+									<?php }}?>
+								</select>
+							</td>
+					    </tr>
+						<tr>		
+							<td><?php echo $tr->translate("START_DATE");?></td>
+							<td><?php echo $register->getElement('start_date');?></td>
+						</tr>
+						<tr>
+							<td><?php echo $tr->translate("END_DATE");?></td>
+							<td><?php echo $register->getElement('end_date');?></td>
+						</tr>
+						<tr>	
+							<td><?php echo $tr->translate("NOTE");?></td>
+							<td><?php echo $register->getElement('not');?></td>	
+						</tr>
+						<tr>	
+							<td colspan="2" align="center">
+								<input type="checkbox" value="1" name="is_void" id="is_void" dojoType="dijit.form.CheckBox"  /> Void
+							<td>
+						</tr>
+					</table>	
+				</fieldset>		
+			</td>
+			
+			<td width="33%" valign="top">
+				<fieldset>
+				<legend align="center"><strong><?php echo $tr->translate("PAYMENT_INFO");?></strong></legend>
+					<table style="margin: 0 auto; width: 100%;padding:0px 10px 10px 10px;" cellspacing="7" >
+						<tr>
+							<td width="20%"><?php echo $tr->translate("RECEIPT_NO");?></td>
+							<td width="80%"><?php echo $register->getElement('reciept_no');?></td>
+						</tr>
+						<tr>
+							<td><?php echo $tr->translate("PAYMENT_TERM");?><label class="red">*</label></td>
+							<td><?php echo $register->getElement('payment_term');?></td>
+						</tr>
+						<tr>
+							<td><?php echo $tr->translate("TUITION_FEE");?></td>
+							<td><?php echo $register->getElement('tuitionfee');?></td>
+						</tr>
+						<input type="hidden" name="price_per_section" id="price_per_section" dojoType="dijit.form.TextBox" >
+						<tr>
+							<td>
+								<div id="label_amount">
+									<?php echo $tr->translate("AMOUNT");?>
+								</div>
+							</td>
+							<td>
+								<div id="amount_section">
+									<input name="amount_section" id="amount_section" onkeyup="calculateTotalFee();netTotal();getDateTerm(1);" dojoType="dijit.form.TextBox" value="1" class="fullside" type="text"/>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td><?php echo $tr->translate("DISCOUNT");?></td>
+							<td>
+								<table width="100%" style="white-space: nowrap;">
+									<tr>
+										<td width="10%">(%)&nbsp;</td>
+										<td width="40%"><?php echo $register->getElement('discount');?></td>
+										<td width="10%">&nbsp;&nbsp;($)&nbsp;&nbsp;</td>
+										<td width="40%"><?php echo $register->getElement('discount_fix');?></td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>	
+							<td><?php echo $tr->translate("OTHERS_PRICE");?></td>
+							<td><?php echo $register->getElement('remark');;?></td>
+						</tr>
+						<tr>	
+							<td><?php echo $tr->translate("TOTAL_PAYMENT");?></td>
+							<td><?php echo $register->getElement('total');?></td>
+						</tr>
+						<tr>	
+							<td><?php echo $tr->translate("PAID_AMOUNT");?></td>
+							<td><?php echo $register->getElement('books');;?></td>
+						</tr>
+						<tr>	
+							<td><?php echo $tr->translate("BALANCE");?></td>
+							<td><?php echo $register->getElement('remaining');;?></td>
+						</tr>
+						<tr>	
+							<td><?php echo $tr->translate("CREATE_DATE");?></td>
+							<td><?php echo $register->getElement('create_date');;?></td>
+						</tr>
+						<tr>	
+							<td><?php echo $tr->translate("វេន");?></td>
+							<td>
+								<select name="shift" id="shift" dojoType="dijit.form.FilteringSelect" class="fullside" >
+									<option value="1">វេនទី1</option>
+									<option value="2">វេនទី2</option>
+									<option value="3">វេនទី3</option>
+								</select>
+							</td>
+						</tr>
+					</table>	
+				</fieldset>		
+			</td>
+		</tr>
+		
+		<tr>
+			<td colspan="3">
+				<table width="100%" border="1" id="table_row" style="border-collapse: collapse; border:1px solid #ccc;white-space: nowrap;">
+						<tr id="head-title" class="head-td" align="right"></tr>
+				</table>
+			</td>
+		</tr>
+		
+		<tr>
+			<td colspan="3" align="right">
+				<table style="width:400px;border-collapse: collapse;white-space:nowrap;" cellpadding="10" cellspacing="10" >
+					<tr>
+						<td ><?php echo $tr->translate("EXCHANGE_RATE")." (៛)";?></td>
+						<td align="right">
+							<input type="text" name="ex_rate" id="ex_rate" readonly value="<?php echo $this->exchange_rate ;?>" dojoType="dijit.form.NumberTextBox" />
+						</td>
+					</tr>
+					<tr>
+						<td ><?php echo $tr->translate("TOTAL_PAYMENT");?></td>
+						<td align="right"><input type="text" readonly="readonly" onkeyup="calculatBalanceAndReturn();"  name="grand_total" id="grand_total" dojoType="dijit.form.NumberTextBox" /></td>
+					</tr>
+					<tr>	
+						<td><?php echo $tr->translate("CONVERT_TO_RIELS");?> (៛)</td>
+						<td align="right"><input  type="text" readonly="readonly"  name="convert_to_riels" id="convert_to_riels" dojoType="dijit.form.NumberTextBox" /></td>
+					</tr>
+					<tr>	
+						<td><?php echo $tr->translate("RECEIVED_AMOUNT");?></td>
+						<td align="right"><input  type="text" readonly="readonly" onkeyup="calculatBalanceAndReturn();" required="true"  name="total_received" id="total_received" dojoType="dijit.form.NumberTextBox" /></td>
+					</tr>
+					<tr>
+						<td><?php echo $tr->translate("BALANCE");?></td>
+						<td align="right"><input type="text"  readonly="readonly" name="total_balance" value="<?php echo 0?>" id="total_balance" dojoType="dijit.form.NumberTextBox" /></td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		
+		<tr>
+			<td colspan="3" align="center">
+				<input type="button" name="save_new" id="save_new" onclick="submitDataAddNew();" value="រក្សាទុក" label="<?php echo $tr->translate('SAVE');?>"  dojoType="dijit.form.Button" 
+				 iconClass="dijitEditorIcon dijitEditorIconSave" />
+			</td>
+		</tr>
+		
+	</table>	
+</form>
 <script type="text/javascript"  src="<?php echo $this->baseUrl();?>/js/jquery-1.8.3.min.js"></script>
 <script type="text/javascript"  src="<?php echo $this->baseUrl();?>/js/convertion.js"></script>
 <script type="text/javascript">
@@ -15,10 +312,6 @@
 
 	dojo.ready(function(){ 
 		changControll();
-		//getStudentNo();
-		//setStudyTime();
-		//displayAmountSection();
-		
 		new dijit.form.FilteringSelect({
 		    store: dept_store,
 		    autoComplete: false,
@@ -27,7 +320,7 @@
 		    id: "dept",
 		    name: "dept",           
 		    class: 'fullside',  
-		    placeHolder:"Selected Class",          
+		    placeHolder:"<?php echo $tr->translate("SELECT_DEGREE")?>",          
 		    onChange: function() {  
 		    	dept_id = dijit.byId('dept').get('value');
 		    	dijit.byId('grade').attr('value','');
@@ -45,7 +338,7 @@
 		    id: "grade",
 		    name: "grade",           
 		    class: 'fullside',  
-		    placeHolder:"Selected Grade",          
+		    placeHolder:"<?php echo $tr->translate("SELECT_GRADE")?>",          
 		    onChange: function() {  
 		    	make_id = dijit.byId('grade').get('value');
 		    	paymentTerm();
@@ -58,7 +351,7 @@
 		    id: "study_year",
 		    name: "study_year",           
 		    class: 'fullside',  
-		    placeHolder:"Selected year",          
+		    placeHolder:"<?php echo $tr->translate("SELECT_ACADEMIC_YEAR")?>",          
 		    onChange: function() {  
 		    	paymentTerm();
 		    }
@@ -73,7 +366,7 @@
 		    name: "old_studens",           
 		    class: 'fullside',  
 			required : false,
-		    placeHolder:"----- select student id -----",          
+		    placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_ID")?>",          
 		    onChange: function() {  
 		    	getGepOldStudentById();
 		    	paymentTerm();
@@ -88,7 +381,7 @@
 		    name: "old_stu_name",           
 		    class: 'fullside',  
 			required : false,
-		    placeHolder:"----- select student name -----",          
+		    placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_NAME")?>",          
 		    onChange: function() {  
 		    	setID(1);
 		    }
@@ -101,7 +394,7 @@
 		    name: "drop_studens", 
 		    required: false,         
 		    class: 'fullside',  
-		    placeHolder:"----- select student id -----",          
+		    placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_ID")?>",          
 		    onChange: function() {  
 		    	getGepOldStudentById();
 		    	paymentTerm();
@@ -116,7 +409,7 @@
 		    name: "drop_student_name",
 		    required: false,           
 		    class: 'fullside',  
-		    placeHolder:"----- select student name -----",          
+		    placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_NAME")?>",          
 		    onChange: function() {  
 		    	setID(2);
 		    }
@@ -619,339 +912,25 @@
 		}
 	}
 	
-	
-	
-</script>
-<style>
-select{ width:100%;}
-fieldset{  background:none;}
-.red{ color: red; padding-left:5px;}
-</style>
-<?php $register = $this->frm_register;?>
-<form id='office_receipt' action="<?php echo $this->url(array('module'=>'accounting','controller'=>'coursestudy','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-<script type="dojo/method" event="onSubmit">   
-   if(this.validate()) {
-    year = dijit.byId('study_year').get('value');
-    branch = dijit.byId('branch').get('value');
-    if(year==-1){
-         dijit.byId("study_year").focus();
-         return false;
-    }
-    if(branch==-1){
-         dijit.byId("branch").focus();
-         return false;
-    }
-    return true;
-   }else {
-    return false;
-   }
-</script>
-	<table  cellspacing="10" style="margin: 0 auto; width: 100%;white-space:nowrap;">
-		<tr>
-			<td width="33%" valign="top">
-				<fieldset>
-				<legend align="center"><strong><?php echo $tr->translate("STUDENT_INFO");?></strong></legend>
-					<table style="margin: 0 auto; width: 100%;padding:0px 10px 10px 10px;" cellspacing="7" >
-						<tr>
-							<td><?php echo $tr->translate("BRANCH");?></td>
-							<td>
-								<select name="branch" id="branch" class="fullside" autoComplete="false" queryExpr="*${0}*"  onchange="getYearByBranch();getOldStuIdByBranch();getDropStuIdByBranch();getStudentNo();getNewReceiptNo('');" dojoType="dijit.form.FilteringSelect" type="text" >
-									<option value="-1">-------- select branch ------</option>
-									<?php if(!empty($this->branch)){foreach ($this->branch as $branch){?>
-									<option value="<?php echo $branch['id'];?>"><?php echo $branch['name'];?></option>
-									<?php }}?>
-								</select>
-							</td>
-						</tr>
-						
-						<tr>
-							<td>
-								<?php echo $tr->translate("STUDENT_TYPE");?>
-								<?php echo $register->getElement('ids');?>
-							</td>
-							<td><?php echo $register->getElement('student_type');?></td>
-						</tr>
-						<tr>
-							<td><?php echo $tr->translate("STUDENT_ID");?></td>
-							<td>
-								<div id="student_id"><?php echo $register->getElement('stu_id');?></div>
-								<div id="student_ids"><input id="old_studens" /></div>
-								
-								<div id="drop_stu_code"><input id="drop_studens" /></div>
-							</td>
-						</tr>
-						<tr>	
-							<td style="width: 160px"><?php echo $tr->translate("STUDENT_NAME");?></td>
-							<td>
-								<div id="student_old_name"><input id="old_stu_name" /></div>
-								<div id="name_stu"><?php echo $register->getElement('stu_name');?></div>
-								
-								<div id="drop_stu_name"><input id="drop_student_name" /></div>
-							</td>
-						</tr>
-						<tr>
-							<td width="20%"><?php echo $tr->translate("NAME_EN");?></td>
-							<td width="80%"><?php echo $register->getElement('en_name');?></td>
-						</tr>
-						<tr>	
-							<td><?php echo $tr->translate("NAME_KH");?></td>
-							<td><?php echo $register->getElement('kh_name');?></td>
-						</tr>
-						<tr>
-							<td><?php echo $tr->translate("SEX");?></td>
-							<td><?php echo $register->getElement('sex');?></td>
-						</tr>
-						<tr>	
-							<td><?php echo $tr->translate("DOB");?></td>
-							<td><input type="text"  class="fullside" name="dob" id="dob" value="now" constraints="{datePattern:'dd/MM/yyyy'}" dojoType="dijit.form.DateTextBox" /></td>
-						</tr>
-						
-						<tr>
-							<td><?php echo $tr->translate("ADDRESS");?></td>
-							<td><input type="text"  class="fullside" name="address" id="address" dojoType="dijit.form.TextBox" /></td>
-						</tr>
-						<tr>	
-							<td><?php echo $tr->translate("PHONE");?></td>
-							<td><input type="text" name="phone" id="phone" class="fullside" dojoType="dijit.form.TextBox" /></td>
-						</tr>
-					</table>	
-				</fieldset>		
-			</td>
-			
-			<td width="33%" valign="top">
-				<fieldset>
-				<legend align="center"><strong><?php echo $tr->translate("STUDY_INFO");?></strong></legend>
-					<table style="margin: 0 auto; width: 100%;padding:0px 10px 10px 10px;" cellspacing="7" >
-						<tr>
-							<td width="20%"><?php echo $tr->translate("ACADEMIC_YEAR");?></td>
-							<td width="80%"><input id="study_year" /></td>
-						</tr>
-						
-						<tr>
-							<input type="hidden" name="old_stu_code" id="old_stu_code" dojoType="dijit.form.TextBox" />
-							<input type="hidden" name="old_degree" id="old_degree" dojoType="dijit.form.TextBox" />
-							<input type="hidden" name="old_grade" id="old_grade" dojoType="dijit.form.TextBox" />
-						
-							<td><?php echo $tr->translate("DEGREE");?><label class="red">*</label></td>
-							<td><input id="dept" /></td>
-						</tr>
-						<tr>	
-							<td><?php echo $tr->translate("CLASS");?><label class="red">*</label></td>
-							<td><input id="grade" /></td>
-						</tr>
-						<tr>	
-							<td><?php echo $tr->translate("ROOM_NAME");?></td>
-							<td>
-								<select name="room" id="room" dojoType="dijit.form.FilteringSelect" class="fullside" autoComplete="false" queryExpr="*${0}*" >
-									<option value="-1">----- select room -----</option>
-									<?php if(!empty($this->room)){foreach ($this->room as $room){?>
-										<option value="<?php echo $room['id']?>"><?php echo $room['name']?></option>
-									<?php }}?>
-								</select>
-							</td>
-						</tr>
-						<tr>
-							<td title="ចាប់ពីម៉ោង"><?php echo $tr->translate("SESSION");?>*</td>
-							<td>
-								<select class="fullside"  tabindex="24" name="session" id="session" onchange="" dojoType="dijit.form.FilteringSelect" autoComplete="false" queryExpr="*${0}*"  >
-									<option value='1'><?php echo $tr->translate('MORNING')?></option>
-									<option value='2'><?php echo $tr->translate('AFTERNOON')?></option>
-									<option value='3'><?php echo $tr->translate('EVERNING')?></option>
-								</select>
-							</td>
-						</tr>
-						<tr>
-							<td style="white-space: nowrap;"><?php echo $tr->translate("TIME");?></td>
-							<td>
-							    <select dojoType="dijit.form.FilteringSelect" class="fullside" id="study_time" name="study_time">
-									<option value="select time">select time</option>
-									<?php if(!empty($this->all_time)){foreach($this->all_time as $time){?>
-										<option value="<?php echo $time['name']?>"><?php echo $time['name']?></option>
-									<?php }}?>
-								</select>
-							</td>
-					    </tr>
-						<tr>		
-							<td><?php echo $tr->translate("START_DATE");?></td>
-							<td><?php echo $register->getElement('start_date');?></td>
-						</tr>
-						<tr>
-							<td><?php echo $tr->translate("END_DATE");?></td>
-							<td><?php echo $register->getElement('end_date');?></td>
-						</tr>
-						<tr>	
-							<td><?php echo $tr->translate("NOTE");?></td>
-							<td><?php echo $register->getElement('not');?></td>	
-						</tr>
-						<tr>	
-							<td colspan="2" align="center">
-								<input type="checkbox" value="1" name="is_void" id="is_void" dojoType="dijit.form.CheckBox"  /> Void
-							<td>
-						</tr>
-					</table>	
-				</fieldset>		
-			</td>
-			
-			<td width="33%" valign="top">
-				<fieldset>
-				<legend align="center"><strong><?php echo $tr->translate("PAYMENT_INFO");?></strong></legend>
-					<table style="margin: 0 auto; width: 100%;padding:0px 10px 10px 10px;" cellspacing="7" >
-						<tr>
-							<td width="20%"><?php echo $tr->translate("RECEIPT_NO");?></td>
-							<td width="80%"><?php echo $register->getElement('reciept_no');?></td>
-						</tr>
-						<tr>
-							<td><?php echo $tr->translate("PAYMENT_TERM");?><label class="red">*</label></td>
-							<td><?php echo $register->getElement('payment_term');?></td>
-						</tr>
-						<tr>
-							<td><?php echo $tr->translate("TUITION_FEE");?></td>
-							<td><?php echo $register->getElement('tuitionfee');?></td>
-						</tr>
-						<input type="hidden" name="price_per_section" id="price_per_section" dojoType="dijit.form.TextBox" >
-						<tr>
-							<td>
-								<div id="label_amount">
-									<?php echo $tr->translate("AMOUNT");?>
-								</div>
-							</td>
-							<td>
-								<div id="amount_section">
-									<input name="amount_section" id="amount_section" onkeyup="calculateTotalFee();netTotal();getDateTerm(1);" dojoType="dijit.form.TextBox" value="1" class="fullside" type="text"/>
-								</div>
-							</td>
-						</tr>
-						<tr>
-							<td><?php echo $tr->translate("DISCOUNT");?></td>
-							<td>
-								<table width="100%" style="white-space: nowrap;">
-									<tr>
-										<td width="10%">(%)&nbsp;</td>
-										<td width="40%"><?php echo $register->getElement('discount');?></td>
-										<td width="10%">&nbsp;&nbsp;($)&nbsp;&nbsp;</td>
-										<td width="40%"><?php echo $register->getElement('discount_fix');?></td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-						<tr>	
-							<td><?php echo $tr->translate("OTHERS_PRICE");?></td>
-							<td><?php echo $register->getElement('remark');;?></td>
-						</tr>
-						<tr>	
-							<td><?php echo $tr->translate("TOTAL_PAYMENT");?></td>
-							<td><?php echo $register->getElement('total');?></td>
-						</tr>
-						<tr>	
-							<td><?php echo $tr->translate("PAID_AMOUNT");?></td>
-							<td><?php echo $register->getElement('books');;?></td>
-						</tr>
-						<tr>	
-							<td><?php echo $tr->translate("BALANCE");?></td>
-							<td><?php echo $register->getElement('remaining');;?></td>
-						</tr>
-						<tr>	
-							<td><?php echo $tr->translate("CREATE_DATE");?></td>
-							<td><?php echo $register->getElement('create_date');;?></td>
-						</tr>
-						<tr>	
-							<td><?php echo $tr->translate("វេន");?></td>
-							<td>
-								<select name="shift" id="shift" dojoType="dijit.form.FilteringSelect" class="fullside" >
-									<option value="1">វេនទី1</option>
-									<option value="2">វេនទី2</option>
-									<option value="3">វេនទី3</option>
-								</select>
-							</td>
-						</tr>
-					</table>	
-				</fieldset>		
-			</td>
-		</tr>
-		
-		<tr>
-			<td colspan="3">
-				<table width="100%" border="1" id="table_row" style="border-collapse: collapse; border:1px solid #ccc;white-space: nowrap;">
-						<tr id="head-title" class="head-td" align="right"></tr>
-				</table>
-			</td>
-		</tr>
-		
-		<tr>
-			<td colspan="3" align="right">
-				<table style="width:400px;border-collapse: collapse;white-space:nowrap;" cellpadding="10" cellspacing="10" >
-					<tr>
-						<td ><?php echo $tr->translate("EXCHANGE_RATE")." (៛)";?></td>
-						<td align="right">
-							<input type="text" name="ex_rate" id="ex_rate" readonly value="<?php echo $this->exchange_rate ;?>" dojoType="dijit.form.NumberTextBox" />
-						</td>
-					</tr>
-					<tr>
-						<td ><?php echo $tr->translate("TOTAL_PAYMENT");?></td>
-						<td align="right"><input type="text" readonly="readonly" onkeyup="calculatBalanceAndReturn();"  name="grand_total" id="grand_total" dojoType="dijit.form.NumberTextBox" /></td>
-					</tr>
-					<tr>	
-						<td><?php echo $tr->translate("CONVERT_TO_RIELS");?> (៛)</td>
-						<td align="right"><input  type="text" readonly="readonly"  name="convert_to_riels" id="convert_to_riels" dojoType="dijit.form.NumberTextBox" /></td>
-					</tr>
-					<tr>	
-						<td><?php echo $tr->translate("RECEIVED_AMOUNT");?></td>
-						<td align="right"><input  type="text" readonly="readonly" onkeyup="calculatBalanceAndReturn();" required="true"  name="total_received" id="total_received" dojoType="dijit.form.NumberTextBox" /></td>
-					</tr>
-					<tr>
-						<td><?php echo $tr->translate("BALANCE");?></td>
-						<td align="right"><input type="text"  readonly="readonly" name="total_balance" value="<?php echo 0?>" id="total_balance" dojoType="dijit.form.NumberTextBox" /></td>
-					</tr>
-				</table>
-			</td>
-		</tr>
-		
-		<tr>
-			<td colspan="3" align="center">
-				<input type="button" name="save_close" id="save_close"  onclick="submitDataClose();" value="រក្សាទុក &ចាកចេញ" label="<?php echo $tr->translate('SAVE_CLOSE');?>"  dojoType="dijit.form.Button" 
-				 iconClass="dijitEditorIcon dijitEditorIconSave" />
-				<input type="button" name="save_new" id="save_new" onclick="submitDataAddNew();" value="រក្សាទុក" label="<?php echo $tr->translate('SAVE_NEW');?>"  dojoType="dijit.form.Button" 
-				 iconClass="dijitEditorIcon dijitEditorIconSave" />
-			</td>
-		</tr>
-		
-	</table>	
-</form>
-<script type="text/javascript">
-
-
-function submitDataClose(){
-	
-	if(dijit.byId('office_receipt').validate()) {
-		
-		dijit.byId('save_new').set('disabled',true);
-		dijit.byId('save_close').set('disabled',true);
-	
-		var url_submit = '<?php echo $this->url(array('module'=>'accounting','controller'=>'coursestudy','action'=>'add')); ?>';
-		loading();
-		dojo.xhrPost({
-		    url: url_submit,	
-			form: dojo.byId("office_receipt"),		    
-			load: function(data) {
-				document.getElementsByClassName("overlay")[0].style.display="none";	
-				alert('<?php echo $tr->translate('INSERT_SUCCESS');?> !');
-				window.location.href ="<?php echo $this->baseUrl();?>/accounting/coursestudy";
-			},
-			error: function(e) {
-			}
-		});
-	}
-}
-
 function submitDataAddNew(){
 	
 	if(dijit.byId('office_receipt').validate()) {
-	
+
+		branch_id = dijit.byId('branch').get('value');
+		if(branch_id==-1 || branch_id==0){
+		 	alert("<?php echo $tr->translate("PLEASE_SELECT_BRANCH")?> !!! ");
+		 	dijit.byId("branch").focus();
+		 	return false;
+		}
+		year = dijit.byId('study_year').get('value');
+		if(year==-1 || year==0){
+			alert("<?php echo $tr->translate("PLEASE_SELECT_ACADEMIC_YEAR")?> !!! ");
+		 	dijit.byId("study_year").focus();
+		 	return false;
+		}
+		loadingBlock();
 		dijit.byId('save_new').set('disabled',true);
-		dijit.byId('save_close').set('disabled',true);
-		
 		var url_submit = '<?php echo $this->url(array('module'=>'accounting','controller'=>'coursestudy','action'=>'add')); ?>';
-		loading();
 		dojo.xhrPost({
 		    url: url_submit,	
 			form: dojo.byId("office_receipt"),		    
@@ -1215,22 +1194,6 @@ function oldStudentChangeDegree(){
 
 
 </script>
-
-<div class="overlay">
-	<div class="overlay-load">
-		<div class="overlay-msg">
-	    </div>
-	</div>
-</div>	
-<style>
-.overlay {display: none;position: absolute;width: 100%;height: 150%;top: 0px;left: 0px;background: #FCFCFC;z-index: 1001;opacity: .5;}
-.overlay-load {width: 350px;height: 100px;margin: auto;top: 0px;bottom: 0px;position: absolute;left: 0px;right: 0px;
-           text-align: center;
-           background: #fff url("<?php echo $this->baseUrl()?>/images/loading.gif") 50% 25%;
-           background-repeat: no-repeat;          
-}
-.overlay-msg{margin-bottom: 10px;bottom: 0px;position: absolute;font-style: italic;color: rgb(19, 19, 19);} 
-</style>
 
 
 

@@ -288,21 +288,21 @@ class Accounting_Model_DbTable_DbProductPayment extends Zend_Db_Table_Abstract
     	$_db = new Application_Model_DbTable_DbGlobal;
     	$branch_id = $_db->getAccessPermission('sp.branch_id');
     	
-    	$sql="select 
+    	$sql="SELECT 
     			sp.id,
-    			(select branch_namekh from rms_branch where br_id = sp.branch_id) as branch,
-		    	(select CONCAT(stu_khname,' - ',stu_enname) from rms_student where rms_student.stu_id=sp.student_id limit 1)AS name,
-		    	(select name_kh from rms_view where rms_view.type=2 and rms_view.key_code=(select sex from rms_student where rms_student.stu_id=sp.student_id limit 1) limit 1)AS sex,
+    			(SELECT branch_namekh FROM rms_branch WHERE br_id = sp.branch_id LIMIT 1) as branch,
+		    	(SELECT CONCAT(stu_khname,' - ',stu_enname) FROM rms_student WHERE rms_student.stu_id=sp.student_id LIMIT 1)AS name,
+		    	(SELECT name_kh FROM rms_view WHERE rms_view.type=2 and rms_view.key_code=(select sex from rms_student where rms_student.stu_id=sp.student_id LIMIT 1) LIMIT 1)AS sex,
 		    	receipt_number,
 		    	sp.grand_total_payment,
 		    	sp.grand_total_paid_amount,
 		    	create_date,
-		    	(select CONCAT(last_name,' ',first_name) from rms_users where rms_users.id=sp.user_id) AS user,
-		    	(select name_en from rms_view where type=12 and key_code = sp.is_void) as void_status,
+		    	(SELECT CONCAT(last_name,' ',first_name) FROM rms_users WHERE rms_users.id=sp.user_id LIMIT 1) AS user,
+		    	(SELECT name_en FROM rms_view WHERE type=12 and key_code = sp.is_void LIMIT 1) as void_status,
 		    	'delete' 
-	    	 from 
+	    	 FROM 
 	    		rms_student_payment as sp 
-	    	 where 
+	    	 WHERE 
 	    	 	sp.payfor_type=5
 	    	 	$branch_id
     		";
@@ -315,8 +315,8 @@ class Accounting_Model_DbTable_DbProductPayment extends Zend_Db_Table_Abstract
     		$s_where = array();
     		$s_search = addslashes(trim($search['adv_search']));
     		$s_where[] = "  receipt_number LIKE '%{$s_search}%'";
-    		$s_where[] = " (select stu_enname from rms_student where rms_student.stu_id=sp.student_id) LIKE '%{$s_search}%'";
-    		$s_where[] = " (select stu_khname from rms_student where rms_student.stu_id=sp.student_id) LIKE '%{$s_search}%'";
+    		$s_where[] = " (SELECT stu_enname FROM rms_student WHERE rms_student.stu_id=sp.student_id LIMIT 1) LIKE '%{$s_search}%'";
+    		$s_where[] = " (SELECT stu_khname FROM rms_student WHERE rms_student.stu_id=sp.student_id LIMIT 1) LIKE '%{$s_search}%'";
     		$where .=' AND ( 
     		'.implode(' OR ',$s_where).')';
     	}
@@ -330,19 +330,19 @@ class Accounting_Model_DbTable_DbProductPayment extends Zend_Db_Table_Abstract
     }
     function getStudentServicePaymentByID($id){
     	$db=$this->getAdapter();
-    	$sql="select * from rms_student_payment where id=".$id;
+    	$sql="SELECT * FROM rms_student_payment WHERE id=".$id." LIMIT 1";
     	return $db->fetchRow($sql);
     }
     
     function getStudentServicePaymentDetailByID($id){
     	$db=$this->getAdapter();
-    	$sql="select * from rms_student_paymentdetail where payment_id=".$id;
+    	$sql="SELECT * FROM rms_student_paymentdetail WHERE payment_id=".$id;
     	return $db->fetchAll($sql);
     }
     
     function getAllPaymentTerm($id){
     	$db=$this->getAdapter();
-    	$sql="select * from rms_student_paymentdetail where payment_id=".$id;
+    	$sql="SELECT * FROM rms_student_paymentdetail WHERE payment_id=".$id;
     	return $db->fetchAll($sql);
     }
     
@@ -480,7 +480,7 @@ class Accounting_Model_DbTable_DbProductPayment extends Zend_Db_Table_Abstract
     public function getAllServiceItemOption(){
     	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
     	$rows = $this->getAllServiceOption();
-    	array_unshift($rows,array('service_id' => '0',"title"=>"Select Service"));
+    	array_unshift($rows,array('service_id' => '0',"title"=>$tr->translate("SELECT_PRODUCT_SERVICE")));
     	$options = '';
     	if(!empty($rows))foreach($rows as $value){
     		$options .= '<option value="'.$value['service_id'].'" >'.htmlspecialchars($value['title'], ENT_QUOTES).'</option>';

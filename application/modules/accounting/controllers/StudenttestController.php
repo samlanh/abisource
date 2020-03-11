@@ -88,6 +88,7 @@ class Accounting_StudenttestController extends Zend_Controller_Action
 			$data=$this->getRequest()->getPost();
 			$db = new Accounting_Model_DbTable_DbStudentTest();				
 			try {
+				$id = empty($data['id'])?$id:$data['id'];
 				$db->updateStudentTest($data,$id);				
 				Application_Form_FrmMessage::Sucessfull('ការ​បញ្ចូល​​ជោគ​ជ័យ', "/accounting/studenttest");		
 			} catch (Exception $e) {

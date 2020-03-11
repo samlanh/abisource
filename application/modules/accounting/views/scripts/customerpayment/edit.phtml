@@ -50,9 +50,11 @@ dojo.require("dojo.data.ItemFileWriteStore");
 										<option value="<?php echo $branch['id']?>" <?php if($branch['id']==$row['branch_id']){echo "selected='selected'";}?>><?php echo $branch['name']?></option>
 									<?php }}?>
 								</select>
+								<input type="hidden" value="<?php echo $row['customer_id']?>"  name="customer_id" id="customer_id"/>
+								<input type="hidden" value="<?php echo $row['id']?>"  name="id" id="id"/>
 							</td>
 						</tr>
-						<input type="hidden" value="<?php echo $row['customer_id']?>"  name="customer_id" id="customer_id"/>
+						
 						<tr>
 							<td><?php echo $tr->translate("CUS_ID");?></td>
 							<td><input type="text" name="cus_id" class="fullside" id="cus_id"   dojoType="dijit.form.ValidationTextBox" required="required" value="<?php echo $row['customer_code'];?>"/> </td> 

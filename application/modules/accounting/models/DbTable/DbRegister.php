@@ -20,27 +20,25 @@ class Accounting_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     }
     
     function getAllStudentRegister($search=null){
-    	 
     	$_db = new Application_Model_DbTable_DbGlobal;
     	$branch_id = $_db->getAccessPermission('sp.branch_id');
-    	
     	$db=$this->getAdapter();
     	$sql=" SELECT
 			    	sp.id,
-			    	(select branch_namekh from rms_branch where br_id = s.branch_id limit 1) as branch,
+			    	(SELECT branch_namekh FROM rms_branch WHERE br_id = s.branch_id LIMIT 1) as branch,
 			    	s.stu_code,
 			    	s.stu_khname,
 			    	s.stu_enname,
 			    	s.sex,
-			    	(SELECT en_name FROM rms_dept WHERE dept_id=sp.degree limit 1)AS degree,
-			    	(SELECT major_enname FROM rms_major WHERE major_id=sp.grade limit 1) AS grade,
+			    	(SELECT en_name FROM rms_dept WHERE dept_id=sp.degree LIMIT 1)AS degree,
+			    	(SELECT major_enname FROM rms_major WHERE major_id=sp.grade LIMIT 1) AS grade,
 			    	sp.receipt_number,
 			    	sp.grand_total_payment,
 			    	sp.grand_total_paid_amount,
 			    	sp.grand_total_balance,
 			    	sp.create_date,
-			    	(select CONCAT(first_name,' ',last_name) as name from rms_users where id = s.user_id limit 1) as user,
-			    	(select name_en from rms_view where type=12 and key_code = sp.is_void limit 1) as void_status,
+			    	(SELECT CONCAT(first_name,' ',last_name) as name FROM rms_users WHERE id = s.user_id LIMIT 1) as user,
+			    	(SELECT name_en FROM rms_view WHERE type=12 and key_code = sp.is_void LIMIT 1) as void_status,
 			    	'Delete' as del
 			    FROM
 			    	rms_student AS s,
@@ -51,7 +49,6 @@ class Accounting_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 			    	and s.status=1
 			    	$branch_id
     		";
-    	 
     	$where=" ";
     	 
     	$from_date =(empty($search['start_date']))? '1': " sp.create_date >= '".$search['start_date']." 00:00:00'";
@@ -88,9 +85,7 @@ class Accounting_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	if(!empty($search['user'])){
     		$where.=" AND sp.user_id=".$search['user'];
     	}
-    	//$order=" ORDER By stu_id DESC ";
     	$order=" ORDER BY sp.id DESC";
-    	//echo $sql.$where.$order;exit();
     	return $db->fetchAll($sql.$where.$order);
     }
     
@@ -99,7 +94,6 @@ class Accounting_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
     	$sql="select spd.id from rms_student_payment AS sp,rms_student_paymentdetail AS spd where
     	sp.id=spd.payment_id and is_start=1 and service_id= $service_id and sp.student_id=$studentid and spd.type=$type limit 1 ";
-    	//echo $sql;exit();
     	return $db->fetchOne($sql);
     }
     function getStuidExist($stu_code){
@@ -305,8 +299,6 @@ class Accounting_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						'is_void'		=>$is_void,
 				);
 				$paymentid = $this->insert($arr);
-				
-				
 				
 		//////////////////  rms_study_history  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 				
@@ -554,9 +546,6 @@ class Accounting_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 	function updateRegister($data){
 		$db = $this->getAdapter();//ស្ពានភ្ជាប់ទៅកាន់Data Base
 		$db->beginTransaction();//ទប់ស្កាត់មើលការErrore , មានErrore វាមិនអោយចូល
-		
-		//	print_r($data);exit();
-		
 		try{
 			if(!empty($data['is_void'])){
 		
@@ -969,6 +958,7 @@ class Accounting_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     function getRegisterById($id){
     	$db=$this->getAdapter();
     	$sql=" SELECT 
+    			  
 				  s.stu_id,
 				  s.stu_code,
 				  s.stu_khname,
@@ -978,6 +968,7 @@ class Accounting_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 				  s.tel,
 				  s.address,
 				  
+				  sp.id,
 				  sp.branch_id,
 				  sp.receipt_number,
 				  sp.year as academic_year,
@@ -1064,10 +1055,6 @@ class Accounting_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     }
     function getBalance($serviceid,$studentid,$type){
     	$db = $this->getAdapter();
-//     	$sql="select rms_student_paymentdetail.id,rms_student_paymentdetail.validate,balance AS price_fee
-//     	from rms_student_paymentdetail,rms_student_payment where rms_student_payment.id=rms_student_paymentdetail.payment_id
-//     	and rms_student_paymentdetail.service_id=$serviceid and rms_student_payment.student_id=$studentid and is_complete=0 limit 1";
-    	
     	$sql = "SELECT 
 				  spd.id,
 				  spd.start_date,
@@ -1393,8 +1380,9 @@ class Accounting_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	$stu_code =  $db->fetchAll($sql1);
     	//return $stu_code;
     	
-    	array_unshift($stu_code, array ( 'id' => -1, 'name' => '------ select student --------') );
-    	array_unshift($stu_name, array ( 'id' => -1, 'name' => '------ select student --------') );
+    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+    	array_unshift($stu_code, array ( 'id' => -1, 'name' => $tr->translate("SELECT_STUDENT_ID") ) );
+    	array_unshift($stu_name, array ( 'id' => -1, 'name' => $tr->translate("SELECT_STUDENT_NAME") ) );
     	
     	//$result = array_merge($stu_name, $stu_code);
     	
@@ -1411,11 +1399,10 @@ class Accounting_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	$sql1="select stu_id as id , stu_code name from rms_student where is_subspend!=0 and status=1 and degree IN(1,2,3,4,5,6) and branch_id = $branch_id ";
     	$stu_code =  $db->fetchAll($sql1);
     	//return $stu_code;
-    	 
-    	//$result = array_merge($stu_name, $stu_code);
     	
-    	array_unshift($stu_code, array ( 'id' => -1, 'name' => '------ select student --------') );
-    	array_unshift($stu_name, array ( 'id' => -1, 'name' => '------ select student --------') );
+    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+    	array_unshift($stu_code, array ( 'id' => -1, 'name' => $tr->translate("SELECT_STUDENT_ID") ) );
+    	array_unshift($stu_name, array ( 'id' => -1, 'name' => $tr->translate("SELECT_STUDENT_NAME") ) );
     	 
     	$result = array(0=>$stu_code, 1=>$stu_name);
     	return $result;
@@ -1471,14 +1458,6 @@ class Accounting_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     function getAllDropStudentID($type){
     	$db=$this->getAdapter();
     
-    	//     	$request=Zend_Controller_Front::getInstance()->getRequest();
-    	//     	$action = $request->getActionName();
-    	//     	if($action == "edit"){
-    	//     		$is_comeback = " ";
-    	//     	}else{
-    	//     		$is_comeback = " and s.is_comeback = 0 ";
-    	//     	}
-    	 
     	if($type==1){
     		$stu_type = " AND s.stu_type != 3";
     	}else{
@@ -1511,14 +1490,6 @@ class Accounting_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     function getAllDropStudentName($type){
     	$db=$this->getAdapter();
     
-    	//     	$request=Zend_Controller_Front::getInstance()->getRequest();
-    	//     	$action = $request->getActionName();
-    	//     	if($action == "edit"){
-    	//     		$is_comeback = " ";
-    	//     	}else{
-    	//     		$is_comeback = " and s.is_comeback = 0 ";
-    	//     	}
-    	 
     	if($type==1){
     		$stu_type = " AND s.stu_type != 3";
     	}else{
