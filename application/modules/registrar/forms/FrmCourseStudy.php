@@ -173,7 +173,7 @@ Class Registrar_Form_FrmCourseStudy extends Zend_Dojo_Form {
 				'Onchange'=>"getGepOldStudentById(1);paymentTerm();getStartDate();",
 				));
 		$opt_gep=$reciept->getAllGepOldStudent();
-		$opts=array(-1=>$this->tr->translate("student id"));
+		$opts=array(-1=>$this->tr->translate("SELECT_STUDENT_ID"));
 		if(!empty($opt_gep))foreach($opt_gep AS $row) $opts[$row['stu_id']]=$row['stu_code'];
 		$old_studens->setMultiOptions($opts);
 		
@@ -187,7 +187,7 @@ Class Registrar_Form_FrmCourseStudy extends Zend_Dojo_Form {
 				'Onchange'=>"setID(1);",
 		));
 		$opt_gep_name=$reciept->getAllGepOldStudentName();
-		$opts=array(-1=>$this->tr->translate("STUDENT_NAME"));
+		$opts=array(-1=>$this->tr->translate("SELECT_STUDENT_NAME"));
 		if(!empty($opt_gep_name))foreach($opt_gep_name AS $row) $opts[$row['stu_id']]=$row['name'];
 		$old_studen_name->setMultiOptions($opts);
 		
@@ -205,7 +205,7 @@ Class Registrar_Form_FrmCourseStudy extends Zend_Dojo_Form {
 		
 		$opt_ger=$reciept->getAllDropStudentID(2);
 		
-		$opts=array(-1=>$this->tr->translate("student id"));
+		$opts=array(-1=>$this->tr->translate("SELECT_STUDENT_ID"));
 		if(!empty($opt_ger))foreach($opt_ger AS $row) $opts[$row['stu_id']]=$row['stu_code'];
 		$drop_studens->setMultiOptions($opts);
 		
@@ -221,7 +221,7 @@ Class Registrar_Form_FrmCourseStudy extends Zend_Dojo_Form {
 				'onchange'=>'setID(2);',
 		));
 		$opt_ger_name=$reciept->getAllDropStudentName(2);
-		$opts=array(-1=>$this->tr->translate("STUDENT_NAME"));
+		$opts=array(-1=>$this->tr->translate("SELECT_STUDENT_NAME"));
 		if(!empty($opt_ger_name))foreach($opt_ger_name AS $row) $opts[$row['stu_id']]=$row['name'];
 		$drop_stu_name->setMultiOptions($opts);
 		

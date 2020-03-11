@@ -12,6 +12,12 @@ fieldset{  background:none;}
 <form id='office_receipt' action="<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'edit')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 <script type="dojo/method" event="onSubmit">   
    if(this.validate()) {
+		year = dijit.byId('study_year').get('value');
+    	if(year==-1 || year==0){
+			alert("<?php echo $tr->translate("PLEASE_SELECT_ACADEMIC_YEAR")?> !!! ");
+        	dijit.byId("study_year").focus();
+        	return false;
+    	}
 		loadingBlock();
 	    dijit.byId('save_close').set('disabled',true);
 		return true;
@@ -111,7 +117,7 @@ fieldset{  background:none;}
 							<td><?php echo $tr->translate("ROOM_NAME");?><label class="red">*</label></td>
 							<td>
 								<select name="room" id="room" dojoType="dijit.form.FilteringSelect" class="fullside" >
-									<option value="-1">----- select room -----</option>
+									<option value="-1"><?php echo $tr->translate("SELECT_ROOM")?></option>
 									<?php if(!empty($this->room)){foreach ($this->room as $room){?>
 										<option value="<?php echo $room['id']?>" <?php if($room['id']==$this->degree_row['room_id']){echo "selected='selected'";}?>><?php echo $room['name']?></option>
 									<?php }}?>
@@ -126,7 +132,7 @@ fieldset{  background:none;}
 							<td style="white-space: nowrap;"><?php echo $tr->translate("TIME");?></td>
 							<td>
 							    <select dojoType="dijit.form.FilteringSelect" class="fullside" id="study_hour" name="study_hour" required="false">
-									<option value="select time">select time</option>
+									<option value="select time"><?php echo $tr->translate("SELECT_TIME")?></option>
 									<?php if(!empty($this->all_time)){foreach($this->all_time as $time){?>
 										<option value="<?php echo $time['name']?>" <?php if($time['name'] == $this->degree_row['time']){echo "selected='selected'";}?>><?php echo $time['name']?></option>
 									<?php }}?>

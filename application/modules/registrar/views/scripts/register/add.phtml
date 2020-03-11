@@ -13,7 +13,8 @@
 	<script type="dojo/method" event="onSubmit">   
     	if(this.validate()) {
     		year = dijit.byId('study_year').get('value');
-    		if(year==-1){
+    		if(year==-1 || year==0){
+				alert("<?php echo $tr->translate("PLEASE_SELECT_ACADEMIC_YEAR")?> !!! ");
          		dijit.byId("study_year").focus();
          		return false;
     		}
@@ -111,7 +112,7 @@
 							<td><?php echo $tr->translate("ROOM_NAME");?><label class="red">*</label></td>
 							<td>
 								<select type="text" class="fullside" name="room" id="room" autoComplete="false" queryExpr="*${0}*" dojoType="dijit.form.FilteringSelect" />
-									<option value='-1'>---------- select room ----------</option>
+									<option value='-1'><?php echo $tr->translate("SELECT_ROOM")?></option>
 									<?php if(!empty($this->room)){foreach($this->room as $room){?>
 										<option value="<?php echo $room['id'];?>"><?php echo $room['name'];?></option>
 									<?php }}?>
@@ -126,7 +127,7 @@
 							<td style="white-space: nowrap;"><?php echo $tr->translate("TIME");?></td>
 							<td>
 							    <select dojoType="dijit.form.FilteringSelect" class="fullside" id="study_hour" name="study_hour">
-									<option value="select time">select time</option>
+									<option value="select time"><?php echo $tr->translate("SELECT_TIME")?></option>
 									<?php if(!empty($this->all_time)){foreach($this->all_time as $time){?>
 										<option value="<?php echo $time['name']?>"><?php echo $time['name']?></option>
 									<?php }}?>
@@ -290,15 +291,13 @@
 		    id: "dept",
 		    name: "dept",           
 		    class: 'fullside',  
-		    placeHolder:"Selected Degree",          
+		    placeHolder:"<?php echo $tr->translate("SELECT_DEGREE")?>",          
 		    onChange: function() {  
 		    	dept_id = dijit.byId('dept').get('value');
 		    	dijit.byId('grade').attr('value','');
 				getDegreeType(dept_id);
 		    	getallModel(dept_id,a=''); 
 		    	getStudentNo(dept_id,'');
-				
-				//oldStudentChangeDegree();
 		    }
 		}, "dept");
 		
@@ -308,7 +307,7 @@
 		    id: "grade",
 		    name: "grade",           
 		    class: 'fullside', 
-		    placeHolder:"Selected Grade",          
+		    placeHolder:"<?php echo $tr->translate("SELECT_GRADE")?>",          
 		    onChange: function() {  
 		    	make_id = dijit.byId('grade').get('value');
 		    	paymentTerm();
@@ -338,7 +337,6 @@
 					},
 				handleAs:"json",
 				load: function(data) {
-					//alert(data);
 					grade_store  = getDataStorefromJSON('id','name', data);
 				    dijit.byId('grade').set('store',grade_store);  
 				    if(a!=""){
@@ -378,7 +376,6 @@
 	var url_getreceiptno = '<?php echo $this->url(array('module'=>'registrar','controller'=>'coursestudy','action'=>'get-receipt-no')); ?>';
 	function getNewReceiptNo(new_stu_id){
 		degree_type = dijit.byId('degree_type').get('value');
-		//alert(degree_type);
 		if(degree_type>0){
 			if(degree_type==1){
 				type = 1; // khmer fulltime
@@ -409,7 +406,6 @@
 		generat=dijit.byId('study_year').get('value');
 		payment_term=dijit.byId('payment_term').get('value');
 		grade=dijit.byId('grade').get('value');
-		//time=dijit.byId('time').get('value');
 		session=dijit.byId('session').get('value');
 		student_type=dijit.byId('student_type').get('value');
 		
@@ -741,10 +737,17 @@
 
 function submitDataClose(){
 	if(dijit.byId('office_receipt').validate()) {
+		year = dijit.byId('study_year').get('value');
+		if(year==-1 || year==0){
+			alert("<?php echo $tr->translate("PLEASE_SELECT_ACADEMIC_YEAR")?> !!! ");
+     		dijit.byId("study_year").focus();
+     		return false;
+		}
+		loadingBlock();
 		dijit.byId('save_new').set('disabled',true);
 		dijit.byId('save_close').set('disabled',true);
+		
 		var url_submit = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'add')); ?>';
-		loadingBlock();
 		dojo.xhrPost({
 		    url: url_submit,	
 			form: dojo.byId("office_receipt"),		    
@@ -761,10 +764,16 @@ function submitDataClose(){
 
 function submitDataAddNew(){
 	if(dijit.byId('office_receipt').validate()) {
+		year = dijit.byId('study_year').get('value');
+		if(year==-1 || year==0){
+			alert("<?php echo $tr->translate("PLEASE_SELECT_ACADEMIC_YEAR")?> !!! ");
+     		dijit.byId("study_year").focus();
+     		return false;
+		}
+		loadingBlock();
 		dijit.byId('save_new').set('disabled',true);
 		dijit.byId('save_close').set('disabled',true);
 		var url_submit = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'add')); ?>';
-		loadingBlock();
 		dojo.xhrPost({
 		    url: url_submit,	
 			form: dojo.byId("office_receipt"),		    
@@ -854,11 +863,13 @@ function displayAmountSection(){
 function printSave(new_stu_id,new_receipt_no){		
 	if(dijit.byId('office_receipt').validate()) {
 		 
-		if(dijit.byId('study_year').get('value')==-1){
-		   dijit.byId("study_year").focus();
-		   return false;
+		year = dijit.byId('study_year').get('value');
+		if(year==-1 || year==0){
+			alert("<?php echo $tr->translate("PLEASE_SELECT_ACADEMIC_YEAR")?> !!! ");
+     		dijit.byId("study_year").focus();
+     		return false;
 		}
-		 
+		loadingBlock();
 		 degree = dijit.byId('dept').get('value');
 		 old_degree = dijit.byId('old_degree').get('value');
 		
@@ -1041,7 +1052,7 @@ function printSave(new_stu_id,new_receipt_no){
 		dojo.byId("lb_epx_date").innerHTML = epx_date;
 		
 		
-		 
+		HideloadingBlock(); 
 		dijit.byId("terms").show();	
 	}
 	
@@ -1441,8 +1452,7 @@ function printSave(new_stu_id,new_receipt_no){
 		<iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>	
 		<button dojoType="dijit.form.Button" label="Cancel" iconClass="dijitEditorIcon dijitEditorIconCancel"
 			showLabel="true" type="button" onclick="hideDialog();">Cancel</button>
-		<button dojoType="dijit.form.Button" label="Print" showLabel="true" iconClass="dijitEditorIcon dijitEditorIconPrint"
-			 type="button" onclick="printSubmit();">Print</button>
+		<button id="bt_print" dojoType="dijit.form.Button" label="Print" showLabel="true" iconClass="dijitEditorIcon dijitEditorIconPrint" type="button" onclick="printSubmit();">Print</button>
 	</div>
 </div>
 
@@ -1452,6 +1462,11 @@ function printSubmit(){
 	window.frames["print_frame"].document.body.innerHTML=dojo.byId('divPrint').innerHTML;
     window.frames["print_frame"].window.focus();
     window.frames["print_frame"].window.print();
+    
+    dijit.byId('save_new').set('disabled',true);
+	dijit.byId('save_close').set('disabled',true);
+	dijit.byId('bt_print').set('disabled',true);
+	
 	$('#office_receipt').submit();
     dijit.byId("terms").hide();	//hideDialog();
 }
