@@ -73,23 +73,22 @@ class Registrar_StudentlunchpaymentController extends Zend_Controller_Action {
       
        $_db = new Application_Model_DbTable_DbGlobal();
        $abc=$this->view->payment_term = $_db->getAllPaymentTerm(null,null,null);
-       //print_r($abc);exit();
        
+       $tr = Application_Form_FrmLanguages::getCurrentlanguage();
        $db = new Registrar_Model_DbTable_DbStudentLunchPayment();
        $this->view->rs = $db->getAllStudentCode();
        $this->view->row = $db->getAllStudentName();
        $service = $db->getAllLunchService();
-       array_unshift($service, array ( 'id' => -2, 'name' => 'បន្ថែមថ្មី') );
-       array_unshift($service, array ( 'id' => -1, 'name' => 'Select Service') );
+       array_unshift($service, array ( 'id' => -2, 'name' => $tr->translate('ADD_NEW') ) );
+       array_unshift($service, array ( 'id' => -1, 'name' => $tr->translate('SELECT_SERVICE')) );
        $this->view->service = $service;
        
        $servicetype = $db->getAllServiceType();
-       array_unshift($servicetype, array ( 'id' => '', 'name' => 'Select Service Type') );
-       array_unshift($servicetype, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
+       array_unshift($servicetype, array ( 'id' => '', 'name' => $tr->translate('SELECT_SERVICE_TYPE') ) );
+       array_unshift($servicetype, array ( 'id' => -1, 'name' => $tr->translate('ADD_NEW')) );
        $this->view->service_type = $servicetype;
        
        $this->view->new_stu_name =  $db->getAllNewStudentName();
-//        print_r($db->getAllNewStudentName());exit();
        
        $this->view->old_stu_name = $db->getAllOldStudentName();
        $this->view->old_car_id = $db->getAllOldLunchId();
@@ -100,9 +99,6 @@ class Registrar_StudentlunchpaymentController extends Zend_Controller_Action {
        $db = new Registrar_Model_DbTable_DbRegister();
        $this->view->all_product = $db->getAllProduct();
        $this->view->exchange_rate = $db->getExchangeRate();
-//        $_model = new Application_Model_GlobalClass();
-//        $this->view->all_service = $_model->getAllServiceItemOption(2); /// for use in add row
-       //$session_user=new Zend_Session_Namespace('auth'); $username = $session_user->first_name;
        
        $dbg = new Application_Model_DbTable_DbGlobal();
        $this->view->branch_info = $dbg->getBranchInfo();
@@ -141,19 +137,19 @@ class Registrar_StudentlunchpaymentController extends Zend_Controller_Action {
     
     	$_db = new Application_Model_DbTable_DbGlobal();
     	$abc=$this->view->payment_term = $_db->getAllPaymentTerm(null,null,null);
-    	//print_r($abc);exit();
     	 
+    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
     	$db = new Registrar_Model_DbTable_DbStudentLunchPayment();
     	$this->view->rs = $db->getAllStudentCode();
     	$this->view->row = $db->getAllStudentName();
     	$service = $db->getAllLunchService();
-    	array_unshift($service, array ( 'id' => -2, 'name' => 'បន្ថែមថ្មី') );
-    	array_unshift($service, array ( 'id' => -1, 'name' => 'Select Service') );
+    	array_unshift($service, array ( 'id' => -2, 'name' => $tr->translate('ADD_NEW')) );
+    	array_unshift($service, array ( 'id' => -1, 'name' => $tr->translate('SELECT_SERVICE')) );
     	$this->view->service = $service;
     	 
     	$servicetype = $db->getAllServiceType();
-    	array_unshift($servicetype, array ( 'id' => '', 'name' => 'Select Service Type') );
-    	array_unshift($servicetype, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
+    	array_unshift($servicetype, array ( 'id' => '', 'name' => $tr->translate('SELECT_SERVICE_TYPE')) );
+    	array_unshift($servicetype, array ( 'id' => -1, 'name' => $tr->translate('ADD_NEW')) );
     	$this->view->service_type = $servicetype;
     	 
     	$this->view->new_stu_name =  $db->getAllNewStudentName();
@@ -168,9 +164,6 @@ class Registrar_StudentlunchpaymentController extends Zend_Controller_Action {
     	$db = new Registrar_Model_DbTable_DbRegister();
     	$this->view->all_product = $db->getAllProduct();
     	$this->view->exchange_rate = $db->getExchangeRate();
-    	//        $_model = new Application_Model_GlobalClass();
-    	//        $this->view->all_service = $_model->getAllServiceItemOption(2); /// for use in add row
-    	//$session_user=new Zend_Session_Namespace('auth'); $username = $session_user->first_name;
     	 
     	$dbg = new Application_Model_DbTable_DbGlobal();
     	$this->view->branch_info = $dbg->getBranchInfo();
@@ -208,19 +201,19 @@ class Registrar_StudentlunchpaymentController extends Zend_Controller_Action {
     
     	$_db = new Application_Model_DbTable_DbGlobal();
     	$abc=$this->view->payment_term = $_db->getAllPaymentTerm(null,null,null);
-    	//print_r($abc);exit();
     
+    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
     	$db = new Registrar_Model_DbTable_DbStudentLunchPayment();
     	$this->view->rs = $db->getAllStudentCode();
     	$this->view->row = $db->getAllStudentName();
     	$service = $db->getAllLunchService();
-    	array_unshift($service, array ( 'id' => -2, 'name' => 'បន្ថែមថ្មី') );
-    	array_unshift($service, array ( 'id' => -1, 'name' => 'Select Service') );
+    	array_unshift($service, array ( 'id' => -2, 'name' => $tr->translate('ADD_NEW')) );
+    	array_unshift($service, array ( 'id' => -1, 'name' => $tr->translate('SELECT_SERVICE')) );
     	$this->view->service = $service;
     
     	$servicetype = $db->getAllServiceType();
-    	array_unshift($servicetype, array ( 'id' => '', 'name' => 'Select Service Type') );
-    	array_unshift($servicetype, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
+    	array_unshift($servicetype, array ( 'id' => '', 'name' => $tr->translate('SELECT_SERVICE_TYPE')) );
+    	array_unshift($servicetype, array ( 'id' => -1, 'name' => $tr->translate('ADD_NEW')) );
     	$this->view->service_type = $servicetype;
     
     	$this->view->new_stu_name =  $db->getAllNewStudentName();
@@ -235,9 +228,6 @@ class Registrar_StudentlunchpaymentController extends Zend_Controller_Action {
     	$db = new Registrar_Model_DbTable_DbRegister();
     	$this->view->all_product = $db->getAllProduct();
     	$this->view->exchange_rate = $db->getExchangeRate();
-    	//        $_model = new Application_Model_GlobalClass();
-    	//        $this->view->all_service = $_model->getAllServiceItemOption(2); /// for use in add row
-    	//$session_user=new Zend_Session_Namespace('auth'); $username = $session_user->first_name;
     
     	$dbg = new Application_Model_DbTable_DbGlobal();
     	$this->view->branch_info = $dbg->getBranchInfo();
@@ -249,16 +239,10 @@ class Registrar_StudentlunchpaymentController extends Zend_Controller_Action {
     	$id=$this->getRequest()->getParam('id');
     	if($this->getRequest()->isPost()){
     		$_data = $this->getRequest()->getPost();
-     		$_data['payment_id']=$id;
-//      		print_r($_data);exit();
     		try {
     			$db = new Registrar_Model_DbTable_DbStudentLunchPayment();
     			$db->updateStudentLunchPayment($_data);
-    			if(isset($_data['save_close'])){
-    				Application_Form_FrmMessage::Sucessfull($this->tr->translate('EDIT_SUCCESS'), self::REDIRECT_URL . '/studentlunchpayment/index');
-    			}else{
-    				Application_Form_FrmMessage::Sucessfull($this->tr->translate('EDIT_SUCCESS'), self::REDIRECT_URL . '/studentlunchpayment/index');
-    			}
+    			Application_Form_FrmMessage::Sucessfull($this->tr->translate('EDIT_SUCCESS'), self::REDIRECT_URL . '/studentlunchpayment/index');
     		} catch (Exception $e) {
     			Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
     			$err =$e->getMessage();
@@ -282,7 +266,6 @@ class Registrar_StudentlunchpaymentController extends Zend_Controller_Action {
 //     	print_r($payment);exit();
     	$this->view->detail = $payment_detail;
     	
-//     	print_r($payment);exit();
     	
     	$frm = new Registrar_Form_FrmStudentServicePayment();
        $frm_register=$frm->FrmRegistarWU($payment);
@@ -294,25 +277,22 @@ class Registrar_StudentlunchpaymentController extends Zend_Controller_Action {
       
        $db = new Application_Model_DbTable_DbGlobal();
        $abc=$this->view->payment_term = $db->getAllPaymentTerm(null,null,null);
-       //print_r($abc);exit();
        
+       $tr = Application_Form_FrmLanguages::getCurrentlanguage();
        $db = new Registrar_Model_DbTable_DbStudentLunchPayment();
        $service = $db->getAllLunchService();
-       array_unshift($service, array ( 'id' => -2, 'name' => 'បន្ថែមថ្មី') );
-       array_unshift($service, array ( 'id' => -1, 'name' => 'Select Service') );
+       array_unshift($service, array ( 'id' => -2, 'name' => $tr->translate('ADD_NEW')) );
+       array_unshift($service, array ( 'id' => -1, 'name' => $tr->translate('SELECT_SERVICE')) );
        $this->view->service = $service;
        
        $servicetype = $db->getAllServiceType();
        $this->view->service_type = $servicetype;
        
        $this->view->all_stu_name =  $db->getAllStudentName();
-//        print_r($db->getAllNewStudentName());exit();
        
        $this->view->old_stu_name = $db->getAllOldStudentName();
-//        print_r($db->getAllOldStudentName());exit();
        
        $this->view->old_car_id = $db->getAllOldLunchId();
-//        print_r($db->getAllOldCarId());exit();
        
        
        $db = new Registrar_Model_DbTable_DbRegister();
@@ -328,8 +308,6 @@ class Registrar_StudentlunchpaymentController extends Zend_Controller_Action {
     		$data=$this->getRequest()->getPost();
     		$db = new Registrar_Model_DbTable_DbRegister();
     		$grade = $db->getAllGrade($data['dept_id']);
-    		//print_r($grade);exit();
-    		//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
     		print_r(Zend_Json::encode($grade));
     		exit();
     	}
@@ -340,7 +318,6 @@ class Registrar_StudentlunchpaymentController extends Zend_Controller_Action {
     		$data=$this->getRequest()->getPost();
     		$db = new Registrar_Model_DbTable_DbStudentLunchPayment();
     		$price = $db->getAllpriceByServiceTerm($data['studentid'],$data['service'],$data['term'],$data['year']);
-    		//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
     		print_r(Zend_Json::encode($price));
     		exit();
     	}
@@ -351,7 +328,6 @@ class Registrar_StudentlunchpaymentController extends Zend_Controller_Action {
     		$data=$this->getRequest()->getPost();
     		$db = new Registrar_Model_DbTable_DbStudentLunchPayment();
     		$price = $db->getAllpriceByServiceTermEdit($data['service'],$data['term'],$data['year']);
-    		//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
     		print_r(Zend_Json::encode($price));
     		exit();
     	}
@@ -362,7 +338,6 @@ class Registrar_StudentlunchpaymentController extends Zend_Controller_Action {
     		$data=$this->getRequest()->getPost();
     		$db = new Registrar_Model_DbTable_DbStudentLunchPayment();
     		$studentinfo = $db->getAllStudentInfo($data['studentid']);
-    		//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
     		print_r(Zend_Json::encode($studentinfo));
     		exit();
     	}
@@ -374,7 +349,6 @@ class Registrar_StudentlunchpaymentController extends Zend_Controller_Action {
     		$data=$this->getRequest()->getPost();
     		$db = new Registrar_Model_DbTable_DbStudentLunchPayment();
     		$year = $db->getAllService($data['year']);
-    		//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
     		print_r(Zend_Json::encode($year));
     		exit();
     	}
@@ -384,7 +358,6 @@ class Registrar_StudentlunchpaymentController extends Zend_Controller_Action {
     		$data=$this->getRequest()->getPost();
     		$db = new Registrar_Model_DbTable_DbStudentLunchPayment();
     		$year = $db->getStudentID($data['study_year'],$data['type']);
-    		//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
     		print_r(Zend_Json::encode($year));
     		exit();
     	}
@@ -395,7 +368,6 @@ class Registrar_StudentlunchpaymentController extends Zend_Controller_Action {
     		$data=$this->getRequest()->getPost();
     		$db = new Registrar_Model_DbTable_DbStudentLunchPayment();
     		$service = $db->addService($data);
-    		//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
     		print_r(Zend_Json::encode($service));
     		exit();
     	}
@@ -406,7 +378,6 @@ class Registrar_StudentlunchpaymentController extends Zend_Controller_Action {
     		$data=$this->getRequest()->getPost();
     		$db = new Registrar_Model_DbTable_DbStudentLunchPayment();
     		$service_cate = $db->getServiceCate($data['service_id']);
-    		//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
     		print_r(Zend_Json::encode($service_cate));
     		exit();
     	}
@@ -417,7 +388,6 @@ class Registrar_StudentlunchpaymentController extends Zend_Controller_Action {
     		$data=$this->getRequest()->getPost();
     		$db = new Registrar_Model_DbTable_DbStudentLunchPayment();
     		$service_start_date = $db->getServiceStartDate($data['service_id'],$data['stu_id']);
-    		//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
     		print_r(Zend_Json::encode($service_start_date));
     		exit();
     	}

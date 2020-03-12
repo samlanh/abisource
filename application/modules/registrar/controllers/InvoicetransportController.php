@@ -71,14 +71,13 @@ class Registrar_InvoicetransportController extends Zend_Controller_Action {
       
        $db = new Application_Model_DbTable_DbGlobal();
        $abc=$this->view->payment_term = $db->getAllPaymentTerm(null,null,null);
-       //print_r($abc);exit();
        
        $db = new Registrar_Model_DbTable_DbInvoiceTransport();
        $this->view->rs = $db->getAllStudentCode();
        $this->view->row = $db->getAllStudentName();
        $service = $db->getAllService();
-       array_unshift($service, array ( 'id' => -2, 'name' => 'បន្ថែមថ្មី') );
-       array_unshift($service, array ( 'id' => -1, 'name' => 'Select Service') );
+       array_unshift($service, array ( 'id' => -2, 'name' => $this->tr->translate('ADD_NEW') ));
+       array_unshift($service, array ( 'id' => -1, 'name' => $this->tr->translate('SELECT_SERVICE') ));
        $this->view->service = $service;
        
        $servicetype = $db->getAllServiceType();
@@ -112,18 +111,12 @@ class Registrar_InvoicetransportController extends Zend_Controller_Action {
     	$id=$this->getRequest()->getParam('id');
     	if($this->getRequest()->isPost()){
     		$_data = $this->getRequest()->getPost();
-     		$_data['payment_id']=$id;
-//      		print_r($_data);exit();
     		try {
     			$db = new Registrar_Model_DbTable_DbInvoiceTransport();
     			$db->updateInvoiceTransport($_data,$id);
-    			if(isset($_data['save_close'])){
-    				Application_Form_FrmMessage::Sucessfull($this->tr->translate('INSERT_SUCCESS'), self::REDIRECT_URL . '/invoicetransport/index');
-    			}else{
-    				Application_Form_FrmMessage::Sucessfull($this->tr->translate('INSERT_SUCCESS'), self::REDIRECT_URL . '/invoicetransport/index');
-    			}
+    				Application_Form_FrmMessage::Sucessfull($this->tr->translate('EDIT_SUCCESS'), self::REDIRECT_URL . '/invoicetransport/index');
     		} catch (Exception $e) {
-    			Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
+    			Application_Form_FrmMessage::message($this->tr->translate('EDIT_FAIL'));
     			$err =$e->getMessage();
     			Application_Model_DbTable_DbUserLog::writeMessageError($err);
     			echo $err;
@@ -140,7 +133,7 @@ class Registrar_InvoicetransportController extends Zend_Controller_Action {
     	
     	$db = new Registrar_Model_DbTable_DbInvoiceTransport();
     	$service = $db->getAllService();
-    	array_unshift($service, array ('id' => -1, 'name' => 'Select Service') );
+    	array_unshift($service, array ('id' => -1, 'name' => $this->tr->translate('SELECT_SERVICE') ));
     	$this->view->service = $service;
     	
     	$this->view->all_stu_name =  $db->getAllStudentName();
@@ -168,8 +161,6 @@ class Registrar_InvoicetransportController extends Zend_Controller_Action {
     		$data=$this->getRequest()->getPost();
     		$db = new Registrar_Model_DbTable_DbRegister();
     		$grade = $db->getAllGrade($data['dept_id']);
-    		//print_r($grade);exit();
-    		//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
     		print_r(Zend_Json::encode($grade));
     		exit();
     	}
@@ -180,7 +171,6 @@ class Registrar_InvoicetransportController extends Zend_Controller_Action {
     		$data=$this->getRequest()->getPost();
     		$db = new Registrar_Model_DbTable_DbStudentServicePayment();
     		$price = $db->getAllpriceByServiceTerm($data['studentid'],$data['service'],$data['term']);
-    		//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
     		print_r(Zend_Json::encode($price));
     		exit();
     	}
@@ -191,7 +181,6 @@ class Registrar_InvoicetransportController extends Zend_Controller_Action {
     		$data=$this->getRequest()->getPost();
     		$db = new Registrar_Model_DbTable_DbStudentServicePayment();
     		$price = $db->getAllpriceByServiceTermEdit($data['service'],$data['term'],$data['year']);
-    		//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
     		print_r(Zend_Json::encode($price));
     		exit();
     	}
@@ -202,7 +191,6 @@ class Registrar_InvoicetransportController extends Zend_Controller_Action {
     		$data=$this->getRequest()->getPost();
     		$db = new Registrar_Model_DbTable_DbStudentServicePayment();
     		$studentinfo = $db->getAllStudentInfo($data['studentid']);
-    		//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
     		print_r(Zend_Json::encode($studentinfo));
     		exit();
     	}
@@ -214,7 +202,6 @@ class Registrar_InvoicetransportController extends Zend_Controller_Action {
     		$data=$this->getRequest()->getPost();
     		$db = new Registrar_Model_DbTable_DbStudentServicePayment();
     		$year = $db->getAllService($data['year']);
-    		//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
     		print_r(Zend_Json::encode($year));
     		exit();
     	}
@@ -224,7 +211,6 @@ class Registrar_InvoicetransportController extends Zend_Controller_Action {
     		$data=$this->getRequest()->getPost();
     		$db = new Registrar_Model_DbTable_DbStudentServicePayment();
     		$year = $db->getStudentID($data['study_year'],$data['type']);
-    		//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
     		print_r(Zend_Json::encode($year));
     		exit();
     	}
@@ -235,7 +221,6 @@ class Registrar_InvoicetransportController extends Zend_Controller_Action {
     		$data=$this->getRequest()->getPost();
     		$db = new Registrar_Model_DbTable_DbStudentServicePayment();
     		$service = $db->addService($data);
-    		//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
     		print_r(Zend_Json::encode($service));
     		exit();
     	}
@@ -246,7 +231,6 @@ class Registrar_InvoicetransportController extends Zend_Controller_Action {
     		$data=$this->getRequest()->getPost();
     		$db = new Registrar_Model_DbTable_DbStudentServicePayment();
     		$service_cate = $db->getServiceCate($data['service_id']);
-    		//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
     		print_r(Zend_Json::encode($service_cate));
     		exit();
     	}
@@ -257,7 +241,6 @@ class Registrar_InvoicetransportController extends Zend_Controller_Action {
     		$data=$this->getRequest()->getPost();
     		$db = new Registrar_Model_DbTable_DbStudentServicePayment();
     		$service_start_date = $db->getServiceStartDate($data['service_id'],$data['stu_id']);
-    		//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
     		print_r(Zend_Json::encode($service_start_date));
     		exit();
     	}

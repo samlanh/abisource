@@ -208,8 +208,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     	$id=$this->getRequest()->getParam('id');
     	if($this->getRequest()->isPost()){
     		$_data = $this->getRequest()->getPost();
-    		$_data['pay_id']=$id;
-//     		print_r($_data);exit();
     		try {
     			$db = new Registrar_Model_DbTable_DbRegister();
     			$db->updateRegister($_data);
@@ -219,7 +217,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     				Application_Form_FrmMessage::Sucessfull($this->tr->translate('EDIT_SUCCESS'), self::REDIRECT_URL . '/register/index');
     			}
     		} catch (Exception $e) {
-    			Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
+    			Application_Form_FrmMessage::message($this->tr->translate('EDIT_FAIL'));
     			$err =$e->getMessage();
     			Application_Model_DbTable_DbUserLog::writeMessageError($err);
     		}

@@ -7,41 +7,12 @@ echo $this->headTitle($tr->translate('EDIT_STUDENT_TEST'));
  <script>
 		require(["dijit/form/DateTextBox","dijit/form/Textarea"]);
  </script>
- 
- 
- <script type="text/javascript">
-	dojo.require("dojo.data.ItemFileWriteStore");  
-	var grade_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->dept));?> );
-	
-	dojo.ready(function(){
-		new dijit.form.FilteringSelect({
-			store: grade_store,
-			autoComplete: true,                        
-			required: false,
-			id: "grade_result",
-			name: "grade_result",           
-			class: "fullside", 
-			placeHolder:"Select grade",          
-			onChange: function() {  
-				// dept_id = dijit.byId('grade_result').get('value');
-				// if(dept_id==-1){
-					// dijit.byId("popup_add_dept").show();
-				// }
-			}
-		}, "grade_result");
-		
-		getAllGrade();
-		readMoneyInKhmer();
-		getDegreeType();
-	});
-	
-</script>
- 
- 
 <form id='frm_teststudent' action="<?php echo $this->url(array('module'=>'registrar','controller'=>'studenttest','action'=>'edit')); ?>" 
 				dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 	<script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
+				loadingBlock();
+				dijit.byId('savenew').set('disabled',true);
 				return true;
 			}else {
 				return false;
@@ -850,13 +821,29 @@ echo $this->headTitle($tr->translate('EDIT_STUDENT_TEST'));
 </div>
 <?php //*/?>
 
-<script>
-function submitData(){
-	if(dijit.byId('frm_teststudent').validate()) {
-		dijit.byId('savenew').set('disabled',true);
-		dijit.byId('frm_teststudent').submit();
-	}
-}
+<script type="text/javascript">
+	dojo.require("dojo.data.ItemFileWriteStore");  
+	var grade_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->dept));?> );
+	
+	dojo.ready(function(){
+		new dijit.form.FilteringSelect({
+			store: grade_store,
+			autoComplete: true,                        
+			required: false,
+			id: "grade_result",
+			name: "grade_result",           
+			class: "fullside", 
+			placeHolder:"<?php echo $tr->translate("SELECT_GRADE")?>",          
+			onChange: function() {  
+			}
+		}, "grade_result");
+		
+		getAllGrade();
+		readMoneyInKhmer();
+		getDegreeType();
+	});
+	
+
 
 // printReceipt for data only
 
@@ -990,6 +977,7 @@ function readMoneyInKhmer(){
 }
 function submitData(){
 	if(dijit.byId('frm_teststudent').validate()) {
+		loadingBlock();
 		dijit.byId('savenew').set('disabled',true);
 		dijit.byId('frm_teststudent').submit();
 	}
@@ -1002,7 +990,6 @@ function printSubmit(){
 }
 function hideDialog(){
 	dijit.byId('terms').hide();
-	//submitData();
 }
 
 var url_get_grade = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-grade')); ?>';

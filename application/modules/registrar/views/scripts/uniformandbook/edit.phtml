@@ -2,46 +2,28 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate('EDIT_STUDENT_PRODUCT_PAYMENT')); 
 	$base_url = Application_Form_FrmMessage::getUrl("/");
+	$register = $this->frm_register;
 ?>	
-<script type="text/javascript"  src="<?php echo $this->baseUrl();?>/js/jquery-1.8.3.min.js"></script>
-<script type="text/javascript"  src="<?php echo $this->baseUrl();?>/js/convertion.js"></script>
-<script type="text/javascript">
-	dojo.require("dojo.data.ItemFileWriteStore");  
-	dojo.require('dojox.form.BusyButton');
-	dojo.require("dojo.NodeList-manipulate");
-	
-dojo.ready(function(){
-    	 dijitValue();
-    	 getStudentInfo();
-    	 initailize();
-		 netTotal();
-});
-
-function dijitValue(){
-	 dijit.byId('reciept_no').attr('value','<?php echo $this->row['receipt_number']?>');
-	 dijit.byId('grand_total').attr('value','<?php echo $this->row['total_payment']?>');
-	 dijit.byId("phone").set('readOnly',true);
-	 dijit.byId("stu_name").set('readOnly',true);
-}
-</script>
-
 <style>
 select{ width:100%;}
 fieldset{  background:none;}
 .red{ color: red; padding-left:5px;}
 </style>
-<?php $register = $this->frm_register;
-//print_r($register);
-?>
 <form id='office_receipt' action="<?php echo $this->url(array('module'=>'registrar','controller'=>'uniformandbook','action'=>'edit')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-<script type="dojo/method" event="onSubmit">   
-   if(this.validate()) {
-		dijit.byId('save_close').set('disabled',true);	
-		return true;
-   }else {
-		return false;
-   }
-</script>
+	<script type="dojo/method" event="onSubmit">   
+   		if(this.validate()) {
+			condition = checkValidateAddRow();
+			if(condition==false){
+				alert("<?php echo $tr->translate("PLEASE_SELECT_PRODUCT_SERVICE")?> !!! ");
+				return false;
+			}
+			loadingBlock();
+			dijit.byId('save_close').set('disabled',true);	
+			return true;
+  	 	}else {
+			return false;
+   		}
+		</script>
 <table  cellspacing="10" style="margin: 0 auto; width: 100%;">
 	<tr>
 		<td>
@@ -54,13 +36,14 @@ fieldset{  background:none;}
 						</td>
 						<td>
 							<input type="checkbox" value="1" name="is_void" id="is_void" <?php if($this->row['is_void']==1){echo 'onclick="return false;"';}?> dojoType="dijit.form.CheckBox"  /> Void
+							<input type="hidden" name="payment_id" id="payment_id" value="<?php echo $this->row['id']?>" dojoType="dijit.form.TextBox" />
 						</td>
 					</tr>
 					<tr>
 						<td style="width: 12%" align="left"><?php echo $tr->translate("STUDENT_NAME");?></td>
 						<td style="width: 37%" align="center">
 							<select type="text" style="" class="fullside" dojoType="dijit.form.FilteringSelect" name="stu_name" id="stu_name" onChange="" >
-								<option value="-1">Select Student Name</option>
+								<option value="-1"><?php echo $tr->translate("SELECT_STUDENT_NAME");?></option>
 								<?php if(!empty($this->row_name)){foreach ($this->row_name as $row){?>
 								<option value="<?php echo $row['id']?>" <?php if($row['id']==$this->row['student_id']) echo 'selected="selected"' ?> ><?php echo $row['name']?></option>
 								<?php }}?>
@@ -122,7 +105,6 @@ fieldset{  background:none;}
 						<td colspan="4" align="center">
 							<input type="submit" name="save_close" id="save_close" value="រក្សាទុក" label="<?php echo $tr->translate('GO_EDIT');?>"  dojoType="dijit.form.Button" 
 								iconClass="dijitEditorIcon dijitEditorIconSave" />
-								
 							<input type="button" value="បោះពុម្ព" label="<?php echo $tr->translate('PRINT');?>" id="print" dojoType="dijit.form.Button" 
 								iconClass="dijitEditorIcon dijitEditorIconPrint" onclick="printSave('');"/> 
 						</td>
@@ -136,9 +118,40 @@ fieldset{  background:none;}
 	</tr>
 </table>	
 </form>
-
+<script type="text/javascript"  src="<?php echo $this->baseUrl();?>/js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript"  src="<?php echo $this->baseUrl();?>/js/convertion.js"></script>
 <script type="text/javascript">
-
+	dojo.require("dojo.data.ItemFileWriteStore");  
+	dojo.require('dojox.form.BusyButton');
+	dojo.require("dojo.NodeList-manipulate");
+	
+dojo.ready(function(){
+    	 dijitValue();
+    	 getStudentInfo();
+    	 initailize();
+		 netTotal();
+});
+function checkValidateAddRow(){
+	var rowId = $('#identity').val();
+	if(rowId==''){
+		return false;
+	}else if(rowId!=''){
+		var rowIDArray = rowId.split(',');
+		for(var n = 0; n < rowIDArray.length; n++) {
+			product_id = dijit.byId('service_'+rowIDArray[n]).get('value');
+			if(product_id==0){
+				return false;
+			}
+		}
+	}
+	return true;
+}
+function dijitValue(){
+	 dijit.byId('reciept_no').attr('value','<?php echo $this->row['receipt_number']?>');
+	 dijit.byId('grand_total').attr('value','<?php echo $this->row['total_payment']?>');
+	 dijit.byId("phone").set('readOnly',true);
+	 dijit.byId("stu_name").set('readOnly',true);
+}
 	var template = '';
 	var metion = '<?php echo $this->all_metion; ?>';
 	var payment_term = '<?php echo count($this->payment_term);?>';
@@ -202,6 +215,9 @@ fieldset{  background:none;}
 	function netTotal() {
 		var netTotal=0;
 		var rowId = $('#identity').val();
+		if(rowId==""){
+			return false;
+		}
 		var rowIDArray = rowId.split(',');
 		for(var n = 0; n < rowIDArray.length; n++) {
 			netTotal += dijit.byId('subtotal_'+rowIDArray[n]).get('value');

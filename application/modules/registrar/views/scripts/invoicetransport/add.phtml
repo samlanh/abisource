@@ -2,66 +2,26 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate('ADD_INVOICE_TRANSPORT')); 
 	$base_url = Application_Form_FrmMessage::getUrl("/");
-// 	print_r($this->service);exit();
+	$register = $this->frm_register;
 ?>	
-<script type="text/javascript"  src="<?php echo $this->baseUrl();?>/js/jquery-1.8.3.min.js"></script>
-<script type="text/javascript"  src="<?php echo $this->baseUrl();?>/js/convertion.js"></script>
-<?php /*?><script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js"></script> <?php */ ?>
-<script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
-
-<script type="text/javascript">
-	dojo.require("dojo.data.ItemFileWriteStore");  
-	dojo.require('dojox.form.BusyButton');
-	dojo.require("dojo.NodeList-manipulate");
-	dojo.require("dojo.data.ObjectStore");
-	dojo.require("dojo.store.Memory");
-	dojo.require("dijit.form.NumberTextBox");
-	dojo.require("dijit.form.Textarea");
-	dojo.require("dijit.form.DateTextBox");
-	dojo.require("dijit.form.CheckBox");
-	
-	var service_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->service));?>);
-	dojo.ready(function(){ 
-		changeControl();
-		getNewCarId('');
-		
-		new dijit.form.FilteringSelect({
-			store: service_store,
-			autoComplete: false,
-			queryExpr: "*${0}*",                       
-		    id: "service",
-		    name: "service",
-			value:-1,
-		    class: 'fullside',  
-		   // placeHolder:"Selected service", 
-		    onChange: function() {  
-			    service = dijit.byId('service').get('value');
-			    if(service==-2){
-					dijit.byId('popup_add_service').show();
-			    }
-		    	getservicefee();
-				//getCarIdByService();
-		    } 
-		}, "service");
-
-
-		getValidate(1);
-	});	
-
-</script>
 <style>
 select{ width:100%;}
 fieldset{  background:none;}
 .red{ color: red; padding-left:5px;}
 .head-td{font-size: 12px;}
 </style>
-<?php $register = $this->frm_register;
-//print_r($register);
-?>
 <form id='office_receipt' action="<?php echo $this->url(array('module'=>'registrar','controller'=>'invoicetransport','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-	
 	<script type="dojo/method" event="onSubmit">   		
 		if(this.validate()) {
+			student = dijit.byId('student_name_old').get('value');
+			if(student==-1 || student==0){
+		 		alert("<?php echo $tr->translate("PLEASE_SELECT_STUDENT")?> !!! ");
+		 		dijit.byId("student_name_old").focus();
+		 		return false;
+			}
+		
+			loadingBlock();
+			dijit.byId('save_new').set('disabled',true);
 			return true;
 		}else {
 			return false;
@@ -78,7 +38,7 @@ fieldset{  background:none;}
 							<td width="20%"><?php echo $tr->translate("STUDENT_TYPE");?></td>
 							<td width="80%">
 								<select name="student_type" id="student_type" onchange="changeControl();getStudentInfo();" class="fullside" dojoType="dijit.form.FilteringSelect" >
-									<option value="3">Old Student</option>
+									<option value="3"><?php echo $tr->translate("OLD_STUDENT");?></option>
 								</select>
 							</td>
 						</tr>
@@ -87,7 +47,7 @@ fieldset{  background:none;}
 							<td>
 								<div id="new_name">
 									<select name="student_name_new" id="student_name_new" onChange="getStudentInfo();" autoComplete="false" queryExpr="*${0}*" class="fullside" dojoType="dijit.form.FilteringSelect" >
-										<option value="-1">----- select name -----</option>
+										<option value="-1"><?php echo $tr->translate("SELECT_STUDENT_NAME");?></option>
 										<?php if(!empty($this->new_stu_name)){foreach($this->new_stu_name as $new_stu_name){?>
 											<option value="<?php echo $new_stu_name['stu_id']?>"><?php echo $new_stu_name['stu_name']?></option>
 										<?php }}?>
@@ -95,7 +55,7 @@ fieldset{  background:none;}
 								</div>	
 								<div id="old_name">
 									<select name="student_name_old" id="student_name_old" onChange="setID(1);" autoComplete="false" queryExpr="*${0}*" class="fullside" dojoType="dijit.form.FilteringSelect" >
-										<option value="-1">----- select name -----</option>
+										<option value="-1"><?php echo $tr->translate("SELECT_STUDENT_NAME");?></option>
 										<?php if(!empty($this->old_stu_name)){foreach($this->old_stu_name as $old_stu_name){?>
 											<option value="<?php echo $old_stu_name['stu_id']?>"><?php echo $old_stu_name['stu_name']?></option>
 										<?php }}?>
@@ -103,7 +63,7 @@ fieldset{  background:none;}
 								</div>	
 								<div id="drop_name">
 									<select name="drop_name" id="drop_name" onChange="setID(2);" autoComplete="false" queryExpr="*${0}*" class="fullside" dojoType="dijit.form.FilteringSelect" >
-										<option value="-1">----- select name -----</option>
+										<option value="-1"><?php echo $tr->translate("SELECT_STUDENT_NAME");?></option>
 										<?php if(!empty($this->drop_stu_name)){foreach($this->drop_stu_name as $drop_stu_name){?>
 											<option value="<?php echo $drop_stu_name['stu_id']?>"><?php echo $drop_stu_name['stu_name']?></option>
 										<?php }}?>
@@ -120,7 +80,7 @@ fieldset{  background:none;}
 								</div>
 								<div id="old_id">
 									<select name="old_car_id" id="old_car_id" onChange="getStudentInfo();" autoComplete="false" queryExpr="*${0}*" class="fullside" dojoType="dijit.form.FilteringSelect" >
-										<option value="-1">----- select id -----</option>
+										<option value="-1"><?php echo $tr->translate("SELECT_STUDENT_ID");?></option>
 										<?php if(!empty($this->old_car_id)){foreach($this->old_car_id as $old_car_id){?>
 											<option value="<?php echo $old_car_id['stu_id']?>"><?php echo $old_car_id['stu_code']?></option>
 										<?php }}?>
@@ -128,7 +88,7 @@ fieldset{  background:none;}
 								</div>
 								<div id="drop_id">
 									<select name="drop_car_id" id="drop_car_id" onChange="getStudentInfo();" autoComplete="false" queryExpr="*${0}*" class="fullside" dojoType="dijit.form.FilteringSelect" >
-										<option value="-1">----- select id -----</option>
+										<option value="-1"><?php echo $tr->translate("SELECT_STUDENT_ID");?></option>
 										<?php if(!empty($this->drop_car_id)){foreach($this->drop_car_id as $drop_car_id){?>
 											<option value="<?php echo $drop_car_id['stu_id']?>"><?php echo $drop_car_id['stu_code']?></option>
 										<?php }}?>
@@ -170,22 +130,19 @@ fieldset{  background:none;}
 							<td><?php echo $tr->translate("ACADEMIC_YEAR");?></td>
 							<td ><?php echo $register->getElement('study_year');?></td>
 						</tr>
-						
 						<tr>
 							<td width="20%"><?php echo $tr->translate('SERVICE');?></td>
 							<td width="80%"> 
 								<input id="service" />
+								<input type="hidden" name="service_cate" id="service_cate" dojoType="dijit.form.TextBox" />
+								<input type="hidden" name="balance_id" id="balance_id" dojoType="dijit.form.TextBox" />
 							</td>
-							
-							<input type="hidden" name="service_cate" id="service_cate" dojoType="dijit.form.TextBox" />
-							<input type="hidden" name="balance_id" id="balance_id" dojoType="dijit.form.TextBox" />
 						</tr>
-						
 						<tr>
 							<td><?php echo $tr->translate('CAR');?></td>
 							<td>
 								<select class="fullside" class="fullside" name="car_id" id="car_id" dojoType="dijit.form.FilteringSelect" type="text"   >
-									<option value="">Select Car</option>
+									<option value=""><?php echo $tr->translate('SELECT_CAR');?></option>
 									<?php if(!empty($this->all_car)){foreach ($this->all_car as $key => $all_car){?>
 										<option value="<?php echo $all_car['id']?>"><?php echo $all_car['name'];?></option>
 									<?php  }}?>
@@ -321,9 +278,7 @@ fieldset{  background:none;}
 		
 		<tr>
 			<td colspan="3" align="center">
-				<input type="button" name="save_close" id="save_close" onclick="submitDataClose();" value="រក្សាទុក" label="<?php echo $tr->translate('SAVE_CLOSE');?>"  dojoType="dijit.form.Button" 
-					iconClass="dijitEditorIcon dijitEditorIconSave" />
-				<input type="button" name="save_new" id="save_new" onclick="submitDataAddNew();" value="រក្សាទុក" label="<?php echo $tr->translate('SAVE_NEW');?>"  dojoType="dijit.form.Button" 
+				<input type="button" name="save_new" id="save_new" onclick="submitDataAddNew();" value="រក្សាទុក" label="<?php echo $tr->translate('SAVE');?>"  dojoType="dijit.form.Button" 
 					iconClass="dijitEditorIcon dijitEditorIconSave" />
 				<input type="button" value="បោះពុម្ព" label="<?php echo $tr->translate('PRINT');?>" id="print" dojoType="dijit.form.Button" 
 					iconClass="dijitEditorIcon dijitEditorIconPrint" onclick="printSave('','');"/> 
@@ -332,45 +287,59 @@ fieldset{  background:none;}
 		
 	</table>	
 </form>
-
-
+<script type="text/javascript"  src="<?php echo $this->baseUrl();?>/js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript"  src="<?php echo $this->baseUrl();?>/js/convertion.js"></script>
+<script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
 
 <script type="text/javascript">
-
-//submitDataClose(); submitDataAddNew();
-
-function submitDataClose(){
+	dojo.require("dojo.data.ItemFileWriteStore");  
+	dojo.require('dojox.form.BusyButton');
+	dojo.require("dojo.NodeList-manipulate");
+	dojo.require("dojo.data.ObjectStore");
+	dojo.require("dojo.store.Memory");
+	dojo.require("dijit.form.NumberTextBox");
+	dojo.require("dijit.form.Textarea");
+	dojo.require("dijit.form.DateTextBox");
+	dojo.require("dijit.form.CheckBox");
 	
-	if(dijit.byId('office_receipt').validate()) {
+	var service_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->service));?>);
+	dojo.ready(function(){ 
+		changeControl();
+		getNewCarId('');
 		
-		dijit.byId('save_new').set('disabled',true);
-		dijit.byId('save_close').set('disabled',true);
-	
-		var url_submit = '<?php echo $this->url(array('module'=>'registrar','controller'=>'invoicetransport','action'=>'add')); ?>';
-		loading();
-		dojo.xhrPost({
-		    url: url_submit,	
-			form: dojo.byId("office_receipt"),		    
-			load: function(data) {
-				document.getElementsByClassName("overlay")[0].style.display="none";	
-				alert('<?php echo $tr->translate('INSERT_SUCCESS');?> !');
-				window.location.href ="<?php echo $this->baseUrl();?>/registrar/invoicetransport";
-			},
-			error: function(e) {
-			}
-		});
-	}
-}
+		new dijit.form.FilteringSelect({
+			store: service_store,
+			autoComplete: false,
+			queryExpr: "*${0}*",                       
+		    id: "service",
+		    name: "service",
+			value:-1,
+		    class: 'fullside',  
+		    onChange: function() {  
+			    service = dijit.byId('service').get('value');
+			    if(service==-2){
+					dijit.byId('popup_add_service').show();
+			    }
+		    	getservicefee();
+		    } 
+		}, "service");
+
+		getValidate(1);
+	});	
 
 function submitDataAddNew(){
 	
 	if(dijit.byId('office_receipt').validate()) {
-	
-		dijit.byId('save_new').set('disabled',true);
-		dijit.byId('save_close').set('disabled',true);
+		student = dijit.byId('student_name_old').get('value');
+		if(student==-1 || student==0){
+		 	alert("<?php echo $tr->translate("PLEASE_SELECT_STUDENT")?> !!! ");
+		 	dijit.byId("student_name_old").focus();
+		 	return false;
+		}
 		
+		loadingBlock();
+		dijit.byId('save_new').set('disabled',true);
 		var url_submit = '<?php echo $this->url(array('module'=>'registrar','controller'=>'invoicetransport','action'=>'add')); ?>';
-		loading();
 		dojo.xhrPost({
 		    url: url_submit,	
 			form: dojo.byId("office_receipt"),		    
@@ -393,7 +362,6 @@ function loading(){
 
 
 function setID(type){
-
 	if(type==1){
 		stu_id = dijit.byId('student_name_old').get('value');
 		dijit.byId('old_car_id').attr('value',stu_id);
@@ -463,8 +431,12 @@ function getNewCarId(condition){
 function printSave(new_stu_id,new_receipt_no){		
 	if(dijit.byId('office_receipt').validate()) {
 		 
-		 //degree = dijit.byId('dept').get('value');
-
+		student = dijit.byId('student_name_old').get('value');
+		if(student==-1 || student==0){
+		 	alert("<?php echo $tr->translate("PLEASE_SELECT_STUDENT")?> !!! ");
+		 	dijit.byId("student_name_old").focus();
+		 	return false;
+		}
 		 stu_type = dijit.byId('student_type').get('value');
 		 
 		 if(stu_type==1){
@@ -1029,8 +1001,8 @@ function getMonthByNumber(m){
 		<iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>	
 		<button dojoType="dijit.form.Button" label="Cancel" iconClass="dijitEditorIcon dijitEditorIconCancel"
 				showLabel="true" type="button" onclick="hideDialog();">Cancel</button>
-		<button dojoType="dijit.form.Button" label="Print" iconClass="dijitEditorIcon dijitEditorIconPrint"
-				showLabel="true" type="button" onclick="printSubmit();">Print</button>
+		<button id="bt_print" dojoType="dijit.form.Button" label="Print" iconClass="dijitEditorIcon dijitEditorIconPrint"
+				showLabel="true" type="button" onclick="printSubmit();"><?php echo $tr->translate("PRINT");?></button>
 	</div>
 </div>
 
@@ -1041,6 +1013,9 @@ function printSubmit(){
 	window.frames["print_frame"].document.body.innerHTML=dojo.byId('divPrint').innerHTML;
     window.frames["print_frame"].window.focus();
     window.frames["print_frame"].window.print();
+    loadingBlock();
+	dijit.byId('save_new').set('disabled',true);
+	dijit.byId('bt_print').set('disabled',true);
 	$('#office_receipt').submit();
 }
 
@@ -1620,21 +1595,4 @@ function getCarIdByService(){
 		</form>
 	</div>
 </div>
-
-
-<div class="overlay">
-	<div class="overlay-load">
-		<div class="overlay-msg">
-	    </div>
-	</div>
-</div>	
-<style>
-.overlay {display: none;position: absolute;width: 100%;height: 150%;top: 0px;left: 0px;background: #FCFCFC;z-index: 1001;opacity: .5;}
-.overlay-load {width: 350px;height: 100px;margin: auto;top: 0px;bottom: 0px;position: absolute;left: 0px;right: 0px;
-           text-align: center;
-           background: #fff url("<?php echo $this->baseUrl()?>/images/loading.gif") 50% 25%;
-           background-repeat: no-repeat;          
-}
-.overlay-msg{margin-bottom: 10px;bottom: 0px;position: absolute;font-style: italic;color: rgb(19, 19, 19);} 
-</style>
 

@@ -56,11 +56,11 @@ class Registrar_IncomeController extends Zend_Controller_Action
 				if(!empty($data['saveclose'])){
 					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/income");
 				}else{
-					Application_Form_FrmMessage::message("INSERT_SUCCESS");
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/income/add");
 				}				
 			} catch (Exception $e) {
-				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+				Application_Form_FrmMessage::message("INSERT_FAIL");
 				echo $e->getMessage();
 			}
 		}
@@ -69,10 +69,11 @@ class Registrar_IncomeController extends Zend_Controller_Action
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_expense=$frm;
     	
+    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
     	$_dbs = new Application_Model_DbTable_DbGlobal();
     	$cate_income = $_dbs->getCategoryName(1);
-    	array_unshift($cate_income, array('id'=>'-1','name'=>'បន្ថែមថ្មី'));
-    	array_unshift($cate_income, array('id'=>'0','name'=>'Select Category'));
+    	array_unshift($cate_income, array('id'=>'-1','name'=>$tr->translate("ADD_NEW")));
+    	array_unshift($cate_income, array('id'=>'0','name'=>$tr->translate("SELECT_CATEGORY")));
     	$this->view->cate_income = $cate_income;
     }
  
@@ -83,10 +84,12 @@ class Registrar_IncomeController extends Zend_Controller_Action
 			$data=$this->getRequest()->getPost();
 			$db = new Registrar_Model_DbTable_DbIncome();				
 			try {
+				$id = empty($data['payment_id'])?$id:$data['payment_id'];
 				$db->updateIncome($data,$id);				
-				Application_Form_FrmMessage::Sucessfull('ការ​បញ្ចូល​​ជោគ​ជ័យ', "/registrar/income");		
+				Application_Form_FrmMessage::Sucessfull('EDIT_SUCCESS', "/registrar/income");		
 			} catch (Exception $e) {
-				$this->view->msg = 'ការ​បញ្ចូល​មិន​ជោគ​ជ័យ';
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+				Application_Form_FrmMessage::message("EDIT_FAIL");
 			}
 		}
 		$id = $this->getRequest()->getParam('id');
@@ -99,10 +102,11 @@ class Registrar_IncomeController extends Zend_Controller_Action
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_expense=$frm;
 		
+    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
     	$_dbs = new Application_Model_DbTable_DbGlobal();
     	$cate_income = $_dbs->getCategoryName(1);
-    	array_unshift($cate_income, array('id'=>'-1','name'=>'បន្ថែមថ្មី'));
-    	array_unshift($cate_income, array('id'=>'0','name'=>'Select Category'));
+    	array_unshift($cate_income, array('id'=>'-1','name'=>$tr->translate("ADD_NEW")));
+    	array_unshift($cate_income, array('id'=>'0','name'=>$tr->translate("SELECT_CATEGORY")));
     	$this->view->cate_income = $cate_income;
     }
     
@@ -111,7 +115,6 @@ class Registrar_IncomeController extends Zend_Controller_Action
     		$data = $this->getRequest()->getPost();
 	    	$db = new Registrar_Model_DbTable_DbIncome();
 	    	$ex_rate = $db->getExchangeRate();
-	    	//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
 	    	print_r(Zend_Json::encode($ex_rate));
 	    	exit();
     	}

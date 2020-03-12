@@ -66,15 +66,15 @@ class registrar_Model_DbTable_DbIncome extends Zend_Db_Table_Abstract
 		
 		$sql="SELECT 
 					id, 
-					(select branch_namekh from rms_branch where br_id = branch_id) as branch,
+					(SELECT branch_namekh FROM rms_branch WHERE br_id = branch_id LIMIT 1) as branch,
 					invoice,
 					title,
 					(SELECT c.category_name FROM rms_cate_income_expense As c WHERE c.id=ln_income.cat_id AND c.parent=1 LIMIT 1) as cate_name,
-					(SELECT curr_nameen FROM `ln_currency` WHERE ln_currency.id =curr_type) AS currency_type,
+					(SELECT curr_nameen FROM `ln_currency` WHERE ln_currency.id =curr_type LIMIT 1) AS currency_type,
 					total_amount,`desc`,for_date,status 
 				FROM 
 					ln_income 
-				where 	
+				WHERE 	
 					1
 			";
 		
@@ -118,10 +118,8 @@ class registrar_Model_DbTable_DbIncome extends Zend_Db_Table_Abstract
 		if (!empty($search['adv_search'])){
 			$s_where = array();
 			$s_search = trim(addslashes($search['adv_search']));
-			// $s_where[] = " title LIKE '%{$s_search}%'";
 			$s_where[] = " total_amount LIKE '%{$s_search}%'";
 			$s_where[] = " invoice LIKE '%{$s_search}%'";
-			
 			$where .=' AND ('.implode(' OR ',$s_where).')';
 		}
 		if($search['status']>-1){
@@ -195,13 +193,10 @@ class registrar_Model_DbTable_DbIncome extends Zend_Db_Table_Abstract
 		
 		$new_acc_no= (int)$acc_no+1;
 		$acc_no= strlen($new_acc_no);
-		
 		$pre="I";
-		
 		for($i = $acc_no;$i<6;$i++){
 			$pre.='0';
 		}
-		
 		return $pre.$new_acc_no;
 		
 	}

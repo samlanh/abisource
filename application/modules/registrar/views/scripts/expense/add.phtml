@@ -9,30 +9,28 @@
 	height: 30px;
 }
 </style>
- <script>
-		require(["dijit/form/DateTextBox","dijit/form/NumberTextBox"]);
- </script>
-<form id='frm_add_tran' action="<?php echo $this->url(array('module'=>'registrar','controller'=>'expense','action'=>'add')); ?>" 
-				dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-<script type="dojo/method" event="onSubmit">			
+<form id='frm_add_tran' action="<?php echo $this->url(array('module'=>'registrar','controller'=>'expense','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+		<script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
-               if(dijit.byId("branch_id").get("value")==''){
-					alert("Please Select Branch Name!!!");
+				branch_id = dijit.byId('branch_id').get('value');
+               	if(branch_id==-1 || branch_id==0){
+					alert("<?php echo $tr->translate("PLEASE_SELECT_BRANCH")?> !!! ");
                     dijit.byId("branch_id").focus();
 					return false;
 				}
-				if(dijit.byId("cate_expense").get("value")==0){
-					alert("Please Select Category Expense!!!");
+				cate_expense = dijit.byId('cate_expense').get('value');
+				if(cate_expense<=0 || cate_expense==""){
+					alert("<?php echo $tr->translate("PLEASE_SELECT_EXPENSE_CATE")?> !!! ");
                     dijit.byId("cate_expense").focus();
 					return false;
 				}
-                dijit.byId("saveclose").attr("disabled",true);
+				loadingBlock();
 				dijit.byId("savenew").attr("disabled",true);
 				return true;
 			}else {
 				return false;
 			}
-</script>
+		</script>
 <table cellspacing="10" class='fullside' >
 	<tr>
 		<td>
@@ -103,9 +101,7 @@
 						<td align="center" colspan="4">
 						<input type="reset" label="<?php echo $tr->translate("CLEAR")?>" dojoType="dijit.form.Button"
 								 iconClass="dijitIconClear"/>
-							<input type="button"  onclick="submitDataClose();" label="<?php echo $tr->translate("SAVE_CLOSE");?>" name='saveclose' id='saveclose' value='saveclose' dojoType="dijit.form.Button"
-								 iconClass="dijitIconDelete"/>
-							<input type="submit" label="<?php echo $tr->translate("SAVE_NEW")?>" name='savenew'  id='savenew' value='savenew' dojoType="dijit.form.Button"
+							<input type="submit" label="<?php echo $tr->translate("SAVE")?>" name='savenew'  id='savenew' value='savenew' dojoType="dijit.form.Button"
 								 iconClass="dijitIconNewTask"/>
 						</td>
 					</tr>
@@ -126,7 +122,6 @@
 	dojo.require("dijit.form.Textarea");
 
 	var cate_expense_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->cate_expense));?> );
-	
 	dojo.ready(function(){
 		new dijit.form.FilteringSelect({
 			store: cate_expense_store,
@@ -137,7 +132,7 @@
 		    tabindex: "1",  
 		    value:0,       
 		    class: 'fullside',  
-		    placeHolder:"Selecte Category", 
+		    placeHolder:"<?php echo $tr->translate("SELECT_CATEGORY")?>", 
 		    onChange: function() {          
 			   	service_id = dijit.byId('cate_expense').get('value');
 			    if(service_id==-1){
@@ -214,36 +209,10 @@
 		</form>
 	</div>
 </div>
-
 <script>
-function submitDataClose(){
-	if(dijit.byId("branch_id").get("value")==''){
-		alert("Please Select Branch Name!!!");
-  		dijit.byId("branch_id").focus();
-		return false;
-	}
-	if(dijit.byId("cate_expense").get("value")==0){
-		alert("Please Select Category Expense!!!");
-        dijit.byId("cate_expense").focus();
-		return false;
-	}
-	if(dijit.byId('frm_add_tran').validate()) {
-            dijit.byId("saveclose").attr("disabled",true);
-			dijit.byId("savenew").attr("disabled",true);
-		var url_submit = '<?php echo $this->url(array('module'=>'registrar','controller'=>'expense','action'=>'add')); ?>';
-		dojo.xhrPost({
-		    url: url_submit,	
-			form: dojo.byId("frm_add_tran"),		    
-			load: function(data) {
-				alert('<?php echo $tr->translate('INSERT_SUCCESS');?> !');
-				window.location.href ="<?php echo $this->baseUrl();?>/registrar/expense";
-			},
-			error: function(e) {
-			}
-		});
-	}
-}
-
+		require(["dijit/form/DateTextBox","dijit/form/NumberTextBox"]);
+</script>
+<script>
 var url_fixedasset = '<?php echo $this->url(array("module"=>"registrar","controller"=>"expense","action"=>"get-totalasset")); ?>';
 function getFixedAssetTotalPaid(){
 	dijit.byId("total_amount").set('readonly', true);

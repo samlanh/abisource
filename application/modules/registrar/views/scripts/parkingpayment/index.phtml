@@ -24,7 +24,7 @@ $frm_register =  $this->form_search;
 	        <td><?php echo $frm_register->getElement('title');?></td>
 	        <td>
 				<select name="cus_name" id="cus_name" dojoType="dijit.form.FilteringSelect" class="fullside" >
-					<option value="" >select customer</option>
+					<option value="" ><?php echo $tr->translate("SELECT_CUSTOMER");?></option>
 					<?php if(!empty($this->old_cus)){foreach($this->old_cus as $cus){?>
 						<option value="<?php echo $cus['id']?>" <?php if($cus['id']==$this->search['cus_name']){echo "selected='selected'";}?>><?php echo $cus['name']?></option>
 					<?php }}?>

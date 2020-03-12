@@ -876,7 +876,8 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 				  spd.validate,
 				  spd.is_start,
 				  spd.is_parent,
-				  spd.qty 
+				  spd.qty,
+				  sp.id AS payment_id
 				FROM
 				  rms_student AS s,
 				  rms_student_payment AS sp,

@@ -74,9 +74,7 @@ class Registrar_Model_DbTable_DbCustomerPayment extends Zend_Db_Table_Abstract
     		$where.=' AND c.id='.$search["cus_name"];
     	}
     	
-    	//$group=" GROUP BY cp.rent_receipt_no ";
     	$order=" ORDER BY cp.id DESC";
-    	//echo $sql.$where.$order;
     	return $db->fetchAll($sql.$where.$order);
     }
     
@@ -88,8 +86,6 @@ class Registrar_Model_DbTable_DbCustomerPayment extends Zend_Db_Table_Abstract
  
 	public function addCusPayment($data){
 		 
-		//print_r($data);exit(); 
-		
 		$db = $this->getAdapter();
 		$db->beginTransaction();
 		try{
@@ -198,9 +194,6 @@ class Registrar_Model_DbTable_DbCustomerPayment extends Zend_Db_Table_Abstract
 	}
 	 
 	public function editCustomerPayment($data){
-		 
-		//print_r($data);exit();
-		
 		$db = $this->getAdapter();
 		$db->beginTransaction();
 		try{

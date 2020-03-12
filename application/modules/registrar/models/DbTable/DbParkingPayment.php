@@ -33,14 +33,15 @@ class Registrar_Model_DbTable_DbParkingPayment extends Zend_Db_Table_Abstract
 		       		total_fee,
 		       		pd.note,
 		      		(SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id=pd.user_id LIMIT 1) AS user_name,
-		      		pd.create_date
+		      		pd.create_date,
+		      		pd.status
 		      	FROM 
 		      		rms_parking AS p,
 		      		rms_parking_detail AS pd
 		      	WHERE 
     				p.id=pd.parking_id
-    				and pd.status=1
     				and is_void=0
+    				and pd.status=1
     				$branch_id
     		";
     	$where = '';
@@ -64,9 +65,7 @@ class Registrar_Model_DbTable_DbParkingPayment extends Zend_Db_Table_Abstract
     	if($search['cus_name']>0){
     		$where.=' AND p.id='.$search["cus_name"];
     	}
-    	
     	$order=" ORDER BY pd.id DESC";
-    	//echo $sql.$where;
     	return $db->fetchAll($sql.$where.$order);
     }
     
@@ -232,7 +231,7 @@ class Registrar_Model_DbTable_DbParkingPayment extends Zend_Db_Table_Abstract
 		return $db->fetchRow($sql);
 	}
 	
-	function getCusId($branch_id){
+	function getCusId($branch_id=0){
 		$db=$this->getAdapter();
 		if($branch_id>0){
 			$branch = $branch_id;

@@ -175,8 +175,6 @@ class Registrar_uniformandbookController extends Zend_Controller_Action {
     	$id=$this->getRequest()->getParam('id');
     	if($this->getRequest()->isPost()){
     		$_data = $this->getRequest()->getPost();
-     		$_data['payment_id']=$id;
-//      		print_r($_data);exit();
     		try {
     			$db = new Registrar_Model_DbTable_DbUniformAndBook();
     			$db->updateStudentServicePayment($_data);

@@ -23,13 +23,12 @@ class Registrar_ParkingPaymentController extends Zend_Controller_Action {
     		}
 			$db = new Registrar_Model_DbTable_DbParkingPayment();
 			$rs_rows = $db->getAllParkingPayment($search);
-			
+			$glClass = new Application_Model_GlobalClass();
+			$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
 			$this->view->old_cus = $db->getAllCustomerName();
-				
 			$this->view->search = $search;
-			
 			$list = new Application_Form_Frmtable();
-    		$collumns = array("RECEIPT_NO","CUS_ID","NAME","PHONE","ថ្លៃកិបសំបុត្រម៉ូតូ","ថ្លៃកិបសំបុត្រកង់","លក់អេតចាយ","TOTAL","NOTE","USER","CREATE_DATE");
+    		$collumns = array("RECEIPT_NO","CUS_ID","NAME","PHONE","ថ្លៃកិបសំបុត្រម៉ូតូ","ថ្លៃកិបសំបុត្រកង់","លក់អេតចាយ","TOTAL","NOTE","USER","CREATE_DATE","STATUS");
     		$link=array(
     				'module'=>'registrar','controller'=>'parkingpayment','action'=>'edit',
     		);
@@ -140,7 +139,6 @@ class Registrar_ParkingPaymentController extends Zend_Controller_Action {
     	$id=$this->getRequest()->getParam('id');
     	if($this->getRequest()->isPost()){
     		$_data = $this->getRequest()->getPost();
-    		$_data['id']=$id;
     		try {
     			$db->editCustomerPayment($_data);
     			if(!empty($_data['save_new'])){

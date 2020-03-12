@@ -14,10 +14,9 @@ class Registrar_InvoiceparttimeController extends Zend_Controller_Action {
     {
     	try{
     		$db = new Registrar_Model_DbTable_DbInvoiceParttime();
-    		    		if($this->getRequest()->isPost()){
-    		    			$search=$this->getRequest()->getPost();
-    		    		}
-    		    		else{
+    		if($this->getRequest()->isPost()){
+    				$search=$this->getRequest()->getPost();
+    		}else{
     		    			$search = array(
     		    					'adv_search' => '',
     		    					'study_year' => '',
@@ -57,7 +56,6 @@ class Registrar_InvoiceparttimeController extends Zend_Controller_Action {
     {
     if($this->getRequest()->isPost()){
       	$_data = $this->getRequest()->getPost();
-//       	print_r($_data);exit();
       	try {
       		$db = new Registrar_Model_DbTable_DbInvoiceParttime();
       		$db->addInvoiceParttime($_data);
@@ -98,10 +96,7 @@ class Registrar_InvoiceparttimeController extends Zend_Controller_Action {
     	$id=$this->getRequest()->getParam('id');
     	if($this->getRequest()->isPost()){
     		$_data = $this->getRequest()->getPost();
-    		$_data['payment_id']=$id;
-    		
-//     		print_r($_data);exit();
-    		
+//     		$_data['payment_id']=$id;
     		try {
     			$db = new Registrar_Model_DbTable_DbInvoiceParttime();
 				$db->updateInvoiceParttime($_data,$id);

@@ -13,15 +13,15 @@
 </script>
 <script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
 <form  id='frm_parking' action="" dojoType="dijit.form.Form" method="post"  enctype="multipart/form-data" >
-<script type="dojo/method" event="onSubmit" enctype="multipart/form-data">			
-	if(this.validate()) {
-               dijit.byId('save_new').set('disabled',true);
-			   dijit.byId('save_close').set('disabled',true);
+		<script type="dojo/method" event="onSubmit" enctype="multipart/form-data">			
+			if(this.validate()) {
+               loadingBlock();
+    			dijit.byId('save_new').set('disabled',true);
 			   return true;
 			} else {
 				return false;
 			}
-</script>
+		</script>
 <table cellspacing="2" width="100%" style="margin: 0 auto; ">
 	<tr>
 		<td width="33%;" valign="top">
@@ -30,7 +30,10 @@
 				<table style="margin: 0 auto; width: 100%;text-align: right;" cellspacing="2"  >
 				        <tr>
 							<td><?php echo $tr->translate("OLD_CUS");?></td>
-							<td align="left" style="height: 0px;"> <input type="checkbox" name="is_new_cu" id="is_new_cu" value="1" checked onClick="return false;" ></td> 
+							<td align="left" style="height: 0px;"> 
+							<input type="checkbox" name="is_new_cu" id="is_new_cu" value="1" checked onClick="return false;" >
+							<input type="hidden" name="id" id="id" value="<?php echo $this->row['id']?>" dojoType="dijit.form.TextBox" />
+							</td> 
 						</tr>
 						<tr>
 							<td><?php echo $tr->translate("CUS_ID");?></td>
@@ -227,7 +230,6 @@
 		<td colspan="4" align="center" style="padding-left:40px;">
 			<input type="submit" value="save_new" name="save_new"  id="save_new" label="<?php echo $tr->translate('GO_EDIT');?>" dojoType="dijit.form.Button" 
 				 iconClass="dijitEditorIcon dijitEditorIconSave" />
-				 
 			<input type="button" value="បោះពុម្ព" label="<?php echo $tr->translate('PRINT');?>" id="print" dojoType="dijit.form.Button" 
 				iconClass="dijitEditorIcon dijitEditorIconPrint" onclick="printSave();"/> 
 		</td>
@@ -514,210 +516,11 @@ function printSubmit(){
 	window.frames["print_frame"].document.body.innerHTML=dojo.byId('divPrint').innerHTML;
     window.frames["print_frame"].window.focus();
     window.frames["print_frame"].window.print();
-	$('#office_receipt').submit();
+    loadingBlock();
+    dijit.byId('save_new').set('disabled',true);
+	 dijit.byId('bt_print').set('disabled',true);
+	$('#frm_parking').submit();
 }
-
-/*
-function printSave(){		
-	if(dijit.byId('frm_parking').validate()) {
-		 
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
-		 dojo.byId("lb_receipt_no").innerHTML = dijit.byId("receipt_no").get('value');
-		 
-		 if(document.getElementById('is_new_cu').checked){
-			cus_name = dijit.byId("old_cus").attr('displayedValue');
-		 }else{
-			cus_name = dijit.byId("cus_name").get('value');
-		 }
-		 dojo.byId("lb_cus_name").innerHTML = cus_name;
-		 
-		 dojo.byId("lb_receipt_type").innerHTML = "Parking";
-
-		 dojo.byId("lb_sex").innerHTML = dijit.byId("sex").attr('displayedValue');
-		 dojo.byId("lb_phone").innerHTML = dijit.byId("phone").attr('displayedValue');
-		 
-		 dojo.byId("lb_note").innerHTML = dijit.byId("note").get('value');
-		 
-		 dojo.byId("lb_readmoney").innerHTML = dijit.byId("readmoney").attr('displayedValue');
-		 
-		 dojo.byId("lb_total_payment").innerHTML = " $ "+dijit.byId("all_total_amount").attr('displayedValue');
-		 
-		 checkmark = "<img style='width: 15px;height:15px;margin-bottom:-3px;padding-left:0px;' src='<?php echo $this->baseUrl().'/images/checkmark.png'?>'>";
-		 
-		 moto_payment = dijit.byId('moto_total_in_dollar').get('value');
-		 if(moto_payment>0){
-			dojo.byId("lb_moto_payment").innerHTML = " $ " + moto_payment;
-			dojo.byId("checkbox_moto_payment").innerHTML = checkmark;
-			
-			moto_ticket_start = dijit.byId('moto_ticket_start').get('value');
-			if(moto_ticket_start>0){
-				
-			}else{
-				moto_ticket_start = "";
-			}
-			dojo.byId("lb_moto_ticket_start").innerHTML = moto_ticket_start;
-			
-			moto_ticket_end = dijit.byId('moto_ticket_end').get('value');
-			if(moto_ticket_end>0){
-				
-			}else{
-				moto_ticket_end = "";
-			}
-			dojo.byId("lb_moto_ticket_end").innerHTML = moto_ticket_end;
-			
-			moto_amount_ticket = dijit.byId('moto_amount_ticket').get('value');
-			if(moto_amount_ticket>0){
-				
-			}else{
-				moto_amount_ticket = "";
-			}
-			dojo.byId("lb_moto_amount_ticket").innerHTML = moto_amount_ticket;
-			
-			
-			moto_price_per_ticket = dijit.byId('moto_price_per_ticket').get('value');
-			if(moto_price_per_ticket>0){
-				moto_price_per_ticket = dijit.byId('moto_price_per_ticket').get('value')+" ៛";
-			}else{
-				moto_price_per_ticket = "";
-			}
-			dojo.byId("lb_moto_price_per_ticket").innerHTML = moto_price_per_ticket;
-			
-			
-			var date = new Date(dijit.byId("moto_for_date").get('value'));
-			mm = date.getMonth()+1;
-			var dd = date.getDate();
-			if(dd<10){
-				dd = "0"+dd;
-			}
-			var mon = getMonthByNumber(mm);
-			if(mm<10){
-				mm = "0"+mm;
-			}
-			var y = date.getFullYear();
-			var for_date = dd + '/' + mon + '/' + y ;
-			
-			dojo.byId("lb_moto_for_date").innerHTML = for_date;
-			
-		 }else{
-			dojo.byId("lb_moto_payment").innerHTML = "";
-			dojo.byId("checkbox_moto_payment").innerHTML = "";//"<img style='width: 15px;height:15px;margin-bottom:-3px;' src='<?php echo $this->baseUrl().'/images/uncheck.png'?>'>";;
-		 
-			dojo.byId("lb_moto_ticket_start").innerHTML = "";
-			dojo.byId("lb_moto_ticket_end").innerHTML = "";
-			
-			dojo.byId("lb_moto_amount_ticket").innerHTML = "";
-			dojo.byId("lb_moto_price_per_ticket").innerHTML = "";
-			
-			dojo.byId("lb_moto_for_date").innerHTML = "";
-		 }
-		 
-		 bike_payment = dijit.byId('bike_total_in_dollar').get('value');
-		 if(bike_payment>0){
-			dojo.byId("lb_bike_payment").innerHTML = " $ " + bike_payment; 
-			dojo.byId("checkbox_bike_payment").innerHTML = checkmark;
-		 
-			bike_ticket_start = dijit.byId('bike_ticket_start').get('value');
-			if(bike_ticket_start>0){
-				
-			}else{
-				bike_ticket_start = "";
-			}
-			dojo.byId("lb_bike_ticket_start").innerHTML = bike_ticket_start;
-			
-			bike_ticket_end = dijit.byId('bike_ticket_end').get('value');
-			if(bike_ticket_end>0){
-				
-			}else{
-				bike_ticket_end = "";
-			}
-			dojo.byId("lb_bike_ticket_end").innerHTML = bike_ticket_end;
-			
-			bike_amount_ticket = dijit.byId('bike_amount_ticket').get('value');
-			if(bike_amount_ticket>0){
-				
-			}else{
-				bike_amount_ticket = "";
-			}
-			dojo.byId("lb_bike_amount_ticket").innerHTML = bike_amount_ticket;
-			
-			bike_price_per_ticket = dijit.byId('bike_price_per_ticket').get('value');
-			if(bike_price_per_ticket>0){
-				bike_price_per_ticket = dijit.byId('bike_price_per_ticket').get('value')+" ៛";
-			}else{
-				bike_price_per_ticket = "";
-			}
-			dojo.byId("lb_bike_price_per_ticket").innerHTML = bike_price_per_ticket;
-			
-			var date = new Date(dijit.byId("bike_for_date").get('value'));
-			mm = date.getMonth()+1;
-			var dd = date.getDate();
-			if(dd<10){
-				dd = "0"+dd;
-			}
-			var mon = getMonthByNumber(mm);
-			if(mm<10){
-				mm = "0"+mm;
-			}
-			var y = date.getFullYear();
-			var for_date = dd + '/' + mon + '/' + y ;
-			dojo.byId("lb_bike_for_date").innerHTML = for_date;
-			
-		 }else{
-			dojo.byId("lb_bike_payment").innerHTML = " ";
-			dojo.byId("checkbox_bike_payment").innerHTML = "";//"<img style='width: 15px;height:15px;margin-bottom:-3px;' src='<?php echo $this->baseUrl().'/images/uncheck.png'?>'>";
-		 
-			dojo.byId("lb_bike_ticket_start").innerHTML = "";
-			dojo.byId("lb_bike_ticket_end").innerHTML = "";
-			
-			dojo.byId("lb_bike_amount_ticket").innerHTML = "";
-			dojo.byId("lb_bike_price_per_ticket").innerHTML = "";
-			
-			dojo.byId("lb_bike_for_date").innerHTML = "";
-		 }
-		 
-		 broken = dijit.byId('broken_total_in_dollar').get('value');
-		 if(broken>0){
-			dojo.byId("lb_broken").innerHTML = " $ " + broken;  
-			dojo.byId("checkbox_broken").innerHTML = checkmark;
-		 }else{
-			dojo.byId("lb_broken").innerHTML = " ";  
-			dojo.byId("checkbox_broken").innerHTML = "";//"<img style='width: 15px;height:15px;margin-bottom:-3px;' src='<?php echo $this->baseUrl().'/images/uncheck.png'?>'>";
-		 }
-		 
-		
-		// dojo.byId("lb_moto_payment").innerHTML = "";
-		// dojo.byId("checkbox_moto_payment").innerHTML = "<img style='width: 15px;height:15px;margin-bottom:-3px;' src='<?php echo $this->baseUrl().'/images/uncheck.png'?>'>";
-	 
-		// dojo.byId("lb_moto_ticket_start").innerHTML = "";
-		// dojo.byId("lb_moto_ticket_end").innerHTML = "";
-		
-		// dojo.byId("lb_moto_amount_ticket").innerHTML = "";
-		// dojo.byId("lb_moto_price_per_ticket").innerHTML = "";
-		
-		// dojo.byId("lb_moto_for_date").innerHTML = "";
-		 
-		 
-		// dojo.byId("lb_bike_payment").innerHTML = " ";
-		// dojo.byId("checkbox_bike_payment").innerHTML = "<img style='width: 15px;height:15px;margin-bottom:-3px;' src='<?php echo $this->baseUrl().'/images/uncheck.png'?>'>";
-	 
-		// dojo.byId("lb_bike_ticket_start").innerHTML = "";
-		// dojo.byId("lb_bike_ticket_end").innerHTML = "";
-		
-		// dojo.byId("lb_bike_amount_ticket").innerHTML = "";
-		// dojo.byId("lb_bike_price_per_ticket").innerHTML = "";
-		
-		// dojo.byId("lb_bike_for_date").innerHTML = ""; 
-		 
-		 
-		// dojo.byId("lb_broken").innerHTML = " ";  
-		// dojo.byId("checkbox_broken").innerHTML = "<img style='width: 15px;height:15px;margin-bottom:-3px;' src='<?php echo $this->baseUrl().'/images/uncheck.png'?>'>"; 
-		
-		
-		dijit.byId("terms").show();	
-	}
-	
-}
-*/
 
 // printSave full data
 
@@ -889,35 +692,6 @@ function printSave(){
 			dojo.byId("lb_broken").innerHTML = " ";  
 			dojo.byId("checkbox_broken").innerHTML = "";//"<img style='width: 15px;height:15px;margin-bottom:-3px;' src='<?php echo $this->baseUrl().'/images/uncheck.png'?>'>";
 		 }
-		 
-		/* 
-		dojo.byId("lb_moto_payment").innerHTML = "";
-		dojo.byId("checkbox_moto_payment").innerHTML = "<img style='width: 15px;height:15px;margin-bottom:-3px;' src='<?php echo $this->baseUrl().'/images/uncheck.png'?>'>";
-	 
-		dojo.byId("lb_moto_ticket_start").innerHTML = "";
-		dojo.byId("lb_moto_ticket_end").innerHTML = "";
-		
-		dojo.byId("lb_moto_amount_ticket").innerHTML = "";
-		dojo.byId("lb_moto_price_per_ticket").innerHTML = "";
-		
-		dojo.byId("lb_moto_for_date").innerHTML = "";
-		 
-		 
-		dojo.byId("lb_bike_payment").innerHTML = " ";
-		dojo.byId("checkbox_bike_payment").innerHTML = "<img style='width: 15px;height:15px;margin-bottom:-3px;' src='<?php echo $this->baseUrl().'/images/uncheck.png'?>'>";
-	 
-		dojo.byId("lb_bike_ticket_start").innerHTML = "";
-		dojo.byId("lb_bike_ticket_end").innerHTML = "";
-		
-		dojo.byId("lb_bike_amount_ticket").innerHTML = "";
-		dojo.byId("lb_bike_price_per_ticket").innerHTML = "";
-		
-		dojo.byId("lb_bike_for_date").innerHTML = ""; 
-		 
-		 
-		dojo.byId("lb_broken").innerHTML = " ";  
-		dojo.byId("checkbox_broken").innerHTML = "<img style='width: 15px;height:15px;margin-bottom:-3px;' src='<?php echo $this->baseUrl().'/images/uncheck.png'?>'>"; 
-		*/
 		
 		dijit.byId("terms").show();	
 	}
@@ -1696,8 +1470,8 @@ function hideDialog() {
 		<iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>	
 		<button dojoType="dijit.form.Button" label="Cancel" iconClass="dijitEditorIcon dijitEditorIconCancel"
 			showLabel="true" type="button" onclick="hideDialog();">Cancel</button>
-		<button dojoType="dijit.form.Button" label="Print" showLabel="true" iconClass="dijitEditorIcon dijitEditorIconPrint"
-			 type="button" onclick="printSubmit();">Print</button>
+		<button id="bt_print" dojoType="dijit.form.Button" label="Print" showLabel="true" iconClass="dijitEditorIcon dijitEditorIconPrint"
+			 type="button" onclick="printSubmit();"><?php echo $tr->translate('PRINT');?></button>
 	</div>
 </div>
 <?php //*/?>

@@ -100,17 +100,17 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 					receipt,
 					kh_name,
 					en_name,
-					(select name_kh from rms_view where type=2 and key_code=sex LIMIT 1) as sex,
+					(SELECT name_kh FROM rms_view WHERE type=2 and key_code=sex LIMIT 1) as sex,
 					dob,
 					phone,
-					(select en_name from rms_dept where dept_id=degree LIMIT 1) as degree,
+					(SELECT en_name FROM rms_dept WHERE dept_id=degree LIMIT 1) as degree,
 					note,
 					total_price,
 					(SELECT first_name FROM `rms_users` WHERE id=rms_student_test.user_id LIMIT 1),
-					(select name_en from rms_view where type=1 and key_code=rms_student_test.status LIMIT 1) as status
+					(select name_en FROM rms_view where type=1 and key_code=rms_student_test.status LIMIT 1) as status
 				FROM 
 					rms_student_test
-				where
+				WHERE
 					register=0 
 					$branch_id
 				";
@@ -130,7 +130,6 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 		if($search['status_search']!=""){
 			$where.=" AND status=".$search['status_search'];
 		}
-		
 		$order=" order by id desc ";
 		return $db->fetchAll($sql.$where.$order);
 	}	
@@ -190,13 +189,13 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 	
 	function getAllDegreeName(){
 		$db = $this->getAdapter();
-		$sql="select dept_id as id,en_name as name from rms_dept where is_active = 1 ";
+		$sql="SELECT dept_id as id,en_name as name FROM rms_dept WHERE is_active = 1 ";
 		return $db->fetchAll($sql);
 	}
 	
 	function getAllSession(){
 		$db = $this->getAdapter();
-		$sql="select key_code as id,name_en as name from rms_view where type = 4 and status = 1 ";
+		$sql="SELECT key_code as id,name_en as name FROM rms_view WHERE type = 4 and status = 1 ";
 		return $db->fetchAll($sql);
 	}
 	

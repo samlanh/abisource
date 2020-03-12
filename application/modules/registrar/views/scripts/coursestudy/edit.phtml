@@ -45,6 +45,7 @@ fieldset{  background:none;}
 								<div id="student_id"><?php echo $register->getElement('stu_id');?></div>
 								<div id="student_ids"><?php echo $register->getElement('old_studens');?></div>
 								<div id="drop_stu_code"><?php echo $register->getElement('drop_studens');?></div>
+								<input type="hidden" name="payment_id" id="payment_id" value="<?php echo $this->row_gep['payment_id']?>" dojoType="dijit.form.TextBox" />
 							</td>
 						</tr>
 						<tr>	

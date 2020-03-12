@@ -9,26 +9,23 @@
 	height: 30px;
 }
 </style>
- <script>
-		require(["dijit/form/DateTextBox","dijit/form/NumberTextBox","dijit/form/SimpleTextarea"]);
- </script>
-<form id='frm_other_income' action="<?php echo $this->url(array('module'=>'registrar','controller'=>'income','action'=>'edit')); ?>" 
-				dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+<form id='frm_other_income' action="<?php echo $this->url(array('module'=>'registrar','controller'=>'income','action'=>'edit')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 	<script type="dojo/method" event="onSubmit">			
 		if(this.validate()) {
-			cate_income = dijit.byId('cate_income').get('value')
-			if(cate_income==0 || cate_income==-1){
-				alert("Please select category income !!! ");
-				dijit.byId('cate_income').focus();
-				return false;
-			}
-
 			branch_id = dijit.byId('branch_id').get('value')
 			if(branch_id==0 || branch_id==-1){
-				alert("Please select branch !!! ");
+				alert("<?php echo $tr->translate("PLEASE_SELECT_BRANCH")?> !!! ");
 				dijit.byId('branch_id').focus();
 				return false;
 			}
+			cate_income = dijit.byId('cate_income').get('value')
+			if(cate_income==0 || cate_income==-1){
+				alert("<?php echo $tr->translate("PLEASE_SELECT_INCOME_CATE")?> !!! ");
+				dijit.byId('cate_income').focus();
+				return false;
+			}
+			loadingBlock();
+			dijit.byId('save_new').set('disabled',true);
 
 			return true;
 		}else {
@@ -44,7 +41,10 @@
 					<table width="100%" cellspacing="5" cellpadding="10">
 						<tr>
 							<td width="20%"><?php echo $tr->translate("BRANCH");?></td>
-							<td width="80%"><?php echo $frm->getElement('branch_id');?></td>
+							<td width="80%">
+								<?php echo $frm->getElement('branch_id');?>
+								 <input type="hidden" name="payment_id" id="payment_id" value="<?php echo $this->row['id']?>" dojoType="dijit.form.TextBox" />
+							</td>
 						</tr>
 						<tr>
 							<td><?php echo $tr->translate("NAME")?></td>
@@ -105,13 +105,8 @@
 			</tr>
 			<tr>
 				<td colspan="3" align="center">
-				
-					<input type="submit" label="<?php echo $tr->translate("SAVE_CLOSE");?>" name='saveclose' value='saveclose' dojoType="dijit.form.Button"
-						 iconClass="dijitIconDelete"/>
-						 
-					<input type="submit" label="<?php echo $tr->translate("SAVE_NEW")?>" name='savenew' value='savenew' dojoType="dijit.form.Button"
+					<input type="submit" label="<?php echo $tr->translate("SAVE")?>" id='save_new' name='savenew' value='savenew' dojoType="dijit.form.Button"
 						 iconClass="dijitIconNewTask"/>
-						 
 					<input type="button" label="<?php echo $tr->translate("PRINT")?>" name='print' value='print' dojoType="dijit.form.Button"
 						iconClass="dijitIconNewTask"  onclick="printIncome('');"   />	 
 				</td>
@@ -119,9 +114,10 @@
 		</table>
 	</fieldset>
 </form>
-
+ <script>
+		require(["dijit/form/DateTextBox","dijit/form/NumberTextBox","dijit/form/SimpleTextarea"]);
+ </script>
 <script type="text/javascript">
- 
 dojo.require("dojo.data.ItemFileWriteStore");  
 dojo.require("dojo.NodeList-manipulate");
 dojo.require("dojo.data.ObjectStore");
@@ -141,7 +137,7 @@ dojo.ready(function(){
 	    tabindex: "1",  
 	    value:0,       
 	    class: 'fullside',  
-	    placeHolder:"Selecte Category", 
+	    placeHolder:"<?php echo $tr->translate("SELECT_CATEGORY")?>", 
 	    onChange: function() {          
 		   	service_id = dijit.byId('cate_income').get('value');
 		    if(service_id==-1){
@@ -242,17 +238,16 @@ dojo.ready(function(){
 		if(dijit.byId('frm_other_income').validate()) {
 		
 		//////////////////////////////////// check validate ///////////////////////////////
-			cate_income = dijit.byId('cate_income').get('value')
-			if(cate_income==0 || cate_income==-1){
-				alert("Please select category income !!! ");
-				dijit.byId('cate_income').focus();
-				return false;
-			}
-
 			branch_id = dijit.byId('branch_id').get('value')
 			if(branch_id==0 || branch_id==-1){
-				alert("Please select branch !!! ");
+				alert("<?php echo $tr->translate("PLEASE_SELECT_BRANCH")?> !!! ");
 				dijit.byId('branch_id').focus();
+				return false;
+			}
+			cate_income = dijit.byId('cate_income').get('value')
+			if(cate_income==0 || cate_income==-1){
+				alert("<?php echo $tr->translate("PLEASE_SELECT_INCOME_CATE")?> !!! ");
+				dijit.byId('cate_income').focus();
 				return false;
 			}
 		///////////////////////////////////////////////////////////////////////////////////	
@@ -281,22 +276,6 @@ dojo.ready(function(){
 
 
 			dojo.byId("lb_total_income").innerHTML = "$ "+dijit.byId("total_amount").get('value').toFixed(2);
-			/*
-			var d = dijit.byId("Date").get('value');
-			 if(d!=null){
-				 var day = d.getDate();
-				 var mon = d.getMonth() + 1;
-				 if(mon>=10){
-
-				 }else{
-					mon = "0"+mon;
-				 }
-				 var year = d.getFullYear();
-				 dojo.byId("lb_date").innerHTML  = day+'/'+mon+'/'+year;
-			 }else{
-				 dojo.byId("lb_date").innerHTML  = '';
-			 }
-			 */
 			dojo.byId("lb_note").innerHTML = dijit.byId("Description").get('value');
 			dijit.byId("terms").show();	
 		}
@@ -306,6 +285,9 @@ dojo.ready(function(){
 		window.frames["print_frame"].document.body.innerHTML=dojo.byId('PrintIncome').innerHTML;
 		window.frames["print_frame"].window.focus();
 		window.frames["print_frame"].window.print();
+		loadingBlock();
+		dijit.byId('save_new').set('disabled',true);
+		dijit.byId('bt_print').set('disabled',true);
 		$('#frm_other_income').submit();
 		dijit.byId("terms").hide();	//hideDialog();
 	}
@@ -557,7 +539,7 @@ dojo.ready(function(){
 		<iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>	
 		<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel"
 				type="button" onclick="hideDialog();">Cancel</button>
-		<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconPrint"
+		<button id="bt_print" dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconPrint"
 				 type="button" onclick="printSubmit();"><?php echo $tr->translate("PRINT");?></button>
 	</div>
 </div>

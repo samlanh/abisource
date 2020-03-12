@@ -172,7 +172,7 @@ Class Registrar_Form_FrmInvoiceParttime extends Zend_Dojo_Form {
 				'Onchange'=>"getGepOldStudentById(1);paymentTerm();getStartDate();",
 				));
 		$opt_gep=$invoice->getAllGepOldStudent();
-		$opts=array(-1=>$this->tr->translate("student id"));
+		$opts=array(-1=>$this->tr->translate("SELECT_STUDENT_ID"));
 		if(!empty($opt_gep))foreach($opt_gep AS $row) $opts[$row['stu_id']]=$row['stu_code'];
 		$old_studens->setMultiOptions($opts);
 		
@@ -186,7 +186,7 @@ Class Registrar_Form_FrmInvoiceParttime extends Zend_Dojo_Form {
 				'Onchange'=>"setID(1);",
 		));
 		$opt_gep_name=$invoice->getAllGepOldStudentName();
-		$opts=array(-1=>$this->tr->translate("STUDENT_NAME"));
+		$opts=array(-1=>$this->tr->translate("SELECT_STUDENT_NAME"));
 		if(!empty($opt_gep_name))foreach($opt_gep_name AS $row) $opts[$row['stu_id']]=$row['name'];
 		$old_studen_name->setMultiOptions($opts);
 		

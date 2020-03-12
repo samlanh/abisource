@@ -134,10 +134,12 @@ class Registrar_StudenttestController extends Zend_Controller_Action
 			$data=$this->getRequest()->getPost();
 			$db = new Registrar_Model_DbTable_DbStudentTest();				
 			try {
+				$id = empty($data['id'])?$id:$data['id'];
 				$db->updateStudentTest($data,$id);				
-				Application_Form_FrmMessage::Sucessfull('ការ​បញ្ចូល​​ជោគ​ជ័យ', "/registrar/studenttest");		
+				Application_Form_FrmMessage::Sucessfull('EDIT_SUCCESS', "/registrar/studenttest");		
 			} catch (Exception $e) {
-				$this->view->msg = 'ការ​បញ្ចូល​មិន​ជោគ​ជ័យ';
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+				Application_Form_FrmMessage::message("EDIT_FAIL");
 			}
 		}
 		$id = $this->getRequest()->getParam('id');

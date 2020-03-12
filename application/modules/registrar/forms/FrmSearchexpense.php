@@ -13,7 +13,7 @@ Class Registrar_Form_FrmSearchexpense extends Zend_Dojo_Form {
 		$_status=  new Zend_Dojo_Form_Element_FilteringSelect('status');
 		$_status->setAttribs(array('dojoType'=>'dijit.form.FilteringSelect','class'=>'fullside'));
 		$_status_opt = array(
-				-1=>$this->tr->translate("Select Status"),
+				-1=>$this->tr->translate("SELECT_STATUS"),
 				1=>$this->tr->translate("ACTIVE"),
 				0=>$this->tr->translate("DACTIVE"));
 		$_status->setMultiOptions($_status_opt);
@@ -33,7 +33,7 @@ Class Registrar_Form_FrmSearchexpense extends Zend_Dojo_Form {
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'class'=>'fullside'
 		));
-		$opt = array(-1=>"Select Currency Type",1=>"Dollar",2=>'Khmer',3=>"Bath");
+		$opt = array(-1=>$this->tr->translate("SELECT_CURRENCY_TYPE"),1=>"Dollar",2=>'Khmer',3=>"Bath");
 		$_currency_type->setMultiOptions($opt);
 		$_currency_type->setValue($request->getParam("currency_type"));
 		
@@ -43,11 +43,10 @@ Class Registrar_Form_FrmSearchexpense extends Zend_Dojo_Form {
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'class'=>'fullside',
 				'required'=>false
-				//'onchange'=>'convertToDollar();',
 		));
 		$_dbs = new Application_Model_DbTable_DbGlobal();
 		$rows = $_dbs->getCategoryName(1);
-		$opt =array(''=>$this->tr->translate("Select Category"));
+		$opt =array(''=>$this->tr->translate("SELECT_CATEGORY"));
 		if(!empty($rows))foreach($rows AS $row) $opt[$row['id']]=$row['name'];
 		$_category->setMultiOptions($opt);
 		$_category->setValue($request->getParam("cat_income"));
@@ -59,10 +58,9 @@ Class Registrar_Form_FrmSearchexpense extends Zend_Dojo_Form {
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'class'=>'fullside',
 				'required'=>false
-				//'onchange'=>'convertToDollar();',
 		));
 		$rows = $_dbs->getCategoryName(0);
-		$opt =array(''=>$this->tr->translate("select category"));
+		$opt =array(''=>$this->tr->translate("SELECT_CATEGORY"));
 		if(!empty($rows))foreach($rows AS $row) $opt[$row['id']]=$row['name'];
 		$_cat_expend->setMultiOptions($opt);
 		$_cat_expend->setValue($request->getParam("cat_expend"));
@@ -71,7 +69,7 @@ Class Registrar_Form_FrmSearchexpense extends Zend_Dojo_Form {
 		$_releasedate->setAttribs(array('dojoType'=>'dijit.form.DateTextBox',
 				'onchange'=>'CalculateDate();',
 				'class'=>'fullside',
-				'placeHolder'=>' Start Date',
+				'placeHolder'=>$this->tr->translate("START_DATE"),
 				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
 		));
 		$_date = $request->getParam("start_date");
@@ -87,6 +85,7 @@ Class Registrar_Form_FrmSearchexpense extends Zend_Dojo_Form {
 				'dojoType'=>'dijit.form.DateTextBox',
 				'required'=>'true',
 				'class'=>'fullside',
+				'placeHolder'=>$this->tr->translate("END_DATE"),
 				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
 		));
 		$_date = $request->getParam("end_date");
@@ -100,12 +99,12 @@ Class Registrar_Form_FrmSearchexpense extends Zend_Dojo_Form {
 		$db=new Application_Model_DbTable_DbGlobal();
 		$_branch = new Zend_Dojo_Form_Element_FilteringSelect('branch');
 		$_branch->setAttribs(array('dojoType'=>'dijit.form.FilteringSelect',
-				'placeholder'=>$this->tr->translate("----- select branch -----"),
+				'placeholder'=>$this->tr->translate("SELECT_BRANCH"),
 				'class'=>'fullside',
 				'required'=>false
 		));
 		$_branch->setValue($request->getParam('branch'));
-		$opt_branch = array(''=>$this->tr->translate("----- select branch -----"));
+		$opt_branch = array(''=>$this->tr->translate("SELECT_BRANCH"));
 		$all_branch = $db->getAllBranch();
 		if(!empty($all_branch))foreach ($all_branch As $row)$opt_branch[$row['id']]=$row['name'];
 		$_branch->setMultiOptions($opt_branch);

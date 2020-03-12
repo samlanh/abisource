@@ -422,23 +422,23 @@ class Registrar_Model_DbTable_DbStudentServicePayment extends Zend_Db_Table_Abst
     	$_db = new Application_Model_DbTable_DbGlobal();
     	$branch_id = $_db->getAccessPermission('sp.branch_id');
     	
-    	$sql="select 
+    	$sql="SELECT 
     			sp.id,
 				ser.stu_code AS code,
 		    	CONCAT(s.stu_khname,' - ',s.stu_enname) AS name,
-		    	(select name_kh from rms_view where rms_view.type=2 and rms_view.key_code=s.sex limit 1) AS sex,
+		    	(SELECT name_kh FROM rms_view WHERE rms_view.type=2 and rms_view.key_code=s.sex LIMIT 1) AS sex,
 		    	sp.receipt_number,
 		    	sp.grand_total_payment,
 		    	sp.grand_total_paid_amount,
 		    	sp.grand_total_balance,
 		    	sp.create_date,
-		    	(select first_name from rms_users where rms_users.id=sp.user_id limit 1) AS user,
-		    	(select name_en from rms_view where type=12 and key_code = sp.is_void limit 1) as void_status 
-	    	from 
+		    	(SELECT first_name FROM rms_users WHERE rms_users.id=sp.user_id LIMIT 1) AS user,
+		    	(SELECT name_en FROM rms_view WHERE type=12 and key_code = sp.is_void LIMIT 1) as void_status 
+	    	FROM 
 	    		rms_student_payment as sp,
 	    		rms_service as ser,
 	    		rms_student as s
-	    	where 
+	    	WHERE 
     			sp.student_id = ser.stu_id
 	    		and sp.student_id = s.stu_id
 	    		and sp.payfor_type = 3 
@@ -473,8 +473,9 @@ class Registrar_Model_DbTable_DbStudentServicePayment extends Zend_Db_Table_Abst
     	$db=$this->getAdapter();
     	$sql="select 
     				*,
-    				(select stu_code from rms_service where student_id = stu_id and type=4 limit 1) as code,
-    				(select car_id from rms_service where student_id = stu_id and type=4 limit 1) as car_id 
+    				(select stu_code from rms_service where student_id = stu_id and type=4 LIMIT 1) as code,
+    				(select car_id from rms_service where student_id = stu_id and type=4 LIMIT 1) as car_id,
+    				sp.id as payment_id 
     			from 
     				rms_student_payment AS sp,
     				rms_student_paymentdetail as spd

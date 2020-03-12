@@ -66,8 +66,8 @@ class Registrar_ExpenseController extends Zend_Controller_Action
 				}
 				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/expense/add");
 			} catch (Exception $e) {
-				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+				Application_Form_FrmMessage::message("INSERT_FAIL");
 			}
 		}
     	$pructis=new Registrar_Form_Frmexpense();
@@ -75,10 +75,11 @@ class Registrar_ExpenseController extends Zend_Controller_Action
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_expense=$frm;
     	
+    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
     	$_dbs = new Application_Model_DbTable_DbGlobal();
     	$cate_income = $_dbs->getCategoryName(0);
-    	array_unshift($cate_income, array('id'=>'-1','name'=>'បន្ថែមថ្មី'));
-    	array_unshift($cate_income, array('id'=>'0','name'=>'Select Category'));
+    	array_unshift($cate_income, array('id'=>'-1','name'=>$tr->translate("ADD_NEW")));
+    	array_unshift($cate_income, array('id'=>'0','name'=>$tr->translate("SELECT_CATEGORY")));
     	$this->view->cate_expense = $cate_income;
     }
  
@@ -87,13 +88,14 @@ class Registrar_ExpenseController extends Zend_Controller_Action
     	$id = $this->getRequest()->getParam('id');
     	if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();	
-			$data['id'] = $id;
+// 			$data['id'] = $id;
 			$db = new Registrar_Model_DbTable_DbExpense();				
 			try {
 				$db->updateExpense($data);				
-				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/expense");
+				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/registrar/expense");
 			} catch (Exception $e) {
-				$this->view->msg = 'ការ​បញ្ចូល​មិន​ជោគ​ជ័យ';
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+				Application_Form_FrmMessage::message("EDIT_FAIL");
 			}
 		}
 		$id = $this->getRequest()->getParam('id');
@@ -106,10 +108,11 @@ class Registrar_ExpenseController extends Zend_Controller_Action
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_expense=$frm;
 		
+    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
     	$_dbs = new Application_Model_DbTable_DbGlobal();
     	$cate_income = $_dbs->getCategoryName(0);
-    	array_unshift($cate_income, array('id'=>'-1','name'=>'បន្ថែមថ្មី'));
-    	array_unshift($cate_income, array('id'=>'0','name'=>'Select Category'));
+    	array_unshift($cate_income, array('id'=>'-1','name'=>$tr->translate("ADD_NEW")));
+    	array_unshift($cate_income, array('id'=>'0','name'=>$tr->translate("SELECT_CATEGORY")));
     	$this->view->cate_expense = $cate_income;
     }
     

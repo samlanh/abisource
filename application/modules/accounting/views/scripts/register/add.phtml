@@ -1018,7 +1018,6 @@ function loading(){
     document.getElementsByClassName("overlay")[0].style.display="block";
 }
 
-
 function calculateTotalFee(){
 	// price_per_sec = dijit.byId('price_per_section').get('value');
 	// amount_sec = dijit.byId('amount_section').get('value');
@@ -1048,11 +1047,9 @@ function calculateTotalBySection(){
 	price_per_sec = dijit.byId('price_per_section').get('value');
 	
 	total_fee = amount_sec * price_per_sec;
-	//alert(total_fee);
 	dijit.byId('tuitionfee').attr('value',total_fee);
 	getTotale();
 }
-
 </script>
 
 <script>

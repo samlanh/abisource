@@ -425,7 +425,7 @@ class Registrar_Model_DbTable_DbStudentLunchPayment extends Zend_Db_Table_Abstra
     			sp.id,
 				ser.stu_code AS code,
 		    	CONCAT(s.stu_khname,' - ',s.stu_enname) AS name,
-		    	(select name_kh from rms_view where rms_view.type=2 and rms_view.key_code=s.sex limit 1)AS sex,
+		    	(select name_kh from rms_view where rms_view.type=2 and rms_view.key_code=s.sex LIMIT 1)AS sex,
 		    	sp.receipt_number,
 		    	sp.grand_total_payment,
 		    	sp.grand_total_paid_amount,
@@ -469,7 +469,8 @@ class Registrar_Model_DbTable_DbStudentLunchPayment extends Zend_Db_Table_Abstra
     	$db=$this->getAdapter();
     	$sql="select 
 	    			*,
-	    			(select stu_code from rms_service where student_id = stu_id limit 1) as code 
+	    			(select stu_code from rms_service where student_id = stu_id LIMIT 1) as code ,
+	    			sp.id as payment_id
     			from 
     				rms_student_payment AS sp,
     				rms_student_paymentdetail as spd

@@ -48,7 +48,8 @@ fieldset{  background:none;}
 									</select>
 								</div>
 								<div id="id_stu"><?php echo $register->getElement('stu_id');?></div>
-								<div id="drop_stu_code"><?php echo "";?></div>	
+								<div id="drop_stu_code"><?php echo "";?></div>
+								<input type="hidden" name="pay_id" id="pay_id" value="<?php echo $this->degree_row['payment_id']?>" dojoType="dijit.form.TextBox" />	
 							</td>
 						</tr>
 						

@@ -174,10 +174,6 @@ class Registrar_CoursestudyController extends Zend_Controller_Action {
     	$id=$this->getRequest()->getParam('id');
     	if($this->getRequest()->isPost()){
     		$_data = $this->getRequest()->getPost();
-    		$_data['payment_id']=$id;
-    		
-//     		print_r($_data);exit();
-    		
     		try {
     			$db = new Registrar_Model_DbTable_DbCourStudey();
     			if(isset($_data['save_new'])){
@@ -188,7 +184,7 @@ class Registrar_CoursestudyController extends Zend_Controller_Action {
     				Application_Form_FrmMessage::Sucessfull($this->tr->translate('EDIT_SUCCESS'), self::REDIRECT_URL . '/coursestudy/index');
     			}
     		} catch (Exception $e) {
-    			Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
+    			Application_Form_FrmMessage::message($this->tr->translate('EDIT_FAIL'));
     			$err =$e->getMessage();
     			Application_Model_DbTable_DbUserLog::writeMessageError($err);
     		}
@@ -277,8 +273,6 @@ class Registrar_CoursestudyController extends Zend_Controller_Action {
     		$data=$this->getRequest()->getPost();
     		$db = new Registrar_Model_DbTable_DbCourStudey();
     		$payment = $db->getPaymentGep($data['study_year'],$data['levele'],$data['payment_term']);
-    		//print_r($grade);exit();
-    		//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
     		print_r(Zend_Json::encode($payment));
     		exit();
     	}
@@ -288,8 +282,6 @@ class Registrar_CoursestudyController extends Zend_Controller_Action {
     		$data=$this->getRequest()->getPost();
     		$db = new Registrar_Model_DbTable_DbRegister();
     		$gep = $db->getGepOldStudent($data['student_id']);
-    		//print_r($grade);exit();
-    		//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
     		print_r(Zend_Json::encode($gep));
     		exit();
     	}
@@ -317,8 +309,6 @@ class Registrar_CoursestudyController extends Zend_Controller_Action {
     		$data=$this->getRequest()->getPost();
     		$db = new Registrar_Model_DbTable_DbRegister();
     		$grade = $db->getAllGradeGEP($data['dept_id']);
-    		//print_r($grade);exit();
-    		//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
     		print_r(Zend_Json::encode($grade));
     		exit();
     	}
@@ -329,8 +319,6 @@ class Registrar_CoursestudyController extends Zend_Controller_Action {
     		$data=$this->getRequest()->getPost();
     		$db = new Registrar_Model_DbTable_DbRegister();
     		$receipt = $db->getRecieptNo($data['type'],$data['branch_id']);
-    		//print_r($grade);exit();
-    		//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
     		print_r(Zend_Json::encode($receipt));
     		exit();
     	}
