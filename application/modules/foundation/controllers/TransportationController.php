@@ -91,7 +91,6 @@ class Foundation_TransportationController extends Zend_Controller_Action {
 		$this->view->stu_name = $db->getAllStudentTransportName();
 		$this->view->transport_service = $db->getAllTransportService();
 		$this->view->all_car = $db->getAllCar();
-		//print_r($add);exit();
 	}
 
 	

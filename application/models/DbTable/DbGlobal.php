@@ -637,7 +637,16 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 	   	$sql=" SELECT id,fixed_assetname AS `name` FROM ln_fixed_asset WHERE `status`=1 ";
 	   	return $db->fetchAll($sql);
    }
-   
+   public  function caseStatusShowImage($status="status"){
+   	$base_url = Zend_Controller_Front::getInstance()->getBaseUrl();
+   	$imgnone='<img src="'.$base_url.'/images/icon/cross.png"/>';
+   	$imgtick='<img src="'.$base_url.'/images/icon/apply2.png"/>';
+   	$string=", CASE
+   	WHEN  $status = 1 THEN '$imgtick'
+   	WHEN  $status = 0 THEN '$imgnone'
+   	END AS status ";
+   	return $string;
+   }
    
 }
 ?>

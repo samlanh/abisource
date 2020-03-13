@@ -12,7 +12,7 @@
 			<td> <?php echo $frm->getElement("branch");?></td>
 			<td>
 				<select name="service" id="service" dojoType="dijit.form.FilteringSelect" class="fullside" >
-					<option value="0"> select service </option>
+					<option value="0"><?php echo $tr->translate('SELECT_SERVICE')?></option>
 					<?php if(!empty($this->food_service)){foreach ($this->food_service as $food){?>
 						<option value="<?php echo $food['id']?>" <?php if($food['id']==$this->adv_search['service']){echo "selected='selected'";}?>><?php echo $food['name']?></option>
 					<?php }}?>

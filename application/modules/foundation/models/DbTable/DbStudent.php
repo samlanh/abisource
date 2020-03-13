@@ -30,24 +30,23 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		
 		$sql = "SELECT  
 				 s.stu_id,
-				(select branch_namekh from rms_branch where br_id = s.branch_id) as branch,
+				(SELECT branch_namekh FROM rms_branch where br_id = s.branch_id LIMIT 1) as branch,
 				 s.stu_code,
 				 s.stu_khname,
 				 s.stu_enname,
-				(SELECT name_kh FROM `rms_view` WHERE TYPE=2 AND key_code = s.sex) AS sex,nationality ,
-				
-				(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')',' ',(select name_en from rms_view where type=7 and key_code = time)) FROM rms_tuitionfee WHERE rms_tuitionfee.id=s.academic_year) AS academic,
-				
-				(SELECT `en_name` FROM `rms_dept` WHERE `dept_id`=s.degree) AS degree,
-				
-				(SELECT `major_enname` FROM `rms_major` WHERE `major_id`=s.grade) AS grade,
-				
-				(SELECT	`rms_view`.`name_kh` FROM `rms_view` WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `s`.`session`)) LIMIT 1) AS `session`,
-				(select room_name from rms_room where room_id = s.room) as room,
-				(SELECT name_kh FROM `rms_view` WHERE TYPE=1 AND key_code = STATUS) AS status
-				
-				FROM rms_student AS s  WHERE  s.is_subspend=0 AND s.status = 1 AND s.stu_type IN (1,2,3) $branch_id
+				(SELECT name_kh FROM `rms_view` WHERE TYPE=2 AND key_code = s.sex LIMIT 1) AS sex,nationality ,
+				(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')',' ',(SELECT name_en FROM rms_view WHERE type=7 and key_code = time)) FROM rms_tuitionfee WHERE rms_tuitionfee.id=s.academic_year LIMIT 1) AS academic,
+				(SELECT `en_name` FROM `rms_dept` WHERE `dept_id`=s.degree LIMIT 1) AS degree,
+				(SELECT `major_enname` FROM `rms_major` WHERE `major_id`=s.grade LIMIT 1) AS grade,
+				(SELECT	`v`.`name_kh` FROM `rms_view` As v WHERE ((`v`.`type` = 4) AND (`v`.`key_code` = `s`.`session`)) LIMIT 1) AS `session`,
+				(SELECT room_name from rms_room where room_id = s.room) as room,
+				(SELECT	`v`.`name_kh` FROM `rms_view` As v WHERE ((`v`.`type` = 5) AND (`v`.`key_code` = `s`.`is_subspend`)) LIMIT 1) AS `subspend_type`
 			";
+		$sql.=$db->caseStatusShowImage('s.status');
+		$sql.="
+			FROM rms_student AS s  WHERE   s.stu_type IN (1,2,3) $branch_id
+		";
+		//AND s.status = 1 AND s.is_subspend=0 
 		$orderby = " ORDER BY stu_id DESC ";
 		if(empty($search)){
 			return $_db->fetchAll($sql.$orderby);
@@ -84,10 +83,15 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		if(!empty($search['room'])){
 			$where.=" AND s.room=".$search['room'];
 		}
+		if(!empty($search['suspend_type'])){
+			$where.=" AND s.is_subspend=".$search['suspend_type'];
+		}
+		if($search['status_search']>-1){
+			$where.=" AND s.status=".$search['status_search'];
+		}
 		if(!empty($search['user'])){
 			$where.=" AND s.user_id=".$search['user'];
 		}
-		//print_r($sql.$where);
 		return $_db->fetchAll($sql.$where.$orderby);
 	}
 	public function getStudentById($id){

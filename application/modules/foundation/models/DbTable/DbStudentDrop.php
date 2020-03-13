@@ -63,24 +63,27 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 					(SELECT stu_enname FROM `rms_student` WHERE `rms_student`.`stu_id`=`sd`.`stu_id` limit 1) AS en_name,
 					(SELECT name_kh FROM `rms_view` WHERE `rms_view`.`type`=2 and `rms_view`.`key_code`=s.sex)AS sex,
 					
-					(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=s.academic_year) as academic_year,
+					(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=s.academic_year limit 1) as academic_year,
 					(select en_name from rms_dept where dept_id = s.degree ) as degree,
 					(SELECT `major_enname` FROM `rms_major` WHERE `major_id`=s.grade ) AS grade,
-					(SELECT	`rms_view`.`name_en` FROM `rms_view` WHERE `rms_view`.`type` = 4 AND `rms_view`.`key_code` = s.session ) AS session,
+					(SELECT	`rms_view`.`name_en` FROM `rms_view` WHERE `rms_view`.`type` = 4 AND `rms_view`.`key_code` = s.session limit 1) AS session,
 					
 					(SELECT name_kh FROM `rms_view` WHERE `rms_view`.`type`=5 and `rms_view`.`key_code`=`sd`.`type` limit 1) as type,
 					reason,
 					date 
-				from 
+				
+				";
+		$sql.=$db->caseStatusShowImage('sd.status');
+		$sql.="
+		FROM 
 					`rms_student_drop` as sd,
 					rms_student as s 
-				where 
+		WHERE 
 					s.stu_id=sd.stu_id 
-					and sd.status=1 
 					and drop_from=1
 					$branch_id
-				";
-		
+		";
+// 		and sd.status=1 
 		$order_by=" order by sd.id DESC";
 		
 		$where='';
@@ -118,6 +121,9 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 		}
 		if(!empty($search['session'])){
 			$where.=" AND s.session=".$search['session'];
+		}
+		if($search['status_search']>-1){
+			$where.=" AND sd.status=".$search['status_search'];
 		}
 		return $_db->fetchAll($sql.$where.$order_by);
 	}

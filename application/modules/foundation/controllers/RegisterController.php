@@ -23,6 +23,7 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 						'room'		=> '',
 						'user'		=> '',
 						'session'	=> '',
+						'status_search'=>'-1',
 						'start_date'=> date('Y-m-d'),
 						'end_date'	=>date('Y-m-d')
 					);
@@ -32,9 +33,8 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 			
 			$db_student= new Foundation_Model_DbTable_DbStudent();
 			$rs_rows = $db_student->getAllStudent($search);
-			 
 			$list = new Application_Form_Frmtable();
-				$collumns = array("BRANCH","STUDENT_ID","NAME_KH","NAME_EN","SEX","NATIONALITY","ACADEMIC_YEAR","DEGREE","GRADE","SESSION","ROOM","STATUS");
+				$collumns = array("BRANCH","STUDENT_ID","NAME_KH","NAME_EN","SEX","NATIONALITY","ACADEMIC_YEAR","DEGREE","GRADE","SESSION","ROOM","TYPE","STATUS");
 				$link=array(
 						'module'=>'foundation','controller'=>'register','action'=>'edit',
 				);
@@ -76,10 +76,11 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 			}
 		}
 		
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$row =$_db->getOccupation();
-		array_unshift($row, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
-		array_unshift($row, array ( 'id' => 0,'name' => 'Select Job'));
+		array_unshift($row, array ( 'id' => -1,'name' => $tr->translate("ADD_NEW") ));
+		array_unshift($row, array ( 'id' => 0,'name' => $tr->translate("SELECT_JOB") ));
 		$this->view->occupation = $row;
 		
 		$this->view->branch = $_db->getAllBranch();
@@ -106,7 +107,6 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		{
 			try{
 				$data = $this->getRequest()->getPost();
-				$data["id"]=$id;
 				$row=$db->updateStudent($data);
 				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/foundation/register/index");
 			}catch(Exception $e){
@@ -116,13 +116,13 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		}
 		
 		$_db = new Application_Model_DbTable_DbGlobal();
-		
 		$this->view->province = $_db->getProvince();
 		$this->view->branch = $_db->getAllBranch();
 		
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$row =$_db->getOccupation();
-		array_unshift($row, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
-		array_unshift($row, array ( 'id' => 0,'name' => 'Select Job'));
+		array_unshift($row, array ( 'id' => -1,'name' => $tr->translate("ADD_NEW") ));
+		array_unshift($row, array ( 'id' => 0,'name' => $tr->translate("SELECT_JOB") ));
 		$this->view->occupation = $row;
 		
 		$this->view->degree = $db->getAllDegree();
@@ -131,9 +131,6 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		$this->view->user_level = $db->getUserLevel();
 		
 		$this->view->year = $db->getAllYear();
-		
-		//$this->view->occupation = $_db->getOccupation();
-		
 		$this->view->rs = $db->getStudentById($id);
 		
 		
@@ -153,8 +150,9 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 			$data=$this->getRequest()->getPost();
 			$db = new Foundation_Model_DbTable_DbStudent();
 			$grade = $db->getAllGrade($data['dept_id']);
-			//print_r($grade);exit();
-			array_unshift($grade, array ( 'id' => 0, 'name' => 'Select Grade'));
+			
+			$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+			array_unshift($grade, array ( 'id' => 0, 'name' => $tr->translate("SELECT_GRADE") ));
 			print_r(Zend_Json::encode($grade));
 			exit();
 		}

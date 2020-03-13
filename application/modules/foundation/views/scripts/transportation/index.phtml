@@ -12,7 +12,7 @@
 			<td> <?php echo $frm->getElement("branch");?></td>
 			<td>
 				<select name="service" id="service" dojoType="dijit.form.FilteringSelect" class="fullside" >
-					<option value="0"> select service </option>
+					<option value="0"><?php echo $tr->translate('SELECT_SERVICE')?></option>
 					<?php if(!empty($this->transport_service)){foreach ($this->transport_service as $transport){?>
 						<option value="<?php echo $transport['id']?>" <?php if($transport['id']==$this->adv_search['service']){echo "selected='selected'";}?>><?php echo $transport['name']?></option>
 					<?php }}?>
@@ -20,7 +20,7 @@
 			</td>
 			<td>
 				<select name="car" id="car" dojoType="dijit.form.FilteringSelect" class="fullside" >
-					<option value="0"> select car </option>
+					<option value="0"><?php echo $tr->translate('SELECT_CAR')?></option>
 					<?php if(!empty($this->all_car)){foreach ($this->all_car as $car){?>
 						<option value="<?php echo $car['id']?>" <?php if($car['id']==$this->adv_search['car']){echo "selected='selected'";}?>><?php echo $car['name']?></option>
 					<?php }}?>

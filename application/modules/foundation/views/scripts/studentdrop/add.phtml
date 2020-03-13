@@ -16,13 +16,14 @@
 	
 	<script type="dojo/method" event="onSubmit">
 		if(this.validate()) {
-			
 			student_id = dijit.byId('studentid').get('value');
-			if(student_id == -1){
-				alert("Please select student !!!");
+			if(student_id == -1 || student_id == "" ){
+				alert("<?php echo $tr->translate("PLEASE_SELECT_STUDENT")?> !!! ");
 				dijit.byId('studentid').focus();
 				return false;
 			}
+			loadingBlock();
+			dijit.byId('save_new').set('disabled',true);
 			return true;
 		} else {
 			return false;
@@ -41,7 +42,7 @@
 									<tr>
 										<td><?php echo $tr->translate("STUDENT_ID")?></td>
 										<td>
-											<select class="fullside"  name="studentid" id="studentid" required="true" autoComplete="false" queryExpr="*${0}*" dojoType="dijit.form.FilteringSelect" placeholder="Select student " onchange="getStudentInfo(1);" >
+											<select class="fullside"  name="studentid" id="studentid" required="true" autoComplete="false" queryExpr="*${0}*" dojoType="dijit.form.FilteringSelect" placeholder="<?php echo $tr->translate("SELECT_STUDENT_ID")?>" onchange="getStudentInfo(1);" >
 										    	<option value="-1"> </option>
 										    	<?php if(!empty($this->stu_id))foreach ($this->stu_id as $row){?>
 													<option value="<?php echo $row['stu_id']?>"><?php echo $row['stu_code']?></option>
@@ -50,7 +51,7 @@
 										</td>
 										<td><?php echo $tr->translate("STUDENT_NAME")?></td>
 										<td>
-											<select class="fullside"  name="studentname" id="studentname" required="true" autoComplete="false" queryExpr="*${0}*" dojoType="dijit.form.FilteringSelect" placeholder="Select student " onchange="getStudentInfo(2);" >
+											<select class="fullside"  name="studentname" id="studentname" required="true" autoComplete="false" queryExpr="*${0}*" dojoType="dijit.form.FilteringSelect" placeholder="<?php echo $tr->translate("SELECT_STUDENT_NAME")?>" onchange="getStudentInfo(2);" >
 										    	<option value="-1"> </option>
 										    	<?php if(!empty($this->stu_name))foreach ($this->stu_name as $row){?>
 													<option value="<?php echo $row['stu_id']?>"><?php echo $row['name']?></option>
@@ -61,8 +62,8 @@
 										<td><?php echo $tr->translate("SEX")?></td>
 										<td>
 											<select dojoType="dijit.form.FilteringSelect"  readonly="readonly" class="fullside" id="gender" name="gender" type="text">
-												<option value="1">Male</option>
-												<option value="2">Female</option>
+												<option value="1"><?php echo $tr->translate("MALE")?></option>
+												<option value="2"><?php echo $tr->translate("FEMALE")?></option>
 											</select>
 										</td>
 									</tr>
@@ -84,8 +85,8 @@
 										<td><?php echo $tr->translate("TYPE")?></td>
 										<td>
 											<select dojoType="dijit.form.FilteringSelect" required="true" autoComplete="false" queryExpr="*${0}*" class="fullside" id="type" name="type" type="text">
-												<option value="1">Suspend</option>
-												<option value="2">Stop</option>
+												<option value="1"><?php echo $tr->translate("SUSPEND")?></option>
+												<option value="2"><?php echo $tr->translate("STOP")?></option>
 											</select>
 										</td>
 										<td><?php echo $tr->translate("REASON")?></td>
@@ -98,17 +99,15 @@
 										<td><?php echo $tr->translate("STATUS")?></td>
 										<td>
 											<select dojoType="dijit.form.FilteringSelect"  class="fullside" id="status" name="status" type="text">
-												<option value="1">Active</option>
-												<option value="0">Deactive</option>
+												<option value="1"><?php echo $tr->translate("ACTIVE")?></option>
+												<option value="0"><?php echo $tr->translate("DEACTIVE")?></option>
 											</select>
 										</td>
 									</tr>
 									<tr>
 										<td colspan="6" align="center">
 										<input iconClass="dijitIconClear" type="reset" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
-										<input type="submit" value="save_close" name="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
-											iconClass="dijitEditorIcon dijitEditorIconSave" />
-										<input type="submit" value="save_new" name="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
+										<input type="submit" value="save_new" name="save_new" label="<?php echo $tr->translate('SAVE');?>" dojoType="dijit.form.Button" 
 											iconClass="dijitEditorIcon dijitEditorIconSave" />
 										</td>
 									</tr>					

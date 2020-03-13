@@ -20,6 +20,7 @@ class Foundation_studentdropController extends Zend_Controller_Action {
 				'degree_all'=> '',
 				'grade_all'=> '',
 				'session'=> '',
+					'status_search'=>'-1',
 				'start_date'=> date('Y-m-d'),
 				'end_date'	=>date('Y-m-d'),
 			);
@@ -33,7 +34,7 @@ class Foundation_studentdropController extends Zend_Controller_Action {
 		$db_student= new Foundation_Model_DbTable_DbStudentDrop();
 		$rs_rows = $db_student->getAllStudentDrop($search);
 		$list = new Application_Form_Frmtable();
-		$collumns = array("STUDENT_ID","NAME_KH","NAME_EN","SEX","ACADEMIC_YEAR","DEGREE","GRADE","SESSION","TYPE","REASON","STOP_DATE");
+		$collumns = array("STUDENT_ID","NAME_KH","NAME_EN","SEX","ACADEMIC_YEAR","DEGREE","GRADE","SESSION","TYPE","REASON","STOP_DATE","STATUS");
 		$link=array(
 				'module'=>'foundation','controller'=>'studentdrop','action'=>'edit',
 		);

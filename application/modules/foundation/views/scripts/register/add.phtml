@@ -3,211 +3,11 @@
 	$this->headTitle($tr->translate('ADD_STUDENT_REGISTER')); 
 	echo $this->headTitle(''); 
 ?>	
-<?php 
-	$tr=Application_Form_FrmLanguages::getCurrentlanguage();
-?>
-<script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
-
-<script type="text/javascript">
-dojo.require("dojo.data.ItemFileWriteStore");  
-dojo.require("dijit.form.NumberTextBox");
-dojo.require("dijit.form.Textarea");
-dojo.require("dijit.form.DateTextBox");
-dojo.require("dijit.form.CheckBox");
-
-var language_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->language));?> );
-var job_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->occupation));?> );
-var job_store1  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->occupation));?> );
-var job_store2  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->occupation));?> );
-dojo.ready(function(){
-	showBranch();
-	getStudentNo(1);
-	
-	new dijit.form.FilteringSelect({
-	    autoComplete: true,                        
-	    id: "grade",
-	    name: "grade",  
-	    tabindex: "16",  
-	    class: 'fullside',  
-	    placeHolder:"Selected Grade",          
-	    onChange: function() {  
-	    	make_id = dijit.byId('grade').get('value');
-	    }
-	}, "grade");
-	getallGrade();
-
-
-
-	new dijit.form.FilteringSelect({
-		store: job_store,
-		autoComplete: true,                        
-	    id: "fa_job",
-	    name: "fa_job",  
-	    tabindex: "17",    
-	         
-	    class: 'fullside',  
-	    placeHolder:"Selected job", 
-	    onChange: function() {          
-	   	fa_job = dijit.byId('fa_job').get('value');
-	    if(fa_job==-1){
-	   	 dijit.byId("popup_dept2").show();
-		   	dijit.byId('value_j').attr('value',1);
-	     }
-	    else {
-	    }  
-	   } 
-	}, "fa_job");
-	dijit.byId('fa_job').attr('value',0);
-
-	new dijit.form.FilteringSelect({
-		store: job_store,
-		autoComplete: true,                        
-	    id: "mo_job",
-	    name: "mo_job",  
-	    tabindex: "17",         
-	    class: 'fullside',  
-	    placeHolder:"Selected job", 
-	    onChange: function() {          
-	   	mo_job = dijit.byId('mo_job').get('value');
-	    if(mo_job==-1){
-	   	 dijit.byId("popup_dept2").show();
-		   	dijit.byId('value_j').attr('value',2);
-	     }
-	    else {
-	    }  
-	   } 
-	}, "mo_job");
-	dijit.byId('mo_job').attr('value',0);
-
-	new dijit.form.FilteringSelect({
-		store: job_store,
-		autoComplete: true,                        
-	    id: "gu_job",
-	    name: "gu_job",  
-	    tabindex: "17",         
-	    class: 'fullside',  
-	    placeHolder:"Selected job", 
-	    onChange: function() {          
-	   	mo_job = dijit.byId('gu_job').get('value');
-	    if(mo_job==-1){
-	   	 dijit.byId("popup_dept2").show();
-		   	dijit.byId('value_j').attr('value',3);
-	     }
-	    else {
-	    }  
-	   } 
-	}, "gu_job");
-	dijit.byId('gu_job').attr('value',0);
-
-
-	new dijit.form.FilteringSelect({
-		store: language_store,
-		autoComplete: true,                        
-	    id: "level",
-	    name: "level",  
-	    tabindex: "17",         
-	    class: 'fullside',  
-	    placeHolder:"Selected language", 
-	    onChange: function() {          
-	   	service_id = dijit.byId('level').get('value');
-	    if(service_id==-1){
-	   	 dijit.byId("popup_dept").show();
-	     }
-	    else {
-	    }  
-	   } 
-	}, "level");
-	dijit.byId('level').attr('value',0);
-	
-}); 
-var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
-var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'get-grade')); ?>';
-	function getallGrade(){
-		dept_id = dijit.byId('degree').get('value');
-		//alert(dept_id);
-		if(dept_id>0){
-			dojo.xhrPost({
-				url:url_dept,
-				content:{
-					'dept_id':dept_id
-					},
-				handleAs:"json",
-				load: function(data) {
-					//alert(data);
-					grade_store  = getDataStorefromJSON('id','name', data);
-				    dijit.byId('grade').set('store',grade_store);   
-
-				},
-				error: function(err) {
-					alert(err);
-				}
-			});
-		}
-	}
-
-var url_getstuno = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'get-stu-no')); ?>';
-	function getStudentNo(){
-		degree = dijit.byId('degree').get('value');
-		branch = dijit.byId('branch').get('value');
-		if(degree>0 && branch>0){
-			dojo.xhrPost({
-				url:url_getstuno,
-				content:{
-					'degree':degree,
-					'branch':branch
-					},
-				handleAs:"json",
-				load: function(data) {
-					dijit.byId('student_id').attr('value',data);   
-				},
-				error: function(err) {
-					alert(err);
-				}
-			});
-		}
-	}
-	
-	
-	function showBranch(){
-		user_level = '<?php echo $this->user_level?>';
-		if(user_level==1 || user_level==2){
-			//alert(user_level);
-			document.getElementById('show_label_branch').style.display="block";
-			document.getElementById('show_branch').style.display="block";
-		}else{
-			document.getElementById('show_label_branch').style.display="none";
-			document.getElementById('show_branch').style.display="none";
-		}
-	}
-
-	var url_get_degree_type = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-degree-type')); ?>';
-	function getDegreeType(){
-		degree = dijit.byId('degree').get('value');
-		if(degree>0){	
-			dojo.xhrPost({
-				url:url_get_degree_type,
-				content:{
-					'degree':degree,
-					},
-				handleAs:"json",
-				load: function(data) {
-				     if(data){
-				    	  dijit.byId('degree_type').attr('value',data);
-						  //oldStudentChangeDegree();
-				     }
-				},
-				error: function(err) {
-					alert(err);
-				}
-			});
-		}
-	}
-	
-</script>
-
 <form id="add_student" dojoType="dijit.form.Form" method="post">
 		<script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
+				loadingBlock();
+				dijit.byId('save_new').set('disabled',true);
 				return true;
 			}else {
 				return false;
@@ -227,23 +27,23 @@ var url_getstuno = '<?php echo $this->url(array('module'=>'foundation','controll
 						<td><?php echo $tr->translate("SEX");?></td>
 						<td>
 						    <select class="fullside"  tabindex="3" name="sex" id="sex" dojoType="dijit.form.FilteringSelect" >
-							    <option value="1" label="Active">Male</option>
-							    <option value="2" label="Deactive">Female</option>
+							    <option value="1" label="Active"><?php echo $tr->translate("MALE");?></option>
+							    <option value="2" label="Deactive"><?php echo $tr->translate("FEMALE");?></option>
 							</select>
 						</td>
 		      		</tr>
 		      		<tr>
 						<td ><?php echo $tr->translate("NATIONALITY");?></td>
 						<td><input class="fullside" tabindex="4" dojoType="dijit.form.TextBox"  id="studen_national" name="studen_national" value="" type="text" ></td>
-						<td title="ថ្ងៃខែឆ្នាំកំនើត"><?php echo $tr->translate("DOB");?></td>
+						<td title="<?php echo $tr->translate("DOB");?>"><?php echo $tr->translate("DOB");?></td>
 						<td><input class="fullside"  tabindex="5" constraints="{datePattern:'dd/MM/yyyy'}" name="date_of_birth" id="date_of_birth" dojoType="dijit.form.DateTextBox"  value="<?php echo date("2000-m-d")?>" type="text"/></td>
-						<td title="លេខទូរស័ព្ទ"><?php echo $tr->translate("PHONE");?></td>
+						<td title="<?php echo $tr->translate("PHONE");?>"><?php echo $tr->translate("PHONE");?></td>
 						<td><input class="fullside"  tabindex="6" dojoType="dijit.form.ValidationTextBox"  id="st_phone" name="st_phone" value="" type="text" ></td>
 		      		</tr>
 		      		<tr>
-		      			<td title="អ៊ីម៉ែល"><?php echo $tr->translate("EMAIL_ADDRESS");?></td>
+		      			<td title="<?php echo $tr->translate("EMAIL_ADDRESS");?>"><?php echo $tr->translate("EMAIL_ADDRESS");?></td>
 						<td><input class="fullside"  tabindex="7" dojoType="dijit.form.ValidationTextBox"  id="st_email" name="st_email" value="" type="text"  ></td>
-						<td title="ទីកន្លែងកំណើត"><?php echo $tr->translate("POB");?></td>
+						<td title="<?php echo $tr->translate("POB");?>"><?php echo $tr->translate("POB");?></td>
 						<td  colspan="3" >
 							<textarea class="fullside"  style=" height: 40px !important;"
 							tabindex="8" dojoType=""  id="place_of_birth" name="place_of_birth"  ></textarea>
@@ -286,7 +86,7 @@ var url_getstuno = '<?php echo $this->url(array('module'=>'foundation','controll
 						<td>
 							<div id="show_branch">
 								<select name="branch" id="branch" onchange="getStudentNo();" dojoType="dijit.form.FilteringSelect" class="fullside" >
-									<option value="-1">----- select branch -----</option>
+									<option value="-1"><?php echo $tr->translate("SELECT_BRANCH");?></option>
 									<?php if(!empty($this->branch))foreach ($this->branch as $branch){?>
 									<option value="<?php echo $branch['id']?>"><?php echo $branch['name']?></option>
 									<?php }?>
@@ -297,7 +97,7 @@ var url_getstuno = '<?php echo $this->url(array('module'=>'foundation','controll
 		      		<tr>
 		      			<td ><?php echo $tr->translate("ACADEMIC_YEAR");?>*</td>
 						<td>
-							<select class="fullside" tabindex="14" dojoType="dijit.form.FilteringSelect"  id="academic_year" name="academic_year" placeholder="----- Select Year -----" value="" type="text" >
+							<select class="fullside" tabindex="14" dojoType="dijit.form.FilteringSelect"  id="academic_year" name="academic_year" placeholder="<?php echo $tr->translate("SELECT_ACADEMIC_YEAR");?>" value="" type="text" >
 								<?php if(!empty($this->year))foreach ($this->year as $rows){?>
 								<option value="<?php echo $rows['id']?>"><?php echo $rows['years'].' '.$rows['time']?></option>
 								<?php }?>
@@ -307,7 +107,7 @@ var url_getstuno = '<?php echo $this->url(array('module'=>'foundation','controll
 						<input type="hidden" name="degree_type" id="degree_type" dojoType="dijit.form.TextBox" />
 						<td>
 							<select class="fullside" tabindex="15" name="degree" id="degree" dojoType="dijit.form.FilteringSelect" onchange="getStudentNo();getallGrade();getDegreeType();">
-								<option value="">select degree</option>
+								<option value=""><?php echo $tr->translate("SELECT_DEGREE");?></option>
 								<?php if(!empty($this->degree))foreach ($this->degree as $row){?>
 								<option value="<?php echo $row['dept_id']?>"><?php echo $row['en_name']?></option>
 								<?php }?>
@@ -325,7 +125,7 @@ var url_getstuno = '<?php echo $this->url(array('module'=>'foundation','controll
 						<td><?php echo $tr->translate("ROOM_NAME");?>*</td>
 						<td>
 						   <select class="fullside"  name="room" id="room" dojoType="dijit.form.FilteringSelect" onchange="">
-								<option value="-1">----- select room -----</option>
+								<option value="-1"><?php echo $tr->translate("SELECT_ROOM");?></option>
 								<?php if(!empty($this->room))foreach ($this->room as $room){?>
 								<option value="<?php echo $room['id']?>"><?php echo $room['name']?></option>
 								<?php }?>
@@ -345,8 +145,8 @@ var url_getstuno = '<?php echo $this->url(array('module'=>'foundation','controll
 		      			<td title="ស្ថានការណ៍"><?php echo $tr->translate("STATUS");?>*</td>
 						<td>
 							<select class="fullside" tabindex="19" dojoType="dijit.form.FilteringSelect"   id="status" name="status" type="text">								
-								<option value="1" ><?php echo $this->translate("Active")?></option>
-								<option value="0" ><?php echo $this->translate("Deactive")?></option>
+								<option value="1" ><?php echo $this->translate("ACTIVE")?></option>
+								<option value="0" ><?php echo $this->translate("DEACTIVE")?></option>
 							</select>
 						</td>
 						<td title="ពណ៌នា"><?php echo $tr->translate("REMARK");?>*</td>
@@ -432,14 +232,207 @@ var url_getstuno = '<?php echo $this->url(array('module'=>'foundation','controll
 		<tr>
 			<td align="center">
    				<input iconClass="dijitIconClear" type="reset" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button" onclick="getStudentNo(1);"/>
-				<input type="submit" value="save_close" name="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
-					iconClass="dijitEditorIcon dijitEditorIconSave" />
 				<input type="submit" value="save_new" name="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
 					iconClass="dijitEditorIcon dijitEditorIconSave" />
 		   	</td>
 		</tr>
 	</table>
 </form>
+<script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
+<script type="text/javascript">
+dojo.require("dojo.data.ItemFileWriteStore");  
+dojo.require("dijit.form.NumberTextBox");
+dojo.require("dijit.form.Textarea");
+dojo.require("dijit.form.DateTextBox");
+dojo.require("dijit.form.CheckBox");
+
+var language_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->language));?> );
+var job_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->occupation));?> );
+var job_store1  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->occupation));?> );
+var job_store2  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->occupation));?> );
+dojo.ready(function(){
+	showBranch();
+	getStudentNo(1);
+	
+	new dijit.form.FilteringSelect({
+	    autoComplete: true,                        
+	    id: "grade",
+	    name: "grade",  
+	    tabindex: "16",  
+	    class: 'fullside',  
+	    placeHolder:"<?php echo $tr->translate("SELECT_GRADE")?>",          
+	    onChange: function() {  
+	    	make_id = dijit.byId('grade').get('value');
+	    }
+	}, "grade");
+	getallGrade();
+
+
+	new dijit.form.FilteringSelect({
+		store: job_store,
+		autoComplete: true,                        
+	    id: "fa_job",
+	    name: "fa_job",  
+	    tabindex: "17",    
+	         
+	    class: 'fullside',  
+	    placeHolder:"<?php echo $tr->translate("SELECT_JOB")?>", 
+	    onChange: function() {          
+	   	fa_job = dijit.byId('fa_job').get('value');
+	    if(fa_job==-1){
+	   	 dijit.byId("popup_dept2").show();
+		   	dijit.byId('value_j').attr('value',1);
+	     }
+	    else {
+	    }  
+	   } 
+	}, "fa_job");
+	dijit.byId('fa_job').attr('value',0);
+
+	new dijit.form.FilteringSelect({
+		store: job_store,
+		autoComplete: true,                        
+	    id: "mo_job",
+	    name: "mo_job",  
+	    tabindex: "17",         
+	    class: 'fullside',  
+	    placeHolder:"<?php echo $tr->translate("SELECT_JOB")?>", 
+	    onChange: function() {          
+	   	mo_job = dijit.byId('mo_job').get('value');
+	    if(mo_job==-1){
+	   	 dijit.byId("popup_dept2").show();
+		   	dijit.byId('value_j').attr('value',2);
+	     }
+	    else {
+	    }  
+	   } 
+	}, "mo_job");
+	dijit.byId('mo_job').attr('value',0);
+
+	new dijit.form.FilteringSelect({
+		store: job_store,
+		autoComplete: true,                        
+	    id: "gu_job",
+	    name: "gu_job",  
+	    tabindex: "17",         
+	    class: 'fullside',  
+	    placeHolder:"<?php echo $tr->translate("SELECT_JOB")?>", 
+	    onChange: function() {          
+	   	mo_job = dijit.byId('gu_job').get('value');
+	    if(mo_job==-1){
+	   	 dijit.byId("popup_dept2").show();
+		   	dijit.byId('value_j').attr('value',3);
+	     }
+	    else {
+	    }  
+	   } 
+	}, "gu_job");
+	dijit.byId('gu_job').attr('value',0);
+
+
+	new dijit.form.FilteringSelect({
+		store: language_store,
+		autoComplete: true,                        
+	    id: "level",
+	    name: "level",  
+	    tabindex: "17",         
+	    class: 'fullside',  
+	    placeHolder:"Selected language", 
+	    onChange: function() {          
+	   	service_id = dijit.byId('level').get('value');
+	    if(service_id==-1){
+	   	 dijit.byId("popup_dept").show();
+	     }
+	    else {
+	    }  
+	   } 
+	}, "level");
+	dijit.byId('level').attr('value',0);
+	
+}); 
+var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
+var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'get-grade')); ?>';
+	function getallGrade(){
+		dept_id = dijit.byId('degree').get('value');
+		if(dept_id>0){
+			dojo.xhrPost({
+				url:url_dept,
+				content:{
+					'dept_id':dept_id
+					},
+				handleAs:"json",
+				load: function(data) {
+					//alert(data);
+					grade_store  = getDataStorefromJSON('id','name', data);
+				    dijit.byId('grade').set('store',grade_store);   
+
+				},
+				error: function(err) {
+					alert(err);
+				}
+			});
+		}
+	}
+
+var url_getstuno = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'get-stu-no')); ?>';
+	function getStudentNo(){
+		degree = dijit.byId('degree').get('value');
+		branch = dijit.byId('branch').get('value');
+		if(degree>0 && branch>0){
+			dojo.xhrPost({
+				url:url_getstuno,
+				content:{
+					'degree':degree,
+					'branch':branch
+					},
+				handleAs:"json",
+				load: function(data) {
+					dijit.byId('student_id').attr('value',data);   
+				},
+				error: function(err) {
+					alert(err);
+				}
+			});
+		}
+	}
+	
+	
+	function showBranch(){
+		user_level = '<?php echo $this->user_level?>';
+		if(user_level==1 || user_level==2){
+			//alert(user_level);
+			document.getElementById('show_label_branch').style.display="block";
+			document.getElementById('show_branch').style.display="block";
+		}else{
+			document.getElementById('show_label_branch').style.display="none";
+			document.getElementById('show_branch').style.display="none";
+		}
+	}
+
+	var url_get_degree_type = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-degree-type')); ?>';
+	function getDegreeType(){
+		degree = dijit.byId('degree').get('value');
+		if(degree>0){	
+			dojo.xhrPost({
+				url:url_get_degree_type,
+				content:{
+					'degree':degree,
+					},
+				handleAs:"json",
+				load: function(data) {
+				     if(data){
+				    	  dijit.byId('degree_type').attr('value',data);
+						  //oldStudentChangeDegree();
+				     }
+				},
+				error: function(err) {
+					alert(err);
+				}
+			});
+		}
+	}
+	
+</script>
 <script>
 var url_add_lang = '<?php echo $this->url(array("module"=>"foundation","controller"=>"register","action"=>"submit")); ?>';
 function addLanguage(){
@@ -552,11 +545,11 @@ function addJob(){
 							</td>
 						</tr>
 						<tr>
-							<td style="width:100px"><?php echo $tr->translate("status")?></td>
+							<td style="width:100px"><?php echo $tr->translate("STATUS")?></td>
 							<td>
 								<select class="fullside"  tabindex="3" name="status_p" id="status_p" dojoType="dijit.form.FilteringSelect" >
-									    <option value="1"><?php echo $tr->translate("Active")?></option>
-									    <option value="0"><?php echo $tr->translate("Deactive")?></option>
+									    <option value="1"><?php echo $tr->translate("ACTIVE")?></option>
+									    <option value="0"><?php echo $tr->translate("DEACTIVE")?></option>
 								</select>
 							</td>
 						</tr>
@@ -610,8 +603,8 @@ function addJob(){
 								<td><?php echo $tr->translate('STATUS');?></td>
 								<td>
 									<select name="status_j" id="status_j" dojoType="dijit.form.FilteringSelect"   class="fullside">
-	    								<option value="1" label="active">Active</option>
-	    								<option value="0" label="deactive">Deactive</option>
+	    								<option value="1" label="active"><?php echo $this->translate("ACTIVE")?></option>
+	    								<option value="0" label="deactive"><?php echo $this->translate("DEACTIVE")?></option>
 									</select>
 								</td>
 								

@@ -376,7 +376,7 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form
 		$_status=  new Zend_Dojo_Form_Element_FilteringSelect('status_search');
 		$_status->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside'));
 		$_status_opt = array(
-				''=>$this->tr->translate("ALL_STATUS"),
+				'-1'=>$this->tr->translate("ALL_STATUS"),
 				1=>$this->tr->translate("ACTIVE"),
 				0=>$this->tr->translate("DACTIVE"));
 		$_status->setMultiOptions($_status_opt);
@@ -458,7 +458,26 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form
 		$cus_name->setValue($request->getParam('cus_name'));
 		
 		
-		$this->addElements(array($cus_name,$from_receipt,$to_receipt,$lunch_service,$transport_service,$_degree_ft,$_degree_kh_ft,$_degree_en_ft,$_grade_en_ft,$_grade_kh_ft,$_room,$_branch,$_degree_all,$service_product,$start_date,$user,$end_date,$sess_gep,$_title,$_degree_gep,$generation,$_session,$_time,$_grade_all,$_grade_ft,$_grade_kid,$_status,$_grade_gep,$service,$pay_term));
+		$suspend_type = new Zend_Dojo_Form_Element_FilteringSelect('suspend_type');
+		$suspend_type->setAttribs(array('dojoType'=>$this->filter,
+				'placeholder'=>$this->tr->translate("SUSPEND_TYPE"),
+				'class'=>'fullside',
+				'required'=>false,
+				'autoComplete'=>'false',
+				'queryExpr'=>'*${0}*',
+		));
+		$suspend_typeOpt = array(''=>$this->tr->translate("SUSPEND_TYPE"),
+				1=>$this->tr->translate("SUSPEND"),
+				2=>$this->tr->translate("STOP"),
+		);
+		$suspend_type->setMultiOptions($suspend_typeOpt);
+		$suspend_type->setValue($request->getParam("suspend_type"));
+		
+		
+		$this->addElements(array($cus_name,$from_receipt,$to_receipt,$lunch_service,$transport_service,$_degree_ft,$_degree_kh_ft,$_degree_en_ft,$_grade_en_ft,$_grade_kh_ft,$_room,$_branch,$_degree_all,$service_product,$start_date,$user,$end_date,$sess_gep,$_title,$_degree_gep,$generation,$_session,$_time,$_grade_all,$_grade_ft,$_grade_kid,
+				$_status,$_grade_gep,$service,$pay_term,
+				$suspend_type
+				));
 		return $this;
 	} 
 
