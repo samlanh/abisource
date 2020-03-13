@@ -26,8 +26,7 @@ class Allreport_Model_DbTable_DbRptPaymentList extends Zend_Db_Table_Abstract
     			WHERE 
     				s.`stu_id`=sp.`student_id` 
     				AND sp.payfor_type=$type 
-    				$branch_id
-    		";
+    				$branch_id ";
     	
     	$where = " ";
     	
@@ -154,7 +153,6 @@ class Allreport_Model_DbTable_DbRptPaymentList extends Zend_Db_Table_Abstract
     }
     
     function getAllAmountStudentDropByType($search,$type,$this_month){
-//     	print_r($search);
     	
     	$db = $this->getAdapter();
     
@@ -170,8 +168,7 @@ class Allreport_Model_DbTable_DbRptPaymentList extends Zend_Db_Table_Abstract
     				s.`stu_id`=sp.`student_id` 
     				AND sp.`payfor_type`=$type 
     				AND s.`is_subspend`!=0
-			    	$branch_id
-    		";
+			    	$branch_id ";
     	 
     	$where = " ";
     	
@@ -211,19 +208,19 @@ class Allreport_Model_DbTable_DbRptPaymentList extends Zend_Db_Table_Abstract
     	}
 	    
 	    if(!empty($search['degree'])){
-	    	$where.= " and (select spd.is_start from rms_student_paymentdetail as spd where spd.payment_id=sp.id limit 1) = 1 AND s.`degree` = ".$search['degree'];
+	    	$where.= " and (SELECT spd.is_start from rms_student_paymentdetail as spd where spd.payment_id=sp.id limit 1) = 1 AND s.`degree` = ".$search['degree'];
 	    }
 	    if(!empty($search['grade'])){
-	    	$where.= " and (select spd.is_start from rms_student_paymentdetail as spd where spd.payment_id=sp.id limit 1) = 1 AND s.`grade` = ".$search['grade'];
+	    	$where.= " and (SELECT spd.is_start from rms_student_paymentdetail as spd where spd.payment_id=sp.id limit 1) = 1 AND s.`grade` = ".$search['grade'];
 	    }
     	if(!empty($search['room'])){
-    		$where.= " and (select spd.is_start from rms_student_paymentdetail as spd where spd.payment_id=sp.id limit 1) = 1 AND s.`room` = ".$search['room'];
+    		$where.= " and (SELECT spd.is_start from rms_student_paymentdetail as spd where spd.payment_id=sp.id limit 1) = 1 AND s.`room` = ".$search['room'];
 	    }
 	    if(!empty($search['branch'])){
 	    	$where.= " AND sp.`branch_id` = ".$search['branch'];
 	    }
 	    if(!empty($search['service'])){
-	    	$where.= " AND (select spd.service_id from rms_student_paymentdetail as spd where spd.payment_id=sp.id order by spd.id ASC limit 1) = ".$search['service'];
+	    	$where.= " AND (SELECT spd.service_id from rms_student_paymentdetail as spd where spd.payment_id=sp.id order by spd.id ASC limit 1) = ".$search['service'];
 	    }
 	    
 	    if(!empty($this_month)){
@@ -235,16 +232,12 @@ class Allreport_Model_DbTable_DbRptPaymentList extends Zend_Db_Table_Abstract
     		$start = $year.'-'.$for_month.'-'.$first_day;
     		$end = $year.'-'.$for_month.'-'.$last_day;
 	    	
-	    	$from_date =(empty($start))? '1': "(select sd.date from rms_student_drop as sd where sd.stu_id=sp.student_id and sd.status=1 and sd.drop_from =1 order by id DESC limit 1) >= '".$start." 00:00:00'";
-	    	$to_date = (empty($end))? '1': "(select sd.date from rms_student_drop as sd where sd.stu_id=sp.student_id and sd.status=1 and sd.drop_from =1 order by id DESC limit 1) <= '".$end." 23:59:59'";
+	    	$from_date =(empty($start))? '1': "(SELECT sd.date from rms_student_drop as sd where sd.stu_id=sp.student_id and sd.status=1 and sd.drop_from =1 order by id DESC limit 1) >= '".$start." 00:00:00'";
+	    	$to_date = (empty($end))? '1': "(SELECT sd.date from rms_student_drop as sd where sd.stu_id=sp.student_id and sd.status=1 and sd.drop_from =1 order by id DESC limit 1) <= '".$end." 23:59:59'";
 	    
 	    	$where .= " AND ".$from_date." AND ".$to_date;
-	    	//echo $sql.$where;
 	    }
-	    
-	    
-	    //echo $sql.$where.$group_by;
-	    
+	    echo $sql.$where.$group_by;
 	    return $db->fetchAll($sql.$where.$group_by);
     }
     
@@ -1820,8 +1813,6 @@ class Allreport_Model_DbTable_DbRptPaymentList extends Zend_Db_Table_Abstract
     	$_db = new Application_Model_DbTable_DbGlobal();
     	$branch_id = $_db->getAccessPermission("sp.`branch_id`");
     	
-    	//echo $search['for_month'];exit();
-    	 
     	$sql = "SELECT
     				sp.*,
 			    	sp.id,
@@ -1870,8 +1861,7 @@ class Allreport_Model_DbTable_DbRptPaymentList extends Zend_Db_Table_Abstract
 			    	AND st.`stu_id`=sp.`student_id`
 			    	AND sp.`payfor_type`=1
 			    	AND spd.`service_id`=4
-			    	$branch_id
-    			";
+			    	$branch_id ";
     	 
     	$where = " ";
     	$order=" ORDER BY st.`stu_code` ASC, sp.create_date ASC ";
@@ -2046,10 +2036,10 @@ class Allreport_Model_DbTable_DbRptPaymentList extends Zend_Db_Table_Abstract
 	    		if($rs['grand_total_balance']>0){
 	    			$grand_total_balance = "$ ".$rs['grand_total_balance'];
 	    		}
-	    		if($rs['is_subspend']>0){
+	    		if($rs['is_subspend']!=0){
 	    			$suspend_type = $rs['suspend_type'];
 	    		}
-	    		if($rs['is_subspend']>0){
+	    		if($rs['is_subspend']!=0){
 	    			$date_stop = date("d-m-Y",strtotime($rs['date_stop']));
 	    		}
 	    		if($rs['is_void']==1){
