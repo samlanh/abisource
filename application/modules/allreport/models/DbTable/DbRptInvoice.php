@@ -19,16 +19,16 @@ class Allreport_Model_DbTable_DbRptInvoice extends Zend_Db_Table_Abstract
     	
     	$sql = "SELECT
 				  	*,
-				  	(select branch_namekh from rms_branch where br_id = i.branch_id) as branch_name,
-				  	(select en_name from rms_dept as d where d.dept_id = i.degree) as degree_name,
-				  	(select major_enname from rms_major as m where m.major_id = i.grade) as grade_name,
-				  	(select name_en from rms_view as v where v.type=4 and v.key_code = i.session) as session_name,
-				  	(select room_name from rms_room as r where r.room_id = i.room_id) as room_name,
-				  	(select name_en from rms_view as v where v.type=6 and v.key_code = i.payment_term) as payment_term,
+				  	(select branch_namekh from rms_branch where br_id = i.branch_id LIMIT 1) as branch_name,
+				  	(select en_name from rms_dept as d where d.dept_id = i.degree LIMIT 1) as degree_name,
+				  	(select major_enname from rms_major as m where m.major_id = i.grade LIMIT 1) as grade_name,
+				  	(select name_en from rms_view as v where v.type=4 and v.key_code = i.session LIMIT 1) as session_name,
+				  	(select room_name from rms_room as r where r.room_id = i.room_id LIMIT 1) as room_name,
+				  	(select name_en from rms_view as v where v.type=6 and v.key_code = i.payment_term LIMIT 1) as payment_term,
 				  	i.note,
-				  	(select first_name from rms_users as u where u.id = i.user_id) as user,
+				  	(select first_name from rms_users as u where u.id = i.user_id LIMIT 1) as user,
 				  	i.create_date,
-				  	(select name_en from rms_view as v where v.type=12 and v.key_code = i.is_void) as void_status,
+				  	(select name_en from rms_view as v where v.type=12 and v.key_code = i.is_void LIMIT 1) as void_status,
 				  	i.is_void
 				FROM
 				  	`rms_student` AS st,
@@ -84,13 +84,13 @@ class Allreport_Model_DbTable_DbRptInvoice extends Zend_Db_Table_Abstract
     	$sql = "SELECT
 				  	*,
 				  	(select sv.stu_code from rms_service as sv where sv.stu_id = i.student_id and sv.type=4 limit 1)AS code,
-				  	(select branch_namekh from rms_branch where br_id = i.branch_id) as branch_name,
-				  	(select title from rms_program_name as p where p.service_id = i.service_id) as service_name,
-				  	(select name_en from rms_view as v where v.type=6 and v.key_code = i.payment_term) as payment_term,
+				  	(select branch_namekh from rms_branch where br_id = i.branch_id LIMIT 1) as branch_name,
+				  	(select title from rms_program_name as p where p.service_id = i.service_id LIMIT 1) as service_name,
+				  	(select name_en from rms_view as v where v.type=6 and v.key_code = i.payment_term LIMIT 1) as payment_term,
 				  	i.note,
-				  	(select first_name from rms_users as u where u.id = i.user_id) as user,
+				  	(select first_name from rms_users as u where u.id = i.user_id LIMIT 1) as user,
 				  	i.create_date,
-				  	(select name_en from rms_view as v where v.type=12 and v.key_code = i.is_void) as void_status,
+				  	(select name_en from rms_view as v where v.type=12 and v.key_code = i.is_void LIMIT 1) as void_status,
 				  	i.is_void
 				FROM
 				  	`rms_student` AS st,

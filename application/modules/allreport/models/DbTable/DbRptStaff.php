@@ -16,9 +16,9 @@ class Allreport_Model_DbTable_DbRptStaff extends Zend_Db_Table_Abstract
     	$sql = "SELECT 
     				staff_code,
     				name,
-    				(select name_kh from rms_view where type=2 and key_code=sex) as sex,
+    				(select name_kh from rms_view where type=2 and key_code=sex LIMIT 1) as sex,
     				phone,
-    				(select title from rms_staff_position where rms_staff_position.id=position) as position,
+    				(select title from rms_staff_position where rms_staff_position.id=position LIMIT 1) as position,
     				salary,
     				note
     			FROM 

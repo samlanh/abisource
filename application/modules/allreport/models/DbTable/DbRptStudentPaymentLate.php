@@ -19,7 +19,7 @@ class Allreport_Model_DbTable_DbRptStudentPaymentLate extends Zend_Db_Table_Abst
 				  sp.`receipt_number` AS receipt,
 				  sp.payfor_type,
 				  
-				  (select branch_namekh from rms_branch where br_id = sp.branch_id) as branch_name,
+				  (select branch_namekh from rms_branch where br_id = sp.branch_id LIMIT 1) as branch_name,
 				  
 				  s.stu_code,
 				  (select ser.stu_code from rms_service as ser where ser.stu_id= sp.student_id and ser.type=4 limit 1) as transport_code,
@@ -28,11 +28,11 @@ class Allreport_Model_DbTable_DbRptStudentPaymentLate extends Zend_Db_Table_Abst
 				  CONCAT(s.stu_khname,' - ',s.stu_enname) AS name,
 				  s.stu_khname,
 				  s.stu_enname,
-				  (select name_en from rms_view where rms_view.type=2 and key_code=s.sex) AS sex,
+				  (select name_en from rms_view where rms_view.type=2 and key_code=s.sex LIMIT 1) AS sex,
 				  s.tel,
 				  
-				  (select en_name from rms_dept where dept_id=s.degree) as degree,
-				  (select major_enname from rms_major where major_id=s.grade) as grade,
+				  (select en_name from rms_dept where dept_id=s.degree LIMIT 1) as degree,
+				  (select major_enname from rms_major where major_id=s.grade LIMIT 1) as grade,
 				  
 				  pn.`title` service,
 				  spd.`start_date` as start,
@@ -85,7 +85,7 @@ class Allreport_Model_DbTable_DbRptStudentPaymentLate extends Zend_Db_Table_Abst
     		$s_where[] = " (select ser.stu_code from rms_service as ser where ser.stu_id= sp.student_id and ser.type=5 limit 1)  LIKE '%{$s_search}%'";
     		$s_where[] = " s.stu_khname LIKE '%{$s_search}%'";
     		$s_where[] = " s.stu_enname LIKE '%{$s_search}%'";
-    		$s_where[] = " (select title from rms_program_name where rms_program_name.service_id=spd.service_id) LIKE '%{$s_search}%'";
+    		$s_where[] = " (select title from rms_program_name where rms_program_name.service_id=spd.service_id LIMIT 1) LIKE '%{$s_search}%'";
     		$s_where[] = " spd.comment LIKE '%{$s_search}%'";
     		$where .=' AND ( '.implode(' OR ',$s_where).')';
     	}

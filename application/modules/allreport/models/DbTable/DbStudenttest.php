@@ -14,7 +14,7 @@ class Allreport_Model_DbTable_DbStudenttest extends Zend_Db_Table_Abstract
 					 (select en_name from rms_dept where dept_id=degree LIMIT 1) as degree,
 		  			 (SELECT m.major_enname FROM `rms_major` AS m WHERE m.major_id = grade_result LIMIT 1) AS grade_result_title,
 					 (SELECT first_name FROM `rms_users` WHERE id=rms_student_test.user_id LIMIT 1) AS user,
-					 (select name_en from rms_view where type=14 and key_code=updated_result) as result_status
+					 (select name_en from rms_view where type=14 and key_code=updated_result limit 1) as result_status
 				FROM
 					rms_student_test
 				WHERE

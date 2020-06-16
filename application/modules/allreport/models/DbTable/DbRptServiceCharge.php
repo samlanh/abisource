@@ -75,7 +75,7 @@ class Allreport_Model_DbTable_DbRptServiceCharge extends Zend_Db_Table_Abstract
     function getAllYearService(){
     	$db=$this->getAdapter();
     	$sql=" select 
-    				CONCAT(from_academic,'-',to_academic,'(',(SELECT branch_namekh FROM rms_branch WHERE br_id = branch_id),')')as year ,
+    				CONCAT(from_academic,'-',to_academic,'(',(SELECT branch_namekh FROM rms_branch WHERE br_id = branch_id LIMIT 1),')')as year ,
     				sf.id 
     			from 
     				rms_servicefee as sf

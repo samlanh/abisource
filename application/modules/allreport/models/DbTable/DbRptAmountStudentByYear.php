@@ -69,8 +69,8 @@ class Allreport_Model_DbTable_DbRptAmountStudentByYear extends Zend_Db_Table_Abs
     		  (select from_academic from rms_tuitionfee where rms_tuitionfee.id=g.academic_year limit 1) as from_academic,
     		  (select to_academic from rms_tuitionfee where rms_tuitionfee.id=g.academic_year limit 1) as to_academic,
     		  (select generation from rms_tuitionfee where rms_tuitionfee.id=g.academic_year limit 1) as generation,
-			  (select name_en from rms_view where rms_view.type=4 and rms_view.key_code=g.session) as session,
-			  (select major_enname from rms_major where rms_major.major_id=g.`grade`) as grade
+			  (select name_en from rms_view where rms_view.type=4 and rms_view.key_code=g.session LIMIT 1) as session,
+			  (select major_enname from rms_major where rms_major.major_id=g.`grade` LIMIT 1) as grade
 			 FROM
 			  `rms_group_detail_student` AS gds,
 			  `rms_group` AS g ,
@@ -86,9 +86,9 @@ class Allreport_Model_DbTable_DbRptAmountStudentByYear extends Zend_Db_Table_Abs
     	if(!empty($search['txtsearch'])){
     		$s_where = array();
     		$s_search = addslashes(trim($search['txtsearch']));
-    		$s_where[] = " (select CONCAT(from_academic,'-',to_academic,' ',generation) from rms_tuitionfee where rms_tuitionfee.id=g.academic_year) LIKE '%{$s_search}%'";
-    		$s_where[] = " (select major_enname from rms_major where rms_major.major_id=g.grade) LIKE '%{$s_search}%'";
-    		$s_where[] = " (select name_en from rms_view where rms_view.type=4 and rms_view.key_code=g.session) LIKE '%{$s_search}%'";
+    		$s_where[] = " (select CONCAT(from_academic,'-',to_academic,' ',generation) from rms_tuitionfee where rms_tuitionfee.id=g.academic_year LIMIT 1) LIKE '%{$s_search}%'";
+    		$s_where[] = " (select major_enname from rms_major where rms_major.major_id=g.grade LIMIT 1) LIKE '%{$s_search}%'";
+    		$s_where[] = " (select name_en from rms_view where rms_view.type=4 and rms_view.key_code=g.session LIMIT 1) LIKE '%{$s_search}%'";
     		$where .=' AND ( '.implode(' OR ',$s_where).')';
     	}
     	

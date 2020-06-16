@@ -26,19 +26,19 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
     	$sql = "SELECT 
     				st.stu_code as stu_id, 
     				
-    				(select branch_namekh from rms_branch where br_id = st.branch_id) as branch_name,
+    				(select branch_namekh from rms_branch where br_id = st.branch_id LIMIT 1) as branch_name,
     				st.stu_khname,
     				st.stu_enname,
     				CONCAT(st.stu_khname,' - ',st.stu_enname) as name,
-			    	(select CONCAT(from_academic,'-',to_academic,'(',generation,')') from rms_tuitionfee where rms_tuitionfee.id=st.academic_year) as academic_year,
+			    	(select CONCAT(from_academic,'-',to_academic,'(',generation,')') from rms_tuitionfee where rms_tuitionfee.id=st.academic_year LIMIT 1) as academic_year,
 			    	(select name_en from rms_view where rms_view.type=4 and rms_view.key_code=st.session limit 1)AS session,
-			    	(select en_name from rms_dept where dept_id = st.degree ) as degree,
+			    	(select en_name from rms_dept where dept_id = st.degree LIMIT 1) as degree,
 			    	(select major_enname from rms_major where rms_major.major_id=st.grade limit 1)AS grade,
-					(SELECT name_kh FROM `rms_view` WHERE `rms_view`.`type`=2 and `rms_view`.`key_code`=st.sex )AS sex,
-					(SELECT name_kh FROM `rms_view` WHERE `rms_view`.`type`=5 and `rms_view`.`key_code`=stdp.`type`) as type,
+					(SELECT name_kh FROM `rms_view` WHERE `rms_view`.`type`=2 and `rms_view`.`key_code`=st.sex LIMIT 1)AS sex,
+					(SELECT name_kh FROM `rms_view` WHERE `rms_view`.`type`=5 and `rms_view`.`key_code`=stdp.`type` LIMIT 1) as type,
 					stdp.note,stdp.reason,
 					stdp.date,
-					(select name_kh from `rms_view` where `rms_view`.`type`=6 and `rms_view`.`key_code`=`stdp`.`status`)AS status
+					(select name_kh from `rms_view` where `rms_view`.`type`=6 and `rms_view`.`key_code`=`stdp`.`status` LIMIT 1)AS status
 		 		from 
     				rms_student_drop as stdp,
     				rms_student as st 
@@ -63,7 +63,7 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
     		$s_where[] = " st.stu_code LIKE '%{$s_search}%'";
     		$s_where[] = " st.stu_khname LIKE '%{$s_search}%'";
     		$s_where[] = " st.stu_enname LIKE '%{$s_search}%'";
-    		$s_where[] = " (SELECT name_kh FROM `rms_view` WHERE `rms_view`.`type`=5 and `rms_view`.`key_code`=`stdp`.`type`) LIKE '%{$s_search}%'";
+    		$s_where[] = " (SELECT name_kh FROM `rms_view` WHERE `rms_view`.`type`=5 and `rms_view`.`key_code`=`stdp`.`type` LIMIT 1) LIKE '%{$s_search}%'";
     		$where .=' AND ( '.implode(' OR ',$s_where).')';
     	}
     	
@@ -104,19 +104,19 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
     	$sql = "SELECT
 			    	s.stu_code ,
 			    	
-			    	(select branch_namekh from rms_branch where br_id = st.branch_id) as branch_name,
+			    	(select branch_namekh from rms_branch where br_id = st.branch_id LIMIT 1) as branch_name,
 			    	st.stu_khname,
     				st.stu_enname,
 			    	CONCAT(st.stu_khname,' - ',st.stu_enname) as name,
-			    	(SELECT name_kh FROM `rms_view` WHERE `rms_view`.`type`=2 and `rms_view`.`key_code`=st.sex )AS sex,
+			    	(SELECT name_kh FROM `rms_view` WHERE `rms_view`.`type`=2 and `rms_view`.`key_code`=st.sex LIMIT 1)AS sex,
 			    	st.tel,
 			    	
-			    	(select p.title from rms_program_name as p where p.service_id = s.service_id) as service_name,
+			    	(select p.title from rms_program_name as p where p.service_id = s.service_id LIMIT 1) as service_name,
 			    	
-			    	(SELECT name_kh FROM `rms_view` WHERE `rms_view`.`type`=5 and `rms_view`.`key_code`=stdp.`type`) as type,
+			    	(SELECT name_kh FROM `rms_view` WHERE `rms_view`.`type`=5 and `rms_view`.`key_code`=stdp.`type` LIMIT 1) as type,
 			    	stdp.reason,
 			    	stdp.date,
-			    	(select name_kh from `rms_view` where `rms_view`.`type`=6 and `rms_view`.`key_code`=`stdp`.`status`)AS status
+			    	(select name_kh from `rms_view` where `rms_view`.`type`=6 and `rms_view`.`key_code`=`stdp`.`status` LIMIT 1)AS status
 			    from
 			    	rms_student_drop as stdp,
 			    	rms_student as st,
@@ -144,7 +144,7 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
 		    $s_where[] = " s.stu_code LIKE '%{$s_search}%'";
 		    $s_where[] = " st.stu_khname LIKE '%{$s_search}%'";
 		    $s_where[] = " st.stu_enname LIKE '%{$s_search}%'";
-		    $s_where[] = " (SELECT name_kh FROM `rms_view` WHERE `rms_view`.`type`=5 and `rms_view`.`key_code`=`stdp`.`type`) LIKE '%{$s_search}%'";
+		    $s_where[] = " (SELECT name_kh FROM `rms_view` WHERE `rms_view`.`type`=5 and `rms_view`.`key_code`=`stdp`.`type` LIMIT 1) LIKE '%{$s_search}%'";
 		    $where .=' AND ( '.implode(' OR ',$s_where).')';
 	    }
 	    
@@ -174,19 +174,19 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
     	$sql = "SELECT
 			    	s.stu_code ,
 			    	
-			    	(select branch_namekh from rms_branch where br_id = st.branch_id) as branch_name,
+			    	(select branch_namekh from rms_branch where br_id = st.branch_id LIMIT 1) as branch_name,
 			    	st.stu_khname,
     				st.stu_enname,
 			    	CONCAT(st.stu_khname,' - ',st.stu_enname) as name,
-			    	(SELECT name_kh FROM `rms_view` WHERE `rms_view`.`type`=2 and `rms_view`.`key_code`=st.sex )AS sex,
+			    	(SELECT name_kh FROM `rms_view` WHERE `rms_view`.`type`=2 and `rms_view`.`key_code`=st.sex LIMIT 1)AS sex,
 			    	st.tel,
 			    	
-			    	(select p.title from rms_program_name as p where p.service_id = s.service_id) as service_name,
+			    	(select p.title from rms_program_name as p where p.service_id = s.service_id LIMIT 1) as service_name,
 			    	
-			    	(SELECT name_kh FROM `rms_view` WHERE `rms_view`.`type`=5 and `rms_view`.`key_code`=stdp.`type`) as type,
+			    	(SELECT name_kh FROM `rms_view` WHERE `rms_view`.`type`=5 and `rms_view`.`key_code`=stdp.`type` LIMIT 1) as type,
 			    	stdp.reason,
 			    	stdp.date,
-			    	(select name_kh from `rms_view` where `rms_view`.`type`=6 and `rms_view`.`key_code`=`stdp`.`status`)AS status
+			    	(select name_kh from `rms_view` where `rms_view`.`type`=6 and `rms_view`.`key_code`=`stdp`.`status` LIMIT 1)AS status
 			    from
 			    	rms_student_drop as stdp,
 			    	rms_student as st,
@@ -214,7 +214,7 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
 		    $s_where[] = " s.stu_code LIKE '%{$s_search}%'";
 		    $s_where[] = " st.stu_khname LIKE '%{$s_search}%'";
 		    $s_where[] = " st.stu_enname LIKE '%{$s_search}%'";
-		    $s_where[] = " (SELECT name_kh FROM `rms_view` WHERE `rms_view`.`type`=5 and `rms_view`.`key_code`=`stdp`.`type`) LIKE '%{$s_search}%'";
+		    $s_where[] = " (SELECT name_kh FROM `rms_view` WHERE `rms_view`.`type`=5 and `rms_view`.`key_code`=`stdp`.`type` LIMIT 1) LIKE '%{$s_search}%'";
 		    $where .=' AND ( '.implode(' OR ',$s_where).')';
 	    }
 	    
@@ -237,7 +237,7 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
     
     function getAllServiceByCategory($cate_id){
     	$db = $this->getAdapter();
-    	$sql="select service_id as id,title as name from rms_program_name where ser_cate_id = $cate_id and type=2 and status=1 ";
+    	$sql="SELECT service_id AS id,title AS name FROM rms_program_name WHERE ser_cate_id = $cate_id AND type=2 and status=1 ";
     	return $db->fetchAll($sql);
     }
     

@@ -19,17 +19,17 @@ class Allreport_Model_DbTable_DbRptAttLunch extends Zend_Db_Table_Abstract
     	$sql = "SELECT
 				  ser.`stu_code`,
 				  
-				  (select branch_namekh from rms_branch where br_id = ser.branch_id) as branch_name,
-			      (select last_name from rms_users as u where u.id = sp.user_id) as user_name,
+				  (select branch_namekh from rms_branch where br_id = ser.branch_id LIMIT 1) as branch_name,
+			      (select last_name from rms_users as u where u.id = sp.user_id LIMIT 1) as user_name,
 				  
 				  ser.service_id,
 				  st.stu_khname,
 				  st.stu_enname,
 				  CONCAT(st.`stu_khname`,'-',st.`stu_enname`) AS name,
-				  (SELECT name_en FROM rms_view WHERE TYPE=2 AND key_code=st.`sex`) AS sex,
+				  (SELECT name_en FROM rms_view WHERE TYPE=2 AND key_code=st.`sex` LIMIT 1) AS sex,
 				  st.`tel` as stu_phone,
 				  pn.`title` as service_name,
-				  (SELECT name_en FROM rms_view WHERE TYPE=6 AND key_code=spd.`payment_term`) AS payment_term,
+				  (SELECT name_en FROM rms_view WHERE TYPE=6 AND key_code=spd.`payment_term` LIMIT 1) AS payment_term,
 				  spd.fee,
 				  spd.qty,
 				  spd.`start_date`,

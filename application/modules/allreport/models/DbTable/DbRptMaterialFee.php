@@ -13,10 +13,10 @@ class Allreport_Model_DbTable_DbRptMaterialFee extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
     	$sql = "SELECT 
     					title as name,
-    					(select name_en from rms_view where type=14 and key_code = product_type) as product_type,
+    					(select name_en from rms_view where type=14 and key_code = product_type LIMIT 1) as product_type,
     					price,
     					description as note,
-    					(select name_kh from rms_view where type=1 and key_code = pn.status) as status
+    					(select name_kh from rms_view where type=1 and key_code = pn.status LIMIT 1) as status
     				FROM 
     					rms_program_name as pn
     				where 

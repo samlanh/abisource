@@ -62,7 +62,7 @@ class Allreport_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 					  s.stu_khname,
 					  s.stu_enname,
 					  CONCAT(s.stu_khname,'-',s.stu_enname) as name,
-					  (select en_name from rms_dept where dept_id = s.degree) as degree,
+					  (select en_name from rms_dept where dept_id = s.degree LIMIT 1) as degree,
 					  (select major_enname from rms_major where major_id = (select h.grade from rms_study_history as h where  is_finished_grade=0 and h.stu_id=sp.student_id order by h.id DESC limit 1)) as grade,
 					  spd.type,
 					  sp.tuition_fee,
@@ -82,9 +82,9 @@ class Allreport_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 					  spd.is_parent ,
 					  spd.is_complete,
 					  (SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE `status`=1 AND id=sp.year LIMIT 1) AS year,
-					  (SELECT pg.title FROM rms_program_name AS pg WHERE pg.service_id=spd.service_id) AS service_id,
-					  (SELECT CONCAT(last_name,' - ',first_name) FROM rms_users WHERE rms_users.id = sp.user_id) AS user_id,
-					  (SELECT name_kh FROM rms_view  WHERE rms_view.type=6 AND key_code=spd.payment_term) AS payment_term
+					  (SELECT pg.title FROM rms_program_name AS pg WHERE pg.service_id=spd.service_id LIMIT 1) AS service_id,
+					  (SELECT CONCAT(last_name,' - ',first_name) FROM rms_users WHERE rms_users.id = sp.user_id LIMIT 1) AS user_id,
+					  (SELECT name_kh FROM rms_view  WHERE rms_view.type=6 AND key_code=spd.payment_term LIMIT 1) AS payment_term
 					  
 					FROM
 					  rms_student AS s,
@@ -117,10 +117,10 @@ class Allreport_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 	    	}
 	    	
 	    	if(!empty($search['grade_all'])){
-	    		$where.= " AND (select h.grade from rms_study_history as h where h.payment_id=sp.id) = ".$search['grade_all'];
+	    		$where.= " AND (select h.grade from rms_study_history as h where h.payment_id=sp.id LIMIT 1) = ".$search['grade_all'];
 	    	}
 	    	if(!empty($search['degree_all'])){
-	    		$where.= " AND (select h.degree from rms_study_history as h where h.payment_id=sp.id) = ".$search['degree_all'];
+	    		$where.= " AND (select h.degree from rms_study_history as h where h.payment_id=sp.id LIMIT 1) = ".$search['degree_all'];
 	    	}
 	    	
 	    	$order=" ORDER By sp.id DESC ";
@@ -138,8 +138,8 @@ class Allreport_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 		$branch_id = $_db->getAccessPermission('branch_id');
 		
     	$sql = "SELECT *,(SELECT c.category_name FROM rms_category As c WHERE c.id=ln_income.cat_id AND c.parent=1 LIMIT 1) As cat_name,
-    			(select curr_nameen from ln_currency where ln_currency.id=ln_income.curr_type) as curr_name,
-    			(select CONCAT(last_name,' - ',first_name) from rms_users as u where u.id = user_id)  as user_name
+    			(select curr_nameen from ln_currency where ln_currency.id=ln_income.curr_type LIMIT 1) as curr_name,
+    			(select CONCAT(last_name,' - ',first_name) from rms_users as u where u.id = user_id LIMIT 1)  as user_name
     			 from ln_income  WHERE 1 $branch_id ";
     	$where= ' ';
     	$order=" ORDER BY id DESC ";
@@ -178,8 +178,8 @@ class Allreport_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 		$branch_id = $_db->getAccessPermission('branch_id');
 		
     	$sql = "SELECT *,(SELECT c.category_name FROM rms_category As c WHERE c.id=ln_income_expense.cat_id AND c.parent=0 LIMIT 1) As cat_name,
-    			(select curr_nameen from ln_currency where ln_currency.id=curr_type) as curr_name,
-    			(select CONCAT(last_name,' - ',first_name) from rms_users as u where u.id = user_id)  as user_name
+    			(select curr_nameen from ln_currency where ln_currency.id=curr_type LIMIT 1) as curr_name,
+    			(select CONCAT(last_name,' - ',first_name) from rms_users as u where u.id = user_id LIMIT 1)  as user_name
     			 from ln_income_expense  WHERE 1 $branch_id ";
     	$where= ' ';
     	$order=" ORDER BY id DESC ";

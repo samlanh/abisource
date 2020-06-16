@@ -80,8 +80,8 @@ class Allreport_Model_DbTable_DbSubmitDailyIncome extends Zend_Db_Table_Abstract
     	 
     	$sql = "SELECT
     				*,
-    				(select first_name from rms_users as u where user_id = u.id) as user_name,
-    				(select branch_namekh from rms_branch where br_id = branch_id) as branch_name
+    				(select first_name from rms_users as u where user_id = u.id limit 1) as user_name,
+    				(select branch_namekh from rms_branch where br_id = branch_id limit 1) as branch_name
 				    from
 				    	rms_submit_daily_income 
 				    where
@@ -121,7 +121,7 @@ class Allreport_Model_DbTable_DbSubmitDailyIncome extends Zend_Db_Table_Abstract
     
     function getSubmitById($id){
     	$db=$this->getAdapter();
-    	$sql=" SELECT *,(select first_name from rms_users where rms_users.id = user_id) as user_name FROM rms_submit_daily_income WHERE id = $id limit 1 ";
+    	$sql=" SELECT *,(select first_name from rms_users where rms_users.id = user_id LIMIT 1) as user_name FROM rms_submit_daily_income WHERE id = $id limit 1 ";
     	return $db->fetchRow($sql);
     }
     

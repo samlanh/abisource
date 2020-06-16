@@ -37,7 +37,7 @@ class Allreport_Model_DbTable_DbRptStudentBalance extends Zend_Db_Table_Abstract
 					(select stu_khname from rms_student where rms_student.stu_id=sp.student_id limit 1)AS stu_khname,
 					(select stu_enname from rms_student where rms_student.stu_id=sp.student_id limit 1)AS stu_enname,
 					
-					(select name_en from rms_view where rms_view.type=2 and key_code=(select sex from rms_student where rms_student.stu_id=sp.student_id limit 1))AS sex,
+					(select name_en from rms_view where rms_view.type=2 and key_code=(select sex from rms_student where rms_student.stu_id=sp.student_id limit 1) LIMIT 1)AS sex,
 					(select title from rms_program_name where rms_program_name.service_id=spd.service_id limit 1)AS service
 				from 
 					rms_student_payment AS sp,
@@ -76,9 +76,9 @@ class Allreport_Model_DbTable_DbRptStudentBalance extends Zend_Db_Table_Abstract
     			$s_where = array();
     			$s_search = addslashes(trim($search['txtsearch']));
     			$s_where[] = " sp.receipt_number LIKE '%{$s_search}%'";
-    			$s_where[] = " (select stu_code from rms_student where rms_student.stu_id=sp.student_id) LIKE '%{$s_search}%'";
-    			$s_where[] = " (select CONCAT(stu_khname,stu_enname) from rms_student where rms_student.stu_id=sp.student_id) LIKE '%{$s_search}%'";
-    			$s_where[] = " (select title from rms_program_name where rms_program_name.service_id=spd.service_id) LIKE '%{$s_search}%'";
+    			$s_where[] = " (select stu_code from rms_student where rms_student.stu_id=sp.student_id LIMIT 1) LIKE '%{$s_search}%'";
+    			$s_where[] = " (select CONCAT(stu_khname,stu_enname) from rms_student where rms_student.stu_id=sp.student_id LIMIT 1) LIKE '%{$s_search}%'";
+    			$s_where[] = " (select title from rms_program_name where rms_program_name.service_id=spd.service_id LIMIT 1) LIKE '%{$s_search}%'";
     			$s_where[] = " spd.comment LIKE '%{$s_search}%'";
     			$where .=' AND ( '.implode(' OR ',$s_where).')';
     		}

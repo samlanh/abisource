@@ -14,13 +14,13 @@ class Allreport_Model_DbTable_DbRptPayableNextMonth extends Zend_Db_Table_Abstra
     	$sql="SELECT 
     			  sp.id,
     			  
-    			  (select branch_namekh from rms_branch where br_id = sp.branch_id) as branch_name,
-			      (select last_name from rms_users as u where u.id = sp.user_id) as user_name,
+    			  (select branch_namekh from rms_branch where br_id = sp.branch_id LIMIT 1) as branch_name,
+			      (select last_name from rms_users as u where u.id = sp.user_id LIMIT 1) as user_name,
     			  
 				  sp.`receipt_number` AS receipt,
 				  s.stu_code AS code,
-				  (select ser.stu_code from rms_service as ser where ser.stu_id = s.stu_id and ser.type=4) as transport_code,
-				  (select ser.stu_code from rms_service as ser where ser.stu_id = s.stu_id and ser.type=5) as lunch_code,
+				  (select ser.stu_code from rms_service as ser where ser.stu_id = s.stu_id and ser.type=4 LIMIT 1) as transport_code,
+				  (select ser.stu_code from rms_service as ser where ser.stu_id = s.stu_id and ser.type=5 LIMIT 1) as lunch_code,
 				  CONCAT(stu_khname,' - ',stu_enname) AS name,
 				  stu_khname,
 				  stu_enname,
@@ -29,8 +29,8 @@ class Allreport_Model_DbTable_DbRptPayableNextMonth extends Zend_Db_Table_Abstra
 				  sp.discount_fix,
 				  sp.grand_total_payment,
 				  sp.note,
-				  (select name_en from rms_view where rms_view.type=2 and key_code=s.sex) AS sex,
-				  (select major_enname from rms_major where major_id = s.grade) as grade,
+				  (select name_en from rms_view where rms_view.type=2 and key_code=s.sex LIMIT 1) AS sex,
+				  (select major_enname from rms_major where major_id = s.grade LIMIT 1) as grade,
 				  pn.`title` service,
 				  spd.`start_date` as start,
 				  spd.`validate` as end
@@ -101,8 +101,8 @@ class Allreport_Model_DbTable_DbRptPayableNextMonth extends Zend_Db_Table_Abstra
     		$s_search = addslashes(trim($search['txtsearch']));
     		$s_where[] = " sp.receipt_number LIKE '%{$s_search}%'";
     		$s_where[] = " s.stu_code LIKE '%{$s_search}%'";
-    		$s_where[] = " (select ser.stu_code from rms_service as ser where ser.stu_id = s.stu_id and ser.type=4) LIKE '%{$s_search}%'";
-    		$s_where[] = " (select ser.stu_code from rms_service as ser where ser.stu_id = s.stu_id and ser.type=5) LIKE '%{$s_search}%'";
+    		$s_where[] = " (select ser.stu_code from rms_service as ser where ser.stu_id = s.stu_id and ser.type=4 LIMIT 1) LIKE '%{$s_search}%'";
+    		$s_where[] = " (select ser.stu_code from rms_service as ser where ser.stu_id = s.stu_id and ser.type=5 LIMIT 1) LIKE '%{$s_search}%'";
     		$s_where[] = " stu_enname LIKE '%{$s_search}%'";
     		$s_where[] = " stu_khname LIKE '%{$s_search}%'";
     		$s_where[] = " (select title from rms_program_name where rms_program_name.service_id=spd.service_id) LIKE '%{$s_search}%'";
@@ -124,13 +124,13 @@ class Allreport_Model_DbTable_DbRptPayableNextMonth extends Zend_Db_Table_Abstra
     	$sql="SELECT
 			    	sp.id,
 			    		
-			    	(select branch_namekh from rms_branch where br_id = sp.branch_id) as branch_name,
-			    	(select last_name from rms_users as u where u.id = sp.user_id) as user_name,
+			    	(select branch_namekh from rms_branch where br_id = sp.branch_id LIMIT 1) as branch_name,
+			    	(select last_name from rms_users as u where u.id = sp.user_id LIMIT 1) as user_name,
 			    		
 			    	sp.`receipt_number` AS receipt,
 			    	s.stu_code AS code,
-			    	(select ser.stu_code from rms_service as ser where ser.stu_id = s.stu_id and ser.type=4) as transport_code,
-			    	(select ser.stu_code from rms_service as ser where ser.stu_id = s.stu_id and ser.type=5) as lunch_code,
+			    	(select ser.stu_code from rms_service as ser where ser.stu_id = s.stu_id and ser.type=4 LIMIT 1) as transport_code,
+			    	(select ser.stu_code from rms_service as ser where ser.stu_id = s.stu_id and ser.type=5 LIMIT 1) as lunch_code,
 			    	CONCAT(stu_khname,' - ',stu_enname) AS name,
 					stu_khname,
 					stu_enname,
@@ -139,8 +139,8 @@ class Allreport_Model_DbTable_DbRptPayableNextMonth extends Zend_Db_Table_Abstra
 				    sp.discount_fix,
 				    sp.grand_total_payment,
 				    sp.note,
-			    	(select name_en from rms_view where rms_view.type=2 and key_code=s.sex) AS sex,
-			    	(select major_enname from rms_major where major_id = s.grade) as grade,
+			    	(select name_en from rms_view where rms_view.type=2 and key_code=s.sex LIMIT 1) AS sex,
+			    	(select major_enname from rms_major where major_id = s.grade LIMIT 1) as grade,
 			    	pn.`title` service,
 			    	spd.`start_date` as start,
 			    	spd.`validate` as end,
@@ -219,11 +219,11 @@ class Allreport_Model_DbTable_DbRptPayableNextMonth extends Zend_Db_Table_Abstra
 	    $s_search = addslashes(trim($search['txtsearch']));
     		$s_where[] = " sp.receipt_number LIKE '%{$s_search}%'";
     		$s_where[] = " s.stu_code LIKE '%{$s_search}%'";
-    		$s_where[] = " (select ser.stu_code from rms_service as ser where ser.stu_id = s.stu_id and ser.type=4) LIKE '%{$s_search}%'";
-    		$s_where[] = " (select ser.stu_code from rms_service as ser where ser.stu_id = s.stu_id and ser.type=5) LIKE '%{$s_search}%'";
+    		$s_where[] = " (select ser.stu_code from rms_service as ser where ser.stu_id = s.stu_id and ser.type=4 LIMIT 1) LIKE '%{$s_search}%'";
+    		$s_where[] = " (select ser.stu_code from rms_service as ser where ser.stu_id = s.stu_id and ser.type=5 LIMIT 1) LIKE '%{$s_search}%'";
     		$s_where[] = " stu_enname LIKE '%{$s_search}%'";
     		$s_where[] = " stu_khname LIKE '%{$s_search}%'";
-    		$s_where[] = " (select title from rms_program_name where rms_program_name.service_id=spd.service_id) LIKE '%{$s_search}%'";
+    		$s_where[] = " (select title from rms_program_name where rms_program_name.service_id=spd.service_id LIMIT 1) LIKE '%{$s_search}%'";
     		$s_where[] = " spd.comment LIKE '%{$s_search}%'";
     		$where .=' AND ( '.implode(' OR ',$s_where).')';
 	    }

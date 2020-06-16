@@ -68,9 +68,9 @@ class Allreport_Model_DbTable_DbRptStudentLate extends Zend_Db_Table_Abstract
     			$s_where = array();
     			$s_search = trim($search['txtsearch']);
     			$s_where[] = " sp.receipt_number LIKE '%{$s_search}%'";
-    			$s_where[] = " (select stu_code from rms_student where rms_student.stu_id=sp.student_id) LIKE '%{$s_search}%'";
-    			$s_where[] = " (select CONCAT(stu_khname,stu_enname) from rms_student where rms_student.stu_id=sp.student_id) LIKE '%{$s_search}%'";
-    			$s_where[] = " (select title from rms_program_name where rms_program_name.service_id=spd.service_id) LIKE '%{$s_search}%'";
+    			$s_where[] = " (select stu_code from rms_student where rms_student.stu_id=sp.student_id LIMIT 1) LIKE '%{$s_search}%'";
+    			$s_where[] = " (select CONCAT(stu_khname,stu_enname) from rms_student where rms_student.stu_id=sp.student_id LIMIT 1) LIKE '%{$s_search}%'";
+    			$s_where[] = " (select title from rms_program_name where rms_program_name.service_id=spd.service_id LIMIT 1) LIKE '%{$s_search}%'";
     			$s_where[] = " spd.comment LIKE '%{$s_search}%'";
     			$where .=' AND ( '.implode(' OR ',$s_where).')';
     		}

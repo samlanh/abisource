@@ -18,7 +18,7 @@ function getCustomer($search=null){
     	
     	$sql="SELECT 
     				c.*,
-    				(select branch_namekh from rms_branch where br_id = cp.branch_id) as branch_name,
+    				(select branch_namekh from rms_branch where br_id = cp.branch_id LIMIT 1) as branch_name,
     				cp.status As cp_status 
     			FROM 
     				rms_customer AS c,

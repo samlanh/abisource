@@ -25,21 +25,21 @@ class Allreport_Model_DbTable_DbRptDailyIncome extends Zend_Db_Table_Abstract
     	$sql = "SELECT
 			    	sp.*,
 			    	sp.id,
-			    	(select branch_namekh from rms_branch where br_id = sp.branch_id) as branch_name,
-			    	(select last_name from rms_users as u where u.id = sp.user_id) as user_name,
+			    	(select branch_namekh from rms_branch where br_id = sp.branch_id LIMIT 1) as branch_name,
+			    	(select last_name from rms_users as u where u.id = sp.user_id LIMIT 1) as user_name,
 			    	
 			    	sp.`student_id`,
 			    	st.`stu_code`,
 			    	st.`stu_enname`,
 			    	st.`stu_khname`,
-			    	(SELECT name_en FROM rms_view WHERE TYPE=2 AND key_code = st.`sex`) AS sex,
+			    	(SELECT name_en FROM rms_view WHERE TYPE=2 AND key_code = st.`sex` LIMIT 1) AS sex,
 			    	st.`tel`,
 			    	sp.`create_date`,
 			    	sp.`is_new`,
 			    	sp.`receipt_number`,
-			    	(select en_name from rms_dept where dept_id = sp.`degree`) as degree,
-			    	(select major_enname from rms_major where major_id =  sp.`grade`) as grade,
-			    	(select room_name from rms_room where rms_room.room_id = sp.`room_id`) as room,
+			    	(select en_name from rms_dept where dept_id = sp.`degree` LIMIT 1) as degree,
+			    	(select major_enname from rms_major where major_id =  sp.`grade` LIMIT 1) as grade,
+			    	(select room_name from rms_room where rms_room.room_id = sp.`room_id` LIMIT 1) as room,
 			    	sp.`time`,
 			    		
 			    	sp.`tuition_fee`,
@@ -144,21 +144,21 @@ class Allreport_Model_DbTable_DbRptDailyIncome extends Zend_Db_Table_Abstract
     	$sql = "SELECT
 					sp.*,
 					sp.id,
-					(select branch_namekh from rms_branch where br_id = sp.branch_id) as branch_name,
-			    	(select last_name from rms_users as u where u.id = sp.user_id) as user_name,
+					(select branch_namekh from rms_branch where br_id = sp.branch_id LIMIT 1) as branch_name,
+			    	(select last_name from rms_users as u where u.id = sp.user_id LIMIT 1) as user_name,
 			    	
 					sp.`student_id`,
 					st.`stu_code`,
 					st.`stu_enname`,
 					st.`stu_khname`,
-					(SELECT name_en FROM rms_view WHERE TYPE=2 AND key_code = st.`sex`) AS sex,
+					(SELECT name_en FROM rms_view WHERE TYPE=2 AND key_code = st.`sex` LIMIT 1) AS sex,
 					st.`tel`,
 					sp.`create_date`,
 					sp.`is_new`,
 					sp.`receipt_number`,
-					(select en_name from rms_dept where dept_id = sp.`degree`) as degree,
-					(select major_enname from rms_major where major_id =  sp.`grade`) as grade,
-					(select room_name from rms_room where rms_room.room_id = sp.`room_id`) as room,
+					(select en_name from rms_dept where dept_id = sp.`degree` LIMIT 1) as degree,
+					(select major_enname from rms_major where major_id =  sp.`grade` LIMIT 1) as grade,
+					(select room_name from rms_room where rms_room.room_id = sp.`room_id` LIMIT 1) as room,
 					sp.`time`,
 					
 					sp.`tuition_fee`,
@@ -262,21 +262,21 @@ class Allreport_Model_DbTable_DbRptDailyIncome extends Zend_Db_Table_Abstract
 			    	sp.*,
 			    	sp.id,
 			    	
-			    	(select branch_namekh from rms_branch where br_id = sp.branch_id) as branch_name,
-			    	(select last_name from rms_users as u where u.id = sp.user_id) as user_name,
+			    	(select branch_namekh from rms_branch where br_id = sp.branch_id LIMIT 1) as branch_name,
+			    	(select last_name from rms_users as u where u.id = sp.user_id LIMIT 1) as user_name,
 			    	
 			    	sp.`student_id`,
 			    	st.`stu_code`,
 			    	st.`stu_enname`,
 			    	st.`stu_khname`,
-			    	(SELECT name_en FROM rms_view WHERE TYPE=2 AND key_code = st.`sex`) AS sex,
+			    	(SELECT name_en FROM rms_view WHERE TYPE=2 AND key_code = st.`sex` LIMIT 1) AS sex,
 			    	st.`tel`,
 			    	sp.`create_date`,
 			    	sp.`is_new`,
 			    	sp.`receipt_number`,
-			    	(select en_name from rms_dept where dept_id = sp.`degree`) as degree,
-			    	(select major_enname from rms_major where major_id =  sp.`grade`) as grade,
-			    	(select room_name from rms_room where rms_room.room_id = sp.`room_id`) as room,
+			    	(select en_name from rms_dept where dept_id = sp.`degree` LIMIT 1) as degree,
+			    	(select major_enname from rms_major where major_id =  sp.`grade` LIMIT 1) as grade,
+			    	(select room_name from rms_room where rms_room.room_id = sp.`room_id` LIMIT 1) as room,
 			    	sp.`time`,
 			    	 
 			    	sp.`tuition_fee`,
@@ -379,16 +379,16 @@ class Allreport_Model_DbTable_DbRptDailyIncome extends Zend_Db_Table_Abstract
 			    	sp.*,
 			    	sp.id,
 			    	
-			    	(select branch_namekh from rms_branch where br_id = sp.branch_id) as branch_name,
-			    	(select last_name from rms_users as u where u.id = sp.user_id) as user_name,
+			    	(select branch_namekh from rms_branch where br_id = sp.branch_id LIMIT 1) as branch_name,
+			    	(select last_name from rms_users as u where u.id = sp.user_id LIMIT 1) as user_name,
 			    	
 			    	sp.`student_id`,
-			    	(select stu_code from rms_service where rms_service.stu_id = sp.student_id and rms_service.type=4) as stu_code ,
+			    	(select stu_code from rms_service where rms_service.stu_id = sp.student_id and rms_service.type=4 LIMIT 1) as stu_code ,
 			    	st.`stu_enname`,
 			    	st.`stu_khname`,
-			    	(SELECT name_en FROM rms_view WHERE TYPE=2 AND key_code = st.`sex`) AS sex,
-			    	(select title from rms_program_name as p where p.service_id = s.service_id) as service_name,
-			    	(select carid from rms_car where rms_car.id = s.car_id) as car_id,
+			    	(SELECT name_en FROM rms_view WHERE TYPE=2 AND key_code = st.`sex` LIMIT 1) AS sex,
+			    	(select title from rms_program_name as p where p.service_id = s.service_id LIMIT 1) as service_name,
+			    	(select carid from rms_car where rms_car.id = s.car_id LIMIT 1) as car_id,
 			    	
 			    	st.`tel`,
 			    	sp.`create_date`,
@@ -491,16 +491,16 @@ class Allreport_Model_DbTable_DbRptDailyIncome extends Zend_Db_Table_Abstract
 			    	sp.*,
 			    	sp.id,
 			    	
-			    	(select branch_namekh from rms_branch where br_id = sp.branch_id) as branch_name,
-			    	(select last_name from rms_users as u where u.id = sp.user_id) as user_name,
+			    	(select branch_namekh from rms_branch where br_id = sp.branch_id LIMIT 1) as branch_name,
+			    	(select last_name from rms_users as u where u.id = sp.user_id LIMIT 1) as user_name,
 			    	
 			    	sp.`student_id`,
-			    	(select stu_code from rms_service where rms_service.stu_id = sp.student_id and rms_service.type=5) as stu_code ,
+			    	(select stu_code from rms_service where rms_service.stu_id = sp.student_id and rms_service.type=5 LIMIT 1) as stu_code ,
 			    	st.`stu_enname`,
 			    	st.`stu_khname`,
-			    	(SELECT name_en FROM rms_view WHERE TYPE=2 AND key_code = st.`sex`) AS sex,
+			    	(SELECT name_en FROM rms_view WHERE TYPE=2 AND key_code = st.`sex` LIMIT 1) AS sex,
 			    
-			    	(select carid from rms_car where rms_car.id = (select car_id from rms_program_name where rms_program_name.service_id = spd.service_id)) as car_id,
+			    	(select carid from rms_car where rms_car.id = (select car_id from rms_program_name where rms_program_name.service_id = spd.service_id)  LIMIT 1) as car_id,
 			    
 			    	st.`tel`,
 			    	sp.`create_date`,
@@ -604,21 +604,21 @@ class Allreport_Model_DbTable_DbRptDailyIncome extends Zend_Db_Table_Abstract
 			    	sp.*,
 			    	sp.id,
 			    	
-			    	(select branch_namekh from rms_branch where br_id = sp.branch_id) as branch_name,
-			    	(select last_name from rms_users as u where u.id = sp.user_id) as user_name,
+			    	(select branch_namekh from rms_branch where br_id = sp.branch_id LIMIT 1) as branch_name,
+			    	(select last_name from rms_users as u where u.id = sp.user_id LIMIT 1) as user_name,
 			    	
 			    	sp.`student_id`,
 			    	st.`stu_code`,
 			    	st.`stu_enname`,
 			    	st.`stu_khname`,
-			    	(SELECT name_en FROM rms_view WHERE TYPE=2 AND key_code = st.`sex`) AS sex,
+			    	(SELECT name_en FROM rms_view WHERE TYPE=2 AND key_code = st.`sex` LIMIT 1) AS sex,
 			    	st.`tel`,
 			    	sp.`create_date`,
 			    	sp.`is_new`,
 			    	sp.`receipt_number`,
-			    	(select en_name from rms_dept where dept_id = sp.`degree`) as degree,
-			    	(select major_enname from rms_major where major_id =  st.`grade`) as grade,
-			    	(select room_name from rms_room where rms_room.room_id = sp.`room_id`) as room,
+			    	(select en_name from rms_dept where dept_id = sp.`degree` LIMIT 1) as degree,
+			    	(select major_enname from rms_major where major_id =  st.`grade` LIMIT 1) as grade,
+			    	(select room_name from rms_room where rms_room.room_id = sp.`room_id` LIMIT 1) as room,
 			    	sp.`time`,
 			    	 
 			    	sp.`tuition_fee`,
@@ -637,9 +637,9 @@ class Allreport_Model_DbTable_DbRptDailyIncome extends Zend_Db_Table_Abstract
 			    	
 			    	spd.service_id,
 					
-					(select product_type from rms_program_name as pn where pn.service_id = spd.service_id) as product_type,
+					(select product_type from rms_program_name as pn where pn.service_id = spd.service_id LIMIT 1) as product_type,
 					
-			    	(select title from rms_program_name where rms_program_name.service_id = spd.service_id) as service_name,
+			    	(select title from rms_program_name where rms_program_name.service_id = spd.service_id LIMIT 1) as service_name,
 			    	spd.`note`,
 			    	spd.`start_date`,
 			    	spd.`validate`,
@@ -720,8 +720,8 @@ class Allreport_Model_DbTable_DbRptDailyIncome extends Zend_Db_Table_Abstract
     	$sql = "SELECT
 			    	cp.id,
 			    	
-			    	(select branch_namekh from rms_branch where br_id = cp.branch_id) as branch_name,
-			    	(select last_name from rms_users as u where u.id = cp.user_id) as user_name,
+			    	(select branch_namekh from rms_branch where br_id = cp.branch_id LIMIT 1) as branch_name,
+			    	(select last_name from rms_users as u where u.id = cp.user_id LIMIT 1) as user_name,
 			    	
 			    	c.customer_code,
 			    	c.first_name,
@@ -801,7 +801,7 @@ class Allreport_Model_DbTable_DbRptDailyIncome extends Zend_Db_Table_Abstract
     
     function getAllGrade(){
     	$db = $this->getAdapter();
-    	$sql="select major_id as id, CONCAT(major_enname,' (',(select shortcut from rms_dept as d where d.dept_id = m.dept_id),')') as name from rms_major as m where is_active = 1  ";
+    	$sql="select major_id as id, CONCAT(major_enname,' (',(select shortcut from rms_dept as d where d.dept_id = m.dept_id LIMIT 1),')') as name from rms_major as m where is_active = 1  ";
     	return $db->fetchAll($sql);
     }
     

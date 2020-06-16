@@ -14,8 +14,8 @@ class Allreport_Model_DbTable_DbRptIncomeExpense extends Zend_Db_Table_Abstract
     	$branch_id = $_db->getAccessPermission();
     	
     	$sql = "SELECT *,
-    			(select curr_nameen from ln_currency where ln_currency.id=ln_income_expense.curr_type) as curr_name,
-    			(select CONCAT(last_name,' - ',first_name) from rms_users as u where u.id = user_id)  as name
+    			(select curr_nameen from ln_currency where ln_currency.id=ln_income_expense.curr_type LIMIT 1) as curr_name,
+    			(select CONCAT(last_name,' - ',first_name) from rms_users as u where u.id = user_id LIMIT 1)  as name
     			 from ln_income_expense  WHERE 1 $branch_id  ";
     	$where= ' ';
     	$order=" ORDER BY id DESC ";
