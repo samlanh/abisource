@@ -237,7 +237,7 @@ class Allreport_Model_DbTable_DbRptPaymentList extends Zend_Db_Table_Abstract
 	    
 	    	$where .= " AND ".$from_date." AND ".$to_date;
 	    }
-	    echo $sql.$where.$group_by;
+	  //  echo $sql.$where.$group_by;
 	    return $db->fetchAll($sql.$where.$group_by);
     }
     
@@ -1651,13 +1651,13 @@ class Allreport_Model_DbTable_DbRptPaymentList extends Zend_Db_Table_Abstract
     	$i=0;
     	 
     	if(!empty($data)){
-    		$string .= '<table width="100%" cellpadding="8" border="1"​ style="margin:0 auto;border-collapse: collapse;white-space: nowrap;font-family: Khmer OS Battambang;" >';
+    		$string .= '<table width="100%" cellpadding="8" border="1"​ style="margin:0 auto;border-collapse: collapse;white-space: nowrap;font-family: inherit;" >';
     		foreach ($data as $key => $rs){
     			if($rs['student_id']!=$student_id){
     				$i++;
     				if($key>0){
     					$string .= '<tr><td colspan="22">&nbsp;</td></tr></table>';
-    					$string .= '<table width="100%" cellpadding="8"​ border="1" style="margin:0 auto;border-collapse: collapse;white-space: nowrap;font-family: Khmer OS Battambang ;" >';
+    					$string .= '<table width="100%" cellpadding="8"​ border="1" style="margin:0 auto;border-collapse: collapse;white-space: nowrap;font-family: inherit ;" >';
     				}
     	
     				$string .= '<tr style=" font-size:12px; line-height:20px;  font-weight: bold;background: #c1d0f3;" align="center" >';
@@ -1671,7 +1671,7 @@ class Allreport_Model_DbTable_DbRptPaymentList extends Zend_Db_Table_Abstract
 	    				$string .= '<td style="border-bottom: 1px solid #000;" colspan="4">'.$tr->translate("CURRENT_GRADE").'</td>';
     				$string .= '</tr>';
     	
-    				$string .= '<tr style="font-size:12px; line-height:20px;font-family: Khmer OS Battambang ;background: #c1d0f3;" align="center">';
+    				$string .= '<tr style="font-size:12px; line-height:20px;font-family: inherit ;background: #c1d0f3;" align="center">';
 	    				$string .= '<td class="bor_r">'.$i.'</td>';
 	    				$string .= '<td class="bor_r" colspan="2">'.$rs['stu_code'].'</td>';
 	    				$string .= '<td class="bor_r" colspan="4">'.$rs['stu_khname'].'</td>';
@@ -1923,12 +1923,12 @@ class Allreport_Model_DbTable_DbRptPaymentList extends Zend_Db_Table_Abstract
 	    $i=0;
 	    
 	    if(!empty($data)){
-	    	$string .= '<table cellpadding="8" border="1"​ style="margin:0 auto;width:100%; border-collapse: collapse;white-space: nowrap;font-family: Khmer OS Battambang;" >';
+	    	$string .= '<table cellpadding="8" border="1"​ style="margin:0 auto;width:100%; border-collapse: collapse;white-space: nowrap;font-family: inherit;" >';
 	    	foreach ($data as $key => $rs){
 	    		if($rs['student_id']!=$student_id){$i++;
 	    			if($key>0 ){
 	    				$string .= '<tr><td colspan="25">&nbsp;</td></tr></table>';
-	    				$string .= '<table cellpadding="8"​ border="1" style="margin:0 auto;width:100%; border-collapse: collapse;white-space: nowrap;font-family: Khmer OS Battambang ;" >';
+	    				$string .= '<table cellpadding="8"​ border="1" style="margin:0 auto;width:100%; border-collapse: collapse;white-space: nowrap;font-family: inherit ;" >';
 	    			}
 	    			
 	    			$string .= '<tr style=" font-size:12px; line-height:20px;  font-weight: bold;background: #c1d0f3;" align="center" >';
@@ -1942,7 +1942,7 @@ class Allreport_Model_DbTable_DbRptPaymentList extends Zend_Db_Table_Abstract
 	    				$string .= '<td style="border-bottom: 1px solid #000;" colspan="4">'.$tr->translate("CURRENT_GRADE").'</td>';
 	    			$string .= '</tr>';
 	    			
-	    			$string .= '<tr style="font-size:12px; line-height:20px;font-family: Khmer OS Battambang ;background: #c1d0f3;" align="center">';
+	    			$string .= '<tr style="font-size:12px; line-height:20px;font-family: inherit ;background: #c1d0f3;" align="center">';
 	    				$string .= '<td class="bor_r">'.$i.'</td>';
 	    				$string .= '<td class="bor_r" colspan="2">'.$rs['stu_code'].'</td>';
 	    				$string .= '<td class="bor_r" colspan="4">'.$rs['stu_khname'].'</td>';
@@ -2199,13 +2199,13 @@ class Allreport_Model_DbTable_DbRptPaymentList extends Zend_Db_Table_Abstract
 	    $i=0;
 	     
 	    if(!empty($data)){
-	    	$string .= '<table cellpadding="8" border="1"​ style="margin:0 auto;width:100%; border-collapse: collapse;white-space: nowrap;font-family: Khmer OS Battambang;" >';
+	    	$string .= '<table cellpadding="8" border="1"​ style="margin:0 auto;width:100%; border-collapse: collapse;white-space: nowrap;font-family: inherit;" >';
 	    	foreach ($data as $key => $rs){
 	    		if($rs['student_id']!=$student_id){
 	    			$i++;
 	    			if($key>0 ){
 	    				$string .= '<tr><td colspan="25">&nbsp;</td></tr></table>';
-	    				$string .= '<table cellpadding="8"​ border="1" style="margin:0 auto;width:100%; border-collapse: collapse;white-space: nowrap;font-family: Khmer OS Battambang ;" >';
+	    				$string .= '<table cellpadding="8"​ border="1" style="margin:0 auto;width:100%; border-collapse: collapse;white-space: nowrap;font-family: inherit ;" >';
 	    			}
 	    
 	    			$string .= '<tr style=" font-size:12px; line-height:20px;  font-weight: bold;background: #c1d0f3;" align="center" >';
@@ -2219,7 +2219,7 @@ class Allreport_Model_DbTable_DbRptPaymentList extends Zend_Db_Table_Abstract
 		    			$string .= '<td style="border-bottom: 1px solid #000;" colspan="4">'.$tr->translate("CURRENT_GRADE").'</td>';
 	    			$string .= '</tr>';
 	    
-	    			$string .= '<tr style="font-size:12px; line-height:20px;font-family: Khmer OS Battambang ;background: #c1d0f3;" align="center">';
+	    			$string .= '<tr style="font-size:12px; line-height:20px;font-family: inherit ;background: #c1d0f3;" align="center">';
 		    			$string .= '<td class="bor_r">'.$i.'</td>';
 		    			$string .= '<td class="bor_r" colspan="2">'.$rs['stu_code'].'</td>';
 		    			$string .= '<td class="bor_r" colspan="3">'.$rs['stu_khname'].'</td>';
@@ -2457,13 +2457,13 @@ class Allreport_Model_DbTable_DbRptPaymentList extends Zend_Db_Table_Abstract
     	$i=0;
     	 
     	if(!empty($data)){
-    		$string .= '<table cellpadding="8" border="1"​ style="margin:0 auto;width:100%; border-collapse: collapse;white-space: nowrap;font-family: Khmer OS Battambang;" >';
+    		$string .= '<table cellpadding="8" border="1"​ style="margin:0 auto;width:100%; border-collapse: collapse;white-space: nowrap;font-family: inherit;" >';
     		foreach ($data as $key => $rs){
     			if($rs['student_id']!=$student_id){
     				$i++;
     				if($key>0 ){
     					$string .= '<tr><td colspan="25">&nbsp;</td></tr></table>';
-    					$string .= '<table cellpadding="8"​ border="1" style="margin:0 auto;width:100%; border-collapse: collapse;white-space: nowrap;font-family: Khmer OS Battambang ;" >';
+    					$string .= '<table cellpadding="8"​ border="1" style="margin:0 auto;width:100%; border-collapse: collapse;white-space: nowrap;font-family: inherit ;" >';
     				}
     	
     				$string .= '<tr style=" font-size:12px; line-height:20px;  font-weight: bold;background: #c1d0f3;" align="center" >';
@@ -2492,7 +2492,7 @@ class Allreport_Model_DbTable_DbRptPaymentList extends Zend_Db_Table_Abstract
     				if(!empty($current_time_id)){foreach ($current_time_id as $id){if($id==3){$current_time3 = "<img ".$style." src='".$img_src."' />" ;}}}
     				if(!empty($current_time_id)){foreach ($current_time_id as $id){if($id==4){$current_time4 = "<img ".$style." src='".$img_src."' />" ;}}}
     				
-    				$string .= '<tr style="font-size:12px; line-height:20px;font-family: Khmer OS Battambang ;background: #c1d0f3;" align="center">';
+    				$string .= '<tr style="font-size:12px; line-height:20px;font-family: inherit ;background: #c1d0f3;" align="center">';
 	    				$string .= '<td class="bor_r">'.$i.'</td>';
 	    				$string .= '<td class="bor_r" colspan="1">'.$rs['stu_code'].'</td>';
 	    				$string .= '<td class="bor_r" colspan="4">'.$rs['stu_khname'].'</td>';
@@ -2763,13 +2763,13 @@ class Allreport_Model_DbTable_DbRptPaymentList extends Zend_Db_Table_Abstract
 	    $i=0;
 	    
 	    if(!empty($data)){
-	    	$string .= '<table cellpadding="8" border="1"​ style="margin:0 auto;width:100%; border-collapse: collapse;white-space: nowrap;font-family: Khmer OS Battambang;" >';
+	    	$string .= '<table cellpadding="8" border="1"​ style="margin:0 auto;width:100%; border-collapse: collapse;white-space: nowrap;font-family: inherit;" >';
 	    	foreach ($data as $key => $rs){
 	    		if($rs['student_id']!=$student_id){
 	    			$i++;
 	    			if($key>0 ){
 	    				$string .= '<tr><td colspan="25">&nbsp;</td></tr></table>';
-	    				$string .= '<table cellpadding="8"​ border="1" style="margin:0 auto;width:100%; border-collapse: collapse;white-space: nowrap;font-family: Khmer OS Battambang ;" >';
+	    				$string .= '<table cellpadding="8"​ border="1" style="margin:0 auto;width:100%; border-collapse: collapse;white-space: nowrap;font-family: inherit ;" >';
 	    			}
 	    			 
 	    			$string .= '<tr style=" font-size:12px; line-height:20px;  font-weight: bold;background: #c1d0f3;" align="center" >';
@@ -2782,7 +2782,7 @@ class Allreport_Model_DbTable_DbRptPaymentList extends Zend_Db_Table_Abstract
 		    			$string .= '<td class="bor" colspan="2">'.$tr->translate("សេវាកម្មបច្ចុប្បន្ន").'</td>';
 	    			$string .= '</tr>';
 	    			 
-	    			$string .= '<tr style="font-size:12px; line-height:20px;font-family: Khmer OS Battambang ;background: #c1d0f3;" align="center">';
+	    			$string .= '<tr style="font-size:12px; line-height:20px;font-family: inherit ;background: #c1d0f3;" align="center">';
 		    			$string .= '<td class="bor_r">'.$i.'</td>';
 		    			$string .= '<td class="bor_r" colspan="2">'.$rs['stu_code'].'</td>';
 		    			$string .= '<td class="bor_r" colspan="4">'.$rs['stu_khname'].'</td>';
