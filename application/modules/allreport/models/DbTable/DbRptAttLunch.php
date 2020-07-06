@@ -19,8 +19,8 @@ class Allreport_Model_DbTable_DbRptAttLunch extends Zend_Db_Table_Abstract
     	$sql = "SELECT
 				  ser.`stu_code`,
 				  
-				  (select branch_namekh from rms_branch where br_id = ser.branch_id LIMIT 1) as branch_name,
-			      (select last_name from rms_users as u where u.id = sp.user_id LIMIT 1) as user_name,
+				  (SELECT branch_namekh FROM rms_branch WHERE br_id = ser.branch_id LIMIT 1) as branch_name,
+			      (SELECT last_name FROM rms_users as u WHERE u.id = sp.user_id LIMIT 1) as user_name,
 				  
 				  ser.service_id,
 				  st.stu_khname,
@@ -48,11 +48,11 @@ class Allreport_Model_DbTable_DbRptAttLunch extends Zend_Db_Table_Abstract
 				  AND spd.`service_id`=ser.`service_id`
 				  AND spd.`is_start`=1
 				  AND sp.`student_id`=ser.`stu_id`
-				  and ser.is_suspend=0
+				  AND ser.is_suspend=0
 				  $branch_id
     		  ";
     	
-    	$where = " ";
+    	$WHERE = " ";
     	$group_by = " group by ser.`stu_id` ";
     	$order=" ORDER BY ser.service_id ASC, ser.stu_code ASC";
     	
@@ -65,22 +65,22 @@ class Allreport_Model_DbTable_DbRptAttLunch extends Zend_Db_Table_Abstract
     		$s_where[] = " ser.stu_code LIKE '%{$s_search}%'";
     		$s_where[] = " st.stu_enname LIKE '%{$s_search}%'";
     		$s_where[] = " st.stu_khname LIKE '%{$s_search}%'";
-    		$where .=' AND ( '.implode(' OR ',$s_where).')';
+    		$WHERE .=' AND ( '.implode(' OR ',$s_where).')';
     	}
     	
     	if($search['service'] > 0){
-    		$where.= " AND ser.`service_id` = ".$search['service'];
+    		$WHERE.= " AND ser.`service_id` = ".$search['service'];
     	}
     	if($search['branch'] > 0){
-    		$where.= " AND ser.`branch_id` = ".$search['branch'];
+    		$WHERE.= " AND ser.`branch_id` = ".$search['branch'];
     	}
-    	return $db->fetchAll($sql.$where.$group_by.$order);
+    	return $db->fetchAll($sql.$WHERE.$group_by.$order);
     	 
     }
    
     function getAllLunchService(){
     	$db = $this->getAdapter();
-    	$sql="select service_id as id,title as name from rms_program_name where status=1 and service_id IN(91,92,93) ";
+    	$sql="SELECT service_id as id,title as name FROM rms_program_name WHERE status=1 AND service_id IN(91,92,93) ";
     	return $db->fetchAll($sql);
     }
     

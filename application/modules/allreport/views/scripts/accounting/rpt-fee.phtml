@@ -1,6 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	$this->headTitle('Report Fee'); 
+	$this->headTitle($tr->translate('RPT_FEE')); 
 	echo $this->headTitle(''); 
 	$frm=$this->form_search;
 // 	print_r($this->rs);exit();
@@ -35,13 +35,13 @@
 	<div id="divPrint">
 		<div id="exportExcel">
 		
-			<table  style="background:#fff; margin: 0 auto; ;white-space: nowrap;width: 100%;font-family: Khmer OS Battambang,Times New Roman;">
+			<table  style="background:#fff; margin: 0 auto; ;white-space: nowrap;width: 100%;font-family: 'Times New Roman','Khmer OS Battambang';">
 				<tr >
 					<td width="20%" align="center">
 						<img style="width: 60%;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>"><br />
 					</td>
 					<td width="60%"  align="center" >
-						<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate('RPT_FEE')?></strong><br />
+						<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate('RPT_FEE')?></strong><br />
 					</td>
 					<td width="20%" align="center">
 						<?php if($this->search['branch']>0 && !empty($this->rs)){echo "Branch : ".$this->rs[0]['branch_name'];}?>
@@ -50,13 +50,13 @@
 				
 				<style>
 					table tr th{background-color: #ccc;}	
-					table { page-break-inside:auto }
+					table {  page-break-inside:auto; font-family:'Times New Roman','Khmer OS Battambang'; }
 					tr{ page-break-inside:avoid; page-break-after:auto }									
 				</style>
 				
 				<tr>
 					<td colspan="3" id="exportExcel">
-						<table cellpadding="5"​ style="margin:0 auto;border: 1px solid #000;width:100%; border-collapse: collapse;font-family: Khmer OS Battambang,Times New Roman;white-space: nowrap;"  border="1" >
+						<table cellpadding="5"​ style="margin:0 auto;border: 1px solid #000;width:100%; border-collapse: collapse;font-family: 'Times New Roman','Khmer OS Battambang';white-space: nowrap;"  border="1" >
 							<tr style="font-size:13px; height: 20px;border: 1px solid #000;background-color: #ccc;line-height: 30px;font-weight: bold;" align="center" >
 								<td style="border: 1px solid #000;"><?php echo $tr->translate('N_O')?></td>
 								<td style="border: 1px solid #000;"><?php echo $tr->translate('ACADEMIC_YEAR')?></td>
@@ -98,22 +98,7 @@
 				</tr>
 				<tr >
 					<td colspan="3">
-						<table width="100%">
-							<tr>
-								<td align="center" width="25%">
-									<span style="font-size: 14px;"><?php echo $tr->translate("APPROVED_BY"); ?></span>
-								</td>
-								<td align="center" width="25%">
-									<span style="font-size: 14px;"><?php echo $tr->translate("VERIFIED_BY"); ?></span>
-								</td>
-								<td align="center" width="25%">
-									<span style="font-size: 14px;"><?php echo $tr->translate("CHECKED_BY"); ?></span>
-								</td>
-								<td align="center"  width="25%">
-									<span style="font-size: 14px;text-align: right;"><?php echo $tr->translate("PREPARED_BY"); ?></span>
-								</td>
-							</tr>
-						</table>
+						<?php echo $this->footerReport;?>
 					</td>
 				</tr>
 			</table>

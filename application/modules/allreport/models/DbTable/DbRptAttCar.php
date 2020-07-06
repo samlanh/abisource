@@ -19,8 +19,8 @@ class Allreport_Model_DbTable_DbRptAttCar extends Zend_Db_Table_Abstract
     	
     	$sql = "SELECT
 				  ser.`stu_code`,
-				  (SELECT branch_namekh from rms_branch where br_id = ser.branch_id LIMIT 1) as branch_name,
-			      (SELECT last_name from rms_users as u where u.id = sp.user_id LIMIT 1) as user_name,
+				  (SELECT branch_namekh FROM rms_branch WHERE br_id = ser.branch_id LIMIT 1) as branch_name,
+			      (SELECT last_name FROM rms_users as u WHERE u.id = sp.user_id LIMIT 1) as user_name,
 				  st.stu_khname,
 				  st.stu_enname,
 				  CONCAT(st.`stu_khname`,'-',st.`stu_enname`) AS name,
@@ -56,9 +56,9 @@ class Allreport_Model_DbTable_DbRptAttCar extends Zend_Db_Table_Abstract
 				  AND spd.`is_start`=1
 				  AND c.id = ser.`car_id`  
 				  AND sp.`student_id`=ser.`stu_id`
-				  and ser.is_suspend=0
+				  AND ser.is_suspend=0
 				  $branch_id ";
-    	$where = " ";
+    	$WHERE = " ";
     	$group_by = " group by ser.`stu_id` ";
     	$order=" ORDER BY c.`carid` ASC , ser.id ASC, ser.stu_code ASC ";
     	
@@ -73,19 +73,19 @@ class Allreport_Model_DbTable_DbRptAttCar extends Zend_Db_Table_Abstract
     		$s_where[] = " st.stu_khname LIKE '%{$s_search}%'";
     		$s_where[] = " c.carid LIKE '%{$s_search}%'";
     		$s_where[] = " c.drivername LIKE '%{$s_search}%'";
-    		$where .=' AND ( '.implode(' OR ',$s_where).')';
+    		$WHERE .=' AND ( '.implode(' OR ',$s_where).')';
     	}
     	if($search['carid'] > 0){
-    		$where.= " AND c.id = ".$search['carid'];
+    		$WHERE.= " AND c.id = ".$search['carid'];
     	}
     	if($search['service'] > 0){
-    		$where.= " AND ser.`service_id` = ".$search['service'];
+    		$WHERE.= " AND ser.`service_id` = ".$search['service'];
     	}
     	if($search['branch'] > 0){
-    		$where.= " AND ser.`branch_id` = ".$search['branch'];
+    		$WHERE.= " AND ser.`branch_id` = ".$search['branch'];
     	}
-    	//echo $sql.$where;
-    	return $db->fetchAll($sql.$where.$group_by.$order);
+    	//echo $sql.$WHERE;
+    	return $db->fetchAll($sql.$WHERE.$group_by.$order);
     }
    
     function getAllCar(){
@@ -94,13 +94,13 @@ class Allreport_Model_DbTable_DbRptAttCar extends Zend_Db_Table_Abstract
     	$_db = new Application_Model_DbTable_DbGlobal();
     	$branch_id = $_db->getAccessPermission("branch_id");
     	
-    	$sql="select id,carid as name from rms_car where status=1 $branch_id ";
+    	$sql="SELECT id,carid as name FROM rms_car WHERE status=1 $branch_id ";
     	return $db->fetchAll($sql);
     }
     
     function getAllService(){
     	$db = $this->getAdapter();
-    	$sql="select service_id as id,title as name from rms_program_name where status=1 and type=2";
+    	$sql="SELECT service_id as id,title as name FROM rms_program_name WHERE status=1 AND type=2";
     	return $db->fetchAll($sql);
     }
     

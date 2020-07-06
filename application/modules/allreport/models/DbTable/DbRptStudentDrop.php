@@ -26,30 +26,30 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
     	$sql = "SELECT 
     				st.stu_code as stu_id, 
     				
-    				(select branch_namekh from rms_branch where br_id = st.branch_id LIMIT 1) as branch_name,
+    				(SELECT branch_namekh FROM rms_branch WHERE br_id = st.branch_id LIMIT 1) as branch_name,
     				st.stu_khname,
     				st.stu_enname,
     				CONCAT(st.stu_khname,' - ',st.stu_enname) as name,
-			    	(select CONCAT(from_academic,'-',to_academic,'(',generation,')') from rms_tuitionfee where rms_tuitionfee.id=st.academic_year LIMIT 1) as academic_year,
-			    	(select name_en from rms_view where rms_view.type=4 and rms_view.key_code=st.session limit 1)AS session,
-			    	(select en_name from rms_dept where dept_id = st.degree LIMIT 1) as degree,
-			    	(select major_enname from rms_major where rms_major.major_id=st.grade limit 1)AS grade,
+			    	(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=st.academic_year LIMIT 1) as academic_year,
+			    	(SELECT name_en FROM rms_view WHERE rms_view.type=4 and rms_view.key_code=st.session LIMIT 1)AS session,
+			    	(SELECT en_name FROM rms_dept WHERE dept_id = st.degree LIMIT 1) as degree,
+			    	(SELECT major_enname FROM rms_major WHERE rms_major.major_id=st.grade LIMIT 1)AS grade,
 					(SELECT name_kh FROM `rms_view` WHERE `rms_view`.`type`=2 and `rms_view`.`key_code`=st.sex LIMIT 1)AS sex,
 					(SELECT name_kh FROM `rms_view` WHERE `rms_view`.`type`=5 and `rms_view`.`key_code`=stdp.`type` LIMIT 1) as type,
 					stdp.note,stdp.reason,
 					stdp.date,
-					(select name_kh from `rms_view` where `rms_view`.`type`=6 and `rms_view`.`key_code`=`stdp`.`status` LIMIT 1)AS status
-		 		from 
+					(SELECT name_kh FROM `rms_view` WHERE `rms_view`.`type`=6 and `rms_view`.`key_code`=`stdp`.`status` LIMIT 1)AS status
+		 		FROM 
     				rms_student_drop as stdp,
     				rms_student as st 
-    			where 
+    			WHERE 
     				stdp.stu_id=st.stu_id 
     				and stdp.status = 1 
     				and stdp.drop_from = 1
     				$branch_id
     		";
 
-    	$where=' ';
+    	$WHERE=' ';
     	
     	$order=" order by stdp.id DESC ";
     	
@@ -64,33 +64,33 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
     		$s_where[] = " st.stu_khname LIKE '%{$s_search}%'";
     		$s_where[] = " st.stu_enname LIKE '%{$s_search}%'";
     		$s_where[] = " (SELECT name_kh FROM `rms_view` WHERE `rms_view`.`type`=5 and `rms_view`.`key_code`=`stdp`.`type` LIMIT 1) LIKE '%{$s_search}%'";
-    		$where .=' AND ( '.implode(' OR ',$s_where).')';
+    		$WHERE .=' AND ( '.implode(' OR ',$s_where).')';
     	}
     	
     	$from_date =(empty($search['start_date']))? '1': "stdp.date >= '".$search['start_date']." 00:00:00'";
     	$to_date = (empty($search['end_date']))? '1': "stdp.date <= '".$search['end_date']." 23:59:59'";
-    	$where .= " AND ".$from_date." AND ".$to_date;
+    	$WHERE .= " AND ".$from_date." AND ".$to_date;
     	
     	if(!empty($search['study_year'])){
-    		$where.=' AND st.academic_year='.$search['study_year'];
+    		$WHERE.=' AND st.academic_year='.$search['study_year'];
     	}
     	if(!empty($search['grade_all'])){
-    		$where.=' AND st.grade='.$search['grade_all'];
+    		$WHERE.=' AND st.grade='.$search['grade_all'];
     	}
     	if(!empty($search['degree_all'])){
-    		$where.=' AND st.degree='.$search['degree_all'];
+    		$WHERE.=' AND st.degree='.$search['degree_all'];
     	}
     	if(!empty($search['session'])){
-    		$where.=' AND st.session='.$search['session'];
+    		$WHERE.=' AND st.session='.$search['session'];
     	}
     	if($search['branch'] > 0){
-    		$where.= " AND st.`branch_id` = ".$search['branch'];
+    		$WHERE.= " AND st.`branch_id` = ".$search['branch'];
     	}
     	if($search['user'] > 0){
-    		$where.= " AND stdp.`user_id` = ".$search['user'];
+    		$WHERE.= " AND stdp.`user_id` = ".$search['user'];
     	}
-    	//echo $sql.$where;
-    	return $db->fetchAll($sql.$where.$order);
+    	//echo $sql.$WHERE;
+    	return $db->fetchAll($sql.$WHERE.$order);
     	 
     }
    
@@ -104,24 +104,24 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
     	$sql = "SELECT
 			    	s.stu_code ,
 			    	
-			    	(select branch_namekh from rms_branch where br_id = st.branch_id LIMIT 1) as branch_name,
+			    	(SELECT branch_namekh FROM rms_branch WHERE br_id = st.branch_id LIMIT 1) as branch_name,
 			    	st.stu_khname,
     				st.stu_enname,
 			    	CONCAT(st.stu_khname,' - ',st.stu_enname) as name,
 			    	(SELECT name_kh FROM `rms_view` WHERE `rms_view`.`type`=2 and `rms_view`.`key_code`=st.sex LIMIT 1)AS sex,
 			    	st.tel,
 			    	
-			    	(select p.title from rms_program_name as p where p.service_id = s.service_id LIMIT 1) as service_name,
+			    	(SELECT p.title FROM rms_program_name as p WHERE p.service_id = s.service_id LIMIT 1) as service_name,
 			    	
 			    	(SELECT name_kh FROM `rms_view` WHERE `rms_view`.`type`=5 and `rms_view`.`key_code`=stdp.`type` LIMIT 1) as type,
 			    	stdp.reason,
 			    	stdp.date,
-			    	(select name_kh from `rms_view` where `rms_view`.`type`=6 and `rms_view`.`key_code`=`stdp`.`status` LIMIT 1)AS status
-			    from
+			    	(SELECT name_kh FROM `rms_view` WHERE `rms_view`.`type`=6 and `rms_view`.`key_code`=`stdp`.`status` LIMIT 1)AS status
+			    FROM
 			    	rms_student_drop as stdp,
 			    	rms_student as st,
 			    	rms_service as s
-			    where
+			    WHERE
 			    	stdp.stu_id=st.stu_id
 			    	and s.stu_id = stdp.stu_id
 			    	and stdp.status = 1
@@ -130,7 +130,7 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
 			    	$branch_id
     			";
     
-    	$where = ' ';
+    	$WHERE = ' ';
     	 
     	$order = " order by stdp.id DESC ";
     	 
@@ -145,23 +145,23 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
 		    $s_where[] = " st.stu_khname LIKE '%{$s_search}%'";
 		    $s_where[] = " st.stu_enname LIKE '%{$s_search}%'";
 		    $s_where[] = " (SELECT name_kh FROM `rms_view` WHERE `rms_view`.`type`=5 and `rms_view`.`key_code`=`stdp`.`type` LIMIT 1) LIKE '%{$s_search}%'";
-		    $where .=' AND ( '.implode(' OR ',$s_where).')';
+		    $WHERE .=' AND ( '.implode(' OR ',$s_where).')';
 	    }
 	    
 	    $from_date =(empty($search['start_date']))? '1': "stdp.date >= '".$search['start_date']." 00:00:00'";
 	    $to_date = (empty($search['end_date']))? '1': "stdp.date <= '".$search['end_date']." 23:59:59'";
-	    $where .= " AND ".$from_date." AND ".$to_date;
+	    $WHERE .= " AND ".$from_date." AND ".$to_date;
 	     
 	    if(!empty($search['service'])){
-	    	$where.=' AND s.service_id='.$search['service'];
+	    	$WHERE.=' AND s.service_id='.$search['service'];
 	    }
     	if($search['branch'] > 0){
-    		$where.= " AND st.`branch_id` = ".$search['branch'];
+    		$WHERE.= " AND st.`branch_id` = ".$search['branch'];
     	}
 	    if($search['user'] > 0){
-	    	$where.= " AND stdp.`user_id` = ".$search['user'];
+	    	$WHERE.= " AND stdp.`user_id` = ".$search['user'];
 	    }
-	    return $db->fetchAll($sql.$where.$order);
+	    return $db->fetchAll($sql.$WHERE.$order);
     }
     
     
@@ -174,24 +174,24 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
     	$sql = "SELECT
 			    	s.stu_code ,
 			    	
-			    	(select branch_namekh from rms_branch where br_id = st.branch_id LIMIT 1) as branch_name,
+			    	(SELECT branch_namekh FROM rms_branch WHERE br_id = st.branch_id LIMIT 1) as branch_name,
 			    	st.stu_khname,
     				st.stu_enname,
 			    	CONCAT(st.stu_khname,' - ',st.stu_enname) as name,
 			    	(SELECT name_kh FROM `rms_view` WHERE `rms_view`.`type`=2 and `rms_view`.`key_code`=st.sex LIMIT 1)AS sex,
 			    	st.tel,
 			    	
-			    	(select p.title from rms_program_name as p where p.service_id = s.service_id LIMIT 1) as service_name,
+			    	(SELECT p.title FROM rms_program_name as p WHERE p.service_id = s.service_id LIMIT 1) as service_name,
 			    	
 			    	(SELECT name_kh FROM `rms_view` WHERE `rms_view`.`type`=5 and `rms_view`.`key_code`=stdp.`type` LIMIT 1) as type,
 			    	stdp.reason,
 			    	stdp.date,
-			    	(select name_kh from `rms_view` where `rms_view`.`type`=6 and `rms_view`.`key_code`=`stdp`.`status` LIMIT 1)AS status
-			    from
+			    	(SELECT name_kh FROM `rms_view` WHERE `rms_view`.`type`=6 and `rms_view`.`key_code`=`stdp`.`status` LIMIT 1)AS status
+			    FROM
 			    	rms_student_drop as stdp,
 			    	rms_student as st,
 			    	rms_service as s
-			    where
+			    WHERE
 			    	stdp.stu_id=st.stu_id
 			    	and s.stu_id = stdp.stu_id
 			    	and stdp.status = 1
@@ -200,7 +200,7 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
 			    	$branch_id
     			";
     
-    	$where = ' ';
+    	$WHERE = ' ';
     	 
     	$order = " order by stdp.id DESC ";
     	 
@@ -215,23 +215,25 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
 		    $s_where[] = " st.stu_khname LIKE '%{$s_search}%'";
 		    $s_where[] = " st.stu_enname LIKE '%{$s_search}%'";
 		    $s_where[] = " (SELECT name_kh FROM `rms_view` WHERE `rms_view`.`type`=5 and `rms_view`.`key_code`=`stdp`.`type` LIMIT 1) LIKE '%{$s_search}%'";
-		    $where .=' AND ( '.implode(' OR ',$s_where).')';
+		    $WHERE .=' AND ( '.implode(' OR ',$s_where).')';
 	    }
 	    
 	    $from_date =(empty($search['start_date']))? '1': "stdp.date >= '".$search['start_date']." 00:00:00'";
 	    $to_date = (empty($search['end_date']))? '1': "stdp.date <= '".$search['end_date']." 23:59:59'";
-	    $where .= " AND ".$from_date." AND ".$to_date;
+	    $WHERE .= " AND ".$from_date." AND ".$to_date;
 	     
 	    if(!empty($search['service'])){
-	    	$where.=' AND s.service_id='.$search['service'];
+	    	$WHERE.=' AND s.service_id='.$search['service'];
 	    }
     	if($search['branch'] > 0){
-    		$where.= " AND st.`branch_id` = ".$search['branch'];
+    		$WHERE.= " AND st.`branch_id` = ".$search['branch'];
     	}
-	    if($search['user'] > 0){
-	    	$where.= " AND stdp.`user_id` = ".$search['user'];
-	    }
-	    return $db->fetchAll($sql.$where.$order);
+    	if (!empty($search['user'])){
+		    if($search['user'] > 0){
+		    	$WHERE.= " AND stdp.`user_id` = ".$search['user'];
+		    }
+    	}
+	    return $db->fetchAll($sql.$WHERE.$order);
     
     }
     

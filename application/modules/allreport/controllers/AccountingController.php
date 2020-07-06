@@ -38,6 +38,9 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$group= new Allreport_Model_DbTable_DbRptAllStudent();
 		$this->view->rs = $rs_rows = $group->getAllStudent($search);
 		$this->view->search=$search;
+		
+		$frm = new Application_Form_FrmPopupGlobal();
+		$this->view->footerReport = $frm->footerReportAdminInKhmer();
 	}
 	
 	public function rptAllAmountStudentAction(){
@@ -441,6 +444,9 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		}
 		$this->view->rs = $rs_rows;
 		$this->view->search = $search;
+		
+		$frm = new Application_Form_FrmPopupGlobal();
+		$this->view->footerReport = $frm->footerReportAdminInKhmer();
 	}
 	
 	public function headAddRecordTuitionFee($rs,$key){
@@ -539,6 +545,9 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 	
 		$this->view->rs = $rs_rows;
 		$this->view->search = $search;
+		
+		$frm = new Application_Form_FrmPopupGlobal();
+		$this->view->footerReport = $frm->footerReportAdminInKhmer();
 	}
 	
 	public function headAddRecordServiceFee($rs,$key){
@@ -624,6 +633,9 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$form->FrmSearchRegister();
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
+		
+		$frm = new Application_Form_FrmPopupGlobal();
+		$this->view->footerReport = $frm->footerReportAdminInKhmer();
 	}
 	
 	
@@ -657,6 +669,9 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$form->FrmSearchRegister();
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
+		
+		$frm = new Application_Form_FrmPopupGlobal();
+		$this->view->footerReport = $frm->footerReportAdminInKhmer();
 	
 	}
 	
@@ -695,6 +710,9 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$form->FrmSearchRegister();
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
+		
+		$frm = new Application_Form_FrmPopupGlobal();
+		$this->view->footerReport = $frm->footerReportAdminInKhmer();
 	}
 	
 	
@@ -1801,6 +1819,9 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$group= new Allreport_Model_DbTable_DbRptStudentDrop();
 		$this->view->rs = $rs_rows = $group->getAllStudentDrop($search);
 		$this->view->search=$search;
+		
+		$frm = new Application_Form_FrmPopupGlobal();
+		$this->view->footerReport = $frm->footerReportAdminEnglish();
 	}
 	
 	public function rptStudentDropTransportAction(){
@@ -1829,6 +1850,8 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		
 		$this->view->service = $db->getAllServiceByCategory(3); // 3 = transport service type
 		
+		$frm = new Application_Form_FrmPopupGlobal();
+		$this->view->footerReport = $frm->footerReportAdminEnglish();
 	}
 	
 	public function rptStudentDropLunchAndStayAction(){
@@ -1856,6 +1879,9 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$this->view->search=$search;
 		
 		$this->view->service = $db->getAllServiceByCategory(2); // 2 = lunch service type
+		
+		$frm = new Application_Form_FrmPopupGlobal();
+		$this->view->footerReport = $frm->footerReportAdminEnglish();
 	}
 
 	
@@ -1972,6 +1998,9 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 				
 			$this->view->search = $search;
 				
+			$frm = new Application_Form_FrmPopupGlobal();
+			$this->view->footerReport = $frm->footerReportAdminInKhmer();
+			
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -2005,6 +2034,9 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			$this->view->form_search=$form;
 	
 			$this->view->search = $search;
+			
+			$frm = new Application_Form_FrmPopupGlobal();
+			$this->view->footerReport = $frm->footerReportAdminInKhmer();
 	
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
@@ -2040,6 +2072,9 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			$this->view->form_search=$form;
 	
 			$this->view->search = $search;
+			
+			$frm = new Application_Form_FrmPopupGlobal();
+			$this->view->footerReport = $frm->footerReportAdminInKhmer();
 	
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
@@ -2077,6 +2112,9 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			
 			$db = new Allreport_Model_DbTable_DbRptAttCar();
 			$this->view->all_car = $db->getAllCar();
+			
+			$frm = new Application_Form_FrmPopupGlobal();
+			$this->view->footerReport = $frm->footerReportAdminInKhmer();
 	
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
@@ -2110,6 +2148,9 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			$this->view->form_search=$form;
 	
 			$this->view->search = $search;
+			
+			$frm = new Application_Form_FrmPopupGlobal();
+			$this->view->footerReport = $frm->footerReportAdminInKhmer();
 	
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
@@ -2543,6 +2584,9 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
 		$this->view->search = $search;
+		
+		$frm = new Application_Form_FrmPopupGlobal();
+		$this->view->footerReport = $frm->footerReportAdminInKhmer();
 	}
 	
 	public function editsubmitAction()

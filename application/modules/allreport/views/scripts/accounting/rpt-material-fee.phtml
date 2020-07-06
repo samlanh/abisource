@@ -1,6 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	$this->headTitle($tr->translate("RPR_PRODUCT_FEE")); 
+	$this->headTitle($tr->translate('RPR_PRODUCT_FEE')); 
 	echo $this->headTitle(''); 
 	$frm=$this->form_search;
 	
@@ -43,6 +43,7 @@
 	.row_control {
 	    display: table-row !important;
 	}
+	table {  font-family:'Times New Roman','Khmer OS Battambang'; }
 </style>
 
 <div style="border: 1px dotted #000;background: #fff;width: 27cm;margin: 0 auto;min-height: 27cm;padding: 0.5cm;">
@@ -75,7 +76,7 @@
 					
 					
 					<td width="56%" align="center">
-						<strong style="padding-left: 30px;font-weight:bold;font-family: Arial Black;color:#000; font-size: 18px;font-family:'Khmer MEF2';"><?php echo $tr->translate('RPR_PRODUCT_FEE')?></strong><br />
+						<strong style="padding-left: 30px;font-weight:bold; color:#000; font-size: 18px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate('RPR_PRODUCT_FEE')?></strong><br />
 					</td>
 					<td align="center" width="22%" style="white-space: nowrap;">
 						&nbsp;
@@ -83,6 +84,7 @@
 				</tr>
 				
 				<style>
+				table {  font-family:'Times New Roman','Khmer OS Battambang'; }
 					table tr th{background-color: #ccc;}	
 					.style_tr{
 						font-size:12px;
@@ -93,7 +95,7 @@
 				
 				<tr>
 					<td colspan="3" id="exportExcel">
-						<table cellpadding="5"​ style="font-family:'Khmer OS Battambang';margin:0 auto;border: 1px solid #000;width:100%; border-collapse: collapse;"  border="1" >
+						<table cellpadding="5"​ style="font-family:'Times New Roman','Khmer OS Battambang';margin:0 auto;border: 1px solid #000;width:100%; border-collapse: collapse;"  border="1" >
 							<tr style="font-size:13px; height: 20px;border: 1px solid #000;background-color: #ccc;line-height: 30px;font-weight: bold;" align="center" >
 								<td style="border: 1px solid #000;"><?php echo $tr->translate('N_O')?></td>
 								<td style="border: 1px solid #000;"><?php echo $tr->translate('NAME')?></td>
@@ -125,22 +127,7 @@
 				</tr>
 				<tr >
 					<td colspan="3" width="100%">
-						<table width="100%" style="font-family:'Khmer OS Battambang';">
-							<tr>
-								<td align="center" width="25%">
-									<span style="font-size: 14px;"><?php echo $tr->translate("APPROVED_BY"); ?></span>
-								</td>
-								<td align="center" width="25%">
-									<span style="font-size: 14px;"><?php echo $tr->translate("VERIFIED_BY"); ?></span>
-								</td>
-								<td align="center" width="25%">
-									<span style="font-size: 14px;"><?php echo $tr->translate("CHECKED_BY"); ?></span>
-								</td>
-								<td align="center"  width="25%">
-									<span style="font-size: 14px;"><?php echo $tr->translate("PREPARED_BY"); ?></span>
-								</td>
-							</tr>
-						</table>
+						<?php echo $this->footerReport;?>
 					</td>
 				</tr>
 			</table>

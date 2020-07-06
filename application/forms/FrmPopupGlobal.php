@@ -228,5 +228,27 @@ protected $tr;
 		';
 		return $str;
 	}
+	function footerReportAdminEnglish(){
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		$str='
+				<table width="100%">
+						<tr>
+							<td align="center" width="25%">
+								<span style="font-weight: bold;font-size: 14px;">Approved by</span>
+							</td>
+							<td align="center" width="25%">
+								<span style="font-weight: bold;font-size: 14px;">Verified by</span>
+							</td>
+							<td align="center" width="25%">
+								<span style="font-weight: bold;font-size: 14px;">Checked by</span>
+							</td>
+							<td align="center"  width="25%">
+								<span style="font-weight: bold;font-size: 14px;">Prepared by</span>
+							</td>
+						</tr>
+					</table>
+		';
+		return $str;
+	}
 }
 
