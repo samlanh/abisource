@@ -22,7 +22,7 @@
 		 <td> <?php echo $frm->getElement("grade_all");?></td>
 		 <td>
 		 	<select name="shift"  id="shift" dojoType="dijit.form.FilteringSelect" class="fullside" >
-		 		<option value="0" <?php if($this->search['shift']==0){echo 'selected="selected"';}?>>Shift</option>
+		 		<option value="0" <?php if($this->search['shift']==0){echo 'selected="selected"';}?>><?php echo $tr->translate("Shift");?></option>
 		 		<option value="1" <?php if($this->search['shift']==1){echo 'selected="selected"';}?>>10:30</option>
 		 		<option value="2" <?php if($this->search['shift']==2){echo 'selected="selected"';}?>>16:30</option>
 		 		<option value="3" <?php if($this->search['shift']==3){echo 'selected="selected"';}?>>19:00</option>

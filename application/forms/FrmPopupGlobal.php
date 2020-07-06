@@ -92,5 +92,141 @@ protected $tr;
 		return $this;
 	
 	}
+	
+	function footerReportAccountInEnglish(){
+		$str='
+				<table width="100%" border="0" style="white-space: nowrap;font-size: 13px;">
+					<tr align="center">
+						<td width="15%">Auditor</td>
+						<td width="18%">Senior Accountant</td>
+						<td width="18%">Accountant Income</td>
+						<td width="16%">Accounting Manager</td>
+						<td width="18%">School Principal</td>
+						<td width="15%">Cashier</td>
+					</tr>
+					<tr>
+						<td colspan="6">&nbsp;</td>
+					</tr>
+					<tr align="center">
+						<td>
+							<div style="font-size: 13px;line-height: 20px;">
+								Name:..............................<br />
+								Date:........../........../..........
+							</div>
+						</td>
+						<td>
+							<div style="font-size: 13px;line-height: 20px;">
+								Name:..............................<br />
+								Date:........../........../..........
+							</div>
+						</td>
+						<td>
+							<div style="font-size: 13px;line-height: 20px;">
+								Name:..............................<br />
+								Date:........../........../..........
+							</div>
+						</td>
+						<td>
+							<div style="font-size: 13px;line-height: 20px;">
+								Name:..............................<br />
+								Date:........../........../..........
+							</div>
+						</td>
+						<td>
+							<div style="font-size: 13px;line-height: 20px;">
+								Name:..............................<br />
+								Date:........../........../..........
+							</div>
+						</td>
+						<td>
+							<div style="font-size: 13px;line-height: 20px;">
+								Name:..............................<br />
+								Date:........../........../..........
+							</div>
+						</td>
+					</tr>
+				</table>
+		';
+		return $str;
+	}
+	function footerReportAccountInKhmer(){
+		
+		$str='
+			<table width="100%" border="0" style="white-space: nowrap;font-size: 13px;">
+				<tr align="center">
+					<td width="15%">សវនករ</td>
+					<td width="18%">ប្រធានក្រុមគណនេយ្យ</td>
+					<td width="18%">គណនេយ្យចំណូល</td>
+					<td width="16%">ប្រធានផ្នែកគណនេយ្យ</td>
+					<td width="18%">ប្រធានសាខា</td>
+					<td width="15%">បេឡាករ</td>
+				</tr>
+				<tr>
+					<td colspan="6">&nbsp;</td>
+				</tr>
+				<tr align="center">
+					<td>
+						<div style="font-size: 13px;line-height: 20px;">
+							ឈ្មោះ:..............................<br />
+							ថ្ងៃទី:........../........../..........
+						</div>
+					</td>
+					<td>
+						<div style="font-size: 13px;line-height: 20px;">
+							ឈ្មោះ:..............................<br />
+							ថ្ងៃទី:........../........../..........
+						</div>
+					</td>
+					<td>
+						<div style="font-size: 13px;line-height: 20px;">
+							ឈ្មោះ:..............................<br />
+							ថ្ងៃទី:........../........../..........
+						</div>
+					</td>
+					<td>
+						<div style="font-size: 13px;line-height: 20px;">
+							ឈ្មោះ:..............................<br />
+							ថ្ងៃទី:........../........../..........
+						</div>
+					</td>
+					<td>
+						<div style="font-size: 13px;line-height: 20px;">
+							ឈ្មោះ:..............................<br />
+							ថ្ងៃទី:........../........../..........
+						</div>
+					</td>
+					<td>
+						<div style="font-size: 13px;line-height: 20px;">
+							ឈ្មោះ:..............................<br />
+							ថ្ងៃទី:........../........../..........
+						</div>
+					</td>
+				</tr>
+			</table>
+		';
+		return $str;
+	}
+	function footerReportAdminInKhmer(){
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		$str='
+				<table width="100%" border="0" style="white-space: nowrap;font-size: 13px;">
+						<tr>
+							<td align="center" width="25%">
+								<span style="font-size: 14px;">'.$tr->translate("APPROVED_BY").'</span>
+							</td>
+							<td align="center" width="25%">
+								<span style="font-size: 14px;">'.$tr->translate("VERIFIED_BY").'</span>
+							</td>
+							<td align="center" width="25%">
+								<span style="font-size: 14px;">'.$tr->translate("CHECKED_BY").'</span>
+							</td>
+							<td align="center"  width="25%">
+								<span style="font-size: 14px;text-align: right;">'.$tr->translate("PREPARED_BY").'</span>
+							</td>
+						</tr>
+					</table>
+		';
+		return $str;
+	}
 }
 

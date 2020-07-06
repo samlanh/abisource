@@ -264,12 +264,14 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			$db = new Allreport_Model_DbTable_DbRptStudentBalance();
 			$this->view->rs = $db->getAllStudentBalance($search);
 			$this->view->search = $search;
-// 			print_r($abc);exit();
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			echo $e->getMessage();
 		}
+		
+		$frm = new Application_Form_FrmPopupGlobal();
+		$this->view->footerReport = $frm->footerReportAdminInKhmer();
 	}
 	public function rptexpectincomeAction(){
 		try{
@@ -323,6 +325,9 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			$this->view->form_search=$form;
 			
 			$this->view->search = $search;
+			
+			$frm = new Application_Form_FrmPopupGlobal();
+			$this->view->footerReport = $frm->footerReportAdminInKhmer();
 			
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
@@ -776,6 +781,9 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$form->FrmSearchRegister();
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
+		
+		$frm = new Application_Form_FrmPopupGlobal();
+		$this->view->footerReport = $frm->footerReportAdminInKhmer();
 	}
 	
 	function getEnglishfulltimedataAction(){
@@ -895,6 +903,9 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$db = new Allreport_Model_DbTable_DbRptPaymentList();
 		$this->view->all_month = $db->getAllMonth();
 		
+		$frm = new Application_Form_FrmPopupGlobal();
+		$this->view->footerReport = $frm->footerReportAdminInKhmer();
+		
 	}
 	
 	function getKhmerdataAction(){
@@ -1010,6 +1021,9 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$form->FrmSearchRegister();
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
+		
+		$frm = new Application_Form_FrmPopupGlobal();
+		$this->view->footerReport = $frm->footerReportAdminInKhmer();
 	}
 	
 	function getEnglishparttimedataAction(){
@@ -1112,6 +1126,9 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$form->FrmSearchRegister();
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
+		
+		$frm = new Application_Form_FrmPopupGlobal();
+		$this->view->footerReport = $frm->footerReportAdminInKhmer();
 	}
 	
 	function getTransportdataAction(){
@@ -1211,6 +1228,9 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$form->FrmSearchRegister();
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
+		
+		$frm = new Application_Form_FrmPopupGlobal();
+		$this->view->footerReport = $frm->footerReportAdminInKhmer();
 	}
 	
 	function getFooddataAction(){
@@ -1291,6 +1311,9 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$form->FrmSearchRegister();
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
+		
+		$frm = new Application_Form_FrmPopupGlobal();
+		$this->view->footerReport = $frm->footerReportAccountInEnglish();
 	}
 	
 	public function rptDailyIncomeEnglishParttimeAction(){
@@ -1333,6 +1356,9 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$form->FrmSearchRegister();
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
+		
+		$frm = new Application_Form_FrmPopupGlobal();
+		$this->view->footerReport = $frm->footerReportAccountInEnglish();
 	}
 	
 	
@@ -1376,6 +1402,9 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$form->FrmSearchRegister();
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
+		
+		$frm = new Application_Form_FrmPopupGlobal();
+		$this->view->footerReport = $frm->footerReportAccountInKhmer();
 	}
 	
 	
@@ -1399,10 +1428,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			$db = new Allreport_Model_DbTable_DbRptDailyIncome();
 			$this->view->rs = $db->getDailyIncomeTransport($search);
 	
-			// 			print_r($this->view->rs);
-	
 			$this->view->search = $search;
-	
 			$this->view->rate = $db->getRate();
 	
 		}catch(Exception $e){
@@ -1416,6 +1442,9 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$form->FrmSearchRegister();
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
+		
+		$frm = new Application_Form_FrmPopupGlobal();
+		$this->view->footerReport = $frm->footerReportAccountInEnglish();
 	}
 	
 	
@@ -1438,11 +1467,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 	
 			$db = new Allreport_Model_DbTable_DbRptDailyIncome();
 			$this->view->rs = $db->getDailyIncomeFoodandstay($search);
-	
-			// 			print_r($this->view->rs);
-	
 			$this->view->search = $search;
-	
 			$this->view->rate = $db->getRate();
 	
 		}catch(Exception $e){
@@ -1456,6 +1481,9 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$form->FrmSearchRegister();
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
+		
+		$frm = new Application_Form_FrmPopupGlobal();
+		$this->view->footerReport = $frm->footerReportAccountInEnglish();
 	}
 	
 	
@@ -1496,6 +1524,9 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$form->FrmSearchRegister();
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
+		
+		$frm = new Application_Form_FrmPopupGlobal();
+		$this->view->footerReport = $frm->footerReportAccountInEnglish();
 	}
 	
 	
@@ -1516,11 +1547,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 	
 			$db = new Allreport_Model_DbTable_DbRptDailyIncome();
 			$this->view->rs = $db->getDailyIncomeParkingCanteen($search);
-	
-			// 						print_r($this->view->rs);
-	
 			$this->view->search = $search;
-	
 			$this->view->rate = $db->getRate();
 	
 		}catch(Exception $e){
@@ -1534,6 +1561,9 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$form->FrmSearchRegister();
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
+		
+		$frm = new Application_Form_FrmPopupGlobal();
+		$this->view->footerReport = $frm->footerReportAccountInEnglish();
 	}
 	
 	public function rptResultIncomeAction(){
@@ -1668,6 +1698,9 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$form->FrmSearchRegister();
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
+		
+		$frm = new Application_Form_FrmPopupGlobal();
+		$this->view->footerReport = $frm->footerReportAccountInEnglish();
 	}
 	
 	
@@ -1706,6 +1739,9 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$form->FrmSearchRegister();
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
+		
+		$frm = new Application_Form_FrmPopupGlobal();
+		$this->view->footerReport = $frm->footerReportAdminInKhmer();
 	}
 	
 	public function rptCusNearlyEndServiceAction(){
@@ -1732,6 +1768,9 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$forms=$form->FrmSearchRegister();
 		Application_Model_Decorator::removeAllDecorator($forms);
 		$this->view->form_search=$form;
+		
+		$frm = new Application_Form_FrmPopupGlobal();
+		$this->view->footerReport = $frm->footerReportAdminInKhmer();
 	}
 	 
 	
@@ -1861,6 +1900,9 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			echo $e->getMessage();
 		}
+		
+		$frm = new Application_Form_FrmPopupGlobal();
+		$this->view->footerReport = $frm->footerReportAccountInEnglish();
 	}
 	
 	
@@ -1884,7 +1926,6 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			$this->view->expense_category = $db->getAllCategory(0);
 			$this->view->fix_asset=$db->getAllFixAssetName();
 	
-			//print_r($abc);exit();
 			$form=new Registrar_Form_FrmSearchInfor();
 			$form->FrmSearchRegister();
 			Application_Model_Decorator::removeAllDecorator($form);
@@ -1897,6 +1938,9 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			echo $e->getMessage();
 		}
+		
+		$frm = new Application_Form_FrmPopupGlobal();
+		$this->view->footerReport = $frm->footerReportAdminInKhmer();
 	}
 	
 /////////////////////////////////////////////// payable next month ////////////////////////////////////////////////////////////////////////////////////////////////////	
@@ -2098,6 +2142,9 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			$this->view->form_search=$form;
 		
 			$this->view->search = $search;
+			
+			$frm = new Application_Form_FrmPopupGlobal();
+			$this->view->footerReport = $frm->footerReportAdminInKhmer();
 		
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
@@ -2128,6 +2175,9 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			$this->view->form_search=$form;
 	
 			$this->view->search = $search;
+			
+			$frm = new Application_Form_FrmPopupGlobal();
+			$this->view->footerReport = $frm->footerReportAdminInKhmer();
 	
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
@@ -2164,6 +2214,9 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			$this->view->form_search=$form;
 	
 			$this->view->search = $search;
+			
+			$frm = new Application_Form_FrmPopupGlobal();
+			$this->view->footerReport = $frm->footerReportAccountInEnglish();
 	
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
@@ -2208,6 +2261,10 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		
 		$_db = new Allreport_Model_DbTable_DbRptDailyIncome();
 		$this->view->rate = $_db->getRate();
+		
+		
+		$frm = new Application_Form_FrmPopupGlobal();
+		$this->view->footerReport = $frm->footerReportAccountInEnglish();
 	}
 	
 	function rptFixedAssetAction(){
@@ -2242,6 +2299,9 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 	
 		$_db = new Allreport_Model_DbTable_DbRptDailyIncome();
 		$this->view->rate = $_db->getRate();
+		
+		$frm = new Application_Form_FrmPopupGlobal();
+		$this->view->footerReport = $frm->footerReportAdminInKhmer();
 	}
 	
 	function rptFixedAssetDetailAction(){
@@ -2309,6 +2369,9 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			echo $e->getMessage();
 		}
+		
+		$frm = new Application_Form_FrmPopupGlobal();
+		$this->view->footerReport = $frm->footerReportAdminInKhmer();
 	}
 	
 	function rptStudentChangeCarAction(){

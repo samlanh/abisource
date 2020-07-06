@@ -13,7 +13,7 @@
 		    	<td><?php echo $frm->getElement('user');?></td>
 		    	<td>
 				 	<select name="shift"  id="shift" dojoType="dijit.form.FilteringSelect" class="fullside" >
-				 		<option value="0" <?php if($this->search['shift']==0){echo 'selected="selected"';}?>>Shift</option>
+				 		<option value="0" <?php if($this->search['shift']==0){echo 'selected="selected"';}?>><?php echo $tr->translate("Shift");?></option>
 				 		<option value="1" <?php if($this->search['shift']==1){echo 'selected="selected"';}?>>10:30am</option>
 				 		<option value="2" <?php if($this->search['shift']==2){echo 'selected="selected"';}?>>04:30pm</option>
 				 		<option value="3" <?php if($this->search['shift']==3){echo 'selected="selected"';}?>>07:00pm</option>
@@ -49,21 +49,21 @@
 			.padd{
 				padding: 3px;	
 			}
-			#row{ font-size:12px; height: 30px;border: 1px solid #000;font-family:'Khmer OS Battambang';  }
+			#row{ font-size:12px; height: 30px;border: 1px solid #000;font-family:'Times New Roman','Khmer OS Battambang';  }
 		</style>
 		
 	<?php 
 		$shift = array(1=>"10:30am",2=>"04:30pm",3=>"07:00pm");
 	?>
 	
-		<table style="background:#fff;width:90%; margin: 0 auto;width: 100%;font-family:'Khmer OS Battambang';">
+		<table style="background:#fff;width:90%; margin: 0 auto;width: 100%;font-family:'Times New Roman','Khmer OS Battambang';">
 			<tr>
 				<td width="22%" align="center">
 					<img style="width:50%;" src="<?php echo $this->baseUrl().'/images/logo.png'?>">
 				</td>
 				<td align="center" width="56%" style="font-weight:bold;color:#000;">
-					<strong style="font-size: 18px;font-family:Khmer MEF2,Times New Roman;​;​"><?php echo $tr->translate("Summary of Total Income"); ?></strong><br />
-					<strong style="font-family: Khmer OS Battambang,Times New Roman;color:#000; font-size: 14px;">For Date <?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> to <?php echo date("d-M-Y",strtotime($this->search["end_date"]));?></strong> <br />   
+					<strong style="font-size: 18px;font-family:'Times New Roman','Khmer OS Muol Light';​​"><?php echo $tr->translate("Summary of Total Income"); ?></strong><br />
+					<strong style="font-family: 'Times New Roman','Khmer OS Battambang';color:#000; font-size: 14px;">For Date <?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> to <?php echo date("d-M-Y",strtotime($this->search["end_date"]));?></strong> <br />   
 					<?php if($this->search['shift']>0){echo "Time : ".$shift[$this->search['shift']]." , "."Shift : ".$this->search['shift'];}?>
 				</td>
 				<td align="center" width="22%" style="white-space: nowrap;">
@@ -72,7 +72,7 @@
 			</tr>
 			<tr>
 				<td colspan="3" id="exportExcel">
-					<table cellpadding="8"​ style="font-size:14px; margin:0 auto;width:100%; border-collapse: collapse;white-space: nowrap;font-family:'Khmer OS Battambang'; border: 1px solid #000;"  border="1" >
+					<table cellpadding="8"​ style="font-size:14px; margin:0 auto;width:100%; border-collapse: collapse;white-space: nowrap;font-family:'Times New Roman','Khmer OS Battambang'; border: 1px solid #000;"  border="1" >
 						<thead>
 							<tr style=" font-size:14px; height: 20px;  line-height: 30px; font-weight: bold;background: #c1d0f3;" align="center" >
 								<td><?php echo $tr->translate("Title"); ?></td>
@@ -497,57 +497,7 @@
 						</tr>
 						<tr>
 							<td colspan="2">
-								<table width="100%" border="0" style="white-space: nowrap;font-size: 13px;">
-									<tr align="center">
-										<td width="15%">Auditor</td>
-										<td width="18%">Accountant Income</td>
-										<td width="16%">Accounting Manager</td>
-										<td width="18%">Cash Collector</td>
-										<td width="18%">School Principal</td>
-										<td width="15%">Cashier</td>
-									</tr>
-									<tr>
-										<td colspan="6">&nbsp;</td>
-									</tr>
-									<tr align="center">
-										<td>
-											<div style="font-size: 13px;line-height: 20px;">
-												Name:..............................<br />
-												Date:........../........../..........
-											</div>
-										</td>
-										<td>
-											<div style="font-size: 13px;line-height: 20px;">
-												Name:..............................<br />
-												Date:........../........../..........
-											</div>
-										</td>
-										<td>
-											<div style="font-size: 13px;line-height: 20px;">
-												Name:..............................<br />
-												Date:........../........../..........
-											</div>
-										</td>
-										<td>
-											<div style="font-size: 13px;line-height: 20px;">
-												Name:..............................<br />
-												Date:........../........../..........
-											</div>
-										</td>
-										<td>
-											<div style="font-size: 13px;line-height: 20px;">
-												Name:..............................<br />
-												Date:........../........../..........
-											</div>
-										</td>
-										<td>
-											<div style="font-size: 13px;line-height: 20px;">
-												Name:..............................<br />
-												Date:........../........../..........
-											</div>
-										</td>
-									</tr>
-								</table>							
+								<?php echo $this->footerReport;?>							
 							</td>
 						</tr>
 					</table>

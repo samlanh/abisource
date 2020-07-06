@@ -19,20 +19,20 @@ class Allreport_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
 				  sp.`receipt_number` AS receipt,
 				  sp.payfor_type,
 				  sp.note,
-				  (select branch_namekh from rms_branch where br_id = sp.branch_id limit 1) as branch_name,
+				  (SELECT branch_namekh FROM rms_branch WHERE br_id = sp.branch_id LIMIT 1) as branch_name,
 				  
 				  s.stu_code,
-				  (select ser.stu_code from rms_service as ser where ser.stu_id= sp.student_id and ser.type=4 limit 1) as transport_code,
-				  (select ser.stu_code from rms_service as ser where ser.stu_id= sp.student_id and ser.type=5 limit 1) as lunch_code,
+				  (SELECT ser.stu_code FROM rms_service as ser WHERE ser.stu_id= sp.student_id AND ser.type=4 LIMIT 1) as transport_code,
+				  (SELECT ser.stu_code FROM rms_service as ser WHERE ser.stu_id= sp.student_id AND ser.type=5 LIMIT 1) as lunch_code,
 				  
 				  CONCAT(s.stu_khname,' - ',s.stu_enname) AS name,
 				  s.stu_khname,
 				  s.stu_enname,
-				  (select name_en from rms_view where rms_view.type=2 and key_code=s.sex limit 1)AS sex,
+				  (SELECT name_en FROM rms_view WHERE rms_view.type=2 AND key_code=s.sex LIMIT 1)AS sex,
 				  s.tel,
 				  
-				  (select en_name from rms_dept where dept_id=s.degree limit 1) as degree,
-				  (select major_enname from rms_major where major_id=s.grade limit 1) as grade,
+				  (SELECT en_name FROM rms_dept WHERE dept_id=s.degree LIMIT 1) as degree,
+				  (SELECT major_enname FROM rms_major WHERE major_id=s.grade LIMIT 1) as grade,
 				  
 				  pn.`title` service,
 				  spd.discount_percent,
@@ -46,54 +46,54 @@ class Allreport_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
 				  `rms_program_name` AS pn,
 				  rms_student as s
 				WHERE spd.`is_start` = 1
-				  and sp.is_void=0
+				  AND sp.is_void=0
 				  AND s.stu_id=sp.student_id 
 				  AND sp.id=spd.`payment_id`
 				  AND spd.`service_id`=pn.`service_id` 
-				  and s.is_subspend=0
+				  AND s.is_subspend=0
 				  $branch_id
     		";
     	
      	$order=" ORDER by spd.`validate` DESC ";
-     	//$from_date =(empty($search['start_date']))? '1': "sp.create_date >= '".$search['start_date']." 00:00:00'";
-     	$where=" ";
+     	//$FROM_date =(empty($search['start_date']))? '1': "sp.create_date >= '".$search['start_date']." 00:00:00'";
+     	$WHERE=" ";
      	$str_next = '+1 week';
      	$search['end_date']=date("Y-m-d", strtotime($search['end_date'].$str_next));
 
-//      $from_date = (empty($search['start_date']))? '1': "spd.validate >= '".$search['start_date']." 00:00:00'";
+//      $FROM_date = (empty($search['start_date']))? '1': "spd.validate >= '".$search['start_date']." 00:00:00'";
      	$to_date = (empty($search['end_date']))? '1': "spd.validate <= '".$search['end_date']." 23:59:59'";
-     	//$where .= " AND ".$from_date." AND ".$to_date;
-     	$where .= " AND ".$to_date;
+     	//$WHERE .= " AND ".$FROM_date." AND ".$to_date;
+     	$WHERE .= " AND ".$to_date;
      	
      	if($search['service']>0){
-     		$where .=" and spd.service_id=".$search['service'];
+     		$WHERE .=" AND spd.service_id=".$search['service'];
      	}
      	if($search['branch'] > 0){
-     		$where.= " AND sp.`branch_id` = ".$search['branch'];
+     		$WHERE.= " AND sp.`branch_id` = ".$search['branch'];
      	}
      	if($search['degree_all']>0){
-     		$where.=" AND s.degree=".$search['degree_all'];
+     		$WHERE.=" AND s.degree=".$search['degree_all'];
      	}
      	if($search['grade_all']>0){
-     		$where.=" AND s.grade=".$search['grade_all'];
+     		$WHERE.=" AND s.grade=".$search['grade_all'];
      	}
      	
     	if(!empty($search['txtsearch'])){
-    		$s_where = array();
+    		$s_WHERE = array();
     		$s_search = addslashes(trim($search['txtsearch']));
-    		$s_where[] = " sp.receipt_number LIKE '%{$s_search}%'";
-    		$s_where[] = " s.stu_code  LIKE '%{$s_search}%'";
-    		$s_where[] = " (select ser.stu_code from rms_service as ser where ser.stu_id= sp.student_id and ser.type=4 limit 1)  LIKE '%{$s_search}%'";
-    		$s_where[] = " (select ser.stu_code from rms_service as ser where ser.stu_id= sp.student_id and ser.type=5 limit 1)  LIKE '%{$s_search}%'";
-    		$s_where[] = " s.stu_khname LIKE '%{$s_search}%'";
-    		$s_where[] = " s.stu_enname LIKE '%{$s_search}%'";
-    		$s_where[] = " (select title from rms_program_name where rms_program_name.service_id=spd.service_id limit 1) LIKE '%{$s_search}%'";
-    		$s_where[] = " spd.comment LIKE '%{$s_search}%'";
-    		$where .=' AND ( '.implode(' OR ',$s_where).')';
+    		$s_WHERE[] = " sp.receipt_number LIKE '%{$s_search}%'";
+    		$s_WHERE[] = " s.stu_code  LIKE '%{$s_search}%'";
+    		$s_WHERE[] = " (SELECT ser.stu_code FROM rms_service as ser WHERE ser.stu_id= sp.student_id AND ser.type=4 LIMIT 1)  LIKE '%{$s_search}%'";
+    		$s_WHERE[] = " (SELECT ser.stu_code FROM rms_service as ser WHERE ser.stu_id= sp.student_id AND ser.type=5 LIMIT 1)  LIKE '%{$s_search}%'";
+    		$s_WHERE[] = " s.stu_khname LIKE '%{$s_search}%'";
+    		$s_WHERE[] = " s.stu_enname LIKE '%{$s_search}%'";
+    		$s_WHERE[] = " (SELECT title FROM rms_program_name WHERE rms_program_name.service_id=spd.service_id LIMIT 1) LIKE '%{$s_search}%'";
+    		$s_WHERE[] = " spd.comment LIKE '%{$s_search}%'";
+    		$WHERE .=' AND ( '.implode(' OR ',$s_WHERE).')';
     	}
     		
-//     		echo $sql.$where;
-    	return $db->fetchAll($sql.$where.$order);
+//     		echo $sql.$WHERE;
+    	return $db->fetchAll($sql.$WHERE.$order);
     }
     
 }

@@ -32,6 +32,11 @@
 </div>
 <div style="border: 1px dotted #000;background: #fff;width: 27cm;margin: 0 auto;min-height: 27cm; padding: 0.5cm;">
 	<div id="divPrint">
+		<style>
+			table{
+				font-family: 'Times New Roman','Khmer OS Battambang';
+			}
+		</style>
 		<div id="exportExcel">
 			<table style="background:#fff;width:100%; margin: 0 auto;width: 100%;">
 				
@@ -40,7 +45,7 @@
 						<img style="width:70%;" src="<?php echo $this->baseUrl().'/images/logo.png'?>"><br />
 					</td>
 					<td align="center" width="60%">
-						<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';">របាយការណ៏​​ សិស្សជិតដល់ថ្ងៃបង់លុយ</strong><br />
+						<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Times New Roman','Khmer OS Muol Light';">របាយការណ៏​​ សិស្សជិតដល់ថ្ងៃបង់លុយ</strong><br />
 						<span style="font-weight: bold;font-size: 11px;">&nbsp; For Date &nbsp;<?php echo date("d-M-Y",strtotime($this->search['end_date']));?></span><br /><br />
 					</td>
 					<td width="20%" align="right">
@@ -130,22 +135,7 @@
 				</tr>
 				<tr >
 					<td colspan="3" align="center" >
-						<table width="100%">
-							<tr>
-								<td align="center" width="25%">
-									<span style="font-size: 14px;"><?php echo $tr->translate("APPROVED_BY"); ?></span>
-								</td>
-								<td align="center" width="25%">
-									<span style="font-size: 14px;"><?php echo $tr->translate("VERIFIED_BY"); ?></span>
-								</td>
-								<td align="center" width="25%">
-									<span style="font-size: 14px;"><?php echo $tr->translate("CHECKED_BY"); ?></span>
-								</td>
-								<td align="center"  width="25%">
-									<span style="font-size: 14px;text-align: right;"><?php echo $tr->translate("PREPARED_BY"); ?></span>
-								</td>
-							</tr>
-						</table>
+						<?php echo $this->footerReport;?>
 					</td>
 				</tr>
 			</table>

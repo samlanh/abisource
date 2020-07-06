@@ -1,6 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	$this->headTitle('Report Student Balance'); 
+	$this->headTitle($tr->translate("STUDENT_BALANCE_REPORT")); 
 	echo $this->headTitle(''); 
 	$frm=$this->form_search;
 	
@@ -27,7 +27,7 @@
 			</td>
 			<td>
 				<select name="status" id="status" dojoType="dijit.form.FilteringSelect" class="fullside"  >
-					<option value="" <?php if($this->search['status']==""){echo "selected='selected'";}?>>select status</option>
+					<option value="" <?php if($this->search['status']==""){echo "selected='selected'";}?>><?php echo $tr->translate("SELECT_STATUS")?></option>
 					<option value="1" <?php if($this->search['status']==1){echo "selected='selected'";}?>>បង់រួច</option>
 					<option value="0" <?php if($this->search['status']==0){echo "selected='selected'";}?>>មិនទាន់បង់</option>
 				</select>
@@ -36,7 +36,7 @@
 		<tr>	
 			<td>
 				<select name="payfor_type" id="payfor_type" dojoType="dijit.form.FilteringSelect" class="fullside"  >
-					<option value="" <?php if($this->search['payfor_type']==""){echo "selected='selected'";}?>>select type</option>
+					<option value="" <?php if($this->search['payfor_type']==""){echo "selected='selected'";}?>><?php echo $tr->translate("Select Type")?></option>
 					<option value="1" <?php if($this->search['payfor_type']==1){echo "selected='selected'";}?>>Khmer Fulltime</option>
 					<option value="6" <?php if($this->search['payfor_type']==6){echo "selected='selected'";}?>>English Fulltime</option>
 					<option value="2" <?php if($this->search['payfor_type']==2){echo "selected='selected'";}?>>English Parttime</option>
@@ -55,6 +55,11 @@
 </div>
 <div style="border: 1px dotted #000;background: #fff;width: 27cm;margin: 0 auto;min-height: 27cm;padding: 0.5cm;">
 	<div id="divPrint">
+		<style>
+			table{
+				font-family: 'Times New Roman','Khmer OS Battambang';
+			}
+		</style>
 		<div id="exportExcel" >
 			<table  style="background:#fff; margin: 0 auto;width: 100%;">
 				<tr>
@@ -62,8 +67,10 @@
 						<img style="width:50%;" src="<?php echo $this->baseUrl().'/images/logo.png'?>"><br />
 					</td>
 					<td align="center" width="44%">
-						<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate("REPORT_STUDENT_BALANCE")?></strong><br />
+						<strong style="font-weight:bold; color:#000; font-size: 16px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("STUDENT_BALANCE_REPORT")?></strong><br />
+						<?php if (!empty($this->search['start_date'])){?>
 						<span style="font-weight: bold;font-size: 14px;">From &nbsp;<?php echo date("d-M-Y",strtotime($this->search['start_date']));?> &nbsp;To&nbsp; <?php echo date("d-M-Y",strtotime($this->search['end_date']));?></span><br />
+						<?php }?>
 						<?php if(!empty($this->search['payfor_type'])){?>
 						<span style="font-weight: bold;font-size: 14px;"><?php echo $payfor_type[$this->search['payfor_type']];?></span>
 						<?php }?>
@@ -73,7 +80,7 @@
 				</tr>
 				<tr>
 					<td colspan="3">
-						<table cellpadding="5"​ style="margin:0 auto;border: 1px solid #000;width:100%; border-collapse: collapse;white-space: nowrap;font-family: Khmer OS Battambang,Times New Roman;"  border="1" >
+						<table cellpadding="5"​ style="margin:0 auto;border: 1px solid #000;width:100%; border-collapse: collapse;white-space: nowrap;font-family: 'Times New Roman','Khmer OS Battambang';"  border="1" >
 							<tr style="font-size:13px; height: 20px;border: 1px solid #000;background-color: #ccc;line-height: 30px;font-weight: bold;" align="center" >
 								<td style="border: 1px solid #000;"><?php echo $tr->translate("N_O");?></td>
 								<td style="border: 1px solid #000;"><?php echo $tr->translate("RECEIPT_NO");?></td>
@@ -157,22 +164,7 @@
 				</tr>
 				<tr >
 					<td colspan="3" align="center" >
-						<table width="100%" style="font-family: Khmer OS Battambang,Times New Roman;">
-							<tr>
-								<td align="center" width="25%">
-									<span style="font-size: 14px;"><?php echo $tr->translate("APPROVED_BY"); ?></span>
-								</td>
-								<td align="center" width="25%">
-									<span style="font-size: 14px;"><?php echo $tr->translate("VERIFIED_BY"); ?></span>
-								</td>
-								<td align="center" width="25%">
-									<span style="font-size: 14px;"><?php echo $tr->translate("CHECKED_BY"); ?></span>
-								</td>
-								<td align="center"  width="25%">
-									<span style="font-size: 14px;text-align: right;"><?php echo $tr->translate("PREPARED_BY"); ?></span>
-								</td>
-							</tr>
-						</table>
+						<?php echo $this->footerReport;?>
 					</td>
 				</tr>
 			</table>
