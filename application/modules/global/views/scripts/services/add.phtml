@@ -4,6 +4,14 @@
 ?>	
 <?php  $item= $this->frm_item;?>
 <form  id='acc_item' action="<?php echo $this->url(array('module'=>'global','controller'=>'services','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+		<script type="dojo/method" event="onSubmit">			
+			if(this.validate()) {
+				loadingBlock();
+				return true;
+			} else {
+				return false;
+			}
+	 </script>
 		<table cellspacing="10" width="50%" style="margin: 0 auto;">
 			<tr>
 				<td>
@@ -23,14 +31,10 @@
 							<td><?php  echo $item->getElement('type');?></td>
 						</tr>
 						<tr>
-							<td style="width: 5px"><?php echo $tr->translate("STATUS")?></td>
-							<td><?php  echo $item->getElement('status');?></td>
-						</tr>
-						<tr>
 							<td colspan="2" align="center">
-							<input iconClass="dijitIconUndo" type="button" value="<?php echo $tr->translate("áž�áŸ’ážšáž›áž”áŸ‹áž€áŸ’ážšáŸ„áž™");?>" 
+							<input iconClass="dijitIconUndo" type="button" value="<?php echo $tr->translate("GO_BACK");?>" 
 											label="<?php echo $tr->translate("GO_BACK");?>" dojoType="dijit.form.Button" onclick="window.location = '<?php echo $this->url(array('module'=>'accounting','controller'=>"services",'action'=>'index'),null,true); ?>';"/>
-							<input type="submit" label="<?php echo $tr->translate('GO_SAVE');?>"â€‹â€‹â€‹â€‹ value="<?php echo $tr->translate('GO_SAVE');?>" id="submitButton" dojoType="dijit.form.Button" 
+							<input type="submit" label="<?php echo $tr->translate('GO_SAVE');?>" value="<?php echo $tr->translate('GO_SAVE');?>" id="submitButton" dojoType="dijit.form.Button" 
 								 iconClass="dijitEditorIcon dijitEditorIconSave"/>
 							</td>
 						</tr>

@@ -10,6 +10,7 @@
 <form action="<?php echo $this->url(array('module'=>'global','controller'=>'branch','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 	 <script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
+				loadingBlock();
 				return true;
 			} else {
 				return false;
@@ -45,10 +46,6 @@
 										<td><?php echo $frm->getElement("fax");?></td>	
 										<td><?php echo $tr->translate("NOTE")?></td>
 										<td><?php echo $frm->getElement("branch_note");?></td>
-									</tr>
-									<tr>
-										<td><?php echo $tr->translate("STATUS")?></td>
-										<td><?php echo $frm->getElement("branch_status");?></td>
 									</tr>
 								</table>
 							</td>	

@@ -2,8 +2,10 @@
 class Global_ServicesController extends Zend_Controller_Action {
 	private $activelist = array('មិនប្រើ​ប្រាស់', 'ប្រើ​ប្រាស់');
 	private $type = array(1=>'service',2=>'program');
+	protected $tr;
 	public function init()
     {    	
+    	$this->tr=Application_Form_FrmLanguages::getCurrentlanguage();
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 	}
@@ -64,10 +66,8 @@ class Global_ServicesController extends Zend_Controller_Action {
 				}else{
 					if(isset($_data['save_close'])){
 						Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/global/services");
-					}else{
-						Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/global/services/add");
 					}
-					Application_Form_FrmMessage::message("INSERT_SUCCESS");
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/global/services/add");
 				}
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("INSERT_FAIL");
@@ -87,8 +87,15 @@ class Global_ServicesController extends Zend_Controller_Action {
 				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", "/global/services/index");
 			}
 			$id = $this->getRequest()->getParam('id');
+			$id = empty($id)?0:$id;
 			$model = new Global_Model_DbTable_DbServiceType();
 			$row = $model->getServiceTypeById($id);
+			
+			if (empty($row)){
+				Application_Form_FrmMessage::Sucessfull($this->tr->translate("NO_RECORD"),"/global/services/index");
+				exit();
+			}
+			
 			$item=new Accounting_Form_Frmitem();
 			$frm_item=$item->FrmProgramType($row);
 			Application_Model_Decorator::removeAllDecorator($frm_item);

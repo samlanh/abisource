@@ -1,9 +1,10 @@
 <?php
 class Global_RoomController extends Zend_Controller_Action {
-	private $activelist = array('មិនប្រើ​ប្រាស់', 'ប្រើ​ប្រាស់');
+	protected $tr;
     public function init()
     {    	
      /* Initialize action controller here */
+    	$this->tr=Application_Form_FrmLanguages::getCurrentlanguage();
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 	}
@@ -49,10 +50,10 @@ class Global_RoomController extends Zend_Controller_Action {
    		try {
    			$_dbmodel = new Global_Model_DbTable_DbRoom();
    			$_major_id = $_dbmodel->addNewRoom($_data);
-   			Application_Form_FrmMessage::message("ការ​បញ្ចូល​ជោគ​ជ័យ !");
+   			Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/global/room/index");
    
    		} catch (Exception $e) {
-   			Application_Form_FrmMessage::message("ការ​បញ្ចូល​មិន​ជោគ​ជ័យ");
+   			Application_Form_FrmMessage::message($this->tr->translate("INSERT_FAIL"));
    			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
    		}
    
@@ -65,8 +66,8 @@ class Global_RoomController extends Zend_Controller_Action {
    public function editAction()
    {
 	   	$id=$this->getRequest()->getParam("id");
-	   	$db = new Global_Model_DbTable_DbRoom();
-	   	$row = $db->getRoomById($id);
+	   	$id = empty($id)?0:$id;
+	   	
 	   	if($this->getRequest()->isPost())
 	   	{
 	   		try{
@@ -80,6 +81,12 @@ class Global_RoomController extends Zend_Controller_Action {
 	   			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 	   		}
 	   	}
+	   	$db = new Global_Model_DbTable_DbRoom();
+	   	$row = $db->getRoomById($id);
+	   	if (empty($row)){
+	   		Application_Form_FrmMessage::Sucessfull($this->tr->translate("NO_RECORD"),"/global/room/index");
+	   		exit();
+	   	}
 	   	$obj=new Global_Form_FrmAddClass();
 	   	$frm_room=$obj->FrmAddClass($row);
 	   	$this->view->update_room=$frm_room;
@@ -87,13 +94,13 @@ class Global_RoomController extends Zend_Controller_Action {
    }
    function addroomAction()//ajax
    {
-   	if($this->getRequest()->isPost()){
+   		if($this->getRequest()->isPost()){
    			$_data = $this->getRequest()->getPost();
    			$_dbmodel = new Global_Model_DbTable_DbRoom();
    			$roomid = $_dbmodel->addAjaxRoom($_data);
    			print_r(Zend_Json::encode($roomid));
    			exit();
-   	}
+   		}
    }
 }
 

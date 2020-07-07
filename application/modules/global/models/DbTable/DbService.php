@@ -26,7 +26,7 @@ class Global_Model_DbTable_DbService extends Zend_Db_Table_Abstract
     				'ser_cate_id'=>$_data['title'],
     				'description'=>$_data['description'],
     				'create_date'=>Zend_Date::now(),
-    				'status'	=>$_data['status'],
+    				'status'	=>1,
     				'user_id'	=>$this->getUserId(),
     		);
     		return ($this->insert($_arr));

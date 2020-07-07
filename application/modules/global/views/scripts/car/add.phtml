@@ -12,6 +12,7 @@
 				dijit.byId('branch_id').focus();
 				return false;
 			}
+			loadingBlock();
     		return true;
    		}else {
     		return false;
@@ -31,7 +32,7 @@
 										<td><?php echo $tr->translate("BRANCH")?></td>
 										<td>
 											<select dojoType="dijit.form.FilteringSelect"  class="fullside" id="branch_id" name="branch_id" type="text">
-												<option value="-1">select branch</option>
+												<option value="-1"><?php echo $tr->translate("SELECT_BRANCH")?></option>
 												<?php if(!empty($this->branch)){foreach ($this->branch as $branch){?>
 													<option value="<?php echo $branch['id']?>"><?php echo $branch['name']?></option>
 												<?php }}?>
@@ -53,15 +54,6 @@
 									<tr>
 										<td><?php echo $tr->translate("NOTE")?></td>
 										<td><input dojoType="dijit.form.TextBox"  class="fullside" id="note" name="note" value="" type="text"></td>
-									</tr>
-									<tr>
-										<td><?php echo $tr->translate("STATUS")?></td>
-										<td>
-											<select dojoType="dijit.form.FilteringSelect"  class="fullside" id="status" name="status" type="text">
-												<option value="1">Active</option>
-												<option value="0">Deactive</option>
-											</select>
-										</td>
 									</tr>
 									<tr>
 										<td colspan="2" align="center">

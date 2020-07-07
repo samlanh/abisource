@@ -14,7 +14,6 @@ class Global_Model_DbTable_DbServiceType extends Zend_Db_Table_Abstract
     	$_arr = array(
     			'title'=>$_data['title'],
     			'item_desc'=>$_data['item_desc'],
-    			'status'=>$_data['status'],
     			'type'=>$_data['type'],
     			'create_date'=> new Zend_Date(),
     			'user_id' => $this->getUserId(),
@@ -22,9 +21,11 @@ class Global_Model_DbTable_DbServiceType extends Zend_Db_Table_Abstract
     	
     	if(!empty($_data['id'])){
     		$db = $this->getAdapter();
+    		$_arr['status']=$_data['status'];
     		$where = $db->quoteInto('id=?', $_data['id']);
     		$this->update($_arr, $where);
     	}else{
+    		$_arr['status']=1;
     		$this->insert($_arr);
     	}
     }

@@ -20,7 +20,6 @@ class Global_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     		}
     	}
     	$_arr = array(
-    			//'parent'=>$_data['main_branch_id'],
     			'branch_namekh'=>$_data['branch_nameen'],
     			'prefix'=>$_data['prefix_code'],
     			'br_address'=>$_data['br_address'],
@@ -28,7 +27,7 @@ class Global_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     			'branch_tel'=>$phone_list,
     			'fax'=>$_data['fax'],
     			'other'=>$_data['branch_note'],
-    			'status'=>$_data['branch_status'],
+    			'status'=>1,
     			'displayby'=>2,
     			);
     	$this->insert($_arr);//insert data
@@ -49,7 +48,6 @@ class Global_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     		}
     	}
     	$_arr = array(
-    			//'parent'=>$_data['main_branch_id'],
     			'branch_namekh'=>$_data['branch_nameen'],
     			'prefix'      => $_data['prefix_code'],
     			'br_address'=>$_data['br_address'],
@@ -87,7 +85,6 @@ class Global_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     	if($search['status_search']>-1){
     		$where.= " AND b.status = ".$search['status_search'];
     	}
-//     	(SELECT name_en FROM `rms_view` AS v WHERE v.`type` = 4 AND v.key_code = b.displayby)AS displayby,
     	if(!empty($search['adv_search'])){
     		$s_where=array();
     		$s_search=trim(addslashes($search['adv_search']));
@@ -102,24 +99,13 @@ class Global_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     		$where.=' AND ('.implode(' OR ',$s_where).')';
     	}
     	$order=' ORDER BY b.br_id DESC';
-   		//echo $sql.$where;
   	 	return $db->fetchAll($sql.$where.$order);
     }
     
 	function getBranchById($id){
     	$db = $this->getAdapter();
     	$sql = "SELECT 
-    				br_id,
-    				prefix,
-    				branch_namekh,
-    				branch_nameen,
-    				br_address,
-    				branch_code,
-    				branch_tel,
-    				fax,
-    				displayby,
-    				other,
-    				status 
+    				* 
     			FROM
     				rms_branch
     			WHERE 

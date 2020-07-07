@@ -13,7 +13,7 @@ class Global_Model_DbTable_DbRoom extends Zend_Db_Table_Abstract
 		$_arr=array(
 				'room_name'	  => $_data['classname'],
 				'modify_date' => Zend_Date::now(),
-				'is_active'   => $_data['status'],
+				'is_active'   => 1,
 				'user_id'	  => $this->getUserId()
 		);
 		return  $this->insert($_arr);

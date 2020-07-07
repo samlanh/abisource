@@ -41,6 +41,7 @@ dojo.ready(function(){
 						dijit.byId("dept").focus();
 						return false;
    					 }
+					loadingBlock();
 					return true;
    				}else {
 					return false;
@@ -107,8 +108,8 @@ dojo.ready(function(){
 					<td><?php echo $tr->translate("STATUS");?></td>
 					<td>
 						<select dojoType="dijit.form.FilteringSelect" id="status_fac" name="status_fac"  class="fullsize" type="text">
-							<option value='1'>Active</option>
-							<option value='2'>Deactive</option>
+							<option value='1'><?php echo $tr->translate("ACTIVE");?></option>
+							<option value='2'><?php echo $tr->translate("DEACTIVE");?></option>
 						</select>
 					</td>
 				</tr>

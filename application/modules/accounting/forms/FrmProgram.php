@@ -61,8 +61,8 @@ Class Accounting_Form_FrmProgram extends Zend_Dojo_Form {
 		$_branch->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$branch = $_db->getAllBranch();
-		$branch_opt = array('-1'=>'select branch ');
-		array_unshift($branch, array('id'=>'50','name'=>'all branch'));
+		$branch_opt = array('-1'=>$this->tr->translate("SELECT_BRANCH"));
+		array_unshift($branch, array('id'=>'50','name'=>$this->tr->translate("ALL_BRANCH")));
 		if(!empty($branch)){foreach ($branch as $row){
 			$branch_opt[$row['id']]=$row['name'];
 		}}

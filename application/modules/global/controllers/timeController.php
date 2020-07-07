@@ -1,9 +1,11 @@
 <?php
 class Global_TimeController extends Zend_Controller_Action {
 	private $activelist = array('មិនប្រើ​ប្រាស់', 'ប្រើ​ប្រាស់');
+	protected $tr;
     public function init()
     {    	
      /* Initialize action controller here */
+    	$this->tr=Application_Form_FrmLanguages::getCurrentlanguage();
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 	}
@@ -48,10 +50,10 @@ class Global_TimeController extends Zend_Controller_Action {
 	   		try {
 	   			$db = new Global_Model_DbTable_DbTime();
 	   			$db->addTime($_data);
-	   			Application_Form_FrmMessage::message("ការ​បញ្ចូល​ជោគ​ជ័យ !");
+	   			Application_Form_FrmMessage::Sucessfull($this->tr->translate("INSERT_SUCCESS"), "/global/time");
 	   
 	   		} catch (Exception $e) {
-	   			Application_Form_FrmMessage::message("ការ​បញ្ចូល​មិន​ជោគ​ជ័យ");
+	   			Application_Form_FrmMessage::message($this->tr->translate("INSERT_FAIL"));
 	   			echo $e->getMessage();
 	   		}
 	   	}
@@ -59,6 +61,8 @@ class Global_TimeController extends Zend_Controller_Action {
    public function editAction()
    {
 	   	$id=$this->getRequest()->getParam("id");
+	   	$id = empty($id)?0:$id;
+	   	
 	   	$db = new Global_Model_DbTable_DbTime();
 	   	
 	   	if($this->getRequest()->isPost())
@@ -74,8 +78,12 @@ class Global_TimeController extends Zend_Controller_Action {
 	   		}
 	   	}
 	   	
-	   	$this->view->row = $db->getTimeById($id);
-	   	
+	 	 $row	= $db->getTimeById($id);
+	   	if (empty($row)){
+	   		Application_Form_FrmMessage::Sucessfull($this->tr->translate("NO_RECORD"),"/global/time/index");
+	   		exit();
+	   	}
+	   	$this->view->row = $row;
 	   	
    }
    

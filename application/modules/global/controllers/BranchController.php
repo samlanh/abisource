@@ -4,8 +4,8 @@ class Global_BranchController extends Zend_Controller_Action {
 	protected $tr;
 	public function init()
 	{
-		$this->tr=Application_Form_FrmLanguages::getCurrentlanguage();
 		/* Initialize action controller here */
+		$this->tr=Application_Form_FrmLanguages::getCurrentlanguage();
 		header('content-type: text/html; charset=utf8');
 		defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 	}
@@ -49,10 +49,9 @@ class Global_BranchController extends Zend_Controller_Action {
 			try {
 				$_dbmodel->addbranch($_data);
 				if(!empty($_data['save_new'])){
-					Application_Form_FrmMessage::message($this->tr->translate("INSERT_SUCCESS"));
-				}else{
-					Application_Form_FrmMessage::Sucessfull($this->tr->translate("INSERT_SUCCESS"),self::REDIRECT_URL ."/branch/index");
+					Application_Form_FrmMessage::Sucessfull($this->tr->translate("INSERT_SUCCESS"),self::REDIRECT_URL ."/branch/add");
 				}
+				Application_Form_FrmMessage::Sucessfull($this->tr->translate("INSERT_SUCCESS"),self::REDIRECT_URL ."/branch/index");
 			}catch (Exception $e) {
 				Application_Form_FrmMessage::message($this->tr->translate("INSERT_FAIL"));
 				echo $e->getMessage();exit();
@@ -65,6 +64,8 @@ class Global_BranchController extends Zend_Controller_Action {
 	}
 	function editAction(){
 		$id=$this->getRequest()->getParam("id");
+		$id = empty($id)?0:$id;
+		
 		if($this->getRequest()->isPost())
 		{
 			$data = $this->getRequest()->getPost();
@@ -79,6 +80,10 @@ class Global_BranchController extends Zend_Controller_Action {
 		}
 		$db=new Global_Model_DbTable_DbBranch();
 		$row=$db->getBranchById($id);
+		if (empty($row)){
+			Application_Form_FrmMessage::Sucessfull($this->tr->translate("NO_RECORD"),self::REDIRECT_URL."/branch/index");
+			exit();
+		}
 		$this->view->row = $row;
 		
 		$frm= new Global_Form_Frmbranch();

@@ -8,20 +8,21 @@
 </script>
 
 <form  id='frm_add_degree' name='frm_add_degree' action="<?php echo $this->url(array('module'=>'global','controller'=>'faculty','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-<script type="dojo/method" event="onSubmit">   
+		<script type="dojo/method" event="onSubmit">   
    				if(this.validate()) {
                    if(dijit.byId('type').get("value")==''){
 						alert("Please Select Degree Type");
                       dijit.byId("type").focus();
 					  return false;
 					}
+					loadingBlock();
                     dijit.byId("save_close").attr("disabled",true);
 					dijit.byId("save_new").attr("disabled",true);
 					return true;
    				}else {
 					return false;
    				}
-			</script>
+		</script>
 <table cellspacing="10" width="40%" style="margin: 0 auto;">
 	<tr>
 		<td>
@@ -39,12 +40,6 @@
 					<tr>
 						<td><?php echo $tr->translate("SHORTCUT");?></td>
 						<td><?php echo $frm_->getElement("shortcut");?></td>
-					</tr>
-					<tr>
-						<td><?php echo $tr->translate("STATUS");?></td>
-						<td><?php echo $frm_->getElement("status");?>
-							<?php echo $frm_->getElement("_id");?>
-						</td>
 					</tr>
 					<tr>
 						<td colspan="2" align="center">
@@ -113,6 +108,7 @@ function submitDataClose(){
 	  return false;
 	}
 	if(dijit.byId('frm_add_degree').validate()) {
+		loadingBlock();
 		dijit.byId('save_close').set('disabled',true);
 		dijit.byId('save_new').set('disabled',true);
 		var url_submit = '<?php echo $this->url(array('module'=>'global','controller'=>'faculty','action'=>'add')); ?>';
@@ -157,8 +153,8 @@ function submitDataClose(){
 					<td><?php echo $tr->translate("STATUS");?></td>
 					<td>
 						<select dojoType="dijit.form.FilteringSelect" id="status_fac" name="status_degree"  class="fullsize" type="text">
-							<option value='1'>Active</option>
-							<option value='2'>Deactive</option>
+							<option value='1'><?php echo $tr->translate("ACTIVE");?></option>
+							<option value='2'><?php echo $tr->translate("DEACTIVE");?></option>
 						</select>
 					</td>
 				</tr>

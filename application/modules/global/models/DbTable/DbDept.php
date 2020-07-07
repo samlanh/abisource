@@ -148,7 +148,7 @@ class Global_Model_DbTable_DbDept extends Zend_Db_Table_Abstract
 					'dept_id'	  => $_data['dept'],
 					'major_enname'  => $_data['major_enname'],
 					'modify_date' => Zend_Date::now(),
-					'is_active'	  => $_data['status'],
+					'is_active'	  => 1,
 					'user_id'	  => $this->getUserId()
 			);
 			return  $this->insert($_arr);
@@ -197,7 +197,7 @@ class Global_Model_DbTable_DbDept extends Zend_Db_Table_Abstract
 				'type'		  => $_data['type'],
 				'shortcut'    => $_data['shortcut'],
 				'modify_date' => new Zend_Date(),
-				'is_active'   => $_data['status'],
+				'is_active'   => 1,
 				'user_id'	  => $this->getUserId()
 		);
 		return  $this->insert($_arr);

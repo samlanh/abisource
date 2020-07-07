@@ -18,7 +18,7 @@ class Global_Model_DbTable_DbCar extends Zend_Db_Table_Abstract
     			'tel'		=>$data['tel'],
     			'note'		=>$data['note'],
     			'userid'	=>$this->getUserId(),
-    			'status'	=>$data['status'],
+    			'status'	=>1,
     			'create_date'=>date('Y-m-d')
     			);  	
     	$this->insert($arr);   	

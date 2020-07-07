@@ -11,7 +11,7 @@
 			<td><input type="text" name="txtsearch" id="txtsearch" value="<?php echo $this->search['txtsearch'];?>" dojoType="dijit.form.TextBox" class="fullside" /></td>
 			<td>
 				<select name="degree" id="degree" dojoType="dijit.form.FilteringSelect" class="fullside">
-					<option value="0">----- select degree -----</option>
+					<option value="0"><?php echo $tr->translate("SELECT_DEGREE")?></option>
 					<?php if(!empty($this->degree)){foreach ($this->degree as $degree){?>
 						<option value="<?php echo $degree['id']?>" <?php if($degree['id']==$this->search['degree']){echo 'selected="selected"';}?>><?php echo $degree['name']?></option>
 					<?php }}?>

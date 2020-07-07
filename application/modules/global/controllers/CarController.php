@@ -1,9 +1,10 @@
 <?php
 class Global_CarController extends Zend_Controller_Action {
-	private $activelist = array('មិនប្រើ​ប្រាស់', 'ប្រើ​ប្រាស់');
+	protected $tr;
     public function init()
     {    	
-     /* Initialize action controller here */
+     	/* Initialize action controller here */
+    	$this->tr=Application_Form_FrmLanguages::getCurrentlanguage();
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 	}
@@ -13,11 +14,9 @@ class Global_CarController extends Zend_Controller_Action {
 			if($this->getRequest()->isPost()){
 				$_data=$this->getRequest()->getPost();
 				$search = array(
-						'title' => $_data['title'],
-						);
-			}
-			else{
-			
+					'title' => $_data['title'],
+				);
+			}else{
 				$search = array(
 						'title' => '',
 				);
@@ -25,9 +24,6 @@ class Global_CarController extends Zend_Controller_Action {
 			}
 			$db = new Global_Model_DbTable_DbCar();
 			$rs_rows= $db->getAllCars($search);
-	
-// 			$glClass = new Application_Model_GlobalClass();
-// 			$rs = $glClass->getImgActive($rs_rows, BASE_URL, true);
 			
 			$this->view->search =  $search;
 			$list = new Application_Form_Frmtable();
@@ -51,11 +47,9 @@ class Global_CarController extends Zend_Controller_Action {
 				$_dbcar = new Global_Model_DbTable_DbCar();
 				$_dbcar->addcar($_data);
 				if(isset($_data['save_close'])){
-					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/global/car");
-				}else{
-					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/global/car/add");
+					Application_Form_FrmMessage::Sucessfull($this->tr->translate("INSERT_SUCCESS"),"/global/car");
 				}
-				Application_Form_FrmMessage::message("INSERT_SUCCESS");
+				Application_Form_FrmMessage::Sucessfull($this->tr->translate("INSERT_SUCCESS"),"/global/car/add");
 			}catch (Exception $e) {
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 				$err = $e->getMessage();
@@ -72,7 +66,8 @@ class Global_CarController extends Zend_Controller_Action {
 	{
 		$db=new Global_Model_DbTable_DbCar();
 		$id=$this->getRequest()->getParam("id");
-		$this->view->rs = $row=$db->getCarById($id);
+		$id = empty($id)?0:$id;
+		
 		if($this->getRequest()->isPost())
 		{
 			$data = $this->getRequest()->getPost();
@@ -80,6 +75,13 @@ class Global_CarController extends Zend_Controller_Action {
 			$db->updateCar($data);
 			Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/global/car/index");
 		}
+		
+		$row = $db->getCarById($id);
+		if (empty($row)){
+			Application_Form_FrmMessage::Sucessfull($this->tr->translate("NO_RECORD"),"/global/car/index");
+			exit();
+		}
+		$this->view->rs = $row;
 		
 		$db=new Application_Model_DbTable_DbGlobal();
 		$this->view->branch = $db->getAllBranch();

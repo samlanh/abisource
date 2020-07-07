@@ -1,9 +1,10 @@
 <?php
 class Global_ServiceController extends Zend_Controller_Action {
-	private $activelist = array('មិនប្រើ​ប្រាស់', 'ប្រើ​ប្រាស់');
+	protected $tr;
 	private $type = array(1=>'service',2=>'program');
 	public function init()
 	{
+		$this->tr=Application_Form_FrmLanguages::getCurrentlanguage();
 		header('content-type: text/html; charset=utf8');
 		defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 	}
@@ -49,18 +50,16 @@ class Global_ServiceController extends Zend_Controller_Action {
 		$this->view->frm_search = $frm;
 		$this->view->adv_search = $search;
 	}
-public function addAction(){
-	if($this->getRequest()->isPost()){
+	public function addAction(){
+		if($this->getRequest()->isPost()){
 			try{
 				$_data = $this->getRequest()->getPost();
 				$_model = new Global_Model_DbTable_DbService();
 				$_model->addservice($_data);
 				if(isset($_data['save_close'])){
 					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/global/service");
-				}else{
-					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/global/service/add");
 				}
-				Application_Form_FrmMessage::message("INSERT_SUCCESS");
+				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/global/service/add");
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -69,7 +68,7 @@ public function addAction(){
 		
 	$db = new Global_Model_DbTable_DbService();
 	$rs= $db->getServiceType(1);
-	array_unshift($rs, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+	array_unshift($rs, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
 	$this->view->service = $rs;
 		
 	$frm=new Accounting_Form_FrmProgram();
@@ -78,9 +77,9 @@ public function addAction(){
 }
 public function editAction(){
 	$id=$this->getRequest()->getParam("id");
-	$db = new Global_Model_DbTable_DbService();
-	$row = $db->getServiceById($id);
-// 	print_r($row);exit();
+	$id = empty($id)?0:$id;
+	
+	
 	if($this->getRequest()->isPost())
 	{
 		try{
@@ -94,10 +93,15 @@ public function editAction(){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 	}
-	
 	$db = new Global_Model_DbTable_DbService();
+	$row = $db->getServiceById($id);
+	if (empty($row)){
+		Application_Form_FrmMessage::Sucessfull($this->tr->translate("NO_RECORD"),"/global/service/index");
+		exit();
+	}
+	
 	$rs= $db->getServiceType(1);
-	array_unshift($rs, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+	array_unshift($rs, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
 	$this->view->service = $rs;
 	
 	$obj=new Accounting_Form_FrmProgram();
@@ -115,7 +119,6 @@ function submitAction(){
 			$result = array("id"=>$row);
 			print_r(Zend_Json::encode($row));
 			exit();
-			//Application_Form_FrmMessage::message("INSERT_SUCCESS");
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("INSERT_FAIL");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

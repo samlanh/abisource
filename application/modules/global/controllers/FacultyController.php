@@ -1,9 +1,11 @@
 <?php
 class Global_FacultyController extends Zend_Controller_Action {
 	private $activelist = array('មិនប្រើ​ប្រាស់', 'ប្រើ​ប្រាស់');
+	protected $tr;
     public function init()
     {    	
      /* Initialize action controller here */
+    	$this->tr=Application_Form_FrmLanguages::getCurrentlanguage();
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 	}
@@ -52,11 +54,9 @@ class Global_FacultyController extends Zend_Controller_Action {
     			$_dbmodel->AddNewDepartment($_data);
     			
     			if(isset($_data['save_close'])){
-    				Application_Form_FrmMessage::Sucessfull("ការបន្ថែមដោយជោគជ័យ !", "/global/faculty/index");
-    			}else{
-    				Application_Form_FrmMessage::Sucessfull("ការបន្ថែមដោយជោគជ័យ !", "/global/faculty/add");
+    				Application_Form_FrmMessage::Sucessfull($this->tr->translate("INSERT_SUCCESS"), "/global/faculty/index");
     			}
-    			Application_Form_FrmMessage::Sucessfull("ការបន្ថែមដោយជោគជ័យ !", "/global/faculty/add");
+    			Application_Form_FrmMessage::Sucessfull($this->tr->translate("INSERT_SUCCESS"), "/global/faculty/add");
     		} catch (Exception $e) {
     			echo $e->getMessage();
     		}
@@ -67,7 +67,7 @@ class Global_FacultyController extends Zend_Controller_Action {
     	$this->view->frm_dept = $frm;
     	$db_glopbal=new Global_Model_DbTable_DbDept();
     	$rs_eng=$db_glopbal->getAllDegreeNameEn();
-    	array_unshift($rs_eng, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+    	array_unshift($rs_eng, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
     	$this->view->rs_degree=$rs_eng;
     }
     
@@ -78,14 +78,7 @@ class Global_FacultyController extends Zend_Controller_Action {
     			$_dbmodel = new Global_Model_DbTable_DbDept();
     			$_dbmodel->UpdateDepartment($_data);
     			
-    			if(isset($_data['save_close'])){
-    				Application_Form_FrmMessage::Sucessfull("ការបន្ថែមដោយជោគជ័យ !", "/global/faculty/index");
-    			}else{
-    				Application_Form_FrmMessage::Sucessfull("ការបន្ថែមដោយជោគជ័យ !", "/global/faculty/index");
-    			}
-    			
-    			Application_Form_FrmMessage::Sucessfull("ការកៃប្រែដោយជោគជ័យ !", "/global/faculty/index");
-    			//$this->_redirect("");
+    			Application_Form_FrmMessage::Sucessfull($this->tr->translate("EDIT_SUCCESS"), "/global/faculty/index");
     		} catch (Exception $e) {
     			$err =$e->getMessage();
     			Application_Form_FrmMessage::message("Application Error!");
@@ -94,8 +87,16 @@ class Global_FacultyController extends Zend_Controller_Action {
     		}
     	}
     	$id= $this->getRequest()->getParam("id");
+    	$id = empty($id)?0:$id;
+    	
     	$_db = new Application_Model_DbTable_DbGlobal();
     	$_row =$_db->getDeptById($id);
+    	
+    	if (empty($_row)){
+    		Application_Form_FrmMessage::Sucessfull($this->tr->translate("NO_RECORD"),"/global/faculty/index");
+    		exit();
+    	}
+    	
     	$frm = new Application_Form_FrmOther();
     	$frm->FrmAddDept($_row);
     	Application_Model_Decorator::removeAllDecorator($frm);
@@ -103,7 +104,7 @@ class Global_FacultyController extends Zend_Controller_Action {
     	
     	$db_glopbal=new Global_Model_DbTable_DbDept();
     	$rs_eng=$db_glopbal->getAllDegreeNameEn();
-    	array_unshift($rs_eng, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+    	array_unshift($rs_eng, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW") ));
     	$this->view->rs_degree=$rs_eng;
     }
     function addfacultyAction(){

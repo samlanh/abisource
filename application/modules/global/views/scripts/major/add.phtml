@@ -37,6 +37,7 @@ dojo.ready(function(){
 						dijit.byId("dept").focus();
 						return false;
    					 }
+					loadingBlock();
                     dijit.byId("save_close").attr("disabled",true);
 					dijit.byId("save_new").attr("disabled",true);
 					return true;
@@ -60,15 +61,6 @@ dojo.ready(function(){
 						<td><?php echo $tr->translate("NAME")?></td>
 						<td> 
 							<input dojoType="dijit.form.ValidationTextBox" required="true" class="full height-text" id="major_enname" name="major_enname" value="" type="text">
-						</td>
-					</tr>
-					<tr>
-						<td><?php echo $tr->translate("STATUS")?></td>
-						<td>
-							<select name="status" id="status" dojoType="dijit.form.FilteringSelect" required="true"  class="full height-text">
-							    <option value="1" label="ប្រើប្រាស់" selected="selected">ប្រើប្រាស់</option>
-							    <option value="0" label="មិនប្រើប្រាស់">មិនប្រើប្រាស់</option>
-							</select>
 						</td>
 					</tr>
 					<tr>
@@ -108,8 +100,8 @@ dojo.ready(function(){
 					<td><?php echo $tr->translate("STATUS");?></td>
 					<td>
 						<select dojoType="dijit.form.FilteringSelect" id="status_fac" name="status_fac"  class="fullsize" type="text">
-							<option value='1'>Active</option>
-							<option value='2'>Deactive</option>
+							<option value='1'><?php echo $tr->translate("ACTIVE");?></option>
+							<option value='2'><?php echo $tr->translate("DEACTIVE");?></option>
 						</select>
 					</td>
 				</tr>
@@ -173,6 +165,7 @@ function submitDataClose(){
 		return false;
     }
 	if(dijit.byId('edit-major').validate()) {
+		loadingBlock();
 		dijit.byId('save_close').set('disabled',true);
 		dijit.byId('save_new').set('disabled',true);
 		var url_submit = '<?php echo $this->url(array('module'=>'global','controller'=>'major','action'=>'add')); ?>';

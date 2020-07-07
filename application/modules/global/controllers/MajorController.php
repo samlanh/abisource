@@ -1,9 +1,11 @@
 <?php
 class Global_MajorController extends Zend_Controller_Action {
 	private $activelist = array('មិនប្រើ​ប្រាស់', 'ប្រើ​ប្រាស់');
+	protected $tr;
     public function init()
     {    	
      /* Initialize action controller here */
+    	$this->tr=Application_Form_FrmLanguages::getCurrentlanguage();
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 	}
@@ -54,12 +56,12 @@ class Global_MajorController extends Zend_Controller_Action {
     			$_dbmodel = new Global_Model_DbTable_DbDept();
     			$_major_id = $_dbmodel->AddNewMajor($_data);
     			if(!empty($_data['save_close'])){
-    				Application_Form_FrmMessage::Sucessfull("ការ​បញ្ចូល​ជោគ​ជ័យ !", "/global/major/index");
+    				Application_Form_FrmMessage::Sucessfull($this->tr->translate("INSERT_SUCCESS"),"/global/major/index");
     			}
-    			Application_Form_FrmMessage::Sucessfull("ការកែប្រែដោយជោគជ័យ", "/global/major/add");
+    			Application_Form_FrmMessage::Sucessfull($this->tr->translate("INSERT_SUCCESS"),"/global/major/add");
     			
     		} catch (Exception $e) {
-    			Application_Form_FrmMessage::message("ការ​បញ្ចូល​មិន​ជោគ​ជ័យ");
+    			Application_Form_FrmMessage::message($this->tr->translate("INSERT_FAIL"));
     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     			echo $e->getMessage();
     		}
@@ -67,40 +69,41 @@ class Global_MajorController extends Zend_Controller_Action {
     	}
     	$db = new Global_Model_DbTable_DbDept();
     	$dept = $db->getAllDept();
-    	array_unshift($dept, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+    	array_unshift($dept, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
     	$this->view->dept = $dept;
     }
     
     
     public function editAction(){
     	$id = $this->getRequest()->getParam("id");
+    	$id = empty($id)?0:$id;
     	if($this->getRequest()->isPost()){
     		try{
-    		$_data = $this->getRequest()->getPost();
-    		$_dbmodel = new Global_Model_DbTable_DbDept();
-    		$_dbmodel ->updatMajorById($_data);
-    		Application_Form_FrmMessage::Sucessfull("ការកែប្រែដោយជោគជ័យ", "/global/major/index");
+	    		$_data = $this->getRequest()->getPost();
+	    		$_dbmodel = new Global_Model_DbTable_DbDept();
+	    		$_dbmodel ->updatMajorById($_data);
+	    		Application_Form_FrmMessage::Sucessfull($this->tr->translate("EDIT_SUCCESS"), "/global/major/index");
     		}catch(Exception $e){
     			Application_Form_FrmMessage::message("Application Error");
     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     		}
     	}
-    	if(!empty($id)){
+    	$db_model = new Global_Model_DbTable_DbDept();
+    	$row=$db_model->getMajorById($id);
+    	$this->view->rs = $row;
+    	if (empty($row)){
+    		Application_Form_FrmMessage::Sucessfull($this->tr->translate("NO_RECORD"),"/global/major/index");
+    		exit();
+    	}
     		$frm = new Application_Form_FrmOther();
-    		$db_model = new Global_Model_DbTable_DbDept();
-    		$row=$db_model->getMajorById($id);
     		$frm->FrmAddMajor($row);
     		Application_Model_Decorator::removeAllDecorator($frm);
     		$this->view->frm_major = $frm;
-    	}
     	
-    	$db= new Global_Model_DbTable_DbDept();
-    	$row=$db->getMajorById($id);
-    	$this->view->rs = $row;
     	
     	$db = new Global_Model_DbTable_DbDept();
     	$dept = $db->getAllDept();
-    	array_unshift($dept, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+    	array_unshift($dept, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
     	$this->view->dept = $dept;
     }
     
@@ -113,7 +116,6 @@ class Global_MajorController extends Zend_Controller_Action {
     			$result = array("id"=>$row);
     			print_r(Zend_Json::encode($row));
     			exit();
-    			//Application_Form_FrmMessage::message("INSERT_SUCCESS");
     		}catch(Exception $e){
     			Application_Form_FrmMessage::message("INSERT_FAIL");
     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
