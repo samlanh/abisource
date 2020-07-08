@@ -5,9 +5,10 @@
 	$rs=$this->rs;
 ?>
 
-	<form  id='add_occupation' action="<?php echo $this->url(array('module'=>'global','controller'=>'occupation','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+	<form  id='add_occupation' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 		<script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
+				loadingBlock();
 				return true;
 			}else {
 				return false;
@@ -30,8 +31,8 @@
 					<td><?php echo $tr->translate('STATUS');?></td>
 					<td>
 						<select name="status" id="status" dojoType="dijit.form.FilteringSelect" required="true" class="fullside">
-    						<option value="1" <?php if ($rs["status"]==1){echo "selected='selected'";}?> label="active" >Active</option>
-    						<option value="0" label="deactive" <?php if ($rs["status"]==0){echo "selected='selected'";}?>  >Deactive</option>
+    						<option value="1" <?php if ($rs["status"]==1){echo "selected='selected'";}?> label="active" ><?php echo $tr->translate('ACTIVE');?></option>
+    						<option value="0" label="deactive" <?php if ($rs["status"]==0){echo "selected='selected'";}?>  ><?php echo $tr->translate('DEACTIVE');?></option>
 						</select>
 					</td>
 				</tr>

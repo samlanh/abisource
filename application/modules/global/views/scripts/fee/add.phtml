@@ -5,55 +5,7 @@
 	//print_r($payment_term);exit();
 ?>	
 <script type="text/javascript" src="js/dojo/dojo.js" djConfig="isDebug: true, parseOnLoad: true"></script>
-<script type="text/javascript">
-    dojo.require("dojo.NodeList-manipulate");
-    dojo.require("dojo.parser");
-    dojo.require("dojo.data.ItemFileWriteStore");  
-</script>
- 
-<script>
-var grade_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->names_grade));?> );
-var dept_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->dept));?> );
-dojo.ready(function(){
-	
-	new dijit.form.FilteringSelect({
-		store: grade_store,
-		autoComplete: true,                        
-		id: "grade",
-		name: "grade",  
-		style:'height:40px !important',         
-		class: 'fullside',  
-		required:false,
-		placeHolder:"Select Grade",          
-		onChange: function() {  
-			grade   = dijit.byId('grade').get('value');
-			if(grade==-1){
-			dijit.byId("popup_grate").show();
-			}else{
-				addRow();
-			}
-		}
-	}, "grade");
-	
-	new dijit.form.FilteringSelect({
-		store: dept_store,
-		autoComplete: true,                        
-		required: true,
-		id: "degree_popup1",
-		name: "degree_popup1",           
-		class: "fullside", 
-		placeHolder:"Select Degree",          
-		onChange: function() {  
-			degree_id = dijit.byId('degree_popup1').get('value');
-			if(degree_id==-1){
-				dijit.byId("popup_add_dept").show();
-			}else{
-			}
-		}
-	}, "degree_popup1");
-	
-});
-</script>
+
 <style>
 select{ width:100%;}
 fieldset{  background:none;}
@@ -63,25 +15,26 @@ table .set-style td,table .set-style th{ padding: 2px; border:1px solid #ccc;}
 table .set-style tr.st1{ background: none repeat scroll 0% 0% rgba(218, 250, 255, 1);}
 </style>
 <form id='office_receipt' action="<?php echo $this->url(array('module'=>'global','controller'=>'fee','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-<script type="dojo/method" event="onSubmit">   
-   if(this.validate()) {
-    if( dijit.byId("branch").get("value")==''){
-    	alert("Please Select Branch Name!!!");
-        dijit.byId("branch").focus();
-        return false;
-	}
-    if($('#identity').val()==''){
-        alert("Please Select Grade Name!!!");
-		dijit.byId("grade").focus();
-		return false;
-	}
-   dijit.byId('save_close').set('disabled',true);
-   dijit.byId('save_new').set('disabled',true);
-    return true;
-   }else {
-    return false;
-   }
-</script>
+	<script type="dojo/method" event="onSubmit">   
+  		 if(this.validate()) {
+    		if( dijit.byId("branch").get("value")==''){
+    			alert("<?php echo $tr->translate('Please Select Branch Name');?>!!!");
+        		dijit.byId("branch").focus();
+        		return false;
+			}
+    		if($('#identity').val()==''){
+        		alert("<?php echo $tr->translate('Please Select Grade Name');?>!!!");
+				dijit.byId("grade").focus();
+				return false;
+			}
+			loadingBlock();
+   			dijit.byId('save_close').set('disabled',true);
+  		 	dijit.byId('save_new').set('disabled',true);
+    		return true;
+  		 }else {
+    		return false;
+  		 }
+	</script>
 
 <table cellspacing="10" style="margin: 0 auto;width:100%;" >
 	<tr>
@@ -114,14 +67,14 @@ table .set-style tr.st1{ background: none repeat scroll 0% 0% rgba(218, 250, 255
 						<td ><?php echo $tr->translate("TIME");?></td>
 						<td>
 							<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="time" name="time" type="text">								
-									<option value="2">ពេញម៉ោង</option>
-									<option value="1">ក្រៅម៉ោង</option>
+									<option value="1"><?php echo $tr->translate("PART_TIME");?></option>
+									<option value="2"><?php echo $tr->translate("FULL_TIME");?></option>
 							</select>
 						</td>
 						<td style="white-space: nowrap;"><?php echo $tr->translate("BRANCH");?></td>
 						<td>
 							<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" autoComplete="false" queryExpr="*${0}*" id="branch" name="branch" type="text">								
-								<option value="">Select Branch</option>
+								<option value=""><?php echo $tr->translate("SELECT_BRANCH");?></option>
 								<?php if(!empty($this->branch)){ foreach ($this->branch as $branch){?>	
 									<option value="<?php echo $branch['id'];?>"><?php echo $branch['name'];?></option>
 								<?php }}?>
@@ -199,8 +152,8 @@ table .set-style tr.st1{ background: none repeat scroll 0% 0% rgba(218, 250, 255
 							<td><?php echo $tr->translate("STATUS")?></td>
 							<td>
 								<select name="grade_status" id="grade_status" dojoType="dijit.form.FilteringSelect"  class="fullside">
-								    <option value="1" label="ប្រើប្រាស់" selected="selected">ប្រើប្រាស់</option>
-								    <option value="0" label="មិនប្រើប្រាស់">មិនប្រើប្រាស់</option>
+								    <option value="1" label="<?php echo $tr->translate("ACTIVE");?>" selected="selected"><?php echo $tr->translate("ACTIVE");?></option>
+								    <option value="0" label="<?php echo $tr->translate("DEACTIVE");?>"><?php echo $tr->translate("DEACTIVE");?></option>
 								</select>
 							</td>
 						</tr>
@@ -253,6 +206,55 @@ table .set-style tr.st1{ background: none repeat scroll 0% 0% rgba(218, 250, 255
 		</form>
 	</div>
 </div>
+<script type="text/javascript">
+    dojo.require("dojo.NodeList-manipulate");
+    dojo.require("dojo.parser");
+    dojo.require("dojo.data.ItemFileWriteStore");  
+</script>
+ 
+<script>
+var grade_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->names_grade));?> );
+var dept_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->dept));?> );
+dojo.ready(function(){
+	
+	new dijit.form.FilteringSelect({
+		store: grade_store,
+		autoComplete: true,                        
+		id: "grade",
+		name: "grade",  
+		style:'height:40px !important',         
+		class: 'fullside',  
+		required:false,
+		placeHolder:"Select Grade",          
+		onChange: function() {  
+			grade   = dijit.byId('grade').get('value');
+			if(grade==-1){
+			dijit.byId("popup_grate").show();
+			}else{
+				addRow();
+			}
+		}
+	}, "grade");
+	
+	new dijit.form.FilteringSelect({
+		store: dept_store,
+		autoComplete: true,                        
+		required: true,
+		id: "degree_popup1",
+		name: "degree_popup1",           
+		class: "fullside", 
+		placeHolder:"Select Degree",          
+		onChange: function() {  
+			degree_id = dijit.byId('degree_popup1').get('value');
+			if(degree_id==-1){
+				dijit.byId("popup_add_dept").show();
+			}else{
+			}
+		}
+	}, "degree_popup1");
+	
+});
+</script>
 <script type="text/javascript">
 
 function ResetRecordRecord() {

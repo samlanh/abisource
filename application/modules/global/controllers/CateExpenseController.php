@@ -3,9 +3,10 @@
 class Global_CateExpenseController extends Zend_Controller_Action
 {
 	const REDIRECT_URL = '/global/expense';
-	
+	protected $tr;
     public function init()
     {
+    	$this->tr=Application_Form_FrmLanguages::getCurrentlanguage();
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
     }
@@ -54,9 +55,8 @@ public function indexAction()
 				$db->addCateExpense($data);
 				if(!empty($data['save_close'])){
 					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/global/cateexpense");
-				}else{
-					Application_Form_FrmMessage::message("INSERT_SUCCESS");
-				}				
+				}
+				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/global/cateexpense/add");
 			} catch (Exception $e) {
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -68,8 +68,11 @@ public function indexAction()
  
     public function editAction()
     {
+    	$id = $this->getRequest()->getParam('id');
+    	$id = empty($id)?0:$id;
+    	
     	if($this->getRequest()->isPost()){
-    		$id = $this->getRequest()->getParam('id');
+    		
 			$data=$this->getRequest()->getPost();	
 			$data['id']=$id;
 			$db = new Global_Model_DbTable_DbCateExpense();				
@@ -81,9 +84,12 @@ public function indexAction()
 			}
 		}
 		
-		$id = $this->getRequest()->getParam('id');
 		$db = new Global_Model_DbTable_DbCateExpense();
 		$row  = $db->getCateExpenseById($id);
+		if (empty($row)){
+			Application_Form_FrmMessage::Sucessfull($this->tr->translate("NO_RECORD"),"/global/cateexpense");
+			exit();
+		}
 		$this->view->rs = $row;
 		
     }

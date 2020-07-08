@@ -1,7 +1,9 @@
 <?php
 class Global_FeeController extends Zend_Controller_Action {
+	protected $tr;
 	public function init()
     {    	
+    	$this->tr=Application_Form_FrmLanguages::getCurrentlanguage();
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 	}
@@ -36,7 +38,7 @@ class Global_FeeController extends Zend_Controller_Action {
     	$this->view->adv_search = $search;
     	
     	$year=$db->getAceYear();
-    	array_unshift($year, array('id'=>'','name'=>"Select Year"));
+    	array_unshift($year, array('id'=>'','name'=>$this->tr->translate("SELECT_YEAR")));
     	$this->view->rows_year=$year;
     	
     	$form=new Registrar_Form_FrmSearchInfor();
@@ -68,9 +70,6 @@ class Global_FeeController extends Zend_Controller_Action {
     	if($this->getRequest()->isPost()){
     		$_data = $this->getRequest()->getPost();
     		$_model = new Global_Model_DbTable_DbTuitionFee();
-    		//print_r($_data);exit();
-//     		$result=$_model->getCondition($_data);
-    		
     		try {
 	    		$rs =  $_model->addTuitionFee($_data);
 	    		if(isset($_data['save_close'])){
@@ -89,7 +88,7 @@ class Global_FeeController extends Zend_Controller_Action {
     	$this->view->all_metion = $_model ->getAllMetionOption();
     	$this->view->all_grade = $_model ->getAllFacultyOption();
     	$d_row=$db_glopbl ->getAllMajor();
-    	array_unshift($d_row, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+    	array_unshift($d_row, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
     	$this->view->names_grade = $d_row;
     	
     	$data=$this->view->all_session=$_model->getAllSession();
@@ -105,7 +104,7 @@ class Global_FeeController extends Zend_Controller_Action {
     	$this->view->branch = $db->getAllBranch();
     	
     	$dept = $db_glopbl->getAllDepts();
-    	array_unshift($dept, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+    	array_unshift($dept, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
     	$this->view->dept = $dept;
     	$frm = new Application_Form_FrmOther();
     	$frm->FrmAddDept();
@@ -188,11 +187,11 @@ class Global_FeeController extends Zend_Controller_Action {
 			   
 			   $db_glopbl=new Application_Model_DbTable_DbGlobal();
 			   $d_row=$db_glopbl ->getAllMajor();
-			   array_unshift($d_row, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+			   array_unshift($d_row, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
 			   $this->view->names_grade = $d_row;
 			   
 			   $dept = $db_glopbl->getAllDepts();
-			   array_unshift($dept, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+			   array_unshift($dept, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
 			   $this->view->dept = $dept;
 			   $frm = new Application_Form_FrmOther();
 			   $frm->FrmAddDept();
@@ -273,11 +272,11 @@ class Global_FeeController extends Zend_Controller_Action {
 		
 		$db_glopbl=new Application_Model_DbTable_DbGlobal();
 		$d_row=$db_glopbl ->getAllMajor();
-		array_unshift($d_row, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+		array_unshift($d_row, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
 		$this->view->names_grade = $d_row;
 		
 		$dept = $db_glopbl->getAllDepts();
-		array_unshift($dept, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+		array_unshift($dept, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
 		$this->view->dept = $dept;
 		$frm = new Application_Form_FrmOther();
 		$frm->FrmAddDept();

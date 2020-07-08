@@ -27,7 +27,7 @@ class Global_Model_DbTable_DbCar extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
     	$sql = " SELECT 
     				id,
-    				(select branch_namekh from rms_branch where br_id = branch_id) as branch,
+    				(select branch_namekh from rms_branch where br_id = branch_id LIMIT 1) as branch,
     				carid,
     				drivername,
     				tel,

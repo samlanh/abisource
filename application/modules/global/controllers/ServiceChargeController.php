@@ -1,7 +1,9 @@
 <?php
 class Global_ServiceChargeController extends Zend_Controller_Action {
+	protected $tr;
 	public function init()
     {    	
+    	$this->tr=Application_Form_FrmLanguages::getCurrentlanguage();
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 	}
@@ -17,8 +19,7 @@ class Global_ServiceChargeController extends Zend_Controller_Action {
     					'txtsearch' => $_data['txtsearch'],
     					'year' => $_data['year'],
     			);
- 		}
-    		else{
+ 			}else{
     			$search=array(
     					'txtsearch' =>'',
     					'year' => '',
@@ -26,7 +27,6 @@ class Global_ServiceChargeController extends Zend_Controller_Action {
     		}
     		$db = new Global_Model_DbTable_DbServiceCharge();
     		$rs_rows= $db->getAllServiceFee($search);
-    		//print_r($service);exit();
     		
     		$list = new Application_Form_Frmtable();
     		$collumns = array("ACADEMIC_YEAR","BRANCH","NOTE","CREATED_DATE","STATUS","USER");
@@ -93,12 +93,12 @@ class Global_ServiceChargeController extends Zend_Controller_Action {
 		
 		$db = new Global_Model_DbTable_DbService();
 		$rs= $db->getServiceType(1);
-		array_unshift($rs, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+		array_unshift($rs, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
 		$this->view->service_type = $rs;
 		
 		$db_g=new Application_Model_DbTable_DbGlobal();
 		$row=$db_g->getAllSerives(2);
-		array_unshift($row, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+		array_unshift($row, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
 		$this->view->all_service=$row;
 		
 		$model = new Application_Model_DbTable_DbGlobal();
@@ -170,11 +170,11 @@ class Global_ServiceChargeController extends Zend_Controller_Action {
 			  
 			   $db = new Global_Model_DbTable_DbService();
 			   $rs= $db->getServiceType(1);
-			   array_unshift($rs, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+			   array_unshift($rs, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
 			   $this->view->service = $rs;
 			   $db_g=new Application_Model_DbTable_DbGlobal();
 			   $row=$db_g->getAllSerives(2);
-			   array_unshift($row, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+			   array_unshift($row, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
 			   $this->view->all_service=$row;
 	}
 	
@@ -244,11 +244,11 @@ class Global_ServiceChargeController extends Zend_Controller_Action {
 		// print_r($test);exit();
 		$db = new Global_Model_DbTable_DbService();
 		$rs= $db->getServiceType(1);
-		array_unshift($rs, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+		array_unshift($rs, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW") ));
 		$this->view->service = $rs;
 		$db_g=new Application_Model_DbTable_DbGlobal();
 		$row=$db_g->getAllSerives(2);
-		array_unshift($row, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+		array_unshift($row, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW") ));
 		$this->view->all_service=$row;
 	
 	}
@@ -295,7 +295,6 @@ class Global_ServiceChargeController extends Zend_Controller_Action {
 				$result = array("id"=>$row);
 				print_r(Zend_Json::encode($row));
 				exit();
-				//Application_Form_FrmMessage::message("INSERT_SUCCESS");
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -312,7 +311,6 @@ class Global_ServiceChargeController extends Zend_Controller_Action {
 				$result = array("id"=>$row);
 				print_r(Zend_Json::encode($row));
 				exit();
-				//Application_Form_FrmMessage::message("INSERT_SUCCESS");
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

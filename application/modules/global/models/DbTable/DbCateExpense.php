@@ -44,7 +44,7 @@ class Global_Model_DbTable_DbCateExpense extends Zend_Db_Table_Abstract
 		$sql=" SELECT 
 					ci.id,
 					ci.category_name,
-					(select first_name from rms_users where rms_users.id = ci.user_id) as user,
+					(select first_name from rms_users where rms_users.id = ci.user_id LIMIT 1) as user,
 					create_date,
 					ci.status
 				FROM 

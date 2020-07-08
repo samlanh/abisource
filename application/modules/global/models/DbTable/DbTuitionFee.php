@@ -14,9 +14,9 @@ class Global_Model_DbTable_DbTuitionFee extends Zend_Db_Table_Abstract
     				  (select CONCAT(branch_namekh) from rms_branch where br_id =t.branch_id LIMIT 1) as branch,
 					  CONCAT(t.from_academic,' - ',t.to_academic) AS academic, t.generation,
 					  
-					  (SELECT name_en FROM `rms_view`  WHERE `rms_view`.`type` = 7 AND `rms_view`.`key_code` = t.time) AS `time`,
+					  (SELECT name_en FROM `rms_view`  WHERE `rms_view`.`type` = 7 AND `rms_view`.`key_code` = t.time LIMIT 1) AS `time`,
 					  t.create_date,  
-					  (select name_kh from rms_view where type=1 and key_code=t.status) as status 
+					  (select name_kh from rms_view where type=1 and key_code=t.status LIMIT 1) as status 
 					  FROM `rms_tuitionfee` AS t
 					 WHERE 1	";
     	$where =" ";
@@ -47,8 +47,8 @@ class Global_Model_DbTable_DbTuitionFee extends Zend_Db_Table_Abstract
     }
     function getFeebyOther($fee_id){
     	$db = $this->getAdapter();
-    	$sql = "select *,(SELECT CONCAT(name_en,'-',name_kh) FROM rms_view WHERE rms_tuitionfee_detail.session=rms_view.key_code AND rms_view.type=4)  AS `session`,
-		(SELECT CONCAT(major_enname,'-',major_khname) FROM `rms_major` WHERE major_id=rms_tuitionfee_detail.class_id) as class
+    	$sql = "select *,(SELECT CONCAT(name_en,'-',name_kh) FROM rms_view WHERE rms_tuitionfee_detail.session=rms_view.key_code AND rms_view.type=4 LIMIT 1)  AS `session`,
+		(SELECT CONCAT(major_enname,'-',major_khname) FROM `rms_major` WHERE major_id=rms_tuitionfee_detail.class_id LIMIT 1) as class
     	from rms_tuitionfee_detail where fee_id =".$fee_id." ORDER BY id";
     	return $db->fetchAll($sql);
     }
@@ -180,7 +180,7 @@ class Global_Model_DbTable_DbTuitionFee extends Zend_Db_Table_Abstract
     public function getFeeDetailsById($id){
     	$db = $this->getAdapter();
     	$sql = "SELECT td.*,
-	     (SELECT CONCAT(major_enname,'(',(SELECT shortcut FROM rms_dept WHERE rms_dept.dept_id=rms_major.dept_id),')') AS NAME FROM `rms_major` WHERE rms_major.major_id=td.class_id LIMIT 1) AS grade_name
+	     (SELECT CONCAT(major_enname,'(',(SELECT shortcut FROM rms_dept WHERE rms_dept.dept_id=rms_major.dept_id LIMIT 1),')') AS NAME FROM `rms_major` WHERE rms_major.major_id=td.class_id LIMIT 1) AS grade_name
          FROM rms_tuitionfee_detail AS td where  td.fee_id = ".$id ." ORDER BY id";
     	return $db->fetchAll($sql);
     
@@ -244,7 +244,7 @@ class Global_Model_DbTable_DbTuitionFee extends Zend_Db_Table_Abstract
     	$_db = new Application_Model_DbTable_DbGlobal();
     	$branch_id = $_db->getAccessPermission();
     	
-    	$sql="SELECT id,CONCAT(from_academic,'-',to_academic,'(',generation,')',' ',(select name_en from rms_view where type=7 and key_code=time)) AS `name`     
+    	$sql="SELECT id,CONCAT(from_academic,'-',to_academic,'(',generation,')',' ',(select name_en from rms_view where type=7 and key_code=time LIMIT 1)) AS `name`     
                      FROM rms_tuitionfee WHERE `status`=1 $branch_id  group by from_academic,to_academic,generation,time ";
         $oder=" ORDER BY id DESC ";
     	return $db->fetchAll($sql.$oder);

@@ -3,9 +3,10 @@
 class Global_CateIncomeController extends Zend_Controller_Action
 {
 	const REDIRECT_URL = '/global/cateincome';
-	
+	protected $tr;
     public function init()
     {
+    	$this->tr=Application_Form_FrmLanguages::getCurrentlanguage();
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
     }
@@ -54,9 +55,8 @@ class Global_CateIncomeController extends Zend_Controller_Action
 				$db->addCateIncome($data);
 				if(!empty($data['save_close'])){
 					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/global/cateincome");
-				}else{
-					Application_Form_FrmMessage::message("INSERT_SUCCESS");
 				}				
+				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/global/cateincome/add");
 			} catch (Exception $e) {
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -68,8 +68,11 @@ class Global_CateIncomeController extends Zend_Controller_Action
  
     public function editAction()
     {
+    	$id = $this->getRequest()->getParam('id');
+    	$id = empty($id)?0:$id;
+    	
     	if($this->getRequest()->isPost()){
-    		$id = $this->getRequest()->getParam('id');
+    		
 			$data=$this->getRequest()->getPost();	
 			$data['id']=$id;
 			$db = new Global_Model_DbTable_DbCateIncome();				
@@ -81,9 +84,12 @@ class Global_CateIncomeController extends Zend_Controller_Action
 			}
 		}
 		
-		$id = $this->getRequest()->getParam('id');
 		$db = new Global_Model_DbTable_DbCateIncome();
 		$row  = $db->getCateIncomeById($id);
+		if (empty($row)){
+			Application_Form_FrmMessage::Sucessfull($this->tr->translate("NO_RECORD"),"/global/cateincome");
+			exit();
+		}
 		$this->view->rs = $row;
 		
     }

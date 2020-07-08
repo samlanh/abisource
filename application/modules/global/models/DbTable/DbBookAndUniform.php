@@ -16,7 +16,7 @@ class Global_Model_DbTable_DbBookAndUniform extends Zend_Db_Table_Abstract
     				'description'=>$_data['desc'],
     				'price'		=>$_data['price'],
     				'create_date'=>Zend_Date::now(),
-    				'status'	=>$_data['status'],
+    				'status'	=>1,
     				'user_id'	=>$this->getUserId(),
     		);
     		return ($this->insert($_arr));
@@ -44,12 +44,12 @@ class Global_Model_DbTable_DbBookAndUniform extends Zend_Db_Table_Abstract
     	$sql = "SELECT 
     				service_id,
     				title,
-    				(select name_en from rms_view where type=14 and key_code = product_type) as product_type,
+    				(select name_en from rms_view where type=14 and key_code = product_type LIMIT 1) as product_type,
     				description,
     				price,
     				status,
     				create_date,
-			    	(SELECT CONCAT(last_name,' ',first_name) FROM rms_users WHERE user_id=id ) AS user_name
+			    	(SELECT CONCAT(last_name,' ',first_name) FROM rms_users WHERE user_id=id LIMIT 1) AS user_name
 			      FROM 
     				rms_program_name 
     			  Where 

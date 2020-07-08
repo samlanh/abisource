@@ -22,7 +22,7 @@
     	    name: "title",  
     	    tabindex: "1",         
     	    class: 'fullside',  
-    	    placeHolder:"Selecte Category", 
+    	    placeHolder:"<?php echo $tr->translate('Selecte Category')?>", 
     	    onChange: function() {          
     		   	service_id = dijit.byId('title').get('value');
     		    if(service_id==-1){
@@ -41,9 +41,9 @@ table .set-style td,table .set-style th{ padding: 2px; border:1px solid #ccc;}
 table .set-style tr.st1{ background: none repeat scroll 0% 0% rgba(218, 250, 255, 1);}
 </style>
 <form id='office_receipt' action="<?php echo $this->url(array('module'=>'global','controller'=>'servicecharge','action'=>'edit')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-<script type="dojo/method" event="onSubmit">   
-   if(this.validate()) {
-	var rowId = $('#identity').val();
+	<script type="dojo/method" event="onSubmit">   
+   		if(this.validate()) {
+				var rowId = $('#identity').val();
     			if(rowId!=''){ 
 					var rowIDArray = rowId.split(',');
 					for(var n = 0; n < rowIDArray.length; n++){
@@ -54,11 +54,12 @@ table .set-style tr.st1{ background: none repeat scroll 0% 0% rgba(218, 250, 255
 						}
 					}
 				}
-    return true;
-   }else {
-    return false;
-   }
-</script>
+			loadingBlock();
+    		return true;
+  	 	}else {
+    		return false;
+   		}
+	</script>
 <table cellspacing="10" style="margin: 0 auto;width:100%;" >
 	<tr>
 		<td>
@@ -89,7 +90,7 @@ table .set-style tr.st1{ background: none repeat scroll 0% 0% rgba(218, 250, 255
 							<td style="white-space: nowrap;"><?php echo $tr->translate("BRANCH");?></td>
 							<td>
 								<select dojoType="dijit.form.FilteringSelect" required="true" readonly class="fullside" autoComplete="false" queryExpr="*${0}*" id="branch_id" name="branch_id" type="text">								
-									<option value="">Select Branch</option>
+									<option value=""><?php echo $tr->translate("SELECT_BRANCH");?></option>
 									<?php if(!empty($this->branch)){ foreach ($this->branch as $branch){?>	
 										<option value="<?php echo $branch['id'];?>" <?php if($branch['id'] == $this->rs['branch_id']){echo "selected='selected'";}?> ><?php echo $branch['name'];?></option>
 									<?php }}?>
@@ -104,15 +105,15 @@ table .set-style tr.st1{ background: none repeat scroll 0% 0% rgba(218, 250, 255
 							<td style="white-space: nowrap;text-align: left;"><?php echo $tr->translate("STATUS");?></td>
 							<td>
 								<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="status" name="status" type="text">								
-										<option value="1" <?php if($this->rs['status']==1) echo 'selected="selected"';?>>Active</option>
-										<option value="0" <?php if($this->rs['status']==0) echo 'selected="selected"';?>>Deactive</option>
+										<option value="1" <?php if($this->rs['status']==1) echo 'selected="selected"';?>><?php echo $tr->translate("ACTIVE");?></option>
+										<option value="0" <?php if($this->rs['status']==0) echo 'selected="selected"';?>><?php echo $tr->translate("DEACTIVE");?></option>
 								</select>
 							</td>
 							<td><?php echo $tr->translate("FINISHED");?></td>
 							<td>
 								<select dojoType="dijit.form.FilteringSelect"  id="finished" class="fullside" name="finished" type="text">								
-									<option value="0" <?php if($this->rs['is_finished']==0){ echo "selected='selected'";}?>>Using</option>
-									<option value="1" <?php if($this->rs['is_finished']==1){ echo "selected='selected'";}?>>Finished</option>
+									<option value="0" <?php if($this->rs['is_finished']==0){ echo "selected='selected'";}?>><?php echo $tr->translate("Using");?></option>
+									<option value="1" <?php if($this->rs['is_finished']==1){ echo "selected='selected'";}?>><?php echo $tr->translate("Finished");?></option>
 								</select>
 							</td>							
 						</tr>
@@ -393,8 +394,8 @@ function addCategory(){
 							<td style="width:100px"><?php echo $tr->translate("Status")?></td>
 							<td>
 								<select class="fullside"  tabindex="3" name="status_p" id="status_p" dojoType="dijit.form.FilteringSelect" >
-									    <option value="1"><?php echo $tr->translate("Active")?></option>
-									    <option value="0"><?php echo $tr->translate("Deactive")?></option>
+									    <option value="1"><?php echo $tr->translate("ACTIVE")?></option>
+									    <option value="0"><?php echo $tr->translate("DEACTIVE")?></option>
 								</select>
 							</td>
 						</tr>
@@ -457,8 +458,8 @@ function addCategory(){
 								<td><?php echo $tr->translate("STATUS")?></td>
 								<td>
 									<select name="service_status" id="service_status" dojoType="dijit.form.FilteringSelect" class="fullside" >
-									    <option value="1" label="ប្រើប្រាស់">ប្រើប្រាស់</option>
-									    <option value="0" label="មិនប្រើប្រាស់">មិនប្រើប្រាស់</option>
+									    <option value="1" label="<?php echo $tr->translate("ACTIVE")?>"><?php echo $tr->translate("ACTIVE")?></option>
+									    <option value="0" label="<?php echo $tr->translate("DEACTIVE")?>"><?php echo $tr->translate("DEACTIVE")?></option>
 									</select>
 								</td>
 							</tr>

@@ -79,10 +79,10 @@ class Global_Model_DbTable_DbDept extends Zend_Db_Table_Abstract
 		$sql = " SELECT 
 					m.major_id AS id, 
 					m.major_enname,
-        			(select d.en_name from rms_dept AS d where m.dept_id=d.dept_id )AS dept_name,
+        			(select d.en_name from rms_dept AS d where m.dept_id=d.dept_id LIMIT 1)AS dept_name,
         			m.modify_date,
         			is_active as status,
-        			(SELECT CONCAT(last_name,' ',first_name) FROM rms_users WHERE user_id=id ) AS user_name
+        			(SELECT CONCAT(last_name,' ',first_name) FROM rms_users WHERE user_id=id LIMIT 1) AS user_name
         		FROM 
 					rms_major AS m 
 				WHERE 
@@ -110,9 +110,9 @@ class Global_Model_DbTable_DbDept extends Zend_Db_Table_Abstract
 	public function sqlMajor($search=''){
 		$db = $this->getAdapter();
 		$sql = " SELECT m.major_id AS id, m.major_enname,m.major_khname
-       ,(select d.en_name from rms_dept AS d where m.dept_id=d.dept_id )AS dept_name
+       ,(select d.en_name from rms_dept AS d where m.dept_id=d.dept_id LIMIT 1)AS dept_name
        ,m.shortcut,m.modify_date,m.is_active,
-       (select first_name from rms_users where id=m.user_id) AS user_name
+       (select first_name from rms_users where id=m.user_id LIMIT 1) AS user_name
        FROM rms_major AS m WHERE 1";
 		$order=" order by m.major_enname ,dept_name";
 		$where = '';

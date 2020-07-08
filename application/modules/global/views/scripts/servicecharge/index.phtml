@@ -22,7 +22,7 @@
 	    id: "year",
 	    name: "year",           
 	    class: 'fullside',  
-	    placeHolder:"Selected Acdemice Year",          
+	    placeHolder:"<?php echo $tr->translate("SELECT_YEAR");?>",          
 	    onChange: function() {  
 	    	 
 	    }
@@ -36,7 +36,7 @@
 	  <tr> 
 	    <td style="width: 95px;"><?php echo $formList->showCopyBuntton($url_copy);?></td>
 		<td> 
-			<input dojoType="dijit.form.TextBox" class="fullside"  id="txtsearch" name="txtsearch" placeholder="Search....." value="<?php echo $this->adv_search['txtsearch']; ?>" type="text">
+			<input dojoType="dijit.form.TextBox" class="fullside"  id="txtsearch" name="txtsearch" placeholder="<?php echo $tr->translate("SEARCH");?>....." value="<?php echo $this->adv_search['txtsearch']; ?>" type="text">
 		</td>
 		<td> 
 			<input id="year" /></td>

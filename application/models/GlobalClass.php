@@ -11,7 +11,8 @@ class Application_Model_GlobalClass  extends Zend_Db_Table_Abstract
    }
    public function getOptonsHtml($sql, $display, $value){
    	$db = $this->getAdapter();
-   	$option = '<option value="">--- Select ---</option>';
+   	$tr=Application_Form_FrmLanguages::getCurrentlanguage();
+   	$option = '<option value="">'.$tr->translate("SELECT").'</option>';
    	foreach($db->fetchAll($sql) as $r){
    			
    		$option .= '<option value="'.$r[$value].'">'.htmlspecialchars($r[$display], ENT_QUOTES).'</option>';
@@ -20,7 +21,8 @@ class Application_Model_GlobalClass  extends Zend_Db_Table_Abstract
    }
    public function getYesNoOption(){
    	//Select Public for report
-   	$myopt = '<option value="">---Select----</option>';
+   	$tr=Application_Form_FrmLanguages::getCurrentlanguage();
+   	$myopt = '<option value="">'.$tr->translate("SELECT").'</option>';
    	$myopt .= '<option value="Yes">Yes</option>';
    	$myopt .= '<option value="No">No</option>';
    	return $myopt;
@@ -192,9 +194,10 @@ class Application_Model_GlobalClass  extends Zend_Db_Table_Abstract
 			return $option;
 		}
 		public function getAllFacultyOption(){
+			$tr=Application_Form_FrmLanguages::getCurrentlanguage();
 			$_db = new Application_Model_DbTable_DbGlobal();
 			$rows = $_db->getAllMajor();
-			array_unshift($rows, array('id'=>-1,'name'=>"Select grade"));
+			array_unshift($rows, array('id'=>-1,'name'=>$tr->translate("SELECT_GRADE")));
 			$options = '';
 			if(!empty($rows))foreach($rows as $value){
 				$options .= '<option value="'.$value['id'].'" >'.htmlspecialchars($value['name'], ENT_QUOTES).'</option>';
@@ -217,8 +220,8 @@ class Application_Model_GlobalClass  extends Zend_Db_Table_Abstract
 			$_db = new Application_Model_DbTable_DbGlobal();
 			$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 			$rows = $_db->getAllstudentRequest($type);
-			array_unshift($rows,array('service_id' => '-1',"title"=>"Add New"));
-			array_unshift($rows,array('service_id' => '0',"title"=>"Select Service"));
+			array_unshift($rows,array('service_id' => '-1',"title"=>$tr->translate("ADD_NEW")));
+			array_unshift($rows,array('service_id' => '0',"title"=>$tr->translate("SELECT_SERVICE")));
 			
 			$options = '';
 			if(!empty($rows))foreach($rows as $value){
@@ -323,6 +326,7 @@ class Application_Model_GlobalClass  extends Zend_Db_Table_Abstract
 			return $rows;
 		}
 		public function getsunjectOption(){
+			$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 			$_db = new Application_Model_DbTable_DbGlobal();
 			$rows = $_db->getAllsubject();
 			//array_unshift($rows, array('id'=>-1,'subject_name'=>"Add New"));
@@ -330,7 +334,7 @@ class Application_Model_GlobalClass  extends Zend_Db_Table_Abstract
 			if(!empty($rows))foreach($rows as $value){
 				$options .= '<option value="'.$value['id'].'" >'.htmlspecialchars($value['subject_name'], ENT_QUOTES).'</option>';
 			}
-			$options .= '<option Value="-1">Add New</option>';
+			$options .= '<option Value="-1">'.$tr->translate("ADD_NEW").'</option>';
 			return $options;
 		}
 		public function getTeachersunjectOption(){

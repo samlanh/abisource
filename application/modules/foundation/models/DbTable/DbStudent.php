@@ -422,7 +422,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		
 		$sql = "select 
 					id,
-					CONCAT(from_academic,'-',to_academic,'(',(select branch_namekh from rms_branch where br_id = branch_id),')')as years,
+					CONCAT(from_academic,'-',to_academic,'(',(select branch_namekh from rms_branch where br_id = branch_id LIMIT 1),')')as years,
 					(select name_en from rms_view where type=7 and key_code=time) as time
 				 from 
 					rms_tuitionfee 

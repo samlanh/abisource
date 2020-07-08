@@ -1,9 +1,10 @@
 <?php
 class Global_OccupationController extends Zend_Controller_Action {
-	private $activelist = array('មិនប្រើ​ប្រាស់', 'ប្រើ​ប្រាស់');
+	protected $tr;
     public function init()
     {    	
      /* Initialize action controller here */
+    	$this->tr=Application_Form_FrmLanguages::getCurrentlanguage();
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 	}
@@ -52,14 +53,11 @@ class Global_OccupationController extends Zend_Controller_Action {
 				$_major_id = $_dbmodel->addNewOccupation($_data);
 				if(isset($_data['save_close'])){
 					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/global/occupation");
-				}else{
-					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/global/occupation/add");
 				}
-				Application_Form_FrmMessage::message("INSERT_SUCCESS");
-				
+				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/global/occupation/add");
 					
 			} catch (Exception $e) {
-				Application_Form_FrmMessage::message("ការ​បញ្ចូល​មិន​ជោគ​ជ័យ");
+				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		
@@ -79,8 +77,15 @@ class Global_OccupationController extends Zend_Controller_Action {
 			}
 		}
 		$id=$this->getRequest()->getParam("id");
+		$id = empty($id)?0:$id;
 		$db = new Global_Model_DbTable_DbOccupation();
-		$this->view->rs=$db->getOccupationById($id);
+		$row=$db->getOccupationById($id);
+		
+		if (empty($row)){
+			Application_Form_FrmMessage::Sucessfull($this->tr->translate("NO_RECORD"),"/global/occupation/index");
+			exit();
+		}
+		$this->view->rs= $row;
 	}
 	function addcompositionAction(){
 		if($this->getRequest()->isPost()){
