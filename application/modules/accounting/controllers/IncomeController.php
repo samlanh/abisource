@@ -3,10 +3,11 @@
 class Accounting_IncomeController extends Zend_Controller_Action
 {
 	const REDIRECT_URL = '/accounting/';
-	
+	protected $tr;
     public function init()
     {
     	header('content-type: text/html; charset=utf8');
+    	$this->tr=Application_Form_FrmLanguages::getCurrentlanguage();
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
     }
 
@@ -95,8 +96,13 @@ class Accounting_IncomeController extends Zend_Controller_Action
 			}
 		}
 		$id = $this->getRequest()->getParam('id');
+		$id = empty($id)?0:$id;
 		$db = new Accounting_Model_DbTable_DbIncome();
 		$row  = $db->getIncomeById($id);
+		if (empty($row)){
+			Application_Form_FrmMessage::Sucessfull($this->tr->translate("NO_RECORD"),"/accounting/income");
+			exit();
+		}
 		$this->view->row = $row;
 		
     	$pructis=new Registrar_Form_Frmexpense();

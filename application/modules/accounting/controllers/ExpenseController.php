@@ -3,10 +3,11 @@
 class Accounting_ExpenseController extends Zend_Controller_Action
 {
 	const REDIRECT_URL = '/registrar/expense';
-	
+	protected $tr;
     public function init()
     {
     	header('content-type: text/html; charset=utf8');
+    	$this->tr=Application_Form_FrmLanguages::getCurrentlanguage();
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
     }
 
@@ -84,7 +85,11 @@ class Accounting_ExpenseController extends Zend_Controller_Action
  
     public function editAction()
     {
+    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+    	
     	$id = $this->getRequest()->getParam('id');
+    	$id = empty($id)?0:$id;
+    	
     	if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();	
 			$data['id'] = $id;
@@ -93,13 +98,17 @@ class Accounting_ExpenseController extends Zend_Controller_Action
 				$db->updateExpense($data);				
 				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/accounting/expense");
 			} catch (Exception $e) {
-				$this->view->msg = 'ការ​បញ្ចូល​មិន​ជោគ​ជ័យ';
+				$this->view->msg = $tr->translate("EDIT_FAIL");
 				Application_Form_FrmMessage::Sucessfull('EDIT_FAIL', "/accounting/expense");
 			}
 		}
-		$id = $this->getRequest()->getParam('id');
+	
 		$db = new Accounting_Model_DbTable_DbExpense();
 		$row  = $db->getexpensebyid($id);
+		if (empty($row)){
+			Application_Form_FrmMessage::Sucessfull($this->tr->translate("NO_RECORD"),"/accounting/expense");
+			exit();
+		}
 		$this->view->row = $row;
 		
     	$pructis=new Registrar_Form_Frmexpense();
@@ -107,7 +116,7 @@ class Accounting_ExpenseController extends Zend_Controller_Action
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_expense=$frm;
 		
-    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+    	
     	$_dbs = new Application_Model_DbTable_DbGlobal();
     	$cate_income = $_dbs->getCategoryName(0);
     	array_unshift($cate_income, array('id'=>'-1','name'=>$tr->translate("ADD_NEW")));

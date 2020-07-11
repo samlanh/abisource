@@ -1,10 +1,12 @@
 <?php
 class accounting_FixedAssetController extends Zend_Controller_Action {
 	const REDIRECT_URL = '/accounting/fixedasset';
+	protected $tr;
 	public function init()
 	{
 		/* Initialize action controller here */
 		header('content-type: text/html; charset=utf8');
+		$this->tr=Application_Form_FrmLanguages::getCurrentlanguage();
 		defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 	}
 	
@@ -79,6 +81,7 @@ class accounting_FixedAssetController extends Zend_Controller_Action {
 	public function editAction()
 	{
 		$id = $this->getRequest()->getParam('id');
+		$id = empty($id)?0:$id;
 		if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();
 			$data['id']=$id;
@@ -94,6 +97,10 @@ class accounting_FixedAssetController extends Zend_Controller_Action {
 		}
 		$db = new Accounting_Model_DbTable_DbAsset();
 		$row  = $db->getassetbyid($id);
+		if (empty($row)){
+			Application_Form_FrmMessage::Sucessfull($this->tr->translate("NO_RECORD"),self::REDIRECT_URL . '/index');
+			exit();
+		}
 		
 		$pructis=new Accounting_Form_Frmasset();
 		$frm = $pructis->FrmAsset($row);
