@@ -19,17 +19,17 @@ class Registrar_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
 				  sp.payfor_type,
 				  
 				  s.stu_code,
-				  (select ser.stu_code from rms_service as ser where ser.stu_id= sp.student_id and ser.type=4 limit 1) as transport_code,
-				  (select ser.stu_code from rms_service as ser where ser.stu_id= sp.student_id and ser.type=5 limit 1) as lunch_code,
+				  (SELECT ser.stu_code FROM rms_service as ser WHERE ser.stu_id= sp.student_id AND ser.type=4 LIMIT 1) as transport_code,
+				  (SELECT ser.stu_code FROM rms_service as ser WHERE ser.stu_id= sp.student_id AND ser.type=5 LIMIT 1) as lunch_code,
 				  
 				  CONCAT(s.stu_khname,' - ',s.stu_enname) AS name,
 				  s.stu_khname,
 				  s.stu_enname,
-				  (select name_en from rms_view where rms_view.type=2 and key_code=s.sex )AS sex,
+				  (SELECT name_en FROM rms_view WHERE rms_view.type=2 AND key_code=s.sex LIMIT 1)AS sex,
 				  s.tel,
 				  
-				  (select en_name from rms_dept where dept_id=s.degree) as degree,
-				  (select major_enname from rms_major where major_id=s.grade) as grade,
+				  (SELECT en_name FROM rms_dept WHERE dept_id=s.degree LIMIT 1) as degree,
+				  (SELECT major_enname FROM rms_major WHERE major_id=s.grade LIMIT 1) as grade,
 				  
 				  pn.`title` service,
 				  spd.`start_date` as start,
@@ -43,7 +43,7 @@ class Registrar_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
 				  rms_student as s
 				WHERE 
 				  spd.`is_start` = 1
-				  and sp.is_void=0
+				  AND sp.is_void=0
 				  AND s.stu_id=sp.student_id 
 				  AND sp.id=spd.`payment_id`
 				  AND spd.`service_id`=pn.`service_id` 
@@ -51,44 +51,43 @@ class Registrar_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
 				  $branch_id
 				  
     		";
-    		//OR (select ser.is_suspend from rms_service as ser where ser.stu_id= sp.student_id and ser.type=5 limit 1) = 0
-			//OR (select ser.is_suspend from rms_service as ser where ser.stu_id= sp.student_id and ser.type=4 limit 1) = 0   
+    		//OR (SELECT ser.is_suspend FROM rms_service as ser WHERE ser.stu_id= sp.student_id AND ser.type=5 LIMIT 1) = 0
+			//OR (SELECT ser.is_suspend FROM rms_service as ser WHERE ser.stu_id= sp.student_id AND ser.type=4 LIMIT 1) = 0   
     	
 			 	
     	
     	
-    	$where=" ";
+    	$WHERE=" ";
     	$order=" ORDER by spd.`validate` DESC ";
     	$str_next = '+1 week';
      	$search['end_date']=date("Y-m-d", strtotime($search['end_date'].$str_next));
       	$to_date = (empty($search['end_date']))? '1': " spd.validate <= '".$search['end_date']." 23:59:59'";
 //       	$from_date = (empty($search['start_date']))? '1': " spd.validate >= '".$search['start_date']." 00:00:00'";
-      	$where .= " and ".$to_date;
+      	$WHERE .= " AND ".$to_date;
 	      	
     	if(!empty($search['adv_search'])){
     		$s_where = array();
     		$s_search = addslashes(trim($search['adv_search']));
     		$s_where[] = " sp.receipt_number LIKE '%{$s_search}%'";
     		$s_where[] = " s.stu_code  LIKE '%{$s_search}%'";
-    		$s_where[] = " (select ser.stu_code from rms_service as ser where ser.stu_id= sp.student_id and ser.type=4 limit 1)  LIKE '%{$s_search}%'";
-    		$s_where[] = " (select ser.stu_code from rms_service as ser where ser.stu_id= sp.student_id and ser.type=5 limit 1)  LIKE '%{$s_search}%'";
+    		$s_where[] = " (SELECT ser.stu_code FROM rms_service as ser WHERE ser.stu_id= sp.student_id AND ser.type=4 LIMIT 1)  LIKE '%{$s_search}%'";
+    		$s_where[] = " (SELECT ser.stu_code FROM rms_service as ser WHERE ser.stu_id= sp.student_id AND ser.type=5 LIMIT 1)  LIKE '%{$s_search}%'";
     		$s_where[] = " s.stu_khname LIKE '%{$s_search}%'";
     		$s_where[] = " s.stu_enname LIKE '%{$s_search}%'";
-    		$s_where[] = " (select title from rms_program_name where rms_program_name.service_id=spd.service_id) LIKE '%{$s_search}%'";
+    		$s_where[] = " (SELECT title FROM rms_program_name WHERE rms_program_name.service_id=spd.service_id LIMIT 1) LIKE '%{$s_search}%'";
     		$s_where[] = " spd.comment LIKE '%{$s_search}%'";
-    		$where .=' AND ( '.implode(' OR ',$s_where).')';
+    		$WHERE .=' AND ( '.implode(' OR ',$s_where).')';
     	}
     	if($search['service']>0){
-    		$where.=" AND spd.service_id=".$search['service'];
+    		$WHERE.=" AND spd.service_id=".$search['service'];
     	}
     	if($search['degree_all']>0){
-    		$where.=" AND s.degree=".$search['degree_all'];
+    		$WHERE.=" AND s.degree=".$search['degree_all'];
     	}
     	if($search['grade_all']>0){
-    		$where.=" AND s.grade=".$search['grade_all'];
+    		$WHERE.=" AND s.grade=".$search['grade_all'];
     	}
-//     	echo $sql.$where.$order;exit();
-    	return $db->fetchAll($sql.$where.$order);
+    	return $db->fetchAll($sql.$WHERE.$order);
     }
     
 }

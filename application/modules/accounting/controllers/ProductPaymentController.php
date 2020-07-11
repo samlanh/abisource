@@ -94,6 +94,7 @@ class Accounting_ProductPaymentController extends Zend_Controller_Action {
     public function editAction()
     {
     	$id=$this->getRequest()->getParam('id');
+    	$id = empty($id)?0:$id;
     	if($this->getRequest()->isPost()){
     		$_data = $this->getRequest()->getPost();
     		try {
@@ -114,8 +115,12 @@ class Accounting_ProductPaymentController extends Zend_Controller_Action {
     	
     	$this->view->user_type = $db->getUserType();
     	
-    	$this->view->row = $payment = $db->getStudentServicePaymentByID($id);
-    	
+    	$payment = $db->getStudentServicePaymentByID($id);
+    	if (empty($payment)){
+    		Application_Form_FrmMessage::Sucessfull($this->tr->translate("NO_RECORD"),self::REDIRECT_URL . '/productpayment/index');
+    		exit();
+    	}
+    	$this->view->row = $payment;
     	$payment_detail=$db->getStudentServicePaymentDetailByID($id);
     	$this->view->rows = $payment_detail;
     	

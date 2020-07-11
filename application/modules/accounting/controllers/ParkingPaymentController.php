@@ -80,6 +80,8 @@ class Accounting_ParkingPaymentController extends Zend_Controller_Action {
 	public function editAction(){
     	$db = new Accounting_Model_DbTable_DbParkingPayment();
     	$id=$this->getRequest()->getParam('id');
+    	$id = empty($id)?0:$id;
+    	
     	if($this->getRequest()->isPost()){
     		$_data = $this->getRequest()->getPost();
     		try {
@@ -98,7 +100,12 @@ class Accounting_ParkingPaymentController extends Zend_Controller_Action {
     	
     	$this->view->user_type = $db->getUserType();
     	
-    	$row=$this->view->row=$db->getParkingById($id);
+    	$row=$db->getParkingById($id);
+    	if (empty($row)){
+    		Application_Form_FrmMessage::Sucessfull($this->tr->translate("NO_RECORD"),"/accounting/parkingpayment/index");
+    		exit();
+    	}
+    	$this->view->row=$row;
     	
     	$this->view->cus_id=$db->getCusId();
     	$this->view->receipt_no=$db->getReceiptNo();

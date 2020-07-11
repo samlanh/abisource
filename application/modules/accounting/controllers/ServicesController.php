@@ -1,10 +1,11 @@
 <?php
 class Accounting_ServicesController extends Zend_Controller_Action {
-	private $activelist = array('មិនប្រើ​ប្រាស់', 'ប្រើ​ប្រាស់');
 	private $type = array(1=>'service',2=>'program');
+	protected $tr;
 	public function init()
     {    	
     	header('content-type: text/html; charset=utf8');
+    	$this->tr=Application_Form_FrmLanguages::getCurrentlanguage();
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 	}
 	public function start(){
@@ -80,18 +81,23 @@ class Accounting_ServicesController extends Zend_Controller_Action {
 		$this->view->frm_item = $frm_item;
 	}
 	function editAction(){
-			if($this->getRequest()->isPost()){
-				$_data = $this->getRequest()->getPost();
-				$model = new Accounting_Model_DbTable_DbServiceType();
-				$row = $model->AddServiceType($_data);
-				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", "/accounting/services/index");
-			}
-			$id = $this->getRequest()->getParam('id');
+		if($this->getRequest()->isPost()){
+			$_data = $this->getRequest()->getPost();
 			$model = new Accounting_Model_DbTable_DbServiceType();
-			$row = $model->getServiceTypeById($id);
-			$item=new Accounting_Form_Frmitem();
-			$frm_item=$item->FrmProgramType($row);
-			Application_Model_Decorator::removeAllDecorator($frm_item);
-			$this->view->frm_item = $frm_item;
+			$row = $model->AddServiceType($_data);
+			Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", "/accounting/services/index");
+		}
+		$id = $this->getRequest()->getParam('id');
+		$id = empty($id)?0:$id;
+		$model = new Accounting_Model_DbTable_DbServiceType();
+		$row = $model->getServiceTypeById($id);
+		if (empty($row)){
+			Application_Form_FrmMessage::Sucessfull($this->tr->translate("NO_RECORD"),"/accounting/services/index");
+			exit();
+		}
+		$item=new Accounting_Form_Frmitem();
+		$frm_item=$item->FrmProgramType($row);
+		Application_Model_Decorator::removeAllDecorator($frm_item);
+		$this->view->frm_item = $frm_item;
 	}	
 }

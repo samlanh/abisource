@@ -84,6 +84,8 @@ class Accounting_CustomerPaymentController extends Zend_Controller_Action {
 	public function editAction(){
     	$db = new Accounting_Model_DbTable_DbCustomerPayment();
     	$id=$this->getRequest()->getParam('id');
+    	$id = empty($id)?0:$id;
+    	
     	if($this->getRequest()->isPost()){
     		$_data = $this->getRequest()->getPost();
     		try {
@@ -102,7 +104,12 @@ class Accounting_CustomerPaymentController extends Zend_Controller_Action {
     	
     	$this->view->user_type = $db->getUserType();
     	
-    	$row=$this->view->row=$db->getCustomerById($id);
+    	$row=$db->getCustomerById($id);
+    	if (empty($row)){
+    		Application_Form_FrmMessage::Sucessfull($this->tr->translate("NO_RECORD"),"/accounting/customerpayment/index");
+    		exit();
+    	}
+    	$this->view->row=$row;
     	if($row['last_piad']==0){
     		Application_Form_FrmMessage::Sucessfull($this->tr->translate('Can not edit.!!!'), "/accounting/customerpayment/index");
     	}
@@ -117,6 +124,8 @@ class Accounting_CustomerPaymentController extends Zend_Controller_Action {
     
     public function deleteAction(){
     	$id=$this->getRequest()->getParam('id');
+    	$id = empty($id)?0:$id;
+    	
     	$db = new Accounting_Model_DbTable_DbCustomerPayment();
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();

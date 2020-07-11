@@ -56,7 +56,6 @@ class Registrar_CoursestudyController extends Zend_Controller_Action {
     {
     if($this->getRequest()->isPost()){
       	$_data = $this->getRequest()->getPost();
-//       	print_r($_data);exit();
       	try {
       		$db = new Registrar_Model_DbTable_DbCourStudey();
       		$db->addStudentGep($_data);
@@ -95,7 +94,6 @@ class Registrar_CoursestudyController extends Zend_Controller_Action {
     {
     	if($this->getRequest()->isPost()){
     		$_data = $this->getRequest()->getPost();
-    		//       	print_r($_data);exit();
     		try {
     			$db = new Registrar_Model_DbTable_DbCourStudey();
     			$db->addStudentGep($_data);
@@ -172,6 +170,8 @@ class Registrar_CoursestudyController extends Zend_Controller_Action {
     public function editAction()
     {
     	$id=$this->getRequest()->getParam('id');
+    	$id = empty($id)?0:$id;
+    	
     	if($this->getRequest()->isPost()){
     		$_data = $this->getRequest()->getPost();
     		try {
@@ -191,6 +191,10 @@ class Registrar_CoursestudyController extends Zend_Controller_Action {
     	}
     	$db = new Registrar_Model_DbTable_DbCourStudey();
     	$row_gep=$db->getStuentGepById($id);
+    	if (empty($row_gep)){
+    		Application_Form_FrmMessage::Sucessfull($this->tr->translate("NO_RECORD"),self::REDIRECT_URL . '/coursestudy/index');
+    		exit();
+    	}
     	$is_start=$row_gep['is_start'];
     	if($is_start==0){
     		Application_Form_FrmMessage::Sucessfull($this->tr->translate('Can not edit!'), self::REDIRECT_URL . '/coursestudy/index');

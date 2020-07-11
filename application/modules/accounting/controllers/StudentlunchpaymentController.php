@@ -100,6 +100,7 @@ class Accounting_StudentlunchpaymentController extends Zend_Controller_Action {
     public function editAction()
     {
     	$id=$this->getRequest()->getParam('id');
+    	$id = empty($id)?0:$id;
     	if($this->getRequest()->isPost()){
     		$_data = $this->getRequest()->getPost();
     		try {
@@ -119,10 +120,14 @@ class Accounting_StudentlunchpaymentController extends Zend_Controller_Action {
     	}
     	
     	$db = new Accounting_Model_DbTable_DbStudentLunchPayment();
-    	
     	$this->view->user_type = $db->getUserType();
+    	$payment=$db->getStudentServicePaymentByID($id);
+    	if (empty($payment)){
+    		Application_Form_FrmMessage::Sucessfull($this->tr->translate("NO_RECORD"),self::REDIRECT_URL . '/studentlunchpayment/index');
+    		exit();
+    	}
+    	$this->view->row=$payment;
     	
-    	$payment=$this->view->row=$db->getStudentServicePaymentByID($id);
     	$payment_detail=$db->getStudentServicePaymentDetailByID($id);
     	$this->view->detail = $payment_detail;
     	

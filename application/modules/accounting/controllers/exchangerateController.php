@@ -13,7 +13,7 @@ class Accounting_ExchangeRateController extends Zend_Controller_Action {
 	    	try{
 	    		$data = $this->getRequest()->getPost();
 	    		$db->addExchangerate($data);
-	    		Application_Form_FrmMessage::message("INSERT_SUCCESS");
+	    		Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/accounting/exchangerate");
 	    	}catch(Exception $e){
 	    		Application_Form_FrmMessage::message("APPLICATION_ERROR");
 	    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

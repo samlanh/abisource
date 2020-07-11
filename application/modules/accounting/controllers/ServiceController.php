@@ -1,9 +1,10 @@
 <?php
 class Accounting_ServiceController extends Zend_Controller_Action {
-	private $activelist = array('មិនប្រើ​ប្រាស់', 'ប្រើ​ប្រាស់');
 	private $type = array(1=>'service',2=>'program');
+	protected $tr;
 	public function init()
 	{
+		$this->tr=Application_Form_FrmLanguages::getCurrentlanguage();
 		header('content-type: text/html; charset=utf8');
 		defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 	}
@@ -69,7 +70,7 @@ public function addAction(){
 		
 	$db = new Accounting_Model_DbTable_DbService();
 	$rs= $db->getServiceType(1);
-	array_unshift($rs, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+	array_unshift($rs, array ( 'id' => -1,'name' => $this->tr->translate('ADD_NEW')));
 	$this->view->service = $rs;
 		
 	$this->view->all_car = $db->getAllCar();
@@ -81,9 +82,9 @@ public function addAction(){
 }
 public function editAction(){
 	$id=$this->getRequest()->getParam("id");
+	$id = empty($id)?0:$id;
+	
 	$db = new Accounting_Model_DbTable_Dbservice();
-	$row = $db->getServiceById($id);
-// 	print_r($row);exit();
 	if($this->getRequest()->isPost())
 	{
 		try{
@@ -97,10 +98,14 @@ public function editAction(){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 	}
-	
+	$row = $db->getServiceById($id);
+	if (empty($row)){
+		Application_Form_FrmMessage::Sucessfull($this->tr->translate("NO_RECORD"),"/accounting/service/index");
+		exit();
+	}
 	$db = new Accounting_Model_DbTable_DbService();
 	$rs= $db->getServiceType(1);
-	array_unshift($rs, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+	array_unshift($rs, array ( 'id' => -1,'name' => $this->tr->translate('ADD_NEW')));
 	$this->view->service = $rs;
 	
 	$this->view->all_car = $db->getAllCar();
@@ -120,7 +125,6 @@ function submitAction(){
 			$result = array("id"=>$row);
 			print_r(Zend_Json::encode($row));
 			exit();
-			//Application_Form_FrmMessage::message("INSERT_SUCCESS");
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("INSERT_FAIL");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

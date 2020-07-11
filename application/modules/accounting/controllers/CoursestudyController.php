@@ -93,7 +93,6 @@ class Accounting_CoursestudyController extends Zend_Controller_Action {
     $id=$this->getRequest()->getParam('id');
     	if($this->getRequest()->isPost()){
     		$_data = $this->getRequest()->getPost();
-//     		$_data['payment_id']=$id;
     		try {
     			$db = new Accounting_Model_DbTable_DbCourStudey();
     			if(isset($_data['save_new'])){

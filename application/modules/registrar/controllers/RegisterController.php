@@ -56,7 +56,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     public function addAction(){
       if($this->getRequest()->isPost()){
       	$_data = $this->getRequest()->getPost();
-      	//print_r($_data);exit();
       	try {
       		$db = new Registrar_Model_DbTable_DbRegister();
       		$db->addRegister($_data);
@@ -90,13 +89,11 @@ class Registrar_RegisterController extends Zend_Controller_Action {
        $key = new Application_Model_DbTable_DbKeycode();
        $this->view->data=$key->getKeyCodeMiniInv(TRUE);
        
-       //print_r($this->view->data);
     }
     
     public function adddataonlyAction(){
     	if($this->getRequest()->isPost()){
     		$_data = $this->getRequest()->getPost();
-    		//print_r($_data);exit();
     		try {
     			$db = new Registrar_Model_DbTable_DbRegister();
     			$db->addRegister($_data);
@@ -130,13 +127,11 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     	$key = new Application_Model_DbTable_DbKeycode();
     	$this->view->data=$key->getKeyCodeMiniInv(TRUE);
     	 
-    	//print_r($this->view->data);
     }
     
     public function addblankAction(){
     	if($this->getRequest()->isPost()){
     		$_data = $this->getRequest()->getPost();
-    		//print_r($_data);exit();
     		try {
     			$db = new Registrar_Model_DbTable_DbRegister();
     			$db->addRegister($_data);
@@ -170,7 +165,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     	$key = new Application_Model_DbTable_DbKeycode();
     	$this->view->data=$key->getKeyCodeMiniInv(TRUE);
     
-    	//print_r($this->view->data);
     }
     
     
@@ -206,6 +200,8 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     }
     public function editAction(){
     	$id=$this->getRequest()->getParam('id');
+    	$id = empty($id)?0:$id;
+    	
     	if($this->getRequest()->isPost()){
     		$_data = $this->getRequest()->getPost();
     		try {
@@ -224,6 +220,10 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     	}
     	$db = new Registrar_Model_DbTable_DbRegister();
         $form_row=$db->getRegisterById($id);
+        if (empty($form_row)){
+        	Application_Form_FrmMessage::Sucessfull($this->tr->translate("NO_RECORD"),self::REDIRECT_URL . '/register/index');
+        	exit();
+        }
         $this->view->all_product = $db->getAllProduct();
         $this->view->exchange_rate = $db->getExchangeRate();
         $this->view->user_type = $db->getUserType();

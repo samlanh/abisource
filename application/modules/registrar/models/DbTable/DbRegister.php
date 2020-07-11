@@ -943,7 +943,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	
     	$sql = "SELECT 
     				id,
-    				CONCAT(from_academic,'-',to_academic,'(',(SELECT branch_namekh FROM rms_branch WHERE br_id = branch_id),')') AS years,
+    				CONCAT(from_academic,'-',to_academic,'(',(SELECT branch_namekh FROM rms_branch WHERE br_id = branch_id LIMIT 1),')') AS years,
     				(select name_en from rms_view where type=7 and key_code=time) as time 
     			FROM 
     				rms_tuitionfee
@@ -970,8 +970,8 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	 
     	$sql = "SELECT
 			    	id,
-			    	CONCAT(from_academic,'-',to_academic,'(',(SELECT branch_namekh FROM rms_branch WHERE br_id = branch_id),')') AS years,
-			    	(select name_en from rms_view where type=7 and key_code=time) as time
+			    	CONCAT(from_academic,'-',to_academic,'(',(SELECT branch_namekh FROM rms_branch WHERE br_id = branch_id LIMIT 1),')') AS years,
+			    	(select name_en from rms_view where type=7 and key_code=time LIMIT 1) as time
     			FROM
     				rms_tuitionfee
     			WHERE
@@ -997,8 +997,8 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	
     	$sql = "SELECT 
     				id,
-    				CONCAT(from_academic,'-',to_academic,'(',(SELECT branch_namekh FROM rms_branch WHERE br_id = branch_id),')') AS years,
-    				(select name_en from rms_view where type=7 and key_code=time) as time 
+    				CONCAT(from_academic,'-',to_academic,'(',(SELECT branch_namekh FROM rms_branch WHERE br_id = branch_id LIMIT 1),')') AS years,
+    				(select name_en from rms_view where type=7 and key_code=time LIMIT 1) as time 
     			FROM 
     				rms_tuitionfee 
     			WHERE 

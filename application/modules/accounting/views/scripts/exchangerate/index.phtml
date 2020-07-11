@@ -1,4 +1,16 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	echo $this->headTitle($tr->translate('EXCHANGE_RATE')); 
+?>	
 <form id="exchangerate" dojoType="dijit.form.Form" method="post">
+	<script type="dojo/method" event="onSubmit">   
+   		if(this.validate()) {
+			loadingBlock();
+			return true;
+   		}else {
+			return false;
+   		}
+	</script>
 	<fieldset style="background:#f4f4f4; height:180px; overflow: scroll;overflow-x:hidden;">
 		<legend style="font-size:14px"><strong>ពត៌មាន ទាក់ទង និង ការប្ដូរប្រាក់</strong></legend>
 		<table  width="100%" border="1" style="background:; border-collapse: collapse;">
