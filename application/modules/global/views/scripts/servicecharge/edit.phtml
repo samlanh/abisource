@@ -3,35 +3,6 @@
 	echo $this->headTitle($tr->translate('EDIT_SERVICE_FEE')); 
 	$payment_term = $this->payment_term;
 ?>	
-<script type="text/javascript" src="js/dojo/dojo.js" djConfig="isDebug: true, parseOnLoad: true"></script>
-<script type="text/javascript">
-    dojo.require("dojo.NodeList-manipulate");
-    dojo.require("dojo.parser");
-    dojo.require("dojo.data.ItemFileWriteStore");  
-    dojo.require("dijit.form.NumberTextBox");
-    dojo.require("dijit.form.Textarea");
-    dojo.require("dijit.form.DateTextBox");
-    dojo.require("dijit.form.CheckBox"); 
-    var service_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->service));?> );
-    dojo.ready(function(){	
-    	new dijit.form.FilteringSelect({
-    		store: service_store,
-    		autoComplete: true,                        
-    		required: true,                      
-    	    id: "title",
-    	    name: "title",  
-    	    tabindex: "1",         
-    	    class: 'fullside',  
-    	    placeHolder:"<?php echo $tr->translate('Selecte Category')?>", 
-    	    onChange: function() {          
-    		   	service_id = dijit.byId('title').get('value');
-    		    if(service_id==-1){
-    		   		dijit.byId("popup_dept").show();
-    		    }
-    	   }
-    	}, "title");
-    }); 
-</script>
 <style>
 select{ width:100%;}
 fieldset{  background:none;}
@@ -159,8 +130,33 @@ table .set-style tr.st1{ background: none repeat scroll 0% 0% rgba(218, 250, 255
 	</tr>
 </table>	
 </form>
-
 <script type="text/javascript">
+    dojo.require("dojo.NodeList-manipulate");
+    dojo.require("dojo.parser");
+    dojo.require("dojo.data.ItemFileWriteStore");  
+    dojo.require("dijit.form.NumberTextBox");
+    dojo.require("dijit.form.Textarea");
+    dojo.require("dijit.form.DateTextBox");
+    dojo.require("dijit.form.CheckBox"); 
+    var service_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->service));?> );
+    dojo.ready(function(){	
+    	new dijit.form.FilteringSelect({
+    		store: service_store,
+    		autoComplete: true,                        
+    		required: true,                      
+    	    id: "title",
+    	    name: "title",  
+    	    tabindex: "1",         
+    	    class: 'fullside',  
+    	    placeHolder:"<?php echo $tr->translate('Selecte Category')?>", 
+    	    onChange: function() {          
+    		   	service_id = dijit.byId('title').get('value');
+    		    if(service_id==-1){
+    		   		dijit.byId("popup_dept").show();
+    		    }
+    	   }
+    	}, "title");
+    }); 
 function showPopupDept() {
 	if(dijit.byId('faculty').value==-1){
 		dijit.byId("popup_dept").show();
