@@ -35,6 +35,7 @@
 			<td><?php echo $frm->getElement('end_date');?></td>
 			<td> <?php echo $frm->getElement("from_receipt");?></td>
 	   	  	<td> <?php echo $frm->getElement("to_receipt");?></td>
+	   	  	<td> <?php echo $frm->getElement("payment_method");?></td>
 			<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button> </td>
 	    </tr>
 	</table>
@@ -127,6 +128,7 @@ tr.row_control {
 								<td class="padd">Grade</td>
 								<td class="padd">Phone</td>
 								<td class="padd">Price</td>
+								<td class="padd">Payment<br/>Method</td>
 								<td class="padd">Remark</td>
 								<td class="padd">Create Date</td>
 								<td class="padd">Status</td>
@@ -152,6 +154,7 @@ tr.row_control {
 							<td class="padd">&nbsp;<?php echo $rs['grade_result_title'];?>&nbsp;</td>
 							<td class="padd">&nbsp;<?php echo $rs['phone'];?>&nbsp;</td>
 							<td class="padd">&nbsp;<?php echo " $ ".number_format($rs['total_price'],2);?>&nbsp;</td>
+							<td class="padd">&nbsp;<?php echo $rs['payment_method_title'];?>&nbsp;</td>
 							<td class="padd">&nbsp;<?php echo $rs['note'];?>&nbsp;</td>
 							<td class="padd">&nbsp;<?php echo date("d-M-Y",strtotime($rs['create_date']));?>&nbsp;</td>	
 							<td class="padd"><?php if($rs['status']==0){echo "Void";};?></td>

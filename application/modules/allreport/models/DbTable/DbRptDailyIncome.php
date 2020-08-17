@@ -786,7 +786,12 @@ class Allreport_Model_DbTable_DbRptDailyIncome extends Zend_Db_Table_Abstract
 			    	paid,
 			    	cp.note,
 			    	cp.create_date,
-			    	cp.status
+			    	cp.status,
+			    	
+			    	(SELECT name_kh FROM rms_view WHERE TYPE=18 AND key_code = cp.`payment_method` LIMIT 1) AS payment_method_title,
+			    	cp.`payment_method`,
+			    	cp.`payment_note`
+			    	
 			    FROM
 			    	rms_customer as c,
 			    	rms_customer_paymentdetail as cp
@@ -842,6 +847,9 @@ class Allreport_Model_DbTable_DbRptDailyIncome extends Zend_Db_Table_Abstract
     		$where.= " AND cp.`user_id` = ".$search['user'];
     	}
     
+    	if(!empty($search['payment_method'])){
+    		$where.= " AND cp.payment_method = ".$search['payment_method'];
+    	}
     	return $db->fetchAll($sql.$where.$order);
     
     }

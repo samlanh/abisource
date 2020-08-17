@@ -14,7 +14,12 @@ class Allreport_Model_DbTable_DbStudenttest extends Zend_Db_Table_Abstract
 					 (select en_name from rms_dept where dept_id=degree LIMIT 1) as degree,
 		  			 (SELECT m.major_enname FROM `rms_major` AS m WHERE m.major_id = grade_result LIMIT 1) AS grade_result_title,
 					 (SELECT first_name FROM `rms_users` WHERE id=rms_student_test.user_id LIMIT 1) AS user,
-					 (select name_en from rms_view where type=14 and key_code=updated_result limit 1) as result_status
+					 (select name_en from rms_view where type=14 and key_code=updated_result limit 1) as result_status,
+					 
+					 (SELECT name_kh FROM rms_view WHERE TYPE=18 AND key_code = payment_method LIMIT 1) AS payment_method_title,
+			    	payment_method,
+			    	payment_note
+			    	
 				FROM
 					rms_student_test
 				WHERE
@@ -64,6 +69,10 @@ class Allreport_Model_DbTable_DbStudenttest extends Zend_Db_Table_Abstract
 		if($search['user'] > 0){
 			$where.= " AND `user_id` = ".$search['user'];
 		}
+		if(!empty($search['payment_method'])){
+			$where.= " AND payment_method = ".$search['payment_method'];
+		}
+		
 		$order=" order by id ASC ";
 		return $db->fetchAll($sql.$where.$order);
 	}

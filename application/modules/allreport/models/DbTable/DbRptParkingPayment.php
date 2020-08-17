@@ -32,7 +32,12 @@ class Allreport_Model_DbTable_DbRptParkingPayment extends Zend_Db_Table_Abstract
 		       		pd.note,
 		      		(SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id=pd.user_id LIMIT 1) AS user_name,
 		      		pd.create_date,
-		      		pd.status
+		      		pd.status,
+		      		
+		      		(SELECT name_kh FROM rms_view WHERE TYPE=18 AND key_code = p.payment_method LIMIT 1) AS payment_method_title,
+			    	p.payment_method,
+			    	p.payment_note
+			    	
 				FROM
 				  	`rms_parking` AS p,
 				  	rms_parking_detail as pd
@@ -84,6 +89,10 @@ class Allreport_Model_DbTable_DbRptParkingPayment extends Zend_Db_Table_Abstract
     	}
     	if($search['user'] > 0){
     		$where.= " AND pd.`user_id` = ".$search['user'];
+    	}
+    	
+    	if(!empty($search['payment_method'])){
+    		$where.= " AND p.payment_method = ".$search['payment_method'];
     	}
     	
     	return $db->fetchAll($sql.$where.$order);
