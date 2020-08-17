@@ -53,7 +53,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 		}else{
 			$dob = $data['dob'];
 		}
-		
 			try{
 				if($data['student_type']==1){//new student
 					$this->_name = "rms_student";

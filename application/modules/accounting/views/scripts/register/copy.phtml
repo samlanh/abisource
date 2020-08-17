@@ -1,7 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate('REGISTER')); 
-	$base_url = Application_Form_FrmMessage::getUrl("/");
 ?>	
 <style>
 select{ width:100%;}
@@ -39,13 +38,12 @@ fieldset{  background:none;}
 					<legend align="center"><strong><?php echo $tr->translate("STUDENT_INFO");?></strong></legend>
 					<table style="margin: 0 auto; width: 100%;padding: 0px 10px 10px 10px;" cellspacing="5" >
 						<tr>
-							<td ><?php echo $tr->translate("BRANCH");?></td>
-							<td>
-								<select type="text" name="branch" id="branch" autoComplete="false" queryExpr="*${0}*" onchange="getYearByBranch();getOldStuIdByBranch();getDropStuIdByBranch();getStudentNo(1);getNewReceiptNo();" class="fullside" dojoType="dijit.form.FilteringSelect" >
+							<td><?php echo $tr->translate("BRANCH");?></td>
+							<td><select type="text" name="branch" id="branch" autoComplete="false" queryExpr="*${0}*" onchange="getYearByBranch();getOldStuIdByBranch();getDropStuIdByBranch();getStudentNo(1);getNewReceiptNo();" class="fullside" dojoType="dijit.form.FilteringSelect" >
 									<option value="-1"><?php echo $tr->translate("SELECT_BRANCH");?></option>
-								<?php if(!empty($this->branch_id)){foreach ($this->branch_id as $branch){?>
-									<option value="<?php echo $branch['id'];?>" <?php if($branch['id']==$this->degree_row['branch_id']){echo 'selected="selected"';}?>><?php echo $branch['name'];?></option>
-								<?php }}?>
+									<?php if(!empty($this->branch_id)){foreach ($this->branch_id as $branch){?>
+										<option value="<?php echo $branch['id'];?>" <?php if($branch['id']==$this->degree_row['branch_id']){echo 'selected="selected"';}?>><?php echo $branch['name'];?></option>
+									<?php }}?>
 								</select>
 							</td>
 						</tr>
@@ -57,14 +55,12 @@ fieldset{  background:none;}
 						</tr>
 						<tr>
 							<td><?php echo $tr->translate("STUDENT_ID");?></td>
-							<td>
-								<div id="student_old">
+							<td><div id="student_old">
 									<input id="old_studens" />
 								</div>
 								<div id="id_stu">
 									<?php echo $register->getElement('stu_id');?>
 								</div>
-								
 								<div id="drop_stu_code"><input id="drop_studens" /></div>
 							</td>
 						</tr>
@@ -77,7 +73,6 @@ fieldset{  background:none;}
 								<div id="name_stu">
 									<?php echo $register->getElement('stu_name');?>
 								</div>
-								
 								<div id="drop_stu_name"><input id="drop_student_name" /></div>
 							</td>
 						</tr>
@@ -119,12 +114,12 @@ fieldset{  background:none;}
 							<td width="80%"><input id="study_year" /></td>
 						</tr>
 						<tr>
-							<input type="hidden" name="old_stu_code" id="old_stu_code" dojoType="dijit.form.TextBox" />
-							<input type="hidden" name="old_degree" id="old_degree" dojoType="dijit.form.TextBox" />
-							<input type="hidden" name="old_grade" id="old_grade" dojoType="dijit.form.TextBox" />
-							<input type="hidden" name="degree_type" id="degree_type" dojoType="dijit.form.TextBox" />
-							
-							<td><?php echo $tr->translate("DEGREE");?><label class="red">*</label></td>
+							<td><?php echo $tr->translate("DEGREE");?><label class="red">*</label>
+								<input type="hidden" name="old_stu_code" id="old_stu_code" dojoType="dijit.form.TextBox" />
+								<input type="hidden" name="old_degree" id="old_degree" dojoType="dijit.form.TextBox" />
+								<input type="hidden" name="old_grade" id="old_grade" dojoType="dijit.form.TextBox" />
+								<input type="hidden" name="degree_type" id="degree_type" dojoType="dijit.form.TextBox" />
+							</td>
 							<td><input id="dept" /></td>
 						</tr>
 						<tr>
@@ -157,7 +152,6 @@ fieldset{  background:none;}
 								</select>
 							</td>
 						</tr>
-						
 						<tr>
 							<td><?php echo $tr->translate("START_DATE");?></td>
 							<td><?php echo $register->getElement('start_date');?></td>
@@ -191,9 +185,10 @@ fieldset{  background:none;}
 						</tr>
 						<tr>	
 							<td><?php echo $tr->translate("TUITION_FEE");?></td>
-							<td><?php echo $register->getElement('tuitionfee');?></td>
+							<td><?php echo $register->getElement('tuitionfee');?>
+								<input type="hidden" name="price_per_section" id="price_per_section" value="<?php echo $this->degree_row['price_per_sec'];?>" dojoType="dijit.form.TextBox" >
+							</td>
 						</tr>
-						<input type="hidden" name="price_per_section" id="price_per_section" value="<?php echo $this->degree_row['price_per_sec'];?>" dojoType="dijit.form.TextBox" >
 						<tr>
 							<td>
 								<div id="label_amount">
@@ -258,6 +253,14 @@ fieldset{  background:none;}
 								</select>
 							</td>
 						</tr>
+						<tr>	
+							<td><?php echo $tr->translate("PAYMENT_METHOD");?></td>
+							<td><?php echo $register->getElement('payment_method');?></td>
+						</tr>
+						<tr>	
+							<td><?php echo $tr->translate("PAYIMENT_NOTE");?></td>
+							<td><?php echo $register->getElement('note_payment');?></td>
+						</tr>
 					</table>	
 				</fieldset>		
 			</td>
@@ -315,6 +318,7 @@ fieldset{  background:none;}
 	dojo.require("dojo.data.ItemFileWriteStore");  
 	dojo.require("dojo.NodeList-manipulate");
 	dojo.require('dojox.form.BusyButton');
+	dojo.require("dijit.form.Textarea");
 	
 	var dept_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->all_dept));?> );
 	dojo.ready(function(){

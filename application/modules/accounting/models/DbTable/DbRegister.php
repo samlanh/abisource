@@ -253,7 +253,6 @@ class Accounting_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 				$arr=array(
 						'student_id'	=>$id,
 						'receipt_number'=>$receipt,
-						
 						'year'			=>$data['study_year'],
 						'degree'		=>$data['dept'],
 						'grade'			=>$data['grade'],
@@ -297,6 +296,8 @@ class Accounting_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						'branch_id'		=>$data['branch'],
 						'reg_from'		=>1,
 						'is_void'		=>$is_void,
+						'payment_method'=>$data['payment_method'],
+						'payment_note'	=>$data['note_payment'],
 				);
 				$paymentid = $this->insert($arr);
 				
@@ -399,9 +400,7 @@ class Accounting_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 				}
 				
 		////////////////  rms_student_id  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-				
 				$this->_name='rms_student_id';
-				
 				if($data['student_type']==1){ // new student
 				
 					if($data['degree_type']==1){
@@ -473,8 +472,6 @@ class Accounting_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					);
 					$this->update($arr,$where);
 					
-		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-					
 		////////// update is_complete = 1  ប្រសិនបើ record និងជា record ដែលជំបាក់ពីមុន	រួចបានគិត  balance again ////////////////////////////////////////////////////
 		
 					$this->_name='rms_student_paymentdetail';
@@ -487,7 +484,6 @@ class Accounting_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						$this->update($arr,$where);
 					}
 				}
-	
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 				
 				$this->_name='rms_student_paymentdetail';
@@ -538,7 +534,6 @@ class Accounting_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 			}catch (Exception $e){
 				$db->rollBack();//អោយវាវិលត្រលប់ទៅដើមវីញពេលណាវាជួបErrore
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-				echo $e->getMessage();exit();
 			}
 		}
 		
@@ -694,6 +689,8 @@ class Accounting_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						'receipt_number'=>$data['reciept_no'],
 						'create_date'	=>$create_date,
 						'shift'			=>$data['shift'],
+						'payment_method'=>$data['payment_method'],
+						'payment_note'	=>$data['note_payment'],
 				);
 				$where=" id = ".$data['pay_id'];
 				$this->update($array,$where);
@@ -922,7 +919,6 @@ class Accounting_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 		
 		
 	function deleteRecord($data,$id){
-		//print_r($data);exit();
 		$db = $this->getAdapter();//ស្ពានភ្ជាប់ទៅកាន់Data Base
 		$db->beginTransaction();//ទប់ស្កាត់មើលការErrore , មានErrore វាមិនអោយចូល
 	

@@ -89,7 +89,6 @@ class Accounting_RegisterController extends Zend_Controller_Action {
        
        $db = new Registrar_Model_DbTable_DbRegister();
        $this->view->exchange_rate = $db->getExchangeRate();
-       
     }
     
     public function editAction(){
