@@ -1005,7 +1005,9 @@ class Accounting_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 				  sp.grand_total_payment,
 				  sp.grand_total_payment_in_riel,
 				  sp.grand_total_paid_amount,
-				  sp.grand_total_balance
+				  sp.grand_total_balance,
+				  sp.payment_method,
+				  sp.payment_note
 				FROM
 				  rms_student AS s,
 				  rms_student_payment AS sp,

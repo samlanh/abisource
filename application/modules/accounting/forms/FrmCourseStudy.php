@@ -426,11 +426,8 @@ Class Accounting_Form_FrmCourseStudy extends Zend_Dojo_Form {
 				'class'=>'fullside',
 				'onchange'=>'getReceiptNo();',
 		));
-		$opts = array(
-				1=>$this->tr->translate('CASH'),
-				2=>$this->tr->translate('BANK'),
-				3=>$this->tr->translate('TRANSFER')
-		);
+		
+		$opts = $_db->getViewListById(18,1);
 		$payment_method->setMultiOptions($opts);
 		
 		$note_payment = new Zend_Dojo_Form_Element_Textarea('note_payment');
@@ -441,7 +438,6 @@ Class Accounting_Form_FrmCourseStudy extends Zend_Dojo_Form {
 		));
 		
 		if($data!=null){
-			 //print_r($data);exit();
 			$parent->setValue($data["is_parent"]);
 			$id->setValue($data['stu_id']);
 			$_studid->setValue($data['stu_code']);
@@ -470,7 +466,6 @@ Class Accounting_Form_FrmCourseStudy extends Zend_Dojo_Form {
 			$start_date->setValue($data['start_date']);
 			$end_date->setValue($data['validate']);
 			$create_date->setValue(date("Y-m-d",strtotime($data['create_date'])));
-			
 			$payment_method->setValue($data['payment_method']);
 			$note_payment->setValue($data['payment_note']);
 		}

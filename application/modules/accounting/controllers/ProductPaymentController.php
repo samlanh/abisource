@@ -65,7 +65,6 @@ class Accounting_ProductPaymentController extends Zend_Controller_Action {
       		}
       	} catch (Exception $e) {
       		Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
-      		echo $e->getMessage();
       	}
       }
        $frm = new Registrar_Form_FrmUniformAndBook();

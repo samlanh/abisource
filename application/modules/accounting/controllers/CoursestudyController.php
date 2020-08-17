@@ -90,7 +90,7 @@ class Accounting_CoursestudyController extends Zend_Controller_Action {
     }
     public function editAction()
     {
-    $id=$this->getRequest()->getParam('id');
+    	$id=$this->getRequest()->getParam('id');
     	if($this->getRequest()->isPost()){
     		$_data = $this->getRequest()->getPost();
     		try {

@@ -179,46 +179,35 @@ class Accounting_Model_DbTable_DbStudentServicePayment extends Zend_Db_Table_Abs
 			$arr=array(
 					'student_id'		=>$student_id,
 					'receipt_number'	=>$receipt_no,
-					
 					'buy_product'		=>$buy_product,
-					
 					'year'				=>$data['year'],
-					
 					'exchange_rate'		=>$data['ex_rate'],
 					'tuition_fee'		=>$tuitionfee,
 					'other_fee'			=>$data['other_fee'],
-					
-					
 					'discount_percent'	=>$data['discount'],
 					'discount_fix'		=>$data['discount_fix'],
-					
 					'tuition_fee_after_discount'=>($tuitionfee-$data['discount_fix']) - (($tuitionfee-$data['discount_fix'])*($data['discount']/100)),
-					
 					'total_payment'		=>$data['total_payment'],
 					'receive_amount'	=>$data['paid_amount'],
 					'paid_amount'		=>$data['paid_amount'],
 					'balance_due'		=>$data['balance'],
-					//'amount_in_khmer'	=>$data['char_price'],
 					'note'				=>$data['other'],
 					'time_for_car'		=>$data['time_identity'],
-					
 					'grand_total_payment'			=>$data['grand_total'],
 					'grand_total_payment_in_riel'	=>$data['convert_to_riels'],
 					'grand_total_paid_amount'		=>$data['total_received'],
 					'grand_total_balance'			=>$data['total_balance'],
-					
 					'is_new'			=>$is_new,
 					'student_type'		=>$data['student_type'],
 					'payfor_type'		=>3 , // for service
 					'create_date'		=>$create_date,
 					'shift'				=>$data['shift'],
 					'user_id'			=>$this->getUserId(),
-					
 					'branch_id'			=>$data['branch'],
-					
 					'reg_from'			=>1,  // from accounting
-					
 					'is_void'			=>$is_void,
+					'payment_method'=>$data['payment_method'],
+					'payment_note'	=>$data['note_payment'],
 				);
 				$payment_id = $this->insert($arr);
 				
@@ -260,8 +249,9 @@ class Accounting_Model_DbTable_DbStudentServicePayment extends Zend_Db_Table_Abs
 			
 	    	$db->commit();
 		}catch (Exception $e){
+			$err =$e->getMessage();
+			Application_Model_DbTable_DbUserLog::writeMessageError($err);
 			$db->rollBack();//អោយវាវិលត្រលប់ទៅដើមវីញពេលណាវាជួបErrore
-			echo $e->getMessage();
 		}
 	}
 	
@@ -359,6 +349,8 @@ class Accounting_Model_DbTable_DbStudentServicePayment extends Zend_Db_Table_Abs
 						'receipt_number'=>$data['reciept_no'],
 						'create_date'=>$create_date,
 						'shift'=>$data['shift'],
+						'payment_method'=>$data['payment_method'],
+						'payment_note'	=>$data['note_payment'],
 						
 				);
 				$where=" id = ".$data['payment_id'];
@@ -391,7 +383,8 @@ class Accounting_Model_DbTable_DbStudentServicePayment extends Zend_Db_Table_Abs
 				return 0;
 			}
 		}catch (Exception $e){
-			echo $e->getMessage();
+			$err = $e->getMessage();
+			Application_Model_DbTable_DbUserLog::writeMessageError($err);
 			$db->rollBack();
 		}
 		

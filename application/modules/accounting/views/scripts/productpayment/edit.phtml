@@ -1,7 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate('EDIT_STUDENT_PRODUCT_PAYMENT')); 
-	$base_url = Application_Form_FrmMessage::getUrl("/");
 ?>	
 
 <style>
@@ -136,17 +135,25 @@ fieldset{  background:none;}
 								<table style="width:80%;border-collapse: collapse;" cellpadding="10" cellspacing="10" >
 									<tr>
 										<td ><?php echo $tr->translate("EXCHANGE_RATE")." (៛)";?></td>
-										<td align="right">
+										<td >
 											<input type="text" class="fullside" name="ex_rate" id="ex_rate" readonly value="<?php echo $this->row['exchange_rate'] ;?>" dojoType="dijit.form.NumberTextBox" />
 										</td>
 									</tr>
 									<tr>
 										<td ><?php echo $tr->translate("TOTAL_PAYMENT");?></td>
-										<td align="right"><input class="fullside" type="text" readonly="readonly"  name="grand_total" id="grand_total" dojoType="dijit.form.NumberTextBox" /></td>
+										<td ><input class="fullside" type="text" readonly="readonly"  name="grand_total" id="grand_total" dojoType="dijit.form.NumberTextBox" /></td>
 									</tr>
 									<tr>	
 										<td><?php echo $tr->translate("CONVERT_TO_RIELS");?> (៛)</td>
-										<td align="right"><input class="fullside"  type="text" readonly="readonly" name="convert_to_riels" id="convert_to_riels" dojoType="dijit.form.NumberTextBox" /></td>
+										<td ><input class="fullside"  type="text" readonly="readonly" name="convert_to_riels" id="convert_to_riels" dojoType="dijit.form.NumberTextBox" /></td>
+									</tr>
+									<tr>	
+										<td><?php echo $tr->translate("PAYMENT_METHOD");?></td>
+										<td><?php echo $register->getElement('payment_method');?></td>
+									</tr>
+									<tr>	
+										<td><?php echo $tr->translate("PAYIMENT_NOTE");?></td>
+										<td><?php echo $register->getElement('note_payment');?></td>
 									</tr>
 								</table>
 							</td>
@@ -172,6 +179,7 @@ fieldset{  background:none;}
 	dojo.require("dojo.data.ItemFileWriteStore");  
 	dojo.require('dojox.form.BusyButton');
 	dojo.require("dojo.NodeList-manipulate");
+	dojo.require("dijit.form.Textarea");
 	
 dojo.ready(function(){
     	 dijitValue();
@@ -180,9 +188,10 @@ dojo.ready(function(){
 });
 
 function dijitValue(){
-	 //dijit.byId('reciept_no').attr('value','<?php echo $this->row['receipt_number']?>');
 	 dijit.byId('grand_total').attr('value','<?php echo $this->row['grand_total_paid_amount']?>');
 	 dijit.byId('convert_to_riels').attr('value','<?php echo $this->row['grand_total_payment_in_riel']?>');
+	 dijit.byId('payment_method').attr('value','<?php echo $this->row['payment_method']?>');
+	 dijit.byId('note_payment').attr('value','<?php echo $this->row['payment_note']?>');
 }
 function printSave(){		
 		if(dijit.byId('office_receipt').validate()) {
@@ -203,7 +212,6 @@ function printSave(){
 	     	  temp+='<th><strong style="font-family: Khmer OS Battambang;color:#000; ">តំលៃ<div class="h">Price</div></strong></th>';
 	       	  temp+='<th><strong style="font-family: Khmer OS Battambang;color:#000; ">បញ្ចុះតំលៃ<div class="h">Discount</div></strong></th>';
 	     	  temp+='<th><strong style="font-family: Khmer OS Battambang;color:#000; ">តំលៃសរុប<div class="h">Sub Total</div></strong></th>';
-		     //temp+='<th><strong style="font-family: Khmer OS Battambang;color:#000; ">ផ្សេងៗ<div class="h">Others</div></strong></th></tr>';
 			    i=1;  for(var n = 0; n < rowIDArray.length; n++) {
 			    	var discount = dijit.byId("discount_"+rowIDArray[n]).get('value');
 			    	discount = isNaN(discount)?0:discount;

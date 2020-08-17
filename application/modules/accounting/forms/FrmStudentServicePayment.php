@@ -299,6 +299,26 @@ Class Accounting_Form_FrmStudentServicePayment extends Zend_Dojo_Form {
 		);
 		$session->setMultiOptions($opt_session);
 		
+		$payment_method = new Zend_Dojo_Form_Element_FilteringSelect('payment_method');
+		$payment_method->setAttribs(array('dojoType'=>'dijit.form.FilteringSelect',
+			'class'=>'fullside',
+			'required'=>'true',
+			'autoComplete'=>'false',
+			'queryExpr'=>'*${0}*',
+			'class'=>'fullside',
+			'onchange'=>'getReceiptNo();',
+		));
+		
+		$opts = $_db->getViewListById(18,1);
+		$payment_method->setMultiOptions($opts);
+		
+		$note_payment = new Zend_Dojo_Form_Element_Textarea('note_payment');
+		$note_payment->setAttribs(array(
+			'dojoType'=>'dijit.form.Textarea',
+				'style'=>'min-height:40px;font-family:Khmer os Battambang',
+				'class'=>'fullside'
+		));
+		
 // 		$id = new Zend_Form_Element_Hidden('id');
  		if($data!=null){
 // 			//print_r($data);exit();
@@ -324,6 +344,7 @@ Class Accounting_Form_FrmStudentServicePayment extends Zend_Dojo_Form {
 // 			$old_studens->setValue($data['stu_id']);
  		}
 		$this->addElements(array(
+			   $note_payment,$payment_method,
 			  $room,$session,/*$id,*/$generation,$char_price,$end_date,$start_date,$not,$books,$addmin_fee,$remaining,$total ,$_invoice_no, $_pay_date, $_khname, $_enname,$_studid, $_sex,$_dob,$_degree,
 			  $_phone,$_dept,$_major,$_batch,$_year,$_session,$_term,$_fee,$_disc,$_paid,$_paid_kh,$_remark  ));
 		

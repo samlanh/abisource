@@ -125,15 +125,12 @@ class Accounting_RegisterController extends Zend_Controller_Action {
     	$this->view->branch_id = $_db->getAllBranch();
     	$this->view->all_time = $_db->getAllTime(1);
     	
-    	
     	$db = new Accounting_Model_DbTable_DbRegister();
     	$this->view->room = $db->getAllRoom();
-    	
     	$db = new Registrar_Model_DbTable_DbRegister();
     	$this->view->exchange_rate = $db->getExchangeRate();
     	$this->view->old_stu_code = $db->getAllGerneralOldStudent($form_row['stu_id']);
     	$this->view->old_stu_name = $db->getAllGerneralOldStudentName($form_row['stu_id']);
-    	
     }
     
     

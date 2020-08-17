@@ -26,7 +26,6 @@ class Accounting_Model_DbTable_DbCourStudey extends Zend_Db_Table_Abstract
     	return $db->fetchOne($sql);
     }
 	function addStudentGep($data){
-		//print_r($data);exit();
 		$db = $this->getAdapter();//ស្ពានភ្ជាប់ទៅកាន់Data Base
 		$db->beginTransaction();//ទប់ស្កាត់មើលការErrore , មានErrore វាមិនអោយចូល
 		
@@ -197,6 +196,8 @@ class Accounting_Model_DbTable_DbCourStudey extends Zend_Db_Table_Abstract
 						'reg_from'			=>1, // from accounting
 						
 						'is_void'			=>$is_void,
+						'payment_method'=>$data['payment_method'],
+						'payment_note'	=>$data['note_payment'],
 				);
 				$paymentid=$this->insert($arr);
 				
@@ -521,6 +522,8 @@ class Accounting_Model_DbTable_DbCourStudey extends Zend_Db_Table_Abstract
 						'receipt_number'=>$data['reciept_no'],
 						'create_date'	=>$create_date,
 						'shift'			=>$data['shift'],
+						'payment_method'=>$data['payment_method'],
+						'payment_note'	=>$data['note_payment'],
 				);
 				$where=" id = ".$data['payment_id'];
 				$this->update($array,$where);
@@ -853,7 +856,9 @@ class Accounting_Model_DbTable_DbCourStudey extends Zend_Db_Table_Abstract
 				  sp.grand_total_payment,
 				  sp.grand_total_payment_in_riel,
 				  sp.grand_total_paid_amount,
-				  sp.grand_total_balance
+				  sp.grand_total_balance,
+				  sp.payment_method,
+				  sp.payment_note
 				FROM
 				  rms_student AS s,
 				  rms_student_payment AS sp,

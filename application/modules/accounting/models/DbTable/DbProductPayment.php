@@ -45,7 +45,6 @@ class Accounting_Model_DbTable_DbProductPayment extends Zend_Db_Table_Abstract
     }
     
 	function addProductPayment($data){
-		//print_r($data);exit();
 		$db = $this->getAdapter();//ស្ពានភ្ជាប់ទៅកាន់Data Base
 		$db->beginTransaction();//ទប់ស្កាត់មើលការErrore , មានErrore វាមិនអោយចូល
 		
@@ -70,26 +69,23 @@ class Accounting_Model_DbTable_DbProductPayment extends Zend_Db_Table_Abstract
 		
 		try{
 			$arr=array(
-					'branch_id'			=>$data['branch'],
-					'student_id'		=>$data['student_name'],
-					'receipt_number'	=>$receipt_no,
-					'payfor_type'		=>5 , // product payment
-					
-					'buy_product'		=>1 ,
-					'reg_from'			=>1 ,
-					
-					'exchange_rate'		=>$data['ex_rate'],
-					
-					'grand_total_payment'			=>$data['grand_total'],
-					'grand_total_payment_in_riel'	=>$data['convert_to_riels'],
-					'grand_total_paid_amount'		=>$data['grand_total'],
-					'grand_total_balance'			=>0,
-					
-					'create_date'		=>$create_date,
-					'shift'				=>$data['shift'],
-					'user_id'			=>$this->getUserId(),
-					
-					'is_void'		=>$is_void,
+				'branch_id'			=>$data['branch'],
+				'student_id'		=>$data['student_name'],
+				'receipt_number'	=>$receipt_no,
+				'payfor_type'		=>5 , // product payment
+				'buy_product'		=>1 ,
+				'reg_from'			=>1 ,
+				'exchange_rate'		=>$data['ex_rate'],
+				'grand_total_payment'			=>$data['grand_total'],
+				'grand_total_payment_in_riel'	=>$data['convert_to_riels'],
+				'grand_total_paid_amount'		=>$data['grand_total'],
+				'grand_total_balance'			=>0,
+				'create_date'		=>$create_date,
+				'shift'				=>$data['shift'],
+				'user_id'			=>$this->getUserId(),
+				'is_void'		=>$is_void,
+				'payment_method'=>$data['payment_method'],
+				'payment_note'	=>$data['note_payment'],
 				);
 			$id = $this->insert($arr);
 				
@@ -101,23 +97,20 @@ class Accounting_Model_DbTable_DbProductPayment extends Zend_Db_Table_Abstract
 	    			$complete=1;
 		    		$status="បង់រួច";
 	    			$_arr = array(
-	    					'payment_id'	=>$id,
-	    					'service_id'	=>$data['service_'.$i],
-	    					
-	    					'fee'			=>$data['price_'.$i],
-	    					'qty'			=>$data['qty_'.$i],
-	    					'discount_percent'=>$data['discount_'.$i],
-	    					
-	    					'subtotal'		=>$data['subtotal_'.$i],
-	    					'paidamount'	=>$data['subtotal_'.$i],
-	    					'balance'		=>0,
-	    					
-	    					'note'			=>$data['remark'.$i],
-	    					'type'			=>4,
-	    					'is_start'		=>0,
-	    					'is_parent'		=>0,
-	    					'is_complete'	=>$complete,
-	    					'comment'		=>$status,
+    					'payment_id'	=>$id,
+    					'service_id'	=>$data['service_'.$i],
+    					'fee'			=>$data['price_'.$i],
+    					'qty'			=>$data['qty_'.$i],
+    					'discount_percent'=>$data['discount_'.$i],
+    					'subtotal'		=>$data['subtotal_'.$i],
+    					'paidamount'	=>$data['subtotal_'.$i],
+    					'balance'		=>0,
+    					'note'			=>$data['remark'.$i],
+    					'type'			=>4,
+    					'is_start'		=>0,
+    					'is_parent'		=>0,
+    					'is_complete'	=>$complete,
+    					'comment'		=>$status,
 	    			);
 	    			$id_record = $this->insert($_arr);
 	    		}
@@ -125,8 +118,9 @@ class Accounting_Model_DbTable_DbProductPayment extends Zend_Db_Table_Abstract
     			
     		$db->commit();
 		}catch (Exception $e){
-			echo $e->getMessage();
-			$db->rollBack();//អោយវាវិលត្រលប់ទៅដើមវីញពេលណាវាជួបErrore
+			$err =$e->getMessage();
+			Application_Model_DbTable_DbUserLog::writeMessageError($err);
+			$db->rollBack();
 		}
 	}
 		
@@ -171,6 +165,8 @@ class Accounting_Model_DbTable_DbProductPayment extends Zend_Db_Table_Abstract
 						'grand_total_payment_in_riel'	=>$data['convert_to_riels'],
 						'grand_total_paid_amount'		=>$data['grand_total'],
 						'grand_total_balance'			=>0,
+						'payment_method'=>$data['payment_method'],
+						'payment_note'	=>$data['note_payment'],
 				);
 				$where = " id = ".$data['payment_id'];
 				$this->update($arr, $where);
@@ -189,15 +185,12 @@ class Accounting_Model_DbTable_DbProductPayment extends Zend_Db_Table_Abstract
 		    			$_arr = array(
 		    					'payment_id'	=>$data['payment_id'],
 		    					'service_id'	=>$data['service_'.$i],
-		    					
 		    					'fee'			=>$data['price_'.$i],
 		    					'qty'			=>$data['qty_'.$i],
 		    					'discount_percent'=>$data['discount_'.$i],
-		    					
 		    					'subtotal'		=>$data['subtotal_'.$i],
 		    					'paidamount'	=>$data['subtotal_'.$i],
 		    					'balance'		=>0,
-		    					
 		    					'note'			=>$data['remark'.$i],
 		    					'type'			=>4,
 		    					'is_start'		=>0,
@@ -213,14 +206,13 @@ class Accounting_Model_DbTable_DbProductPayment extends Zend_Db_Table_Abstract
 				return 0;
 			}
 		}catch (Exception $e){
-			echo $e->getMessage();
+			$err =$e->getMessage();
+			Application_Model_DbTable_DbUserLog::writeMessageError($err);
 			$db->rollBack();
 		}
-		
 		return 0;	
 			
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
-		
 		try{
 			$arr=array(
 					'student_id'		=>$data['studentid'],

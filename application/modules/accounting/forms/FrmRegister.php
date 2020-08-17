@@ -135,7 +135,6 @@ Class Accounting_Form_FrmRegister extends Zend_Dojo_Form {
 		$_dob = $this->_dob;
 		$_pay_date=$this->_pay_date;
 		$_remark=$this->_remark;
-		
 		$_dob->setValue(date("Y-m-d"));
 		
 		$_invoice_no = new Zend_Dojo_Form_Element_TextBox('reciept_no');
@@ -424,11 +423,8 @@ Class Accounting_Form_FrmRegister extends Zend_Dojo_Form {
 			'class'=>'fullside',
 			'onchange'=>'getReceiptNo();',
 		));
-		$opts = array(
-			1=>$this->tr->translate('CASH'),
-			2=>$this->tr->translate('BANK'),
-			3=>$this->tr->translate('TRANSFER')
-		);
+		
+		$opts = $_db->getViewListById(18,1);
 		$payment_method->setMultiOptions($opts);
 		
 		$note_payment = new Zend_Dojo_Form_Element_Textarea('note_payment');

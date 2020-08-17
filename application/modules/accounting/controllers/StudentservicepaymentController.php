@@ -38,7 +38,6 @@ class Accounting_StudentservicepaymentController extends Zend_Controller_Action 
     		$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('year'=>$link,'receipt_number'=>$link,'name'=>$link,'service_name'=>$link,'code'=>$link,'delete'=>$link1));
     	}catch (Exception $e){
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-    		echo $e->getMessage();
     	}
     	$forms=new Registrar_Form_FrmSearchInfor();
     	$form=$forms->FrmSearchRegister();
@@ -62,9 +61,8 @@ class Accounting_StudentservicepaymentController extends Zend_Controller_Action 
 		      			Application_Form_FrmMessage::Sucessfull($this->tr->translate('INSERT_SUCCESS'), self::REDIRECT_URL . '/studentservicepayment/index');
 		      		}
 	      		}
-	      	} catch (Exception $e) {
+	      	} catch (Exception $e){
 	      		Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
-	      		echo $e->getMessage();
 	      	}
 	      }
 	       $frm = new Accounting_Form_FrmStudentServicePayment();
@@ -112,7 +110,6 @@ class Accounting_StudentservicepaymentController extends Zend_Controller_Action 
     			Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
     			$err =$e->getMessage();
     			Application_Model_DbTable_DbUserLog::writeMessageError($err);
-    			echo $err;
     		}
     	}
     	
