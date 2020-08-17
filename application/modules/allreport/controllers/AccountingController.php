@@ -1524,11 +1524,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 	
 			$db = new Allreport_Model_DbTable_DbRptDailyIncome();
 			$this->view->rs = $db->getDailyIncomeMaterial($search);
-	
-// 						print_r($this->view->rs);
-	
 			$this->view->search = $search;
-	
 			$this->view->rate = $db->getRate();
 	
 		}catch(Exception $e){

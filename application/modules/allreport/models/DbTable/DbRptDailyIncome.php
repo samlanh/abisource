@@ -187,7 +187,12 @@ class Allreport_Model_DbTable_DbRptDailyIncome extends Zend_Db_Table_Abstract
 					spd.`validate`,
 					spd.`payment_term`,
 					spd.is_complete,
-					spd.qty
+					spd.qty,
+					
+					(SELECT name_kh FROM rms_view WHERE TYPE=18 AND key_code = sp.`payment_method` LIMIT 1) AS payment_method_title,
+			    	sp.`payment_method`,
+			    	sp.`payment_note`
+			    	
 				FROM 
 					`rms_student_payment` AS sp,
 					`rms_student_paymentdetail` AS spd,
@@ -254,6 +259,10 @@ class Allreport_Model_DbTable_DbRptDailyIncome extends Zend_Db_Table_Abstract
     	}
     	if($search['user'] > 0){
     		$where.= " AND sp.`user_id` = ".$search['user'];
+    	}
+    	
+    	if(!empty($search['payment_method'])){
+    		$where.= " AND sp.`payment_method` = ".$search['payment_method'];
     	}
     	return $db->fetchAll($sql.$where.$order);
     	 
@@ -429,7 +438,12 @@ class Allreport_Model_DbTable_DbRptDailyIncome extends Zend_Db_Table_Abstract
 			    	spd.`validate`,
 			    	spd.`payment_term`,
 			    	spd.is_complete,
-			    	spd.qty
+			    	spd.qty,
+			    	
+			    	(SELECT name_kh FROM rms_view WHERE TYPE=18 AND key_code = sp.`payment_method` LIMIT 1) AS payment_method_title,
+			    	sp.`payment_method`,
+			    	sp.`payment_note`
+			    	
 			    FROM
 			    	`rms_student_payment` AS sp,
 			    	`rms_student_paymentdetail` AS spd,
@@ -491,6 +505,11 @@ class Allreport_Model_DbTable_DbRptDailyIncome extends Zend_Db_Table_Abstract
     	if($search['user'] > 0){
     		$where.= " AND sp.`user_id` = ".$search['user'];
     	}
+    	
+    	if(!empty($search['payment_method'])){
+    		$where.= " AND sp.`payment_method` = ".$search['payment_method'];
+    	}
+    	
     	return $db->fetchAll($sql.$where.$order);
     
     }
@@ -541,7 +560,12 @@ class Allreport_Model_DbTable_DbRptDailyIncome extends Zend_Db_Table_Abstract
 			    	spd.`validate`,
 			    	spd.`payment_term`,
 			    	spd.qty,
-			    	spd.is_complete
+			    	spd.is_complete,
+			    	
+			    	(SELECT name_kh FROM rms_view WHERE TYPE=18 AND key_code = sp.`payment_method` LIMIT 1) AS payment_method_title,
+			    	sp.`payment_method`,
+			    	sp.`payment_note`
+			    	
 			    FROM
 			    	`rms_student_payment` AS sp,
 			    	`rms_student_paymentdetail` AS spd,
@@ -603,7 +627,9 @@ class Allreport_Model_DbTable_DbRptDailyIncome extends Zend_Db_Table_Abstract
     	if($search['user'] > 0){
     		$where.= " AND sp.`user_id` = ".$search['user'];
     	}
-    	
+    	if(!empty($search['payment_method'])){
+    		$where.= " AND sp.`payment_method` = ".$search['payment_method'];
+    	}
     	return $db->fetchAll($sql.$where.$order);
     
     }
@@ -661,7 +687,12 @@ class Allreport_Model_DbTable_DbRptDailyIncome extends Zend_Db_Table_Abstract
 			    	spd.`payment_term`,
 			    	spd.subtotal,
 			    	spd.paidamount,
-			    	spd.qty
+			    	spd.qty,
+			    	
+			    	(SELECT name_kh FROM rms_view WHERE TYPE=18 AND key_code = sp.`payment_method` LIMIT 1) AS payment_method_title,
+			    	sp.`payment_method`,
+			    	sp.`payment_note`
+			    	
 			    FROM
 			    	`rms_student_payment` AS sp,
 			    	`rms_student_paymentdetail` AS spd,
@@ -720,7 +751,10 @@ class Allreport_Model_DbTable_DbRptDailyIncome extends Zend_Db_Table_Abstract
     	if($search['user'] > 0){
     		$where.= " AND sp.`user_id` = ".$search['user'];
     	}
-    	 
+    	if(!empty($search['payment_method'])){
+    		$where.= " AND sp.`payment_method` = ".$search['payment_method'];
+    	}
+    	
     	return $db->fetchAll($sql.$where.$order);
     
     }

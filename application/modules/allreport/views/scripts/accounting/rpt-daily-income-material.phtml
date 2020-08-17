@@ -28,6 +28,7 @@
 	   	  	<td> <?php echo $frm->getElement("end_date");?></td>
 			<td> <?php echo $frm->getElement("from_receipt");?></td>
 	   	  	<td> <?php echo $frm->getElement("to_receipt");?></td>
+	   	  	<td> <?php echo $frm->getElement("payment_method");?></td>
 	    	<td>
 	    		<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
 	    	</td>
@@ -125,6 +126,7 @@ tr.row_control {
 							<td class="padd">Material</td>
 							<td class="padd">Description</td>
 							<td class="padd">Total in USD</td>
+							<td class="padd">Payment<br/>Method</td>
 							<td class="padd">Create Date</td>
 							<td class="padd">Status</td>
 	 					 </tr>
@@ -161,8 +163,10 @@ tr.row_control {
 						
 						
 						<td class="padd"><?php echo $rs['service_name'];?></td>
+						
 						<td class="padd" align="left"><?php echo $rs['note'];?></td>
 						<td class="padd"><?php echo "$ ".$rs['paidamount'];?></td>
+						<td class="padd"><?php echo $rs['payment_method_title'];?></td>
 						<td class="padd"><?php echo date("d-M-Y",strtotime($rs['create_date']));?></td>
 						<td class="padd"><?php if($rs['is_void']==1){echo "Void";};?></td>
  					</tr>
