@@ -40,7 +40,6 @@ class Accounting_ParkingPaymentController extends Zend_Controller_Action {
     		$this->view->list=$list->getCheckList(0, $collumns, $rs_rows , array('customer_code'=>$link,'receipt_no'=>$link,'name'=>$link,'phone'=>$link,'delete'=>$link1));
 			
 		}catch (Exception $e){
-			echo $e->getMessage();
 		}
 		
 		$form=new Registrar_Form_FrmSearchInfor();
@@ -64,7 +63,6 @@ class Accounting_ParkingPaymentController extends Zend_Controller_Action {
     		} catch (Exception $e) {
     			Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-    			echo $e->getMessage();
     		}
     	}
     	

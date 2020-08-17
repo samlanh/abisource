@@ -1,7 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate('ADD_COURSESTUDY')); 
-	$base_url = Application_Form_FrmMessage::getUrl("/");
 ?>	
 <style>
 select{ width:100%;}
@@ -242,7 +241,7 @@ fieldset{  background:none;}
 						<tr>	
 							<td><?php echo $tr->translate("វេន");?></td>
 							<td>
-								<select name="shift" id="shift" dojoType="dijit.form.FilteringSelect" class="fullside" >
+								<select class="fullside" name="shift" id="shift" dojoType="dijit.form.FilteringSelect" class="fullside" >
 									<option value="1">វេនទី1</option>
 									<option value="2">វេនទី2</option>
 									<option value="3">វេនទី3</option>

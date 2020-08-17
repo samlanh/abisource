@@ -1,7 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate('ADD_STUDENT_LUNCH_PAYMENT')); 
-	$base_url = Application_Form_FrmMessage::getUrl("/");
 ?>	
 <style>
 select{ width:100%;}
@@ -10,7 +9,6 @@ fieldset{  background:none;}
 .head-td{font-size: 12px;}
 </style>
 <?php $register = $this->frm_register;
-//print_r($register);
 ?>
 <form id='office_receipt' action="<?php echo $this->url(array('module'=>'accounting','controller'=>'studentlunchpayment','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 <script type="dojo/method" event="onSubmit">   
@@ -145,12 +143,12 @@ fieldset{  background:none;}
 							<td><?php echo $tr->translate('SERVICE');?></td>
 							<td> 
 								<input id="service" />
+								<input type="hidden" name="old_service" id="old_service" dojoType="dijit.form.TextBox" />
+								<input type="hidden" name="service_cate" id="service_cate" dojoType="dijit.form.TextBox" />
+								<input type="hidden" name="balance_id" id="balance_id" dojoType="dijit.form.TextBox" />
 							</td>
 						</tr>
 						<tr>	
-							<input type="hidden" name="old_service" id="old_service" dojoType="dijit.form.TextBox" />
-							<input type="hidden" name="service_cate" id="service_cate" dojoType="dijit.form.TextBox" />
-							<input type="hidden" name="balance_id" id="balance_id" dojoType="dijit.form.TextBox" />
 							<td ><?php echo $tr->translate('PAYMENT_TERM');?></td>
 							<td> 
 								<select class="fullside" name="term" id="term" onchange="getservicefee();getValidate(1);" dojoType="dijit.form.FilteringSelect" type="text" autoComplete="false" queryExpr="*${0}*"  >
@@ -267,7 +265,6 @@ fieldset{  background:none;}
 								</select>
 							</td>
 						</tr>
-						
 					</table>	
 				</fieldset>		
 			</td>
@@ -306,6 +303,14 @@ fieldset{  background:none;}
 					<tr>
 						<td><?php echo $tr->translate("BALANCE");?></td>
 						<td ><input type="text"  readonly="readonly" name="total_balance" value="<?php echo 0?>" id="total_balance" dojoType="dijit.form.NumberTextBox" /></td>
+					</tr>
+					<tr>	
+						<td><?php echo $tr->translate("PAYMENT_METHOD");?></td>
+						<td><?php echo $register->getElement('payment_method');?></td>
+					</tr>
+					<tr>	
+						<td><?php echo $tr->translate("PAYIMENT_NOTE");?></td>
+						<td><?php echo $register->getElement('note_payment');?></td>
 					</tr>
 				</table>
 			</td>

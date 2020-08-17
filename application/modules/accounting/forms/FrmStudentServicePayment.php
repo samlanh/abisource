@@ -318,30 +318,11 @@ Class Accounting_Form_FrmStudentServicePayment extends Zend_Dojo_Form {
 				'style'=>'min-height:40px;font-family:Khmer os Battambang',
 				'class'=>'fullside'
 		));
-		
-// 		$id = new Zend_Form_Element_Hidden('id');
+	
  		if($data!=null){
-// 			//print_r($data);exit();
-// 			$id->setValue($data['stu_id']);
-// 			$_studid->setValue($data['stu_code']);
  			$_invoice_no->setValue($data['receipt_number']);
-// 			$this->_khname->setValue($data['stu_khname']);
-// 			$this->_enname->setValue($data['stu_enname']);
-// 			$_sex->setValue($data['sex']);
-// 			$session->setValue($data['session']);
-// 			$generation->setValue($data['academic_year']);
-// 			$_term->setValue($data['payment_term']);
-// 			$_fee->setValue($data['tuition_fee']);
-// 			$_disc->setValue($data['discount_percent']);
-// 			$_remark->setValue($data['other_fee']);
-// 			$addmin_fee->setValue($data['admin_fee']);
-// 			$total->setValue($data['total']);
-// 			$books->setValue($data['paid_amount']);
-// 			$remaining->setValue($data['balance_due']);
-// 			$char_price->setValue($data['amount_in_khmer']);
-// 			$not->setValue($data['note']);
-// 			$room->setValue($data['room_id']);
-// 			$old_studens->setValue($data['stu_id']);
+			$payment_method->setValue($data['payment_method']);
+			$note_payment->setValue($data['payment_note']);
  		}
 		$this->addElements(array(
 			   $note_payment,$payment_method,

@@ -47,26 +47,26 @@ class Accounting_StudentlunchpaymentController extends Zend_Controller_Action {
     }
     public function addAction()
     {
-    if($this->getRequest()->isPost()){
-      	$_data = $this->getRequest()->getPost();
-      	try {
-      		$db = new Accounting_Model_DbTable_DbStudentLunchPayment();
-      		$exist = $db->addStudentLunchPayment($_data);
-      		if($exist==-1){
-      			Application_Form_FrmMessage::message("RECORD_EXIST");
-      		}else{
-	      		if(isset($_data['save_new'])){
-	      			Application_Form_FrmMessage::message($this->tr->translate('INSERT_SUCCESS'));
+	    if($this->getRequest()->isPost()){
+	      	$_data = $this->getRequest()->getPost();
+	      	try {
+	      		$db = new Accounting_Model_DbTable_DbStudentLunchPayment();
+	      		$exist = $db->addStudentLunchPayment($_data);
+	      		if($exist==-1){
+	      			Application_Form_FrmMessage::message("RECORD_EXIST");
 	      		}else{
-	      			Application_Form_FrmMessage::Sucessfull($this->tr->translate('INSERT_SUCCESS'), self::REDIRECT_URL . '/studentlunchpayment/index');
+		      		if(isset($_data['save_new'])){
+		      			Application_Form_FrmMessage::message($this->tr->translate('INSERT_SUCCESS'));
+		      		}else{
+		      			Application_Form_FrmMessage::Sucessfull($this->tr->translate('INSERT_SUCCESS'), self::REDIRECT_URL . '/studentlunchpayment/index');
+		      		}
 	      		}
-      		}
-      	} catch (Exception $e) {
-      		Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
-      		$err =$e->getMessage();
-      		Application_Model_DbTable_DbUserLog::writeMessageError($err);
-      	}
-      }
+	      	} catch (Exception $e) {
+	      		Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
+	      		$err =$e->getMessage();
+	      		Application_Model_DbTable_DbUserLog::writeMessageError($err);
+	      	}
+	      }
        $frm = new Accounting_Form_FrmStudentServicePayment();
        $frm_register=$frm->FrmRegistarWU();
        Application_Model_Decorator::removeAllDecorator($frm_register);

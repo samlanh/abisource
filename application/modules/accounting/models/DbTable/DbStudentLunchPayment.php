@@ -53,7 +53,6 @@ class Accounting_Model_DbTable_DbStudentLunchPayment extends Zend_Db_Table_Abstr
     }
     
 	function addStudentLunchPayment($data){
-		//print_r($data);exit();
 		$db = $this->getAdapter();//ស្ពានភ្ជាប់ទៅកាន់Data Base
 		$db->beginTransaction();//ទប់ស្កាត់មើលការErrore , មានErrore វាមិនអោយចូល
 		
@@ -61,12 +60,6 @@ class Accounting_Model_DbTable_DbStudentLunchPayment extends Zend_Db_Table_Abstr
 		$type = 4 ; // lunch payment 
 		//$receipt_no = $receipt->getRecieptNo($type ,$data['branch']);
 		$receipt_no = $data['receipt_no'];
-		
-		// សិក្សាពេល User ច្រលំចុច submit 2 ដង​​ អោយវាចូលតែ1
-// 		$rs = $this->getStudentExist($data['reciept_no'],$data['studentid']);
-// 		if(!empty($rs)){
-// 			return -1;
-// 		}
 
 		if(!empty($data['is_void'])){
 			$is_void = 1;
@@ -214,8 +207,9 @@ class Accounting_Model_DbTable_DbStudentLunchPayment extends Zend_Db_Table_Abstr
 					'user_id'			=>$this->getUserId(),
 					'branch_id'			=>$data['branch'],
 					'reg_from'			=>1 ,
-					
 					'is_void'			=>$is_void,
+					'payment_method'=>$data['payment_method'],
+					'payment_note'	=>$data['note_payment'],
 					
 				);
 				$payment_id = $this->insert($arr);
@@ -259,7 +253,7 @@ class Accounting_Model_DbTable_DbStudentLunchPayment extends Zend_Db_Table_Abstr
 			
 	    	$db->commit();
 		}catch (Exception $e){
-			echo $e->getMessage();
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			$db->rollBack();//អោយវាវិលត្រលប់ទៅដើមវីញពេលណាវាជួបErrore
 		}
 	}
@@ -271,8 +265,6 @@ class Accounting_Model_DbTable_DbStudentLunchPayment extends Zend_Db_Table_Abstr
 		try{
 			if(!empty($data['is_void'])){
 		
-				///////////////////////////////// rms_student_payment ////////////////////////////////////////////
-					
 				$this->_name='rms_student_payment';
 					
 				$arr = array(
@@ -335,30 +327,25 @@ class Accounting_Model_DbTable_DbStudentLunchPayment extends Zend_Db_Table_Abstr
 				$this->_name='rms_student_payment';
 				$array = array(
 						'year'				=>$data['year'],
-							
 						'tuition_fee'		=>$tuitionfee,
 						'other_fee'			=>$data['other_fee'],
-							
 						'discount_percent'	=>$data['discount'],
 						'discount_fix'		=>$data['discount_fix'],
-							
 						'tuition_fee_after_discount'=>($tuitionfee-$data['discount_fix']) - (($tuitionfee-$data['discount_fix'])*($data['discount']/100)),
-							
 						'total_payment'		=>$data['total_payment'],
 						'receive_amount'	=>$data['paid_amount'],
 						'paid_amount'		=>$data['paid_amount'],
 						'balance_due'		=>$data['balance'],
 						'note'				=>$data['other'],
-							
 						'grand_total_payment'			=>$data['grand_total'],
 						'grand_total_payment_in_riel'	=>$data['convert_to_riels'],
 						'grand_total_paid_amount'		=>$data['total_received'],
 						'grand_total_balance'			=>$data['total_balance'],
-						
-						
 						'receipt_number'=>$data['receipt_no'],
 						'create_date'=>$create_date,
 						'shift'=>$data['shift'],
+						'payment_method'=>$data['payment_method'],
+						'payment_note'	=>$data['note_payment'],
 				);
 				$where=" id = ".$data['payment_id'];
 				$this->update($array,$where);
@@ -370,19 +357,15 @@ class Accounting_Model_DbTable_DbStudentLunchPayment extends Zend_Db_Table_Abstr
 						'payment_term'	=>$data['term'],
 						'fee'			=>$data['service_fee'],
 						'other_fee'		=>$data['other_fee'],
-						
 						'qty'			=>$data['qty'],
 						'discount_percent'=>$data['discount'],
 						'discount_fix'	=>$data['discount_fix'],
 						'subtotal'		=>$data['total_payment'],
 						'paidamount'	=>$data['paid_amount'],
 						'balance'		=>$data['balance'],
-						
 						'note'			=>$data['other'],
-						
 						'start_date'	=>$data['start_date'],
 						'validate'		=>$data['end_date'],
-						
 						'is_start'		=>$data['is_start'],
 				);
 				$where=" payment_id = ".$data['payment_id'];
@@ -392,7 +375,7 @@ class Accounting_Model_DbTable_DbStudentLunchPayment extends Zend_Db_Table_Abstr
 				return 0;
 			}
 		}catch (Exception $e){
-			echo $e->getMessage();
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			$db->rollBack();
 		}
 		
