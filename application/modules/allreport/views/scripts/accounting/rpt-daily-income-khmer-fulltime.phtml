@@ -26,6 +26,7 @@
 	   	    <td> <?php echo $frm->getElement("end_date");?></td>
 	    	<td> <?php echo $frm->getElement("from_receipt");?></td>
 	   	  	<td> <?php echo $frm->getElement("to_receipt");?></td>
+	   	  	<td> <?php echo $frm->getElement("payment_method");?></td>
 	    	<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button> </td>
 	    </tr>
 	</table>
@@ -127,6 +128,7 @@ tr.row_control {
 								<td rowspan="2" class="padd">តម្លៃ<br />ផ្សេងៗ</td>
 								<td rowspan="2" class="padd">ជំពាក់</td>
 								<td rowspan="2" class="padd">ទឹកប្រាក់<br />សរុប</td>
+								<td rowspan="2" class="padd">វិធី​សា​ស្រ្ត​ទូទាត់</td>
 								<td rowspan="2" class="padd">ផ្សេងៗ</td>
 								<td rowspan="2" class="padd">ថ្ងៃបង្កើត</td>
 								<td rowspan="2" class="padd">ស្ថានការណ៍</td>
@@ -189,6 +191,7 @@ tr.row_control {
 							<td align="right" class="padd"><?php if($rs['other_fee']>0){echo "$ ".$rs['other_fee'];}?></td>
 							<td align="right" class="padd"><?php if($rs['grand_total_balance']>0){echo "$ ".$rs['grand_total_balance'];}?></td>
 							<td align="right" class="padd"><?php echo "$ ".$rs['grand_total_paid_amount'];?></td>
+							<td class="padd"><?php echo $rs['payment_method_title'];?></td>
 							<td class="padd"><?php echo $rs['note'];?></td>
 							<td class="padd"><?php echo date("d-M-Y",strtotime($rs['create_date']));?></td>
 							<td class="padd"><?php if($rs['is_void']==1){echo "Void";};?></td>

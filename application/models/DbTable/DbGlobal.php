@@ -539,7 +539,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    }
     function getViewById($type,$is_opt=null){
    	$db=$this->getAdapter();
-   	$sql="SELECT key_code,name_kh AS view_name FROM rms_view WHERE `type`=$type AND `status`=1 and key_code=1 ";
+   	$sql="SELECT key_code,name_kh AS view_name,key_code AS id ,name_kh AS name FROM rms_view WHERE `type`=$type AND `status`=1 and key_code=1 ";
    	$rows = $db->fetchAll($sql);
    	$options= array();
    	if($is_opt!=null){
@@ -548,6 +548,20 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    		}
    	}
    	return $options;
+   }
+   
+   function getViewListById($type,$is_opt=null){
+   	$db=$this->getAdapter();
+   	$sql="SELECT key_code,name_kh AS view_name,key_code AS id ,name_kh AS name FROM rms_view WHERE `type`=$type AND `status`=1 ";
+   	$rows = $db->fetchAll($sql);
+   	$options= array();
+   	if($is_opt!=null){
+   		if(!empty($rows))foreach($rows AS $row){
+   			$options[$row['key_code']]=$row['view_name'];
+   		}
+   		return $options;
+   	}
+   	return $rows;
    }
    function getCategoryName($type){ //type =1 income , type =0 expend
 	   	$db=$this->getAdapter();

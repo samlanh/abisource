@@ -19,6 +19,8 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form
 	public function FrmSearchRegister($data=null){ 
 		$request=Zend_Controller_Front::getInstance()->getRequest();
 	
+		$_dbgb =new Application_Model_DbTable_DbGlobal();
+		
 		$_title = new Zend_Dojo_Form_Element_TextBox('title');
 		$_title->setAttribs(array(
 				'dojoType'=>$this->text,
@@ -474,9 +476,26 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form
 		$suspend_type->setValue($request->getParam("suspend_type"));
 		
 		
+		$_payment_method = new Zend_Dojo_Form_Element_FilteringSelect('payment_method');
+		$_payment_method->setAttribs(array('dojoType'=>$this->filter,
+				'placeholder'=>$this->tr->translate("SELECT_BRANCH"),
+				'class'=>'fullside',
+				'required'=>false,
+				'autoComplete'=>'false',
+				'queryExpr'=>'*${0}*',
+		));
+		$_payment_method->setValue($request->getParam('payment_method'));
+		$opt_paymentMethod = array(''=>$this->tr->translate("SELECT_PAYMENT_METHOD"));
+		$_rs = $_dbgb->getViewListById(18);
+		if(!empty($_rs))foreach ($_rs As $row)$opt_paymentMethod[$row['id']]=$row['name'];
+		$_payment_method->setMultiOptions($opt_paymentMethod);
+		
+		
 		$this->addElements(array($cus_name,$from_receipt,$to_receipt,$lunch_service,$transport_service,$_degree_ft,$_degree_kh_ft,$_degree_en_ft,$_grade_en_ft,$_grade_kh_ft,$_room,$_branch,$_degree_all,$service_product,$start_date,$user,$end_date,$sess_gep,$_title,$_degree_gep,$generation,$_session,$_time,$_grade_all,$_grade_ft,$_grade_kid,
 				$_status,$_grade_gep,$service,$pay_term,
-				$suspend_type
+				$suspend_type,
+				$_payment_method
+				
 				));
 		return $this;
 	} 
