@@ -213,6 +213,14 @@
 							<td><?php echo $tr->translate("BALANCE");?></td>
 							<td><?php echo $register->getElement('remaining');;?></td>
 						</tr>
+						<tr>	
+							<td><?php echo $tr->translate("PAYMENT_METHOD");?></td>
+							<td><?php echo $register->getElement('payment_method');?></td>
+						</tr>
+						<tr>	
+							<td><?php echo $tr->translate("PAYIMENT_NOTE");?></td>
+							<td><?php echo $register->getElement('note_payment');?></td>
+						</tr>
 					</table>	
 				</fieldset>		 
 			</td>
@@ -266,6 +274,8 @@
 	dojo.require("dojo.NodeList-manipulate");
 	dojo.require("dojo.data.ObjectStore");
 	dojo.require("dojo.store.Memory");
+	dojo.require("dijit.form.Textarea");
+	
 	var dept_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->all_dept));?> );
 	dojo.ready(function(){ 
 		changControll();

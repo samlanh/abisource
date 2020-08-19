@@ -1,7 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate('EDIT_STUDENT_LUNCH_PAYMENT')); 
-	$base_url = Application_Form_FrmMessage::getUrl("/");
 	$register = $this->frm_register;
 ?>	
 
@@ -251,6 +250,14 @@ fieldset{  background:none;}
 								<input class="fullside" name="balance" id="balance" value="<?php echo $this->detail['balance']?>" readOnly="readOnly" dojoType="dijit.form.TextBox" type="text" >
 							</td>
 						</tr>
+						<tr>	
+							<td><?php echo $tr->translate("PAYMENT_METHOD");?></td>
+							<td><?php echo $register->getElement('payment_method');?></td>
+						</tr>
+						<tr>	
+							<td><?php echo $tr->translate("PAYIMENT_NOTE");?></td>
+							<td><?php echo $register->getElement('note_payment');?></td>
+						</tr>
 					</table>	
 				</fieldset>		
 			</td>
@@ -334,6 +341,7 @@ fieldset{  background:none;}
 	dojo.require("dijit.form.Textarea");
 	dojo.require("dijit.form.DateTextBox");
 	dojo.require("dijit.form.CheckBox");
+	dojo.require("dijit.form.Textarea");
 	
 	var service_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->service));?>);
 	dojo.ready(function(){ 

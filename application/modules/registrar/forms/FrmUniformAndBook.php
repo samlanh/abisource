@@ -321,7 +321,7 @@ Class Registrar_Form_FrmUniformAndBook extends Zend_Dojo_Form {
 		));
 		
 // 		$id = new Zend_Form_Element_Hidden('id');
-// 		if($data!=null){
+		if($data!=null){
 // 			//print_r($data);exit();
 // 			$id->setValue($data['stu_id']);
 // 			$_studid->setValue($data['stu_code']);
@@ -343,7 +343,9 @@ Class Registrar_Form_FrmUniformAndBook extends Zend_Dojo_Form {
 // 			$not->setValue($data['note']);
 // 			$room->setValue($data['room_id']);
 // 			$old_studens->setValue($data['stu_id']);
-// 		}
+// 			$payment_method->setValue($data['payment_method']);
+// 			$note_payment->setValue($data['payment_note']);
+		}
 		$this->addElements(array(
 				$payment_method,$note_payment,
 			  $room,$session,/*$id,*/$generation,$char_price,$end_date,$start_date,$not,$books,$addmin_fee,$remaining,$total ,$_invoice_no, $_pay_date, $_khname, $_enname,$_studid, $_sex,$_dob,$_degree,

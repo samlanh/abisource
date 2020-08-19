@@ -172,13 +172,11 @@ fieldset{  background:none;}
 										<option value="<?php echo $all_car['id']?>" <?php if($all_car['id']==$this->row['car_id']){echo 'selected="selected"';}?> ><?php echo $all_car['name'];?></option>
 									<?php  }}?>
 								</select>
+								<input type="hidden" name="service_cate" id="service_cate" dojoType="dijit.form.TextBox" />
+							    <input type="hidden" name="balance_id" id="balance_id" dojoType="dijit.form.TextBox" />
 							</td>
 						</tr>
-						
 						<tr>	
-							<input type="hidden" name="service_cate" id="service_cate" dojoType="dijit.form.TextBox" />
-							<input type="hidden" name="balance_id" id="balance_id" dojoType="dijit.form.TextBox" />
-							
 							<td><?php echo $tr->translate('PAYMENT_TERM');?></td>
 							<td>
 								<select class="fullside" class="fullside" name="term" id="term" onchange="getservicefee();getValidate();" dojoType="dijit.form.FilteringSelect" type="text"   >
@@ -200,6 +198,7 @@ fieldset{  background:none;}
 								<input class="fullside" name="start_date" id="start_date" value="<?php echo $this->detail['start_date']?>" constraints="{datePattern:'dd/MM/yyyy'}" dojoType="dijit.form.DateTextBox" type="text" >
 							</td>
 						</tr>
+						<tr>	
 							<td><?php echo $tr->translate('END_DATE');?></td>
 							<td> 
 								<input class="fullside" name="end_date" id="end_date" value="<?php echo $this->detail['validate']?>" constraints="{datePattern:'dd/MM/yyyy'}" dojoType="dijit.form.DateTextBox" type="text"   >
@@ -296,7 +295,14 @@ fieldset{  background:none;}
 								<input class="fullside" name="balance" id="balance"  readOnly="readOnly" value="<?php echo $this->detail['balance']?>" dojoType="dijit.form.TextBox" type="text" >
 							</td>
 						</tr>
-						
+						<tr>	
+							<td><?php echo $tr->translate("PAYMENT_METHOD");?></td>
+							<td><?php echo $register->getElement('payment_method');?></td>
+						</tr>
+						<tr>	
+							<td><?php echo $tr->translate("PAYIMENT_NOTE");?></td>
+							<td><?php echo $register->getElement('note_payment');?></td>
+						</tr>
 					</table>	
 				</fieldset>		
 			</td>

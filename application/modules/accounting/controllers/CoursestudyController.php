@@ -45,7 +45,6 @@ class Accounting_CoursestudyController extends Zend_Controller_Action {
     		$this->view->list=$list->getCheckList(2, $collumns, $rs_rows,array('stu_code'=>$link,'receipt_number'=>$link,'stu_khname'=>$link,'stu_enname'=>$link,'delete'=>$link1));
     	}catch (Exception $e){
     		Application_Form_FrmMessage::message("Application Error");
-    		echo $e->getMessage();
     	}
     	$db=new Accounting_Model_DbTable_DbCourStudey();
     	$this->view->rows_deg=$db->getDegree();
@@ -57,21 +56,20 @@ class Accounting_CoursestudyController extends Zend_Controller_Action {
     }
     public function addAction()
     {
-    if($this->getRequest()->isPost()){
-      	$_data = $this->getRequest()->getPost();
-      	try {
-      		$db = new Accounting_Model_DbTable_DbCourStudey();
-      		$db->addStudentGep($_data);
-      		if(isset($_data['save_new'])){
-      			Application_Form_FrmMessage::message($this->tr->translate('INSERT_SUCCESS'),  '/accounting/coursestudy/add');
-      		}else{
-      			Application_Form_FrmMessage::Sucessfull($this->tr->translate('INSERT_SUCCESS'), '/accounting/coursestudy/index');
-      		}
-      	} catch (Exception $e) {
-      		Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
-      		//echo $e->getMessage();exit();
-      	}
-      }
+	    if($this->getRequest()->isPost()){
+	      	$_data = $this->getRequest()->getPost();
+	      	try{
+	      		$db = new Accounting_Model_DbTable_DbCourStudey();
+	      		$db->addStudentGep($_data);
+	      		if(isset($_data['save_new'])){
+	      			Application_Form_FrmMessage::message($this->tr->translate('INSERT_SUCCESS'),  '/accounting/coursestudy/add');
+	      		}else{
+	      			Application_Form_FrmMessage::Sucessfull($this->tr->translate('INSERT_SUCCESS'), '/accounting/coursestudy/index');
+	      		}
+	      	} catch(Exception $e){
+	      		Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
+	      	}
+	      }
        $frm = new Accounting_Form_FrmCourseStudy();
        $frm_register=$frm->FrmRegistarWU();
        Application_Model_Decorator::removeAllDecorator($frm_register);
@@ -85,8 +83,6 @@ class Accounting_CoursestudyController extends Zend_Controller_Action {
        $db = new Registrar_Model_DbTable_DbRegister();
        $this->view->exchange_rate = $db->getExchangeRate();
        $this->view->room = $db->getAllRoom();
-       
-       
     }
     public function editAction()
     {

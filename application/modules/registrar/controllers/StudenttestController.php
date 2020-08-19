@@ -3,7 +3,6 @@
 class Registrar_StudenttestController extends Zend_Controller_Action
 {
 	const REDIRECT_URL = '/registrar/studenttest';
-	
     public function init()
     {
     	header('content-type: text/html; charset=utf8');
@@ -27,7 +26,6 @@ class Registrar_StudenttestController extends Zend_Controller_Action
     		}
     		
     		$this->view->adv_search = $search;
-    		
 			$rs_rows= $db->getAllStudentTest($search);//call frome model
     		$list = new Application_Form_Frmtable();
     		$collumns = array("RECEIPT_NO","NAME_KH","NAME_EN","SEX","DOB","PHONE","DEGREE","NOTE","PRICE","BY_USER","STATUS");
@@ -44,7 +42,6 @@ class Registrar_StudenttestController extends Zend_Controller_Action
     	$form->FrmSearchRegister();
     	Application_Model_Decorator::removeAllDecorator($form);
     	$this->view->form_search=$form;
-    	
     }
     public function addAction()
     {
@@ -65,10 +62,9 @@ class Registrar_StudenttestController extends Zend_Controller_Action
 		}
 		$db = new Registrar_Model_DbTable_DbStudentTest();
 		$this->view->degree = $db->getAllDegreeName();
-		
 		$dbg = new Application_Model_DbTable_DbGlobal();
 		$this->view->branch_info = $dbg->getBranchInfo();
-		
+		$this->view->payment_option = $dbg->getViewListById(18,0);
 		$key = new Application_Model_DbTable_DbKeycode();
 		$this->view->data=$key->getKeyCodeMiniInv(TRUE);
     }
@@ -156,6 +152,7 @@ class Registrar_StudenttestController extends Zend_Controller_Action
 		
 		$dbg = new Application_Model_DbTable_DbGlobal();
 		$this->view->branch_info = $dbg->getBranchInfo();
+		$this->view->payment_option = $dbg->getViewListById(18,0);
 		
 		$key = new Application_Model_DbTable_DbKeycode();
 		$this->view->data=$key->getKeyCodeMiniInv(TRUE);

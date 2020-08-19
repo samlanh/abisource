@@ -17,25 +17,23 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 		}else{
 			$dob = $data['dob'];
 		}
-		
 		$array = array(
-					'branch_id'	=>$this->getBranchId(),
-					'receipt'	=>$this->getNewReceiptNumber(),
-					'kh_name'	=>$data['kh_name'],
-					'en_name'	=>$data['en_name'],
-					'sex'		=>$data['sex'],
-					'dob'		=>$dob,
-					'phone'		=>$data['phone'],
-// 					'old_school'=>$data['old_school'],
-// 					'old_grade'	=>$data['old_grade'],
-					'degree'	=>$data['degree'],
-					'note'		=>$data['note'],
-// 					'serial'	=>$data['serial'],
-					'address'	=>$data['address'],
-					'user_id'	=>$this->getUserId(),
-					'total_price'=>$data['test_cost'],
-					'create_date'=>date('Y-m-d H:i:s'),
-				);
+			'branch_id'	=>$this->getBranchId(),
+			'receipt'	=>$this->getNewReceiptNumber(),
+			'kh_name'	=>$data['kh_name'],
+			'en_name'	=>$data['en_name'],
+			'sex'		=>$data['sex'],
+			'dob'		=>$dob,
+			'phone'		=>$data['phone'],
+			'degree'	=>$data['degree'],
+			'note'		=>$data['note'],
+			'address'	=>$data['address'],
+			'user_id'	=>$this->getUserId(),
+			'total_price'=>$data['test_cost'],
+			'create_date'=>date('Y-m-d H:i:s'),
+			'payment_method'=>$data['payment_method'],
+			'payment_note'=>$data['note_payment'],
+		);
 		$this->insert($array);
  	}
 	function updateStudentTest($data,$id){
@@ -52,29 +50,25 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 		}
 		
 		$array = array(
-					'branch_id'	=>$this->getBranchId(),
-					'kh_name'	=>$data['kh_name'],
-					'en_name'	=>$data['en_name'],
-					'sex'		=>$data['sex'],
-					'dob'		=>$dob,
-					'phone'		=>$data['phone'],
-// 					'old_school'=>$data['old_school'],
-// 					'old_grade'	=>$data['old_grade'],
-					'degree'	=>$data['degree'],
-					'note'		=>$data['note'],
-// 					'serial'	=>$data['serial'],
-					'address'	=>$data['address'],
-					'user_id'	=>$this->getUserId(),
-					'total_price'=>$data['test_cost'],
-					'status'	=>$data['status'],
-				
-					'degree_result'	=>$data['degree_result'],
-					'grade_result'	=>$data['grade_result'],
-					'session_result'=>$data['session_result'],
-				
-					'updated_result'=>$updated_result,
-				
-				);
+			'branch_id'	=>$this->getBranchId(),
+			'kh_name'	=>$data['kh_name'],
+			'en_name'	=>$data['en_name'],
+			'sex'		=>$data['sex'],
+			'dob'		=>$dob,
+			'phone'		=>$data['phone'],
+			'degree'	=>$data['degree'],
+			'note'		=>$data['note'],
+			'address'	=>$data['address'],
+			'user_id'	=>$this->getUserId(),
+			'total_price'=>$data['test_cost'],
+			'status'	=>$data['status'],
+			'degree_result'	=>$data['degree_result'],
+			'grade_result'	=>$data['grade_result'],
+			'session_result'=>$data['session_result'],
+			'updated_result'=>$updated_result,
+			'payment_method'=>$data['payment_method'],
+			'payment_note'=>$data['note_payment'],
+		);
 		$where="id = $id";
 		$this->update($array, $where);
 	}

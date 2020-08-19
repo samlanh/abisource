@@ -40,34 +40,29 @@ class Registrar_Model_DbTable_DbUniformAndBook extends Zend_Db_Table_Abstract
     }
     
 	function addProductPayment($data){
-		//print_r($data);exit();
 		$db = $this->getAdapter();//ស្ពានភ្ជាប់ទៅកាន់Data Base
 		$db->beginTransaction();//ទប់ស្កាត់មើលការErrore , មានErrore វាមិនអោយចូល
 		
 		$register = new Registrar_Model_DbTable_DbRegister();
 		$receipt_no = $register->getRecieptNo(5,0);
 		
-// 		$receipt_no = $data['receipt_no'];
-		
 		try{
 			$arr=array(
-					'branch_id'			=>$this->getBranchId(),
-					'student_id'		=>$data['stu_name'],
-					'receipt_number'	=>$receipt_no,
-					'payfor_type'		=>5 , // product payment
-					
-					'buy_product'		=>1 ,
-					'reg_from'			=>0 ,
-					
-					'exchange_rate'		=>$data['ex_rate'],
-					
-					'grand_total_payment'			=>$data['grand_total'],
-					'grand_total_payment_in_riel'	=>$data['convert_to_riels'],
-					'grand_total_paid_amount'		=>$data['grand_total'],
-					'grand_total_balance'			=>0,
-					
-					'create_date'		=>date("Y-m-d H:i:s"),
-					'user_id'			=>$this->getUserId(),
+				'branch_id'			=>$this->getBranchId(),
+				'student_id'		=>$data['stu_name'],
+				'receipt_number'	=>$receipt_no,
+				'payfor_type'		=>5 , // product payment
+				'buy_product'		=>1 ,
+				'reg_from'			=>0 ,
+				'exchange_rate'		=>$data['ex_rate'],
+				'grand_total_payment'			=>$data['grand_total'],
+				'grand_total_payment_in_riel'	=>$data['convert_to_riels'],
+				'grand_total_paid_amount'		=>$data['grand_total'],
+				'grand_total_balance'			=>0,
+				'create_date'		=>date("Y-m-d H:i:s"),
+				'user_id'			=>$this->getUserId(),
+				'payment_method'=>$data['payment_method'],
+				'payment_note'	=>$data['note_payment'],
 				);
 			$id = $this->insert($arr);
 				
@@ -103,7 +98,6 @@ class Registrar_Model_DbTable_DbUniformAndBook extends Zend_Db_Table_Abstract
     			
     		$db->commit();
 		}catch (Exception $e){
-			echo $e->getMessage();
 			$db->rollBack();//អោយវាវិលត្រលប់ទៅដើមវីញពេលណាវាជួបErrore
 		}
 	}
@@ -113,16 +107,14 @@ class Registrar_Model_DbTable_DbUniformAndBook extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();//ស្ពានភ្ជាប់ទៅកាន់Data Base
 		$db->beginTransaction();//ទប់ស្កាត់មើលការErrore , មានErrore វាមិនអោយចូល
 		
-		
 		try{
 			if(!empty($data['is_void'])){
-		
-				///////////////////////////////// rms_student_payment ////////////////////////////////////////////
-					
 				$this->_name='rms_student_payment';
 					
 				$arr = array(
 						'is_void'=>$data['is_void'],
+						'payment_method'=>$data['payment_method'],
+						'payment_note'	=>$data['note_payment'],
 				);
 				$where = " id = ".$data['payment_id'];
 				

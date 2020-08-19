@@ -216,6 +216,14 @@ fieldset{  background:none;}
 							<td><?php echo $tr->translate("BALANCE");?></td>
 							<td><?php echo $register->getElement('remaining');;?></td>
 						</tr>
+						<tr>	
+							<td><?php echo $tr->translate("PAYMENT_METHOD");?></td>
+							<td><?php echo $register->getElement('payment_method');?></td>
+						</tr>
+						<tr>	
+							<td><?php echo $tr->translate("PAYIMENT_NOTE");?></td>
+							<td><?php echo $register->getElement('note_payment');?></td>
+						</tr>
 					</table>	
 				</fieldset>		
 			</td>
@@ -277,7 +285,7 @@ fieldset{  background:none;}
 	dojo.require("dojo.data.ItemFileWriteStore");  
 	dojo.require("dojo.store.Memory");
 	dojo.require('dojox.form.BusyButton');
-	
+	dojo.require("dijit.form.Textarea");
 	dojo.require("dojo.NodeList-manipulate");
 	
 	var dept_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->all_dept));?> );

@@ -1,7 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate('ADD_STUDENT_PRODUCT_PAYMENT')); 
-	$base_url = Application_Form_FrmMessage::getUrl("/");
 	$register = $this->frm_unifrom_and_book;
 ?>
 
@@ -77,17 +76,25 @@
 								<table style="width:400px;border-collapse: collapse;white-space:nowrap;" cellpadding="10" cellspacing="10" >
 									<tr>
 										<td ><?php echo $tr->translate("EXCHANGE_RATE")." (៛)";?></td>
-										<td align="right">
+										<td>
 											<input type="text" name="ex_rate" id="ex_rate" class="fullside" readonly value="<?php echo $this->exchange_rate ;?>" dojoType="dijit.form.NumberTextBox" />
 										</td>
 									</tr>
 									<tr>
 										<td ><?php echo $tr->translate("TOTAL");?></td>
-										<td align="right"><input class="fullside" type="text" readonly="readonly" onkeyup="calculatBalanceAndReturn();"  name="grand_total" id="grand_total" dojoType="dijit.form.NumberTextBox" /></td>
+										<td><input class="fullside" type="text" readonly="readonly" onkeyup="calculatBalanceAndReturn();"  name="grand_total" id="grand_total" dojoType="dijit.form.NumberTextBox" /></td>
 									</tr>
 									<tr>	
 										<td><?php echo $tr->translate("CONVERT_TO_RIELS");?> (៛)</td>
-										<td align="right"><input  type="text" class="fullside" readonly="readonly"  name="convert_to_riels" id="convert_to_riels" dojoType="dijit.form.NumberTextBox" /></td>
+										<td ><input  type="text" class="fullside" readonly="readonly"  name="convert_to_riels" id="convert_to_riels" dojoType="dijit.form.NumberTextBox" /></td>
+									</tr>
+									<tr>	
+										<td><?php echo $tr->translate("PAYMENT_METHOD");?></td>
+										<td><?php echo $register->getElement('payment_method');?></td>
+									</tr>
+									<tr>	
+										<td><?php echo $tr->translate("PAYIMENT_NOTE");?></td>
+										<td><?php echo $register->getElement('note_payment');?></td>
 									</tr>
 								</table>
 							</td>

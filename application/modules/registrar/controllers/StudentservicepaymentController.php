@@ -109,7 +109,6 @@ class Registrar_StudentservicepaymentController extends Zend_Controller_Action {
        $this->view->branch_info = $dbg->getBranchInfo();
        
     }
-    
     public function adddataonlyAction()
     {
     	if($this->getRequest()->isPost()){
@@ -277,11 +276,8 @@ class Registrar_StudentservicepaymentController extends Zend_Controller_Action {
     	}
     	
     	$payment_detail=$db->getStudentServicePaymentDetailByID($id);
-//     	print_r($payment);exit();
     	$this->view->detail = $payment_detail;
     	$this->view->user_type = $db->getUserType();
-//     	print_r($payment);exit();
-    	
     	$frm = new Registrar_Form_FrmStudentServicePayment();
     	$frm_register=$frm->FrmRegistarWU($payment);
     	Application_Model_Decorator::removeAllDecorator($frm_register);

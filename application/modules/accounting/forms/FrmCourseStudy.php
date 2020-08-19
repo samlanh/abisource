@@ -470,7 +470,7 @@ Class Accounting_Form_FrmCourseStudy extends Zend_Dojo_Form {
 			$note_payment->setValue($data['payment_note']);
 		}
 		$this->addElements(array(
-				$note_payment,$payment_method,
+			  $note_payment,$payment_method,
 			  $create_date,$material_fee,$parent,$student_type,$old_studens,$_studname,$old_studen_name,$old_student,$room,$session,$ids,$id,$generation,$char_price,$end_date,$start_date,$not,$books,$addmin_fee,$remaining,$total, $_year_one,$_new_student,$_invoice_no, $_pay_date, $_khname, $_enname,$_studid, $_sex,$_dob,$_degree,$metion,
 			  $_phone,$_dept,$_major,$_batch,$_year,$_session,$_term,$_fee,$_disc_fix,$_disc,$_paid,$_paid_kh,$_remark,$_is_hold ));
 		

@@ -138,12 +138,13 @@ Class Registrar_Form_FrmRegister extends Zend_Dojo_Form {
 		
 		$_invoice_no = new Zend_Dojo_Form_Element_TextBox('reciept_no');
 		$_invoice_no->setAttribs(array(
-				'dojoType'=>$this->tvalidate,
-				'class'=>'fullside',
-				'required'=>'true',
-				'readonly'=>'true',
-				'style'=>'color:red;'
-				));
+			'dojoType'=>$this->tvalidate,
+			'class'=>'fullside',
+			'required'=>'true',
+			'readonly'=>'true',
+			'style'=>'color:red;'
+		));
+		
 		$reciept=new Registrar_Model_DbTable_DbRegister();
 		$opt=$reciept->getRecieptNo(1,0);
 		$_invoice_no->setValue($opt);
@@ -166,8 +167,7 @@ Class Registrar_Form_FrmRegister extends Zend_Dojo_Form {
 		$rs_metion_opt = Application_Model_DbTable_DbGlobal::getAllMention();
 		$metion = new Zend_Dojo_Form_Element_FilteringSelect('metion');
 		$metion->setAttribs(array('dojoType'=>$this->filter,
-				'class'=>'fullside',
-				//'onchange'=>'getTuitionFee();]
+			'class'=>'fullside',
 		));
 		$metion->setMultiOptions($rs_metion_opt);
 		
@@ -180,7 +180,6 @@ Class Registrar_Form_FrmRegister extends Zend_Dojo_Form {
 		$_is_hold->setAttribs(array('dojoType'=>"dijit.form.CheckBox",
 				'class'=>'fullside',
 			));
-		//$_is_hold->setValue(1);
 		
 		$_year_one = new Zend_Dojo_Form_Element_TextBox('is_year_one');
 		$_year_one->setAttribs(array('dojoType'=>"dijit.form.CheckBox",
@@ -204,7 +203,7 @@ Class Registrar_Form_FrmRegister extends Zend_Dojo_Form {
 		
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$rows = $_db->getAllFecultyNamess(1);
-		$opt = array();//array(-1=>$this->tr->translate("SELECT_DEPT"));
+		$opt = array();
 		if(!empty($rows))foreach($rows AS $row) $opt[$row['dept_id']]=$row['en_name'];
 		 
 		$_dept = new Zend_Dojo_Form_Element_FilteringSelect("dept");
@@ -236,107 +235,101 @@ Class Registrar_Form_FrmRegister extends Zend_Dojo_Form {
 		
 		$_fee = new Zend_Dojo_Form_Element_NumberTextBox('tuitionfee');
 		$_fee->setAttribs(array(
-				'dojoType'=>'dijit.form.NumberTextBox',
-				'required'=>'true','class'=>'fullside',
-				
-				//'onkeyup'=>'CheckAmount();',
-				'onkeyup'=>'getDisccount();getTotale();netTotal();',
-				'readOnly'=>'true'
-				));
+			'dojoType'=>'dijit.form.NumberTextBox',
+			'required'=>'true','class'=>'fullside',
+			'onkeyup'=>'getDisccount();getTotale();netTotal();',
+			'readOnly'=>'true'
+		));
 
 		$_disc_percent = new Zend_Dojo_Form_Element_NumberTextBox('discount');
 		$_disc_percent->setAttribs(array(
-				'dojoType'=>'dijit.form.NumberTextBox',
-				'class'=>'fullside',
-				'onkeyup'=>'getDisccount();getTotale();netTotal();'
-				//'onkeyup'=>'CheckAmount();'
-				//'onkeyup'=>'getTotale();',
-				));
+			'dojoType'=>'dijit.form.NumberTextBox',
+			'class'=>'fullside',
+			'onkeyup'=>'getDisccount();getTotale();netTotal();'
+		));
 		$_disc_percent->setValue(0);
 		
 		$_disc_fix = new Zend_Dojo_Form_Element_NumberTextBox('discount_fix');
 		$_disc_fix->setAttribs(array(
-				'dojoType'=>'dijit.form.NumberTextBox',
-				'class'=>'fullside',
-				'onkeyup'=>'getDisccount();getTotale();netTotal();'
-				//'onkeyup'=>'CheckAmount();'
-				//'onkeyup'=>'getTotale();',
+			'dojoType'=>'dijit.form.NumberTextBox',
+			'class'=>'fullside',
+			'onkeyup'=>'getDisccount();getTotale();netTotal();'
 		));
 		$_disc_fix->setValue(0);
 		
 		$total = new Zend_Dojo_Form_Element_NumberTextBox('total');
 		$total->setAttribs(array(
-				'dojoType'=>$this->text,
-				'class'=>'fullside',
-				'style'=>'color:red;',
-				'readOnly'=>'true'
-				));
+			'dojoType'=>$this->text,
+			'class'=>'fullside',
+			'style'=>'color:red;',
+			'readOnly'=>'true'
+		));
 		$total->setValue(0);
 		
 		$remaining = new Zend_Dojo_Form_Element_NumberTextBox('remaining');
 		$remaining->setAttribs(array(
-				'dojoType'=>$this->text,
-				'class'=>'fullside',
-				'style'=>'color:blue',
-				'readOnly'=>'true'
+			'dojoType'=>$this->text,
+			'class'=>'fullside',
+			'style'=>'color:blue',
+			'readOnly'=>'true'
 		));
 		$remaining->setValue(0);
 		
 		$addmin_fee = new Zend_Dojo_Form_Element_NumberTextBox('addmin_fee');
 		$addmin_fee->setAttribs(array(
-				'dojoType'=>'dijit.form.NumberTextBox',
-				'class'=>'fullside',
-				'onkeyup'=>'getTotale();netTotal();'
+			'dojoType'=>'dijit.form.NumberTextBox',
+			'class'=>'fullside',
+			'onkeyup'=>'getTotale();netTotal();'
 		));
 		$addmin_fee->setValue(0);
 		
 		$material_fee = new Zend_Dojo_Form_Element_NumberTextBox('material_fee');
 		$material_fee->setAttribs(array(
-				'dojoType'=>'dijit.form.NumberTextBox',
-				'class'=>'fullside',
-				'onkeyup'=>'getTotale();netTotal();'
+			'dojoType'=>'dijit.form.NumberTextBox',
+			'class'=>'fullside',
+			'onkeyup'=>'getTotale();netTotal();'
 		));
 		$material_fee->setValue(0);
 		
 		$books = new Zend_Dojo_Form_Element_NumberTextBox('books');
 		$books->setAttribs(array(
-				'dojoType'=>'dijit.form.NumberTextBox',
-				'class'=>'fullside',
-				'style'=>'color:red',
-				'onkeyup'=>'getRemaining();netTotal();'
+			'dojoType'=>'dijit.form.NumberTextBox',
+			'class'=>'fullside',
+			'style'=>'color:red',
+			'onkeyup'=>'getRemaining();netTotal();'
 		));
 		$books->setValue(0);
 		
 		$not = new Zend_Dojo_Form_Element_TextBox('not');
 		$not->setAttribs(array(
-				'dojoType'=>$this->text,
-				'class'=>'fullside',
+			'dojoType'=>$this->text,
+			'class'=>'fullside',
 		));
 		
 		$char_price = new Zend_Dojo_Form_Element_TextBox('char_price');
 		$char_price->setAttribs(array(
-				'dojoType'=>$this->text,
-				'class'=>'fullside',
+			'dojoType'=>$this->text,
+			'class'=>'fullside',
 		));
 		
 		$start_date= new Zend_Dojo_Form_Element_DateTextBox('start_date');
 		$date = date("Y-m-d");
 		$start_date->setAttribs(array(
-				'dojoType'=>"dijit.form.DateTextBox",
-				'class'=>'fullside',
-				'onChange'=>'getDateTerm(1);',
-				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
-				'required'=>true));
+			'dojoType'=>"dijit.form.DateTextBox",
+			'class'=>'fullside',
+			'onChange'=>'getDateTerm(1);',
+			'constraints'=>"{datePattern:'dd/MM/yyyy'}",
+			'required'=>true));
 		$start_date->setValue($date);
 		
 		$end_date= new Zend_Dojo_Form_Element_DateTextBox('end_date');
 		$date = date("Y-m-d");
 		$end_date->setAttribs(array(
-				'dojoType'=>"dijit.form.DateTextBox",
-				'class'=>'fullside',
-				'onChange'=>'getDateTerm(2);',
-				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
-				'required'=>true));
+			'dojoType'=>"dijit.form.DateTextBox",
+			'class'=>'fullside',
+			'onChange'=>'getDateTerm(2);',
+			'constraints'=>"{datePattern:'dd/MM/yyyy'}",
+			'required'=>true));
 		$end_date->setValue($date);
 		
 		$_paid = new Zend_Dojo_Form_Element_NumberTextBox('payment_paid');
@@ -441,6 +434,26 @@ Class Registrar_Form_FrmRegister extends Zend_Dojo_Form {
 				));
 		$parent = new Zend_Form_Element_Hidden("parent_id");
 		
+		$payment_method = new Zend_Dojo_Form_Element_FilteringSelect('payment_method');
+		$payment_method->setAttribs(array('dojoType'=>'dijit.form.FilteringSelect',
+			'class'=>'fullside',
+			'required'=>'true',
+			'autoComplete'=>'false',
+			'queryExpr'=>'*${0}*',
+			'class'=>'fullside',
+			'onchange'=>'getReceiptNo();',
+		));
+		
+		$opts = $_db->getViewListById(18,1);
+		$payment_method->setMultiOptions($opts);
+		
+		$note_payment = new Zend_Dojo_Form_Element_Textarea('note_payment');
+		$note_payment->setAttribs(array(
+			'dojoType'=>'dijit.form.Textarea',
+			'style'=>'min-height:40px;font-family:Khmer os Battambang',
+			'class'=>'fullside'
+		));
+		
 		if($data!=null){
 			$parent->setValue($data["is_parent"]);
 			$id->setValue($data['stu_id']);
@@ -470,8 +483,12 @@ Class Registrar_Form_FrmRegister extends Zend_Dojo_Form {
 			$old_studen_name->setValue($data['stu_id']);
 			$drop_studens->setValue($data['stu_id']);
 			$drop_stu_name->setValue($data['stu_id']);	
+			
+			$payment_method->setValue($data['payment_method']);
+			$note_payment->setValue($data['payment_note']);
 		}
 		$this->addElements(array(
+			 $note_payment,$payment_method,
 			 $material_fee,$drop_stu_name,$drop_studens,$parent,$old_studens,$old_studen_name,$_studname,$student_type,$ids,$id,$generation,$char_price,$end_date,$start_date,$not,$books,$addmin_fee,$remaining,$total, $_year_one,$_new_student,$_invoice_no, $_pay_date, $_khname, $_enname,$_studid, $_sex,$_dob,$_degree,$metion,
 			  $_phone,$_dept,$_major,$_batch,$_year,$_session,$_term,$_fee,$_disc_fix,$_disc_percent,$_paid,$_paid_kh,$_remark,$_is_hold ));
 		

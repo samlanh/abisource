@@ -27,16 +27,12 @@ class Registrar_Model_DbTable_DbCourStudey extends Zend_Db_Table_Abstract
     	return $db->fetchOne($sql);
     }
 	function addStudentGep($data){
-// 		print_r($data);exit();
 		$db = $this->getAdapter();//ស្ពានភ្ជាប់ទៅកាន់Data Base
 		$db->beginTransaction();//ទប់ស្កាត់មើលការErrore , មានErrore វាមិនអោយចូល
 		
 		$register = new Registrar_Model_DbTable_DbRegister();
 		$stu_code = $register->getNewAccountNumber($data['dept'],0);
 		$receipt = $register->getRecieptNo(2,0);
-
-// 		$stu_code=$data['stu_id'];
-// 		$receipt=$data['reciept_no'];
 		
 		if($data['dob']==""){
 			$dob = null;
@@ -44,7 +40,6 @@ class Registrar_Model_DbTable_DbCourStudey extends Zend_Db_Table_Abstract
 			$dob = $data['dob'];
 		}
 		
-		//print_r($this->getBranchId());exit();
 		try{
 			if($data['student_type']==1){ // new student
 				$this->_name="rms_student";
@@ -54,17 +49,14 @@ class Registrar_Model_DbTable_DbCourStudey extends Zend_Db_Table_Abstract
 						'academic_year'	=>$data['study_year'],
 						'stu_khname'	=>$data['kh_name'],
 						'stu_enname'	=>$data['en_name'],
-							
 						'dob'			=>$dob,
 						'tel'			=>$data['phone'],
 						'address'		=>$data['address'],
-							
 						'session'		=>$data['session'],
 						'sex'			=>$data['sex'],
 						'degree'		=>$data['dept'],
 						'grade'			=>$data['grade'],
 						'room'			=>$data['room'],
-						
 						'is_stu_new' 	=>1,
 						'stu_type'		=>3,
 						'create_date'	=>date("Y-m-d H:i:s"),
@@ -181,6 +173,8 @@ class Registrar_Model_DbTable_DbCourStudey extends Zend_Db_Table_Abstract
 					'payfor_type'	=>2,
 					'user_id'		=>$this->getUserId(),
 					'branch_id'		=>$this->getBranchId(),
+					'payment_method'=>$data['payment_method'],
+					'payment_note'	=>$data['note_payment'],
 			);
 			$paymentid=$this->insert($arr);
 			
@@ -771,7 +765,9 @@ class Registrar_Model_DbTable_DbCourStudey extends Zend_Db_Table_Abstract
 				  spd.is_start,
 				  spd.is_parent,
 				  spd.qty,
-				  sp.id as payment_id
+				  sp.id as payment_id,
+				  sp.payment_method,
+				  sp.payment_note 
 				FROM
 				  rms_student AS s,
 				  rms_student_payment AS sp,

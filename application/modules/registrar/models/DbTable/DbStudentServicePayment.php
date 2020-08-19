@@ -52,17 +52,14 @@ class Registrar_Model_DbTable_DbStudentServicePayment extends Zend_Db_Table_Abst
     }
     
 	function addStudentServicePayment($data){
-		//print_r($data);exit();
 		$db = $this->getAdapter();//ស្ពានភ្ជាប់ទៅកាន់Data Base
 		$db->beginTransaction();//ទប់ស្កាត់មើលការErrore , មានErrore វាមិនអោយចូល
 		$receipt = new Registrar_Model_DbTable_DbRegister();
 		$receipt_no = $receipt->getRecieptNo(3,0);
-		//$receipt_no = $data['reciept_no'];
 
 		$this->_name = "rms_service";
 		if($data['student_type']==1){ // new student
 			$new_car_id = $this->getNewCarId(0);
-			//$new_car_id = $data['new_car_id'];
 			$array = array(
 				'branch_id'		=>$this->getBranchId(),
 				'type'			=>4,
@@ -152,40 +149,32 @@ class Registrar_Model_DbTable_DbStudentServicePayment extends Zend_Db_Table_Abst
 			$arr=array(
 				'student_id'		=>$student_id,
 				'receipt_number'	=>$receipt_no,
-				
 				'buy_product'		=>$buy_product,
-				
 				'year'				=>$data['study_year'],
-				
 				'exchange_rate'		=>$data['ex_rate'],
 				'tuition_fee'		=>$tuitionfee,
 				'other_fee'			=>$data['other_fee'],
-				
 				'discount_percent'	=>$data['discount'],
 				'discount_fix'		=>$data['discount_fix'],
-				
 				'tuition_fee_after_discount'=>($tuitionfee-$data['discount_fix']) - (($tuitionfee-$data['discount_fix'])*($data['discount']/100)),
-				
 				'total_payment'		=>$data['total_payment'],
 				'receive_amount'	=>$data['paid_amount'],
 				'paid_amount'		=>$data['paid_amount'],
 				'balance_due'		=>$data['balance'],
-				
-				//'amount_in_khmer'	=>$data['char_price'],
 				'note'				=>$data['other'],
 				'time_for_car'		=>$data['time_identity'],
-				
 				'grand_total_payment'			=>$data['grand_total'],
 				'grand_total_payment_in_riel'	=>$data['convert_to_riels'],
 				'grand_total_paid_amount'		=>$data['total_received'],
 				'grand_total_balance'			=>$data['total_balance'],
-				
 				'is_new'			=>$is_new,
 				'student_type'		=>$data['student_type'],
 				'payfor_type'		=>3 , // transport payment
 				'create_date'		=>date("Y-m-d H:i:s"),
 				'user_id'			=>$this->getUserId(),
 				'branch_id'			=>$this->getBranchId(),
+				'payment_method'=>$data['payment_method'],
+				'payment_note'	=>$data['note_payment'],
 			);
 			$payment_id = $this->insert($arr);
 				
@@ -248,7 +237,6 @@ class Registrar_Model_DbTable_DbStudentServicePayment extends Zend_Db_Table_Abst
 			
 	    	$db->commit();
 		}catch (Exception $e){
-			echo $e->getMessage();//exit();
 			$db->rollBack();//អោយវាវិលត្រលប់ទៅដើមវីញពេលណាវាជួបErrore
 		}
 	}

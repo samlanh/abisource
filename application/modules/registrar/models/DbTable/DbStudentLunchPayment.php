@@ -150,41 +150,31 @@ class Registrar_Model_DbTable_DbStudentLunchPayment extends Zend_Db_Table_Abstra
 			$arr=array(
 					'student_id'		=>$student_id,
 					'receipt_number'	=>$receipt_no,
-					
 					'buy_product'		=>$buy_product,
-					
 					'year'				=>$data['study_year'],
-					
 					'exchange_rate'		=>$data['ex_rate'],
 					'tuition_fee'		=>$tuitionfee,
 					'other_fee'			=>$data['other_fee'],
-					
 					'discount_percent'	=>$data['discount'],
 					'discount_fix'		=>$data['discount_fix'],
-					
 					'tuition_fee_after_discount'=>($tuitionfee-$data['discount_fix']) - (($tuitionfee-$data['discount_fix'])*($data['discount']/100)),
-					
 					'total_payment'		=>$data['total_payment'],
 					'receive_amount'	=>$data['paid_amount'],
 					'paid_amount'		=>$data['paid_amount'],
 					'balance_due'		=>$data['balance'],
-					
-					//'amount_in_khmer'	=>$data['char_price'],
 					'note'				=>$data['other'],
-					//'time_for_car'		=>$data['time_identity'],
-					
 					'grand_total_payment'			=>$data['grand_total'],
 					'grand_total_payment_in_riel'	=>$data['convert_to_riels'],
 					'grand_total_paid_amount'		=>$data['total_received'],
 					'grand_total_balance'			=>$data['total_balance'],
-					
 					'is_new'			=>$is_new,
-					
 					'payfor_type'		=>4 , // lunch payment 
 					'student_type'		=>$data['student_type'],
 					'create_date'		=>date("Y-m-d H:i:s"),
 					'user_id'			=>$this->getUserId(),
 					'branch_id'			=>$this->getBranchId(),
+					'payment_method'=>$data['payment_method'],
+					'payment_note'	=>$data['note_payment'],
 				);
 				$payment_id = $this->insert($arr);
 				
@@ -200,26 +190,26 @@ class Registrar_Model_DbTable_DbStudentLunchPayment extends Zend_Db_Table_Abstra
 				}
 				
 				$array = array(
-						'payment_id'	=>$payment_id,
-						'type'			=>5,	// lunch service
-						'service_id'	=>$data['service'],
-						'payment_term'	=>$data['term'],
-						'fee'			=>$data['service_fee'],
-						'other_fee'		=>$data['other_fee'],
-						'qty'			=>$data['qty'],
-						'discount_percent'=>$data['discount'],
-						'discount_fix'	=>$data['discount_fix'],
-						'subtotal'		=>$data['total_payment'],
-						'paidamount'	=>$data['paid_amount'],
-						'balance'		=>$balance,
-						'start_date'	=>$data['start_date'],
-						'validate'		=>$data['end_date'],
-						'references'	=>'from service payment',
-						'note'			=>$data['other'],
-						'user_id'		=>$this->getUserId(),
-						'is_complete'	=>$is_complete,
-						'comment'		=>$comment,
-						'is_parent'		=>$finish,
+					'payment_id'	=>$payment_id,
+					'type'			=>5,	// lunch service
+					'service_id'	=>$data['service'],
+					'payment_term'	=>$data['term'],
+					'fee'			=>$data['service_fee'],
+					'other_fee'		=>$data['other_fee'],
+					'qty'			=>$data['qty'],
+					'discount_percent'=>$data['discount'],
+					'discount_fix'	=>$data['discount_fix'],
+					'subtotal'		=>$data['total_payment'],
+					'paidamount'	=>$data['paid_amount'],
+					'balance'		=>$balance,
+					'start_date'	=>$data['start_date'],
+					'validate'		=>$data['end_date'],
+					'references'	=>'from service payment',
+					'note'			=>$data['other'],
+					'user_id'		=>$this->getUserId(),
+					'is_complete'	=>$is_complete,
+					'comment'		=>$comment,
+					'is_parent'		=>$finish,
 						);
 			$this->insert($array);
 			
@@ -227,19 +217,19 @@ class Registrar_Model_DbTable_DbStudentLunchPayment extends Zend_Db_Table_Abstra
 				$ids = explode(',', $data['identity']);
 				foreach ($ids as $i){
 					$array = array(
-							'payment_id'	=>$payment_id,
-							'service_id'	=>$data['product_'.$i],
-							'fee'			=>$data['price_'.$i],
-							'qty'			=>$data['qty_'.$i],
-							'discount_percent'	=>$data['discount_'.$i],
-							'subtotal'		=>$data['subtotal_'.$i],
-							'paidamount'	=>$data['subtotal_'.$i],
-							'balance'		=>0,
-							'note'			=>$data['remark'.$i],
-							'type'			=>4, // 4 => type of product
-							'is_complete'   =>1,
-							'comment'		=>'បង់រួច',
-							'user_id'		=>$this->getUserId(),
+						'payment_id'	=>$payment_id,
+						'service_id'	=>$data['product_'.$i],
+						'fee'			=>$data['price_'.$i],
+						'qty'			=>$data['qty_'.$i],
+						'discount_percent'	=>$data['discount_'.$i],
+						'subtotal'		=>$data['subtotal_'.$i],
+						'paidamount'	=>$data['subtotal_'.$i],
+						'balance'		=>0,
+						'note'			=>$data['remark'.$i],
+						'type'			=>4, // 4 => type of product
+						'is_complete'   =>1,
+						'comment'		=>'បង់រួច',
+						'user_id'		=>$this->getUserId(),
 					);
 					$this->insert($array);
 				}
@@ -247,30 +237,22 @@ class Registrar_Model_DbTable_DbStudentLunchPayment extends Zend_Db_Table_Abstra
 			
 	    	$db->commit();
 		}catch (Exception $e){
-			echo $e->getMessage();
-			$db->rollBack();//អោយវាវិលត្រលប់ទៅដើមវីញពេលណាវាជួបErrore
+			$db->rollBack();
 		}
 	}
 	
 	function updateStudentLunchPayment($data){
 		$db = $this->getAdapter();//ស្ពានភ្ជាប់ទៅកាន់Data Base
 		$db->beginTransaction();//ទប់ស្កាត់មើលការErrore , មានErrore វាមិនអោយចូល
-		
-		
 		try{
 			if(!empty($data['is_void'])){
 		
-				///////////////////////////////// rms_student_payment ////////////////////////////////////////////
-					
 				$this->_name='rms_student_payment';
-					
 				$arr = array(
 						'is_void'=>$data['is_void'],
 				);
 				$where = " id = ".$data['payment_id'];
 				$this->update($arr, $where);
-		
-				///////////////////////////////// rms_student_paymentdetail ////////////////////////////////////////////
 		
 				if(!empty($data['parent_id'])){
 					$arr1 = array(
@@ -290,9 +272,6 @@ class Registrar_Model_DbTable_DbStudentLunchPayment extends Zend_Db_Table_Abstra
 					$this->update($arr,$where);
 				}
 		
-		
-				///////////////////////////////// rms_service ////////////////////////////////////////////
-		
 				if($data['student_type']==4){
 					$this->_name='rms_service';
 		
@@ -303,16 +282,14 @@ class Registrar_Model_DbTable_DbStudentLunchPayment extends Zend_Db_Table_Abstra
 					$this->update($arr, $where);
 				}
 		
-				////////////////////////////////////////////////////////////////////////////////////////////
-		
 				$db->commit();
 				return 0;
 					
 			}else{
 				$this->_name='rms_student_paymentdetail';
 				$arr = array(
-						'start_date'=>$data['start_date'],
-						'validate'	=>$data['end_date'],
+					'start_date'=>$data['start_date'],
+					'validate'	=>$data['end_date'],
 				);
 				$where = " payment_id = ".$data['payment_id'];
 				$this->update($arr, $where);
@@ -320,10 +297,8 @@ class Registrar_Model_DbTable_DbStudentLunchPayment extends Zend_Db_Table_Abstra
 				return 0;
 			}
 		}catch (Exception $e){
-			echo $e->getMessage();
 			$db->rollBack();
 		}
-		
 		return 0;
 		
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////	

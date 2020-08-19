@@ -85,18 +85,26 @@ fieldset{  background:none;}
 						<td colspan="2" align="right">
 							<table style="width:400px;border-collapse: collapse;white-space:nowrap;" cellpadding="10" cellspacing="10" >
 								<tr>
-									<td ><?php echo $tr->translate("EXCHANGE_RATE")." (៛)";?></td>
-									<td align="right">
+									<td><?php echo $tr->translate("EXCHANGE_RATE")." (៛)";?></td>
+									<td>
 										<input type="text" class="fullside" name="ex_rate" id="ex_rate" readonly value="<?php echo $this->row['exchange_rate'] ;?>" dojoType="dijit.form.NumberTextBox" />
 									</td>
 								</tr>
 								<tr>
 									<td ><?php echo $tr->translate("TOTAL");?></td>
-									<td align="right"><input class="fullside" type="text" readonly="readonly" onkeyup="calculatBalanceAndReturn();"  name="grand_total" id="grand_total" dojoType="dijit.form.NumberTextBox" /></td>
+									<td><input class="fullside" type="text" readonly="readonly" onkeyup="calculatBalanceAndReturn();"  name="grand_total" id="grand_total" dojoType="dijit.form.NumberTextBox" /></td>
 								</tr>
 								<tr>	
 									<td><?php echo $tr->translate("CONVERT_TO_RIELS");?> (៛)</td>
-									<td align="right"><input class="fullside" type="text" readonly="readonly"  name="convert_to_riels" id="convert_to_riels" dojoType="dijit.form.NumberTextBox" /></td>
+									<td><input class="fullside" type="text" readonly="readonly"  name="convert_to_riels" id="convert_to_riels" dojoType="dijit.form.NumberTextBox" /></td>
+								</tr>
+								<tr>	
+									<td><?php echo $tr->translate("PAYMENT_METHOD");?></td>
+									<td><?php echo $register->getElement('payment_method');?></td>
+								</tr>
+								<tr>	
+									<td><?php echo $tr->translate("PAYIMENT_NOTE");?></td>
+									<td><?php echo $register->getElement('note_payment');?></td>
 								</tr>
 							</table>
 						</td>
@@ -124,6 +132,7 @@ fieldset{  background:none;}
 	dojo.require("dojo.data.ItemFileWriteStore");  
 	dojo.require('dojox.form.BusyButton');
 	dojo.require("dojo.NodeList-manipulate");
+	dojo.require("dijit.form.Textarea");
 	
 dojo.ready(function(){
     	 dijitValue();
@@ -151,6 +160,12 @@ function dijitValue(){
 	 dijit.byId('grand_total').attr('value','<?php echo $this->row['total_payment']?>');
 	 dijit.byId("phone").set('readOnly',true);
 	 dijit.byId("stu_name").set('readOnly',true);
+
+	 dijit.byId('payment_method').attr('value','<?php echo $this->row['payment_method']?>');
+	 dijit.byId('note_payment').attr('value','<?php echo $this->row['payment_note']?>');
+	 dijit.byId("payment_method").set('readOnly',true);
+	 dijit.byId("note_payment").set('readOnly',true);
+	
 }
 	var template = '';
 	var metion = '<?php echo $this->all_metion; ?>';

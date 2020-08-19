@@ -65,34 +65,29 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					}
 					
 					$arr=array(
-							'stu_code'		=>$stu_code,
-							'academic_year'	=>$data['study_year'],
-							'stu_khname'	=>$data['kh_name'],
-							'stu_enname'	=>$data['en_name'],
-							'sex'			=>$data['sex'],
-					
-							'tel'			=>$data['phone'],
-							'address'		=>$data['address'],
-							'dob'			=>$dob,
-							'room'			=>$data['room'],
-							
-							'session'		=>$data['session'],
-							'degree'		=>$data['dept'],
-							'grade'			=>$data['grade'],
-							'stu_type'		=>$stu_type,
-							'create_date'	=>date('Y-m-d H:i:s'),
-							'user_id'		=>$this->getUserId(),
-							'branch_id'		=>$this->getBranchId(),
-							
-							'is_stu_new' =>1,
-					
+						'stu_code'		=>$stu_code,
+						'academic_year'	=>$data['study_year'],
+						'stu_khname'	=>$data['kh_name'],
+						'stu_enname'	=>$data['en_name'],
+						'sex'			=>$data['sex'],
+						'tel'			=>$data['phone'],
+						'address'		=>$data['address'],
+						'dob'			=>$dob,
+						'room'			=>$data['room'],
+						'session'		=>$data['session'],
+						'degree'		=>$data['dept'],
+						'grade'			=>$data['grade'],
+						'stu_type'		=>$stu_type,
+						'create_date'	=>date('Y-m-d H:i:s'),
+						'user_id'		=>$this->getUserId(),
+						'branch_id'		=>$this->getBranchId(),
+						'is_stu_new' =>1,
 					);
 					$id= $this->insert($arr);
 					
 				}else { // old student or drop student
 					
 					$this->_name = "rms_student";
-						
 					if($data['degree_type']==1){
 						$stu_type=1;  // khmer fulltime
 						$payfor_type = 1;  // khmer fulltime
@@ -100,7 +95,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						$stu_type=2;  // english fulltime
 						$payfor_type = 6;  // english fulltime
 					}
-					
 					// សិក្សាប្រសិនបើប្តូរ រឺ ឡើងកម្រិត Generate new stu_code ឲ្យ , else stu_code នៅដដែល
 // 					if($data['old_degree']!=$data['dept'] && $data['degree_type'] == 1 ){
 // 						$stu_code = $this->getNewAccountNumber($data['dept'],0);
@@ -111,7 +105,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					$stu_code = $data['old_stu_code'];
 					
 				////////////////////////////////////////////////////////////////////////
-					
 					
 					if($data['student_type']==3){
 						$id = $data['old_studens'];
@@ -174,9 +167,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 				$arr=array(
 						'student_id'	=>$id,
 						'receipt_number'=>$receipt_no,
-						
 						'buy_product'	=>$buy_product,
-						
 						'year'			=>$data['study_year'],
 						'degree'		=>$data['dept'],
 						'grade'			=>$data['grade'],
@@ -184,10 +175,8 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						'session'		=>$data['session'],
 						'room_id'		=>$data['room'],
 						'payment_term'	=>$data['payment_term'],
-						
 						'price_per_sec'	=>$price_per_sec,
 						'amount_sec'	=>$amount_sec,				
-						
 						'exchange_rate'	=>$data['ex_rate'],
 						'tuition_fee'	=>$tuitionfee,
 						'discount_percent'=>$data['discount'],
@@ -201,19 +190,18 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						'receive_amount'=>$data['books'],
 						'balance_due'	=>$data['remaining'],
 						'note'			=>$data['not'],
-						
 						'grand_total_payment'			=>$data['grand_total'],
 						'grand_total_payment_in_riel'	=>$data['convert_to_riels'],
 						'grand_total_paid_amount'		=>$data['total_received'],
 						'grand_total_balance'			=>$data['total_balance'],
-						
 						'is_new'		=>$is_new,
 						'student_type'	=>$data['student_type'],
 						'create_date'	=>date('Y-m-d H:i:s'),
 						'payfor_type'	=>$payfor_type,
-						//'amount_in_khmer'=>$data['char_price'],
 						'user_id'		=>$this->getUserId(),
 						'branch_id'		=>$this->getBranchId(),
+						'payment_method'=>$data['payment_method'],
+						'payment_note'	=>$data['note_payment'],
 				);
 				$paymentid = $this->insert($arr);
 				
@@ -229,20 +217,18 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					}
 						
 					$arr=array(
-							'stu_id'		=>$id,
-							'stu_type'		=>$stu_type,
-							'stu_code'		=>$stu_code,
-							
-							'academic_year'	=>$data['study_year'],
-							'degree'		=>$data['dept'],
-							'grade'			=>$data['grade'],
-							'session'		=>$data['session'],
-							'room'			=>$data['room'],
-							
-							'user_id'		=>$this->getUserId(),
-							'branch_id'		=>$this->getBranchId(),
-							'payment_id'	=>$paymentid,
-							'reg_from'		=>0, // from registrar
+						'stu_id'		=>$id,
+						'stu_type'		=>$stu_type,
+						'stu_code'		=>$stu_code,
+						'academic_year'	=>$data['study_year'],
+						'degree'		=>$data['dept'],
+						'grade'			=>$data['grade'],
+						'session'		=>$data['session'],
+						'room'			=>$data['room'],
+						'user_id'		=>$this->getUserId(),
+						'branch_id'		=>$this->getBranchId(),
+						'payment_id'	=>$paymentid,
+						'reg_from'		=>0, // from registrar
 					);
 					$this->insert($arr);
 						
@@ -254,19 +240,18 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 							$finished_record = $db->fetchOne($sql);
 							if(!empty($finished_record)){
 								$array=array(
-										'is_finished_grade'=>1,
-										'is_finished_degree'=>1
+									'is_finished_grade'=>1,
+									'is_finished_degree'=>1
 								);
 								$where=" id = $finished_record ";
 								$this->update($array, $where);
 							}
 						}else if($data['old_grade']!=$data['grade']){
-								
 							$sql="select id from rms_study_history where stu_id=$id and is_finished_grade=0 and grade=".$data['old_grade'];
 							$finished_record = $db->fetchOne($sql);
 							if(!empty($finished_record)){
 								$array=array(
-										'is_finished_grade'=>1,
+									'is_finished_grade'=>1,
 								);
 								$where=" id = $finished_record ";
 								$this->update($array, $where);
@@ -297,13 +282,10 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 								'session'		=>$data['session'],
 								'room'			=>$data['room'],
 								'user_id'		=>$this->getUserId(),
-				
 								'id_record_finished'	=>$finished_record,
 								'payment_id'	=>$paymentid,
-								
 								'branch_id'		=>$this->getBranchId(),
 								'reg_from'		=>0, // from registrar
-				
 						);
 						$this->insert($arr);
 				
@@ -471,21 +453,14 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 	function updateRegister($data){
 		$db = $this->getAdapter();//ស្ពានភ្ជាប់ទៅកាន់Data Base
 		$db->beginTransaction();//ទប់ស្កាត់មើលការErrore , មានErrore វាមិនអោយចូល
-		//print_r($data);exit();
 		try{
 			if(!empty($data['is_void'])){
-				
-				///////////////////////////////// rms_student_payment ////////////////////////////////////////////
-					
 				$this->_name='rms_student_payment';
-					
 				$arr = array(
-						'is_void'=>$data['is_void'],
+					'is_void'=>$data['is_void'],
 				);
 				$where = " id = ".$data['pay_id'];
 				$this->update($arr, $where);
-				
-				///////////////////////////////// rms_student_paymentdetail ////////////////////////////////////////////
 				
 				if(!empty($data['parent_id'])){
 					$arr1 = array(
@@ -504,8 +479,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					$where=" id = ".$data['parent_id'];
 					$this->update($arr,$where);
 				}
-	
-				//////////////////////// study history ///////////////////////////
 				
 				$this->_name='rms_study_history';
 				
@@ -516,7 +489,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					$sql1 = "select * from rms_study_history where id = ".$result['id_record_finished'];
 					$row = $db->fetchRow($sql1);
 					if(!empty($row)){
-					//////////// update student info back //////////////
 						$this->_name='rms_student';
 						$arr = array(
 								'stu_type'		=>$row['stu_type'],
@@ -531,7 +503,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						$this->update($arr, $where2);
 					}
 					
-					//////////////////// update old study_history to active ///////////
 					$this->_name='rms_study_history';
 					$array = array(
 								'is_finished_grade'=>0,
@@ -540,14 +511,9 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					$where = " id = ".$result['id_record_finished'];
 					$this->update($array, $where);
 					
-					////////////////////////// delete new study history that voided ////////////
 					$where1 = "id = ".$result['id'];
 					$this->delete($where1);
 				}
-				
-				
-				
-				///////////////////////////////// rms_student ////////////////////////////////////////////
 				
 				if($data['student_type']==4){
 					$this->_name='rms_student';
@@ -559,14 +525,18 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					$this->update($arr, $where);
 				}
 				
-				
-				
-				////////////////////////////////////////////////////////////////////////////////////////////
-				
 				$db->commit();
 				return 0;
 			
 			}else{
+				$this->_name='rms_student_payment';
+				$arr = array(
+						'payment_method'=>$data['payment_method'],
+						'payment_note'	=>$data['note_payment'],
+				);
+				$where = " id = ".$data['pay_id'];
+				$this->update($arr, $where);
+				
 				$this->_name='rms_student_paymentdetail';
 				$arr = array(
 						'start_date'=>$data['start_date'],
@@ -579,7 +549,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 				return 0;
 			}
 		}catch (Exception $e){
-			echo $e->getMessage();
 			$db->rollBack();
 		}
 		
@@ -876,7 +845,9 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 				  spd.is_start,
 				  spd.is_parent,
 				  spd.qty,
-				  sp.id AS payment_id
+				  sp.id AS payment_id,
+				  sp.payment_method,
+				  sp.payment_note
 				FROM
 				  rms_student AS s,
 				  rms_student_payment AS sp,

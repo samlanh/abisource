@@ -1,6 +1,6 @@
 <?php
-$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-echo $this->headTitle($tr->translate('ADD_STUDENT_TEST'));
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	echo $this->headTitle($tr->translate('ADD_STUDENT_TEST'));
 ?>
 <script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
  <script>
@@ -61,12 +61,6 @@ echo $this->headTitle($tr->translate('ADD_STUDENT_TEST'));
 										    <td><?php echo $tr->translate("RECEIPT")?></td>
 											<td><input readonly="readonly" style="color:red;" type="text" name="receipt" id="receipt" class="fullside" dojoType="dijit.form.TextBox"   /></td>
 										</tr>
-										<!-- 
-										<tr>
-										    <td><?php //echo $tr->translate("SERIAL")?></td>
-											<td><input type="text" name="serial" id="serial" class="fullside" dojoType="dijit.form.TextBox"   /></td>
-										</tr>
-										 -->
 										<tr>
 										    <td><?php echo $tr->translate("DEGREE")?></td>
 											<td>
@@ -78,16 +72,6 @@ echo $this->headTitle($tr->translate('ADD_STUDENT_TEST'));
 												<input type="hidden" dojoType="dijit.form.TextBox" name="degree_type" id="degree_type"/>
 											</td>
 										</tr>
-										<!-- 
-										<tr>
-											<td><?php echo $tr->translate("OLD_SCHOOL")?></td>
-											<td><input type="text" name="old_school" id="old_school" class="fullside" dojoType="dijit.form.TextBox"   /></td>
-										</tr>
-										<tr>
-											 <td><?php echo $tr->translate("OLD_GRADE")?></td>
-											 <td><input type="text" name="old_grade" id="old_grade" class="fullside" dojoType="dijit.form.TextBox" /></td>
-										</tr>
-										 -->
 										<tr>
 											 <td><?php echo $tr->translate("PRICE")?></td>
 											 <td><input onkeyup="readMoneyInKhmer();" type="text" name="test_cost" required="true"  id="test_cost" class="fullside" dojoType="dijit.form.NumberTextBox"   /></td>
@@ -95,6 +79,22 @@ echo $this->headTitle($tr->translate('ADD_STUDENT_TEST'));
 										<tr>
 											<td></td>
 											<td><input type="text" class="fullside" name="readmoney" id="readmoney" readonly dojoType="dijit.form.TextBox" /></td>
+										</tr>
+										<tr>	
+											<td><?php echo $tr->translate("PAYMENT_METHOD");?></td>
+											<td>
+												<select name="payment_method" id="payment_method" dojoType="dijit.form.FilteringSelect" class="fullside" required="true" autoComplete="false" queryExpr="*${0}*" onchange="getReceiptNo();">
+												    <?php  if(!empty($this->payment_option))foreach($this->payment_option as $rs){?>
+												    	<option value="<?php echo $rs['id'];?>" ><?php echo $rs['name'];?></option>
+												    <?php }?>
+												</select>
+											</td>
+										</tr>
+										<tr>	
+											<td><?php echo $tr->translate("PAYIMENT_NOTE");?></td>
+											<td>
+												<textarea dojoType="dijit.form.Textarea" style="min-height:40px;font-family:Khmer os Battambang" class="fullside" id="note_payment" name="note_payment"></textarea>
+											</td>
 										</tr>
 									</table>
 								</td>

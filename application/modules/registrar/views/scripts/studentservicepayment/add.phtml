@@ -160,10 +160,10 @@ fieldset{  background:none;}
 							<td width="20%"><?php echo $tr->translate('SERVICE');?></td>
 							<td width="80%"> 
 								<input id="service" />
+								<input type="hidden" name="old_service" id="old_service" dojoType="dijit.form.TextBox" />
+								<input type="hidden" name="service_cate" id="service_cate" dojoType="dijit.form.TextBox" />
+								<input type="hidden" name="balance_id" id="balance_id" dojoType="dijit.form.TextBox" />
 							</td>
-							<input type="hidden" name="old_service" id="old_service" dojoType="dijit.form.TextBox" />
-							<input type="hidden" name="service_cate" id="service_cate" dojoType="dijit.form.TextBox" />
-							<input type="hidden" name="balance_id" id="balance_id" dojoType="dijit.form.TextBox" />
 						</tr>
 						
 						<tr>
@@ -293,7 +293,14 @@ fieldset{  background:none;}
 								<input class="fullside" name="balance" id="balance"  readOnly="readOnly" dojoType="dijit.form.TextBox" type="text" >
 							</td>
 						</tr>
-						
+						<tr>	
+							<td><?php echo $tr->translate("PAYMENT_METHOD");?></td>
+							<td><?php echo $register->getElement('payment_method');?></td>
+						</tr>
+						<tr>	
+							<td><?php echo $tr->translate("PAYIMENT_NOTE");?></td>
+							<td><?php echo $register->getElement('note_payment');?></td>
+						</tr>
 					</table>	
 				</fieldset>		
 			</td>

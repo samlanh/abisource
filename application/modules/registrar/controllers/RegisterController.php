@@ -4,11 +4,9 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 	const REDIRECT_URL ='/registrar';
     public function init()
     {    	
-     /* Initialize action controller here */
     	header('content-type: text/html; charset=utf8');
     	$this->tr=Application_Form_FrmLanguages::getCurrentlanguage();
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
-    	
 	}
     public function indexAction(){
     	try{
@@ -18,16 +16,16 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     		}
     		else{
     		    $search = array(
-    		    			'adv_search' => '',
-    		    			'study_year' => '',
-    		    			'degree_ft' => '',
-    		    			'time'   =>'', 
-    		    			'session'=>'',
-    		    			'grade_ft'=>'',
-    		    			'user'=>'',
-    		    			'start_date'=> date('Y-m-d'),
-    		    			'end_date'=>date('Y-m-d')
-    		    		);
+    		    	'adv_search' => '',
+    		    	'study_year' => '',
+    		    	'degree_ft' => '',
+    		    	'time'   =>'', 
+    		    	'session'=>'',
+    		    	'grade_ft'=>'',
+    		    	'user'=>'',
+    		    	'start_date'=> date('Y-m-d'),
+    		    	'end_date'=>date('Y-m-d')
+    		    );
     		}
     		
     		$this->view->adv_search=$search;
@@ -67,7 +65,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
       	} catch (Exception $e) {
       		Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
       		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-      		echo $e->getMessage();
       	}
       }
        $frm = new Registrar_Form_FrmRegister();

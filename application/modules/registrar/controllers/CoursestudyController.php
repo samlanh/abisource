@@ -42,7 +42,6 @@ class Registrar_CoursestudyController extends Zend_Controller_Action {
     	}catch (Exception $e){
     		Application_Form_FrmMessage::message("Application Error");
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-    		echo $e->getMessage();
     	}
     	$db=new Registrar_Model_DbTable_DbCourStudey();
     	$this->view->rows_deg=$db->getDegree();
@@ -66,7 +65,6 @@ class Registrar_CoursestudyController extends Zend_Controller_Action {
       		}
       	} catch (Exception $e) {
       		Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
-      		echo $e->getMessage();exit();
       	}
       }
        $frm = new Registrar_Form_FrmCourseStudy();

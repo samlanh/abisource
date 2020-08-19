@@ -36,36 +36,31 @@ class Registrar_uniformandbookController extends Zend_Controller_Action {
     		);
     		$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('year'=>$link,'receipt_number'=>$link,'name'=>$link,'service_name'=>$link,'code'=>$link));
     	}catch (Exception $e){
-    		//Application_Form_FrmMessage::message("Application Error");
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-    		echo $e->getMessage();
     	}
     	$forms=new Registrar_Form_FrmSearchInfor();
     	$form=$forms->FrmSearchRegister();
     	Application_Model_Decorator::removeAllDecorator($form);
     	$this->view->form_search=$form;
     	
-//     	$_db = new Registrar_Model_DbTable_DbUniformAndBook();
-//     	$this->view->year = $year = $_db->getYearService();
-    	
     }
     public function addAction()
     {
-    if($this->getRequest()->isPost()){
-      	$_data = $this->getRequest()->getPost();
-      	try {
-      		$db = new Registrar_Model_DbTable_DbUniformAndBook();
-      		$db->addProductPayment($_data);
-      		if(isset($_data['save_new'])){
-      			Application_Form_FrmMessage::message($this->tr->translate('INSERT_SUCCESS'));
-      		}else{
-      			Application_Form_FrmMessage::Sucessfull($this->tr->translate('INSERT_SUCCESS'), self::REDIRECT_URL . '/uniformandbook/index');
-      		}
-      	} catch (Exception $e) {
-      		Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
-      		echo $e->getMessage();
-      	}
-      }
+	    if($this->getRequest()->isPost()){
+	      	$_data = $this->getRequest()->getPost();
+	      	try {
+	      		$db = new Registrar_Model_DbTable_DbUniformAndBook();
+	      		$db->addProductPayment($_data);
+	      		if(isset($_data['save_new'])){
+	      			Application_Form_FrmMessage::message($this->tr->translate('INSERT_SUCCESS'));
+	      		}else{
+	      			Application_Form_FrmMessage::Sucessfull($this->tr->translate('INSERT_SUCCESS'), self::REDIRECT_URL . '/uniformandbook/index');
+	      		}
+	      	} catch (Exception $e) {
+	      		Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
+	      		echo $e->getMessage();
+	      	}
+	      }
        $frm = new Registrar_Form_FrmUniformAndBook();
        $frm_unifrom_and_book=$frm->FrmRegistarWU();
        Application_Model_Decorator::removeAllDecorator($frm_unifrom_and_book);
@@ -195,8 +190,6 @@ class Registrar_uniformandbookController extends Zend_Controller_Action {
     	
     	$payment=$db->getStudentServicePaymentDetailByID($id);
     	$this->view->rows = $payment;
-    	
-//     	print_r($this->view->row);exit();
     	
     	$frm = new Registrar_Form_FrmUniformAndBook();
     	$frm_register=$frm->FrmRegistarWU($payment);

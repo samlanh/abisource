@@ -444,6 +444,26 @@ Class Registrar_Form_FrmCourseStudy extends Zend_Dojo_Form {
 		));
 		$parent = new Zend_Form_Element_Hidden('parent_id');
 		
+		$payment_method = new Zend_Dojo_Form_Element_FilteringSelect('payment_method');
+		$payment_method->setAttribs(array('dojoType'=>'dijit.form.FilteringSelect',
+				'class'=>'fullside',
+				'required'=>'true',
+				'autoComplete'=>'false',
+				'queryExpr'=>'*${0}*',
+				'class'=>'fullside',
+				'onchange'=>'getReceiptNo();',
+		));
+		
+		$opts = $_db->getViewListById(18,1);
+		$payment_method->setMultiOptions($opts);
+		
+		$note_payment = new Zend_Dojo_Form_Element_Textarea('note_payment');
+		$note_payment->setAttribs(array(
+				'dojoType'=>'dijit.form.Textarea',
+				'style'=>'min-height:40px;font-family:Khmer os Battambang',
+				'class'=>'fullside'
+		));
+		
 		if($data!=null){
 			 //print_r($data);exit();
 			$parent->setValue($data["is_parent"]);
@@ -475,8 +495,12 @@ Class Registrar_Form_FrmCourseStudy extends Zend_Dojo_Form {
 			$end_date->setValue($data['validate']);
 			$drop_studens->setValue($data['stu_id']);
 			$drop_stu_name->setValue($data['stu_id']);
+			
+			$note_payment->setValue($data['payment_method']);
+			$payment_method->setValue($data['payment_note']);
 		}
 		$this->addElements(array(
+				$note_payment,$payment_method,
 			  $material_fee,$drop_stu_name,$drop_studens,$parent,$student_type,$old_studens,$_studname,$old_studen_name,$old_student,$room,$session,$ids,$id,$generation,$char_price,$end_date,$start_date,$not,$books,$addmin_fee,$remaining,$total, $_year_one,$_new_student,$_invoice_no, $_pay_date, $_khname, $_enname,$_studid, $_sex,$_dob,$_degree,$metion,
 			  $_phone,$_dept,$_major,$_batch,$_year,$_session,$_term,$_fee,$_disc_fix,$_disc_percent,$_paid,$_paid_kh,$_remark,$_is_hold ));
 		
