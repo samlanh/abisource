@@ -54,7 +54,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     public function addAction(){
       if($this->getRequest()->isPost()){
       	$_data = $this->getRequest()->getPost();
-      	try {
+      	try{
       		$db = new Registrar_Model_DbTable_DbRegister();
       		$db->addRegister($_data);
       		if(isset($_data['save_new'])){
@@ -85,7 +85,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
        
        $key = new Application_Model_DbTable_DbKeycode();
        $this->view->data=$key->getKeyCodeMiniInv(TRUE);
-       
     }
     
     public function adddataonlyAction(){
@@ -161,7 +160,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     
     	$key = new Application_Model_DbTable_DbKeycode();
     	$this->view->data=$key->getKeyCodeMiniInv(TRUE);
-    
     }
     
     

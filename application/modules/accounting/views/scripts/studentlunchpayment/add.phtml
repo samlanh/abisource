@@ -470,7 +470,7 @@ fieldset{  background:none;}
 					dijit.byId('year').set('store',year_store);   
 				},
 				error: function(err) {
-					alert(err);
+					
 				}
 			});
 		}
@@ -497,7 +497,7 @@ fieldset{  background:none;}
 					dijit.byId('student_name_new').set('store',new_student_store);   
 				},
 				error: function(err) {
-					alert(err);
+					
 				}
 			});
 		}
@@ -530,7 +530,7 @@ fieldset{  background:none;}
 					dijit.byId('old_car_id').set('store',old_car_student_id_store);  
 				},
 				error: function(err) {
-					alert(err);
+					
 				}
 			});
 		}
@@ -561,7 +561,7 @@ fieldset{  background:none;}
 					dijit.byId('stu_drop_id').set('store',drop_student_id_store);  
 				},
 				error: function(err) {
-					alert(err);
+					
 				}
 			});
 		}
@@ -678,7 +678,7 @@ function getNewLunchId(condition){
 			
 		},
 		error: function(err) {
-			alert(err);
+			
 		}
 	});
 	
@@ -708,7 +708,7 @@ function getStartDateService(){
 					}		
 				},
 				error: function(err) {
-					alert(err);
+					
 				}
 			});
 		}
@@ -728,7 +728,7 @@ function getServiceCate(service_id){
 					dijit.byId('service_cate').attr('value',data)					 
 				},
 				error: function(err) {
-					alert(err);
+					
 				}
 		});
 	}
@@ -741,11 +741,14 @@ var url_getreceiptno = '<?php echo $this->url(array('module'=>'registrar','contr
 	function getNewReceiptNo(new_stu_id,condition){
 		type = 4 ;// lunch payment 
 		branch_id = dijit.byId('branch').get('value');
+		payment_method = dijit.byId('payment_method').get('value');
+		
 		dojo.xhrPost({
 			url:url_getreceiptno,
 			content:{
 				'type':type,
 				'branch_id':branch_id,
+				'payment_method':payment_method
 				},
 			handleAs:"json",
 			load: function(data) {
@@ -755,7 +758,7 @@ var url_getreceiptno = '<?php echo $this->url(array('module'=>'registrar','contr
 				}
 			},
 			error: function(err) {
-				alert(err);
+				
 			}
 		});
 	}
@@ -846,7 +849,7 @@ function getStudentInfo(){
 				}
 			},
 			error: function(err) {
-				//alert(err);
+				
 			}
 		});
 	}
@@ -897,7 +900,7 @@ function getservicefee(){
 				}
 			},
 			error: function(err) {
-				alert(err);
+				
 			}
 		});
 	}
@@ -1038,7 +1041,7 @@ function addService(){
 				
 			},
 			error: function(err) {
-				alert(err);
+				
 			}
 	});
 	}
@@ -1185,7 +1188,7 @@ function addCategory(){
 				
 			},
 			error: function(err) {
-				//alert(err);
+				
 			}
 	});
 }

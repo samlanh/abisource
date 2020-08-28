@@ -270,17 +270,14 @@ class Allreport_Model_DbTable_DbRptDailyIncome extends Zend_Db_Table_Abstract
 
     public function getDailyIncomeKhmerFulltime($search){
     	$db = $this->getAdapter();
-    
     	$_db = new Application_Model_DbTable_DbGlobal();
     	$branch_id = $_db->getAccessPermission("sp.`branch_id`");
     
     	$sql = "SELECT
 			    	sp.*,
 			    	sp.id,
-			    	
-			    	(select branch_namekh from rms_branch where br_id = sp.branch_id LIMIT 1) as branch_name,
-			    	(select last_name from rms_users as u where u.id = sp.user_id LIMIT 1) as user_name,
-			    	
+			    	(SELECT branch_namekh from rms_branch where br_id = sp.branch_id LIMIT 1) as branch_name,
+			    	(SELECT last_name from rms_users as u where u.id = sp.user_id LIMIT 1) as user_name,
 			    	sp.`student_id`,
 			    	st.`stu_code`,
 			    	st.`stu_enname`,
@@ -294,26 +291,22 @@ class Allreport_Model_DbTable_DbRptDailyIncome extends Zend_Db_Table_Abstract
 			    	(select major_enname from rms_major where major_id =  sp.`grade` LIMIT 1) as grade,
 			    	(select room_name from rms_room where rms_room.room_id = sp.`room_id` LIMIT 1) as room,
 			    	sp.`time`,
-			    	 
 			    	sp.`tuition_fee`,
 			    	sp.`discount_percent`,
 			    	sp.`discount_fix`,
 			    	sp.`total_payment`,
 			    	sp.`admin_fee`,
 			    	sp.`other_fee`,
-			    	 
 			    	sp.`grand_total_payment`,
 			    	sp.`grand_total_paid_amount`,
 			    	sp.`grand_total_balance`,
 			    	sp.`note`,
 			    	sp.is_subspend,
-			    	 
 			    	spd.`start_date`,
 			    	spd.`validate`,
 			    	spd.`payment_term`,
 			    	spd.is_complete,
 			    	spd.qty,
-			    	
 			    	(SELECT name_kh FROM rms_view WHERE TYPE=18 AND key_code = sp.`payment_method` LIMIT 1) AS payment_method_title,
 			    	sp.`payment_method`,
 			    	sp.`payment_note`
@@ -326,11 +319,9 @@ class Allreport_Model_DbTable_DbRptDailyIncome extends Zend_Db_Table_Abstract
 			    	AND st.`stu_id`=sp.`student_id`
 			    	AND sp.`payfor_type`=1
 			    	AND spd.`service_id`=4
-			    	$branch_id
-    		";
+			    	$branch_id ";
     
     	$where = " ";
-    
     	if($search['shift']==0){
     		$from_date =(empty($search['start_date']))? '1': "sp.create_date >= '".$search['start_date']." 00:00:00'";
     		$to_date = (empty($search['end_date']))? '1': "sp.create_date <= '".$search['end_date']." 23:59:59'";
@@ -351,10 +342,7 @@ class Allreport_Model_DbTable_DbRptDailyIncome extends Zend_Db_Table_Abstract
     	if(!empty($search['from_receipt']) && !empty($search['to_receipt'])){
     		$where .= " AND receipt_number between '".$search['from_receipt']."' AND '".$search['to_receipt']."'";
     	}
-    
     	$order=" ORDER BY sp.`receipt_number` ASC,sp.`grade` ASC ";
-    
-    
     	if(empty($search)){
     		return $db->fetchAll($sql.$order);
     	}
@@ -384,12 +372,10 @@ class Allreport_Model_DbTable_DbRptDailyIncome extends Zend_Db_Table_Abstract
     	if($search['user'] > 0){
     		$where.= " AND sp.`user_id` = ".$search['user'];
     	}
-    	
     	if(!empty($search['payment_method'])){
     		$where.= " AND sp.`payment_method` = ".$search['payment_method'];
     	}
     	return $db->fetchAll($sql.$where.$order);
-    
     }
     
     

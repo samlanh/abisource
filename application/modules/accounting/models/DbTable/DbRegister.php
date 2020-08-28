@@ -102,7 +102,6 @@ class Accounting_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	return $db->fetchRow($sql);
     }
 	function addRegister($data){
-		
 		$register = new Registrar_Model_DbTable_DbRegister();
 		//$stu_code = $register->getNewAccountNumber($data['dept'],$data['branch']);
 		//$receipt = $register->getRecieptNo($type,$data['branch']);
@@ -137,11 +136,9 @@ class Accounting_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 							'stu_khname'	=>$data['kh_name'],
 							'stu_enname'	=>$data['en_name'],
 							'sex'			=>$data['sex'],
-					
 							'dob'			=>$dob,
 							'tel'			=>$data['phone'],
 							'address'		=>$data['address'],
-					
 							'session'		=>$data['session'],
 							'degree'		=>$data['dept'],
 							'grade'			=>$data['grade'],
@@ -176,7 +173,6 @@ class Accounting_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						$payfor_type = 6;  // english fulltime
 					}
 					
-					
 					if(empty($data['is_void'])){
 						
 						$this->_name = "rms_student";
@@ -190,29 +186,27 @@ class Accounting_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						////////////////////////////////////////////////////////////////////////
 						
 						$arr = array(
-								'stu_code'	=>$stu_code,
-								'session'	=>$data['session'],
-								'degree'	=>$data['dept'],
-								'grade'		=>$data['grade'],
-								'room'		=>$data['room'],
-								'stu_enname'	=>$data['en_name'],
-								'stu_khname'	=>$data['kh_name'],
-								'sex'			=>$data['sex'],
-								'dob'			=>$dob,
-								'tel'			=>$data['phone'],
-								'address'		=>$data['address'],
-								'academic_year'	=>$data['study_year'],
-								'stu_type'		=>$stu_type,
-								
-								'is_subspend'=>0,
-								'is_stu_new' =>$is_stu_new,
-								'is_comeback'=>$is_comeback,
+							'stu_code'	=>$stu_code,
+							'session'	=>$data['session'],
+							'degree'	=>$data['dept'],
+							'grade'		=>$data['grade'],
+							'room'		=>$data['room'],
+							'stu_enname'	=>$data['en_name'],
+							'stu_khname'	=>$data['kh_name'],
+							'sex'			=>$data['sex'],
+							'dob'			=>$dob,
+							'tel'			=>$data['phone'],
+							'address'		=>$data['address'],
+							'academic_year'	=>$data['study_year'],
+							'stu_type'		=>$stu_type,
+							'is_subspend'=>0,
+							'is_stu_new' =>$is_stu_new,
+							'is_comeback'=>$is_comeback,
 						);
 						$where = ' stu_id = '.$id;
 						$this->update($arr, $where);
 					}
 				}
-				
 				
 				if($data['payment_term']==5){
 					$price_per_sec = $data['price_per_section'];
@@ -262,36 +256,28 @@ class Accounting_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						'payment_term'	=>$data['payment_term'],
 						'price_per_sec'	=>$price_per_sec,
 						'amount_sec'	=>$amount_sec,
-						
 						'exchange_rate'	=>$data['ex_rate'],
 						'tuition_fee'	=>$tuitionfee,
 						'discount_percent'=>$data['discount'],
 						'discount_fix'	=>$data['discount_fix'],
-						
 						'tuition_fee_after_discount'=>($tuitionfee - $data['discount_fix']) - (($tuitionfee - $data['discount_fix'])*($data['discount']/100)),      //$tuitionfee - ($tuitionfee*$data['discount']/100) - $data['discount_fix'],           
-						
 						'other_fee'		=>$data['remark'],
 						'admin_fee'		=>$data['addmin_fee'],
 						'material_fee'	=>$data['material_fee'],
-						
 						'total_payment'	=>$data['total'],
 						'paid_amount'	=>$data['books'],
 						'receive_amount'=>$data['books'],
 						'balance_due'	=>$data['remaining'],
 						'note'			=>$data['not'],
-						
 						'grand_total_payment'			=>$data['grand_total'],
 						'grand_total_payment_in_riel'	=>$data['convert_to_riels'],
 						'grand_total_paid_amount'		=>$data['total_received'],
 						'grand_total_balance'			=>$data['total_balance'],
-						
 						'student_type'	=>$data['student_type'],
 						'create_date'	=>$create_date,
 						'shift'			=>$data['shift'],
 						'payfor_type'	=>$payfor_type,
-						
 						'is_new'		=>$is_new,
-						
 						'user_id'		=>$this->getUserId(),
 						'branch_id'		=>$data['branch'],
 						'reg_from'		=>1,
@@ -308,7 +294,6 @@ class Accounting_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 				if($is_void == 0){
 				
 					if($data['student_type']==1){
-					
 						if($data['degree_type']==1){
 							$stu_type=1;
 						}else{

@@ -358,38 +358,34 @@ fieldset{  background:none;}
 					},
 				handleAs:"json",
 				load: function(data) {
-					//alert(data);
 					dijit.byId('stu_id').attr('value',data);   
-					
 					if(condition!=''){
 						getNewReceiptNo(data);
 					}
 				},
 				error: function(err) {
-					alert(err);
 				}
 			});
 		}
 	}
 	var url_getreceiptno = '<?php echo $this->url(array('module'=>'registrar','controller'=>'coursestudy','action'=>'get-receipt-no')); ?>';
 	function getNewReceiptNo(new_stu_id){
-		
+		payment_method = dijit.byId('payment_method').get('value');
 		dojo.xhrPost({
 			url:url_getreceiptno,
 			content:{
 				'type':2, // english parttime
 				'branch_id':0,
+				'payment_method':payment_method
 				},
 			handleAs:"json",
 			load: function(data) {
-				//alert(data);
 				dijit.byId('reciept_no').attr('value',data);   
 				if(new_stu_id!=''){
 					printSave(new_stu_id,data);
 				}
 			},
 			error: function(err) {
-				alert(err);
 			}
 		});
 			
@@ -493,7 +489,6 @@ fieldset{  background:none;}
 				      }
 				},
 				error: function(err) {
-					//alert(err);
 				}
 			});
 	}
@@ -503,20 +498,7 @@ fieldset{  background:none;}
 		dijit.byId('tuitionfee').attr('value',0);
     	dijit.byId('total').attr('value',0);
     	dijit.byId('books').attr('value',0);
-    	//dijit.byId('discount').attr('value',0);
-		//dijit.byId('discount_fix').attr('value',0);
-    	//dijit.byId('remaining').attr('value',0);
-    	//dijit.byId('remark').attr('value',0);
-    	//dijit.byId('char_price').attr('value',0);
-
-    	// if(payment_term==5){ // if pay by section => show amount of section 
-			// document.getElementById('amount_section').style.display="block";
-			// document.getElementById('label_amount').style.display="block";
-			
-		// }else{ // pay by other => hide amount of section
-			// document.getElementById('amount_section').style.display="none";
-			// document.getElementById('label_amount').style.display="none";
-		// }
+ 
 		dojo.xhrPost({
 			url:url_getpaymentterm,
 			content:{
@@ -541,7 +523,6 @@ fieldset{  background:none;}
 				  netTotal();
 			},
 			error: function(err) {
-				alert(err);
 			}
 		});
 	}

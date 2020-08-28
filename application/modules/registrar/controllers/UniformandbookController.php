@@ -58,7 +58,6 @@ class Registrar_uniformandbookController extends Zend_Controller_Action {
 	      		}
 	      	} catch (Exception $e) {
 	      		Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
-	      		echo $e->getMessage();
 	      	}
 	      }
        $frm = new Registrar_Form_FrmUniformAndBook();
@@ -81,7 +80,6 @@ class Registrar_uniformandbookController extends Zend_Controller_Action {
        
        $dbg = new Application_Model_DbTable_DbGlobal();
        $this->view->branch_info = $dbg->getBranchInfo();
-       
     }
     
     public function adddataonlyAction()

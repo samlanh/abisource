@@ -841,7 +841,6 @@ function getServiceCate(service_id){
 					dijit.byId('service_cate').attr('value',data)					 
 				},
 				error: function(err) {
-					alert(err);
 				}
 		});
 	}
@@ -852,16 +851,17 @@ var url_getreceiptno = '<?php echo $this->url(array('module'=>'registrar','contr
 	function getNewReceiptNo(new_stu_id,condition){
 		type = 3 ;// transport payment 
 		branch_id = dijit.byId('branch').get('value');
+		payment_method = dijit.byId('payment_method').get('value');
+		
 		dojo.xhrPost({
 				url:url_getreceiptno,
 				content:{
 					'type':type,
 					'branch_id':branch_id,
+					'payment_method':payment_method
 					},
 				handleAs:"json",
 				load: function(data) {
-					//alert(data);
-					//url_getstuno  = getDataStorefromJSON('id','name', data);
 					 dijit.byId('reciept_no').attr('value',data);   
 					 if(condition==1){
 						printSave(new_stu_id,data);
@@ -964,7 +964,7 @@ function getStudentInfo(){
 				}
 			},
 			error: function(err) {
-				//alert(err);
+				
 			}
 		});
 	}
@@ -1303,7 +1303,6 @@ function addCategory(){
 				
 			},
 			error: function(err) {
-				//alert(err);
 			}
 	});
 }
@@ -1364,7 +1363,6 @@ function hideDialog(){
 				</td>
 			</tr>
 		</table>
-
 		</form>
 	</div>
 </div>

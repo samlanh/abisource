@@ -60,7 +60,6 @@ class Registrar_StudentservicepaymentController extends Zend_Controller_Action {
       		}
       	} catch (Exception $e) {
       		Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
-      		echo $e->getMessage();exit();
       	}
       }
        $frm = new Registrar_Form_FrmStudentServicePayment();
@@ -73,7 +72,6 @@ class Registrar_StudentservicepaymentController extends Zend_Controller_Action {
       
        $db = new Application_Model_DbTable_DbGlobal();
        $abc=$this->view->payment_term = $db->getAllPaymentTerm(null,null,null);
-       //print_r($abc);exit();
        
        $tr = Application_Form_FrmLanguages::getCurrentlanguage();
        $db = new Registrar_Model_DbTable_DbStudentServicePayment();

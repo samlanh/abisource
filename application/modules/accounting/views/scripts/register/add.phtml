@@ -546,12 +546,12 @@ function getallModel(dept_id,a){
 	var url_getreceiptno = '<?php echo $this->url(array('module'=>'registrar','controller'=>'coursestudy','action'=>'get-receipt-no')); ?>';
 	function getNewReceiptNo(new_stu_id){
 		degree_type = dijit.byId('degree_type').get('value');
+		payment_method = dijit.byId('payment_method').get('value');
 		if(degree_type==1){
 			type = 1; // khmer fulltime
 		}else{
 			type = 6; // english fulltime
 		}
-
 		branch_id = dijit.byId('branch').get('value');
 		if(type>0 && branch_id>0){
 				dojo.xhrPost({
@@ -559,6 +559,7 @@ function getallModel(dept_id,a){
 				content:{
 					'type':type,
 					'branch_id':branch_id,
+					'payment_method':payment_method
 					},
 				handleAs:"json",
 				load: function(data) {

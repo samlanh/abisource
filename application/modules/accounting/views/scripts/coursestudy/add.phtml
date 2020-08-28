@@ -569,20 +569,19 @@ fieldset{  background:none;}
 	}
 	var url_getreceiptno = '<?php echo $this->url(array('module'=>'registrar','controller'=>'coursestudy','action'=>'get-receipt-no')); ?>';
 	function getNewReceiptNo(new_stu_id){
-		
 		type = 2; // parttime payment
 		branch_id = dijit.byId('branch').get('value');
+		payment_method = dijit.byId('payment_method').get('value');
 		if(branch_id>0){
 			dojo.xhrPost({
 				url:url_getreceiptno,
 				content:{
 					'type':type,
 					'branch_id':branch_id,
+					'payment_method':payment_method
 					},
 				handleAs:"json",
 				load: function(data) {
-					//alert(data);
-					//url_getstuno  = getDataStorefromJSON('id','name', data);
 					 dijit.byId('reciept_no').attr('value',data);   
 					if(new_stu_id!=''){
 						printSave(new_stu_id,data);

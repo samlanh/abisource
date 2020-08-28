@@ -320,7 +320,8 @@ class Registrar_CoursestudyController extends Zend_Controller_Action {
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
     		$db = new Registrar_Model_DbTable_DbRegister();
-    		$receipt = $db->getRecieptNo($data['type'],$data['branch_id']);
+    		$data['payment_method']=empty($data['payment_method'])?1:$data['payment_method'];
+    		$receipt = $db->getRecieptNo($data['type'],$data['branch_id'],$data['payment_method']);
     		print_r(Zend_Json::encode($receipt));
     		exit();
     	}

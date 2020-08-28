@@ -109,6 +109,22 @@ echo $this->headTitle($tr->translate('EDIT_STUDENT_TEST'));
 											</td>
 										</tr>
 										<tr>	
+											<td><?php echo $tr->translate("PAYMENT_METHOD");?></td>
+											<td>
+												<select name="payment_method" id="payment_method" dojoType="dijit.form.FilteringSelect" class="fullside" required="true" autoComplete="false" queryExpr="*${0}*" onchange="getReceiptNo();">
+												    <?php  if(!empty($this->payment_option))foreach($this->payment_option as $rs){?>
+												    	<option value="<?php echo $rs['id'];?>" <?php if($this->rs['payment_method']==$rs['id']){echo "selected='selected'";}?>><?php echo $rs['name'];?></option>
+												    <?php }?>
+												</select>
+											</td>
+										</tr>
+										<tr>	
+											<td><?php echo $tr->translate("PAYIMENT_NOTE");?></td>
+											<td>
+												<textarea dojoType="dijit.form.Textarea" style="min-height:40px;font-family:Khmer os Battambang" class="fullside" id="note_payment" name="note_payment"><?php echo $this->rs['payment_note'];?></textarea>
+											</td>
+										</tr>
+										<tr>	
 											<td colspan="2" align="center">
 												<input type="checkbox" value="1" name="is_void" id="is_void" <?php if($this->rs['status']==0){echo "checked onclick='return false'";}?> dojoType="dijit.form.CheckBox" /> Void
 											<td>

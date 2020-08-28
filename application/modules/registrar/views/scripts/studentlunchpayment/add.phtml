@@ -523,7 +523,7 @@ function getNewLunchId(condition){
 			
 		},
 		error: function(err) {
-			alert(err);
+			
 		}
 	});
 	
@@ -1160,7 +1160,7 @@ function getStartDateService(){
 					//getValidate();
 				},
 				error: function(err) {
-					alert(err);
+					
 				}
 			});
 		}
@@ -1180,7 +1180,7 @@ function getServiceCate(service_id){
 					dijit.byId('service_cate').attr('value',data)					 
 				},
 				error: function(err) {
-					alert(err);
+					
 				}
 		});
 	}
@@ -1190,11 +1190,13 @@ function getServiceCate(service_id){
 
 var url_getreceiptno = '<?php echo $this->url(array('module'=>'registrar','controller'=>'coursestudy','action'=>'get-receipt-no')); ?>';
 	function getNewReceiptNo(new_stu_id,condition){
+		payment_method = dijit.byId('payment_method').get('value');
 		dojo.xhrPost({
 			url:url_getreceiptno,
 			content:{
 				'type':4, // lunch payment
 				'branch_id':0,
+				'payment_method':payment_method
 				},
 			handleAs:"json",
 			load: function(data) {
@@ -1205,7 +1207,7 @@ var url_getreceiptno = '<?php echo $this->url(array('module'=>'registrar','contr
 				}
 			},
 			error: function(err) {
-				alert(err);
+				
 			}
 		});
 	}
@@ -1297,7 +1299,7 @@ function getStudentInfo(){
 				}
 			},
 			error: function(err) {
-				//alert(err);
+				
 			}
 		});
 	}
@@ -1350,7 +1352,7 @@ function getservicefee(){
 				}
 			},
 			error: function(err) {
-				alert(err);
+				
 			}
 		});
 	}
@@ -1510,7 +1512,7 @@ function addService(){
 				
 			},
 			error: function(err) {
-				alert(err);
+				
 			}
 	});
 	}
@@ -1627,7 +1629,7 @@ function getProductPrice(index){
 			}
 		},
 		error: function(err) {
-			//alert(err);
+			
 		}
 	});
 }
@@ -1811,7 +1813,7 @@ function addCategory(){
 				
 			},
 			error: function(err) {
-				//alert(err);
+				
 			}
 	});
 }

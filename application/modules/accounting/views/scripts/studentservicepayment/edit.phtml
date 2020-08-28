@@ -553,17 +553,16 @@ function getServiceCate(service_id){
 
 var url_getreceiptno = '<?php echo $this->url(array('module'=>'registrar','controller'=>'coursestudy','action'=>'get-receipt-no')); ?>';
 	function getNewReceiptNo(new_stu_id,condition){
-		
+		payment_method = dijit.byId('payment_method').get('value');
 		dojo.xhrPost({
 				url:url_getreceiptno,
 				content:{
 					'type':3, // transport payment
 					'branch_id':0,
+					'payment_method':payment_method
 					},
 				handleAs:"json",
 				load: function(data) {
-					//alert(data);
-					//url_getstuno  = getDataStorefromJSON('id','name', data);
 					 dijit.byId('reciept_no').attr('value',data);   
 					 if(condition==1){
 						printSave(new_stu_id,data);

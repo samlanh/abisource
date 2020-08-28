@@ -4,31 +4,29 @@ class Accounting_RegisterController extends Zend_Controller_Action {
 	const REDIRECT_URL ='/accounting';
     public function init()
     {    	
-     /* Initialize action controller here */
     	header('content-type: text/html; charset=utf8');
     	$this->tr=Application_Form_FrmLanguages::getCurrentlanguage();
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
-    	
 	}
     public function indexAction(){
     	try{
     		$db = new Accounting_Model_DbTable_DbRegister();
-    		    		if($this->getRequest()->isPost()){
-    		    			$search=$this->getRequest()->getPost();
-    		    		}
-    		    		else{
-    		    			$search = array(
-    		    					'adv_search' => '',
-    		    					'branch' 	=> '',
-    		    					'study_year' => '',
-    		    					'degree_ft' => '',
-    		    					'time'   =>'', 
-    		    					'session'=>'',
-    		    					'grade_ft'=>'',
-    		    					'user'=>'',
-    		    					'start_date'=> date('Y-m-d'),
-    		    					'end_date'=>date('Y-m-d'));
-    		    		}
+    		if($this->getRequest()->isPost()){
+    		    $search=$this->getRequest()->getPost();
+    		}
+    		else{
+    		   $search = array(
+    		    	'adv_search' => '',
+    		    	'branch' 	=> '',
+    		    	'study_year' => '',
+    		    	'degree_ft' => '',
+    		    	'time'   =>'', 
+    		    	'session'=>'',
+    		    	'grade_ft'=>'',
+    		    	'user'=>'',
+    		    	'start_date'=> date('Y-m-d'),
+    		    	'end_date'=>date('Y-m-d'));
+    		}
     		$this->view->adv_search=$search;
     		$rs_rows= $db->getAllStudentRegister($search);
     		$glClass = new Application_Model_GlobalClass();
@@ -44,8 +42,8 @@ class Accounting_RegisterController extends Zend_Controller_Action {
     		);
     		$this->view->list=$list->getCheckList(2, $collumns, $rs_rows,array('stu_code'=>$link,'receipt_number'=>$link,'stu_khname'=>$link,'stu_enname'=>$link,'del'=>$link1));
     	}catch (Exception $e){
+    		Application_Form_FrmMessage::message($this->tr->translate('APPLICATION_FAIL'));
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-    		echo $e->getMessage();
     	}
     	$data = new Accounting_Model_DbTable_DbRegister();
     	$this->view->rows_degree=$data->getDegree();
@@ -54,9 +52,7 @@ class Accounting_RegisterController extends Zend_Controller_Action {
     	$form->FrmSearchRegister();
     	Application_Model_Decorator::removeAllDecorator($form);
     	$this->view->form_search=$form;
-    	
     }
-  
     public function addAction(){
       if($this->getRequest()->isPost()){
       	$_data = $this->getRequest()->getPost();
@@ -71,7 +67,6 @@ class Accounting_RegisterController extends Zend_Controller_Action {
       	} catch (Exception $e) {
       		Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
       		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-      		echo $e->getMessage();exit();
       	}
       }
        $frm = new Accounting_Form_FrmRegister();
@@ -133,7 +128,6 @@ class Accounting_RegisterController extends Zend_Controller_Action {
     	$this->view->old_stu_name = $db->getAllGerneralOldStudentName($form_row['stu_id']);
     }
     
-    
     public function copyAction(){
     	$id=$this->getRequest()->getParam('id');
     	if($this->getRequest()->isPost()){
@@ -171,7 +165,6 @@ class Accounting_RegisterController extends Zend_Controller_Action {
     	 
     	$db = new Registrar_Model_DbTable_DbRegister();
     	$this->view->exchange_rate = $db->getExchangeRate();
-    	
     }
     
     public function deleteAction(){
@@ -183,20 +176,13 @@ class Accounting_RegisterController extends Zend_Controller_Action {
 	    	$db->deleteRecord($data,$id);
 	    	Application_Form_FrmMessage::Sucessfull($this->tr->translate('EDIT_SUCCESS'), self::REDIRECT_URL . '/register/index');
     	}
-    	
     	$this->view->detail = $db->getReceiptDetail($id);
     }
-    
-    
-    
-    
-    
     public function oldaddAction()
     {
     	if($this->getRequest()->isPost()){
     		$_data = $this->getRequest()->getPost();
     		$_model = new Registrar_Model_DbTable_DbwuRegister();
-    		//print_r($_data);exit();
     		$_model->AddNewStudent($_data);
     	}
     	$frm = new Registrar_Form_FrmRegister();
@@ -260,7 +246,6 @@ class Accounting_RegisterController extends Zend_Controller_Action {
     		exit();
     	}
     }
-
     function getOldStuIdByBranchAction(){
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
@@ -270,7 +255,6 @@ class Accounting_RegisterController extends Zend_Controller_Action {
     		exit();
     	}
     }
-    
     function getDropStuIdByBranchAction(){
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
@@ -281,25 +265,13 @@ class Accounting_RegisterController extends Zend_Controller_Action {
     		exit();
     	}
     }
-    
-    
     function checkStuCodeAction(){
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
     		$db = new Accounting_Model_DbTable_DbRegister();
     		$stu_code = $db->checkStuCode($data['stu_code'],$data['branch']);
-    
     		print_r(Zend_Json::encode($stu_code));
     		exit();
     	}
     }
-	
 }
-
-
-
-
-
-
-
-

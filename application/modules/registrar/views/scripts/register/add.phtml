@@ -371,6 +371,7 @@
 	var url_getreceiptno = '<?php echo $this->url(array('module'=>'registrar','controller'=>'coursestudy','action'=>'get-receipt-no')); ?>';
 	function getNewReceiptNo(new_stu_id){
 		degree_type = dijit.byId('degree_type').get('value');
+		payment_method = dijit.byId('payment_method').get('value');
 		if(degree_type>0){
 			if(degree_type==1){
 				type = 1; // khmer fulltime
@@ -382,10 +383,12 @@
 				content:{
 					'type':type,
 					'branch_id':0,
+					'payment_method':payment_method
 					},
 				handleAs:"json",
 				load: function(data) {
 					dijit.byId('reciept_no').attr('value',data);   
+					
 					if(new_stu_id!=''){
 						printSave(new_stu_id,data);
 					}

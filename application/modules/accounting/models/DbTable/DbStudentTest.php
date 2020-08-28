@@ -11,7 +11,6 @@ class Accounting_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 		return $session_user->branch_id;
 	}
 	function addStudentTest($data){
-		//print_r($data);exit();
 		
 		if($data['dob']==""){
 			$dob = null;
@@ -33,22 +32,24 @@ class Accounting_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 		}
 		
 		$array = array(
-					'branch_id'	=>$data['branch'],
-					'receipt'	=>$data['receipt'],
-					'kh_name'	=>$data['kh_name'],
-					'en_name'	=>$data['en_name'],
-					'sex'		=>$data['sex'],
-					'dob'		=>$dob,
-					'phone'		=>$data['phone'],
-					'degree'	=>$data['degree'],
-					'note'		=>$data['note'],
-					'address'	=>$data['address'],
-					'user_id'	=>$this->getUserId(),
-					'total_price'=>$data['test_cost'],
-					'create_date'=>$create_date,
-					'shift'		=>$data['shift'],
-					'status'	=>$status,
-				);
+				'branch_id'	=>$data['branch'],
+				'receipt'	=>$data['receipt'],
+				'kh_name'	=>$data['kh_name'],
+				'en_name'	=>$data['en_name'],
+				'sex'		=>$data['sex'],
+				'dob'		=>$dob,
+				'phone'		=>$data['phone'],
+				'degree'	=>$data['degree'],
+				'note'		=>$data['note'],
+				'address'	=>$data['address'],
+				'user_id'	=>$this->getUserId(),
+				'total_price'=>$data['test_cost'],
+				'create_date'=>$create_date,
+				'shift'		=>$data['shift'],
+				'status'	=>$status,
+				'payment_method'=>$data['payment_method'],
+				'payment_note'=>$data['note_payment'],
+			);
 		$this->insert($array);
  	}
 	function updateStudentTest($data,$id){
@@ -91,16 +92,14 @@ class Accounting_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 					//'user_id'	=>$this->getUserId(),
 					'total_price'=>$data['test_cost'],
 					'status'	=>$status,
-				
 					'create_date'=>$create_date,
 					'shift'		=>$data['shift'],
-				
 // 					'degree_result'	=>$data['degree_result'],
 // 					'grade_result'	=>$data['grade_result'],
 // 					'session_result'=>$data['session_result'],
-				
 // 					'updated_result'=>$updated_result,
-				
+					'payment_method'=>$data['payment_method'],
+					'payment_note'=>$data['note_payment'],
 				);
 		$where="id = $id";
 		$this->update($array, $where);

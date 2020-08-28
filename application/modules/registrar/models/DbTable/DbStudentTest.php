@@ -106,8 +106,7 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 					rms_student_test
 				WHERE
 					register=0 
-					$branch_id
-				";
+					$branch_id ";
 		
 		if (!empty($search['txtsearch'])){
 				$s_where = array();
@@ -121,14 +120,14 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 		if(!empty($search['branch'])){
 			$where.=" AND branch_id=".$search['branch'];
 		}
-		if($search['status_search']!=""){
+		if($search['status_search']>-1){
 			$where.=" AND status=".$search['status_search'];
 		}
 		$order=" order by id desc ";
 		return $db->fetchAll($sql.$where.$order);
 	}	
 	
-	function getNewReceiptNumber($branch=0){
+	function getNewReceiptNumber($branch=0,$payment_method=1){
 		$db=$this->getAdapter();
 		
 		if($branch>0){
@@ -165,8 +164,11 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 		}else if($branch_id==2){
 			$create_date = " and create_date > '2019-03-02 00:00:00'";
 		}
+		if($payment_method==2 OR $payment_method==3){
+			$payment_method=' 2 OR payment_method=3 ';
+		}
 		
-		$sql="select count(id) from rms_student_test where branch_id = $branch_id  $create_date ";
+		$sql="select count(id) from rms_student_test where payment_method=$payment_method AND branch_id = $branch_id  $create_date ";
 		$result = $db->fetchOne($sql);
 		
 		$new_acc_no = (int)$result+1;

@@ -122,7 +122,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 							'session'	=>$data['session'],
 							'degree'	=>$data['dept'],
 							'grade'		=>$data['grade'],
-							
 							'stu_khname'=>$data['kh_name'],
 							'stu_enname'=>$data['en_name'],
 							'sex'		=>$data['sex'],
@@ -156,7 +155,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					$is_new = 1;
 				}
 				
-				
 				if(!empty($data['buy_product'])){
 					$buy_product = 1;
 				}else{
@@ -165,43 +163,43 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 				
 				$this->_name='rms_student_payment';
 				$arr=array(
-						'student_id'	=>$id,
-						'receipt_number'=>$receipt_no,
-						'buy_product'	=>$buy_product,
-						'year'			=>$data['study_year'],
-						'degree'		=>$data['dept'],
-						'grade'			=>$data['grade'],
-						'time'			=>$data['study_hour'],
-						'session'		=>$data['session'],
-						'room_id'		=>$data['room'],
-						'payment_term'	=>$data['payment_term'],
-						'price_per_sec'	=>$price_per_sec,
-						'amount_sec'	=>$amount_sec,				
-						'exchange_rate'	=>$data['ex_rate'],
-						'tuition_fee'	=>$tuitionfee,
-						'discount_percent'=>$data['discount'],
-						'discount_fix'	=>$data['discount_fix'],
-						'tuition_fee_after_discount'=>($tuitionfee - $data['discount_fix']) - (($tuitionfee - $data['discount_fix'])*($data['discount']/100)),
-						'other_fee'		=>$data['remark'],
-						'admin_fee'		=>$data['addmin_fee'],
-						'material_fee'	=>$data['material_fee'],
-						'total_payment'	=>$data['total'],
-						'paid_amount'	=>$data['books'],
-						'receive_amount'=>$data['books'],
-						'balance_due'	=>$data['remaining'],
-						'note'			=>$data['not'],
-						'grand_total_payment'			=>$data['grand_total'],
-						'grand_total_payment_in_riel'	=>$data['convert_to_riels'],
-						'grand_total_paid_amount'		=>$data['total_received'],
-						'grand_total_balance'			=>$data['total_balance'],
-						'is_new'		=>$is_new,
-						'student_type'	=>$data['student_type'],
-						'create_date'	=>date('Y-m-d H:i:s'),
-						'payfor_type'	=>$payfor_type,
-						'user_id'		=>$this->getUserId(),
-						'branch_id'		=>$this->getBranchId(),
-						'payment_method'=>$data['payment_method'],
-						'payment_note'	=>$data['note_payment'],
+					'student_id'	=>$id,
+					'receipt_number'=>$receipt_no,
+					'buy_product'	=>$buy_product,
+					'year'			=>$data['study_year'],
+					'degree'		=>$data['dept'],
+					'grade'			=>$data['grade'],
+					'time'			=>$data['study_hour'],
+					'session'		=>$data['session'],
+					'room_id'		=>$data['room'],
+					'payment_term'	=>$data['payment_term'],
+					'price_per_sec'	=>$price_per_sec,
+					'amount_sec'	=>$amount_sec,				
+					'exchange_rate'	=>$data['ex_rate'],
+					'tuition_fee'	=>$tuitionfee,
+					'discount_percent'=>$data['discount'],
+					'discount_fix'	=>$data['discount_fix'],
+					'tuition_fee_after_discount'=>($tuitionfee - $data['discount_fix']) - (($tuitionfee - $data['discount_fix'])*($data['discount']/100)),
+					'other_fee'		=>$data['remark'],
+					'admin_fee'		=>$data['addmin_fee'],
+					'material_fee'	=>$data['material_fee'],
+					'total_payment'	=>$data['total'],
+					'paid_amount'	=>$data['books'],
+					'receive_amount'=>$data['books'],
+					'balance_due'	=>$data['remaining'],
+					'note'			=>$data['not'],
+					'grand_total_payment'			=>$data['grand_total'],
+					'grand_total_payment_in_riel'	=>$data['convert_to_riels'],
+					'grand_total_paid_amount'		=>$data['total_received'],
+					'grand_total_balance'			=>$data['total_balance'],
+					'is_new'		=>$is_new,
+					'student_type'	=>$data['student_type'],
+					'create_date'	=>date('Y-m-d H:i:s'),
+					'payfor_type'	=>$payfor_type,
+					'user_id'		=>$this->getUserId(),
+					'branch_id'		=>$this->getBranchId(),
+					'payment_method'=>$data['payment_method'],
+					'payment_note'	=>$data['note_payment'],
 				);
 				$paymentid = $this->insert($arr);
 				
@@ -531,8 +529,8 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 			}else{
 				$this->_name='rms_student_payment';
 				$arr = array(
-						'payment_method'=>$data['payment_method'],
-						'payment_note'	=>$data['note_payment'],
+					'payment_method'=>$data['payment_method'],
+					'payment_note'	=>$data['note_payment'],
 				);
 				$where = " id = ".$data['pay_id'];
 				$this->update($arr, $where);
@@ -1027,7 +1025,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	return $pre.$new_acc_no;//0000 + new number
     }
     
-    public function getRecieptNo($payfor_type,$branch=0){
+    public function getRecieptNo($payfor_type,$branch=0,$payment_method=1){
     	$db = $this->getAdapter();
     	
     	if($branch>0){
@@ -1064,12 +1062,14 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 		}else if($branch_id==2){
 			$create_date = " and create_date > '2019-03-02 00:00:00'";
 		}
+		if($payment_method==2 OR $payment_method==3){
+			$payment_method=' 2 OR payment_method=3 ';
+		}
     	
-    	$sql="SELECT count(id) FROM rms_student_payment where payfor_type = $payfor_type and branch_id = $branch_id $create_date LIMIT 1 ";
+    	$sql="SELECT count(id) FROM rms_student_payment where payment_method=$payment_method AND payfor_type = $payfor_type and branch_id = $branch_id $create_date LIMIT 1 ";
     	$acc_no = $db->fetchOne($sql);
     	$new_acc_no= (int)$acc_no+1;
     	$acc_no= strlen((int)$acc_no+1);
-    	
     	$pre="";
     	
     	if($payfor_type==1){

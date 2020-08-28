@@ -272,11 +272,13 @@ function loading(){
 var url_getreceiptno = '<?php echo $this->url(array('module'=>'registrar','controller'=>'coursestudy','action'=>'get-receipt-no')); ?>';
 	function getNewReceiptNo(condition){
 		branch_id = dijit.byId('branch').get('value');
+		payment_method = dijit.byId('payment_method').get('value');
 		dojo.xhrPost({
 			url:url_getreceiptno,
 			content:{
 				'type':5, // product payment
 				'branch_id':branch_id,
+				'payment_method':payment_method
 				},
 			handleAs:"json",
 			load: function(data) {
@@ -288,7 +290,6 @@ var url_getreceiptno = '<?php echo $this->url(array('module'=>'registrar','contr
 				
 			},
 			error: function(err) {
-				alert(err);
 			}
 		});
 			

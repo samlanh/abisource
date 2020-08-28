@@ -83,7 +83,7 @@
 										<tr>	
 											<td><?php echo $tr->translate("PAYMENT_METHOD");?></td>
 											<td>
-												<select name="payment_method" id="payment_method" dojoType="dijit.form.FilteringSelect" class="fullside" required="true" autoComplete="false" queryExpr="*${0}*" onchange="getReceiptNo();">
+												<select name="payment_method" id="payment_method" dojoType="dijit.form.FilteringSelect" class="fullside" required="true" autoComplete="false" queryExpr="*${0}*" onchange="getReceiptNumber('');">
 												    <?php  if(!empty($this->payment_option))foreach($this->payment_option as $rs){?>
 												    	<option value="<?php echo $rs['id'];?>" ><?php echo $rs['name'];?></option>
 												    <?php }?>
@@ -500,11 +500,12 @@ dojo.ready(function(){
 });
 var url_get_recceipt_number = "<?php echo $this->url(array('module'=>'registrar','controller'=>'studenttest','action'=>'get-receipt-number')); ?>";
 function getReceiptNumber(condition){
+	payment_method = dijit.byId('payment_method').get('value');
 	dojo.xhrPost({
 		url:url_get_recceipt_number,
 		content:{
-			//'branch_id':dijit.byId('branch_id').get('value')
-			},
+		'payment_method':payment_method
+		},
 		handleAs:"json",
 		load: function(data) {
 			 dijit.byId('receipt').attr('value',data);
@@ -513,18 +514,15 @@ function getReceiptNumber(condition){
 			 }
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }
 function printReceipt(new_receipt){
 	if(dijit.byId('frm_teststudent').validate()) {
 		if(new_receipt==''){
-			//dojo.byId("lb_receipt").innerHTML = '';
 			dojo.byId("lb_receipt_no").innerHTML = '';
 			getReceiptNumber(1);
 		}else{
-			//dojo.byId("lb_receipt").innerHTML = new_receipt;
 			dojo.byId("lb_receipt_no").innerHTML = new_receipt;
 		}
 
@@ -551,15 +549,12 @@ function printReceipt(new_receipt){
 		
 		dojo.byId("lb_studentkh").innerHTML = "&nbsp;"+dijit.byId("kh_name").get('value');
 		dojo.byId("lb_studenten").innerHTML = "&nbsp;"+dijit.byId("en_name").get('value');
-		//dojo.byId("lb_serial").innerHTML = dijit.byId("serial").get('value');
-		//dojo.byId("lb_degree").innerHTML = dijit.byId("degree").attr('displayedValue');
 		dojo.byId("lb_gender").innerHTML = "&nbsp;"+dijit.byId("sex").attr('displayedValue');
 		dojo.byId("lb_price").innerHTML = "&nbsp;$ "+dijit.byId("test_cost").get('value').toFixed(2);
 		dojo.byId("lb_total_amount").innerHTML = "&nbsp;$ "+dijit.byId("test_cost").get('value').toFixed(2);
 		dojo.byId("lb_dob").innerHTML = "&nbsp;"+dijit.byId("dob").get('value');
 		dojo.byId("lb_address").innerHTML = "&nbsp;"+dijit.byId("address").get('value');
 		dojo.byId("lb_phone").innerHTML = "&nbsp;"+dijit.byId("phone").get('value');
-		//dojo.byId("lb_note").innerHTML = dijit.byId("note").get('value');
 		dojo.byId("lb_total_inword").innerHTML = dijit.byId('readmoney').get('value');
 		var d = dijit.byId("dob").get('value');
 		 if(d!=null){

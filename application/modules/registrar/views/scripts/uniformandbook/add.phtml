@@ -260,39 +260,30 @@ function printSave(new_receipt_no){
 		}
 		dijit.byId("popup_invoice").show();	
 	}
-	
-	
 }
-
-
 
 var url_getreceiptno = '<?php echo $this->url(array('module'=>'registrar','controller'=>'coursestudy','action'=>'get-receipt-no')); ?>';
 	function getNewReceiptNo(condition){
-		
+		payment_method = dijit.byId('payment_method').get('value');
 		dojo.xhrPost({
 			url:url_getreceiptno,
 			content:{
-				'type':5, // product payment
+				'type':5, 
 				'branch_id':0,
+				'payment_method':payment_method
 				},
 			handleAs:"json",
 			load: function(data) {
-				
 				dijit.byId('receipt_no').attr('value',data);   
 				if(condition==1){ 
 					printSave(data);
 				}
-				
 			},
 			error: function(err) {
-				alert(err);
 			}
 		});
-			
 	}
-
 </script>
-
 <div class="dijitHidden" style="width: 26cm !important; height: 11cm ; padding: 0px; margin: 0px;">
 <?php $keycode = $this->keycode;?>
 	<div data-dojo-type="dijit.Dialog" style="width:26cm;" align="center" data-dojo-props="title:'<?php echo $tr->translate("");?>'" id="popup_invoice" >

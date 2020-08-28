@@ -459,7 +459,7 @@ fieldset{  background:none;}
 				    dijit.byId('study_year').attr('value','<?php echo $this->row_gep['academic_year']?>'); 
 				},
 				error: function(err) {
-					//alert(err);
+					
 				}
 			});
 	}
@@ -492,7 +492,7 @@ fieldset{  background:none;}
 					dijit.byId('old_stu_name').set('store',old_stu_name_store);
 				},
 				error: function(err) {
-					//alert(err);
+					
 				}
 			});
 	}
@@ -524,7 +524,7 @@ fieldset{  background:none;}
 					dijit.byId('drop_student_name').set('store',drop_stu_name_store);
 				},
 				error: function(err) {
-					//alert(err);
+					
 				}
 			});
 		}
@@ -547,7 +547,7 @@ fieldset{  background:none;}
 
 				},
 				error: function(err) {
-					//alert(err);
+					
 				}
 			});
 	}
@@ -566,7 +566,7 @@ fieldset{  background:none;}
 					 dijit.byId('stu_id').attr('value',data);   
 				},
 				error: function(err) {
-					alert(err);
+					
 				}
 			});
 		}
@@ -576,18 +576,20 @@ fieldset{  background:none;}
 	function getNewReceiptNo(){
 		type = 2; // parttime payment
 		branch_id = dijit.byId('branch').get('value');
+		payment_method = dijit.byId('payment_method').get('value');
 		dojo.xhrPost({
 				url:url_getreceiptno,
 				content:{
 					'type':type,
 					'branch_id':branch_id,
+					'payment_method':payment_method
 					},
 				handleAs:"json",
 				load: function(data) {
 					 dijit.byId('reciept_no').attr('value',data);   
 				},
 				error: function(err) {
-					alert(err);
+					
 				}
 			});
 			
@@ -657,7 +659,7 @@ fieldset{  background:none;}
 				      netTotal();
 				},
 				error: function(err) {
-					//alert(err);
+					
 				}
 			});
 	}
@@ -856,7 +858,7 @@ fieldset{  background:none;}
 						}	
 					},
 					error: function(err) {
-						alert(err);
+						
 					}
 				});
 			}
@@ -985,7 +987,7 @@ function getBalancePrice(servce_id,student_id){
 			      }
 			},
 			error: function(err) {
-				//alert(err);
+				
 			}
 		});
 }
@@ -1046,7 +1048,7 @@ function getGepOldStudentById(){
 				      }
 				},
 				error: function(err) {
-					//alert(err);
+					
 				}
 			});
 		}

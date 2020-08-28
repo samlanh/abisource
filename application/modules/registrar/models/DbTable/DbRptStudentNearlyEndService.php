@@ -17,20 +17,16 @@ class Registrar_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
     	$sql="SELECT 
 				  sp.`receipt_number` AS receipt,
 				  sp.payfor_type,
-				  
 				  s.stu_code,
 				  (SELECT ser.stu_code FROM rms_service as ser WHERE ser.stu_id= sp.student_id AND ser.type=4 LIMIT 1) as transport_code,
 				  (SELECT ser.stu_code FROM rms_service as ser WHERE ser.stu_id= sp.student_id AND ser.type=5 LIMIT 1) as lunch_code,
-				  
 				  CONCAT(s.stu_khname,' - ',s.stu_enname) AS name,
 				  s.stu_khname,
 				  s.stu_enname,
 				  (SELECT name_en FROM rms_view WHERE rms_view.type=2 AND key_code=s.sex LIMIT 1)AS sex,
 				  s.tel,
-				  
 				  (SELECT en_name FROM rms_dept WHERE dept_id=s.degree LIMIT 1) as degree,
 				  (SELECT major_enname FROM rms_major WHERE major_id=s.grade LIMIT 1) as grade,
-				  
 				  pn.`title` service,
 				  spd.`start_date` as start,
 				  spd.`validate` as end,
@@ -88,9 +84,5 @@ class Registrar_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
     		$WHERE.=" AND s.grade=".$search['grade_all'];
     	}
     	return $db->fetchAll($sql.$WHERE.$order);
-    }
-    
+    }   
 }
-   
-    
-   

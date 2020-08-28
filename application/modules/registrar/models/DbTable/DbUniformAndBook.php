@@ -44,7 +44,7 @@ class Registrar_Model_DbTable_DbUniformAndBook extends Zend_Db_Table_Abstract
 		$db->beginTransaction();//ទប់ស្កាត់មើលការErrore , មានErrore វាមិនអោយចូល
 		
 		$register = new Registrar_Model_DbTable_DbRegister();
-		$receipt_no = $register->getRecieptNo(5,0);
+		$receipt_no = $register->getRecieptNo(5,0,$data['payment_method']);
 		
 		try{
 			$arr=array(
@@ -76,15 +76,12 @@ class Registrar_Model_DbTable_DbUniformAndBook extends Zend_Db_Table_Abstract
 	    			$_arr = array(
 	    					'payment_id'	=>$id,
 	    					'service_id'	=>$data['service_'.$i],
-	    					
 	    					'fee'			=>$data['price_'.$i],
 	    					'qty'			=>$data['qty_'.$i],
 	    					'discount_percent'=>$data['discount_'.$i],
-	    					
 	    					'subtotal'		=>$data['subtotal_'.$i],
 	    					'paidamount'	=>$data['subtotal_'.$i],
 	    					'balance'		=>0,
-	    					
 	    					'note'			=>$data['remark'.$i],
 	    					'type'			=>4,
 	    					'is_start'		=>0,
@@ -95,13 +92,11 @@ class Registrar_Model_DbTable_DbUniformAndBook extends Zend_Db_Table_Abstract
 	    			$id_record = $this->insert($_arr);
 	    		}
 			}
-    			
     		$db->commit();
 		}catch (Exception $e){
 			$db->rollBack();//អោយវាវិលត្រលប់ទៅដើមវីញពេលណាវាជួបErrore
 		}
 	}
-		
 		
 	function updateStudentServicePayment($data){
 		$db = $this->getAdapter();//ស្ពានភ្ជាប់ទៅកាន់Data Base

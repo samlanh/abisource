@@ -441,7 +441,7 @@ Class Registrar_Form_FrmRegister extends Zend_Dojo_Form {
 			'autoComplete'=>'false',
 			'queryExpr'=>'*${0}*',
 			'class'=>'fullside',
-			'onchange'=>'getReceiptNo();',
+			'onchange'=>'getNewReceiptNo("");',
 		));
 		
 		$opts = $_db->getViewListById(18,1);

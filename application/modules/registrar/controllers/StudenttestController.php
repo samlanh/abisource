@@ -19,7 +19,7 @@ class Registrar_StudenttestController extends Zend_Controller_Action
     			$search = array(
     					'txtsearch'		=>'',
     					'branch'		=>'',
-    					'status_search'	=>'',
+    					'status_search'	=>-1,
     					'start_date'	=> date('Y-m-d'),
     					'end_date'		=>date('Y-m-d'),
     			);
@@ -145,7 +145,6 @@ class Registrar_StudenttestController extends Zend_Controller_Action
 			Application_Form_FrmMessage::Sucessfull('You can not edit because student already registered !!! ', "/registrar/studenttest");
 		}
 		
-		
 		$db = new Registrar_Model_DbTable_DbStudentTest();
 		$this->view->degree = $db->getAllDegreeName();
 		$this->view->session = $db->getAllSession();
@@ -163,7 +162,8 @@ class Registrar_StudenttestController extends Zend_Controller_Action
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
     		$db = new Registrar_Model_DbTable_DbStudentTest();
-    		$receipt_no = $db->getNewReceiptNumber(0);
+    		$payment_method=empty($data['payment_method'])?1:$data['payment_method'];
+    		$receipt_no = $db->getNewReceiptNumber(0,$payment_method);
     		print_r(Zend_Json::encode($receipt_no));
     		exit();
     	}

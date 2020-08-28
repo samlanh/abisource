@@ -1,10 +1,9 @@
 <?php
-$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-echo $this->headTitle($tr->translate('ADD_STUDENT_TEST'));
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	echo $this->headTitle($tr->translate('ADD_STUDENT_TEST'));
 ?>
-
 <form id='frm_teststudent' action="<?php echo $this->url(array('module'=>'accounting','controller'=>'studenttest','action'=>'add')); ?>" 
-				dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+	dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 	<script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
 				return true;
@@ -109,6 +108,22 @@ echo $this->headTitle($tr->translate('ADD_STUDENT_TEST'));
 											</td>
 										</tr>
 										<tr>	
+											<td><?php echo $tr->translate("PAYMENT_METHOD");?></td>
+											<td>
+												<select name="payment_method" id="payment_method" dojoType="dijit.form.FilteringSelect" class="fullside" required="true" autoComplete="false" queryExpr="*${0}*" onchange="getReceiptNumber('');">
+												    <?php  if(!empty($this->payment_option))foreach($this->payment_option as $rs){?>
+												    	<option value="<?php echo $rs['id'];?>" ><?php echo $rs['name'];?></option>
+												    <?php }?>
+												</select>
+											</td>
+										</tr>
+										<tr>	
+											<td><?php echo $tr->translate("PAYIMENT_NOTE");?></td>
+											<td>
+												<textarea dojoType="dijit.form.Textarea" style="min-height:40px;font-family:Khmer os Battambang" class="fullside" id="note_payment" name="note_payment"></textarea>
+											</td>
+										</tr>
+										<tr>	
 											<td colspan="2" align="center">
 												<input type="checkbox" value="1" name="is_void" id="is_void" dojoType="dijit.form.CheckBox"  /> Void
 											<td>
@@ -171,14 +186,16 @@ function loading(){
 dojo.ready(function(){
 	getReceiptNumber('');
 });
-var url_get_recceipt_number = "<?php echo $this->url(array('module'=>'accounting','controller'=>'studenttest','action'=>'get-receipt-number')); ?>";
+var url_get_recceipt_number = "<?php echo $this->url(array('module'=>'registrar','controller'=>'studenttest','action'=>'get-receipt-number')); ?>";
 function getReceiptNumber(condition){
 	branch_id = dijit.byId('branch').get('value');
+	payment_method = dijit.byId('payment_method').get('value');
 	if(branch_id>0){
 		dojo.xhrPost({
 			url:url_get_recceipt_number,
 			content:{
 				'branch_id' : branch_id,
+				'payment_method':payment_method
 				},
 			handleAs:"json",
 			load: function(data) {
