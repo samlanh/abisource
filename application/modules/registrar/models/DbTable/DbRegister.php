@@ -999,25 +999,22 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     		$branch_id = $this->getBranchId();
     	}
     	
-    	$sql_degree = "select type from rms_dept where dept_id = $degree limit 1";
+    	$sql_degree = "SELECT type from rms_dept where dept_id = $degree limit 1";
     	$degree_type = $db->fetchOne($sql_degree);
     	
     	if($degree_type==2){
-    		$sql="SELECT COUNT(stu_id) FROM rms_student_id WHERE stu_type = 2 and  branch_id=$branch_id  LIMIT 1"; // english fulltime student id រួមគ្នា
+    		$sql="SELECT COUNT(stu_id) FROM rms_student_id WHERE stu_type = 2 and  branch_id=$branch_id  LIMIT 1 "; // english fulltime student id រួមគ្នា
     	}else{
-    		$sql="SELECT COUNT(stu_id) FROM rms_student_id WHERE degree = $degree and  branch_id=$branch_id  LIMIT 1";
+    		$sql="SELECT COUNT(stu_id) FROM rms_student_id WHERE degree = $degree and  branch_id=$branch_id  LIMIT 1 ";
     	}
     	
     	$length = '';
     	$acc_no = $db->fetchOne($sql);
     	$new_acc_no= (int)$acc_no+1;
-
-    	$length = strlen((int)$new_acc_no);
-    	
+    	$length = strlen((int)$new_acc_no);   	
     	$sql="SELECT shortcut FROM rms_dept WHERE dept_id=$degree LIMIT 1";
     	$shortcut=$db->fetchOne($sql);
     	$pre=$shortcut;
-    	
     	
     	for($i = $length;$i<5;$i++){ // = 0000
     		$pre.='0';
@@ -1027,13 +1024,11 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     
     public function getRecieptNo($payfor_type,$branch=0,$payment_method=1){
     	$db = $this->getAdapter();
-    	
     	if($branch>0){
     		$branch_id = $branch;
     	}else{
     		$branch_id = $this->getBranchId();
     	}
-    	
     	$create_date="";
 		if($branch_id==6){
 			$create_date = " and create_date > '2018-04-01 00:00:00'";
@@ -1090,7 +1085,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	else if($payfor_type==5){
     		$pre="M";
     	}
-    	
     	for($i = $acc_no;$i<6;$i++){
     		$pre.='0';
     	}
