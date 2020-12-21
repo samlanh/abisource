@@ -48,6 +48,7 @@ class Allreport_Model_DbTable_DbRptAttLunch extends Zend_Db_Table_Abstract
 				  AND spd.`service_id`=ser.`service_id`
 				  AND spd.`is_start`=1
 				  AND sp.`student_id`=ser.`stu_id`
+				  and sp.payfor_type=4
 				  AND ser.is_suspend=0
 				  $branch_id
     		  ";

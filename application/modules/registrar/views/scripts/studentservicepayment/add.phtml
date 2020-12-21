@@ -626,7 +626,7 @@ function printSave(new_stu_id,new_receipt_no){
 			 if(new_stu_id==''){
 				 getNewCarId(1);
 			 }else{
-				 dojo.byId("lb_receipt_no").innerHTML = new_receipt_no;
+				 //dojo.byId("lb_receipt_no").innerHTML = new_receipt_no;
 				 dojo.byId("lb_stu_id").innerHTML = new_stu_id;
 			 }
 		 }else{
@@ -634,7 +634,7 @@ function printSave(new_stu_id,new_receipt_no){
 				getNewReceiptNo(1,1); 
 			 }
 			 
-			 dojo.byId("lb_receipt_no").innerHTML = new_receipt_no;
+			 //dojo.byId("lb_receipt_no").innerHTML = new_receipt_no;
 			 if(stu_type==3){// old student
 				stu_id = dijit.byId("old_car_id").attr('displayedValue');
 			 }else{ // drop student
@@ -653,7 +653,7 @@ function printSave(new_stu_id,new_receipt_no){
 		
 		dojo.byId("lb_car_id").innerHTML = dijit.byId('car_id').attr('displayedValue');
 		
-		dojo.byId("lb_receipt_type").innerHTML = "Transportation";
+		label = "Transportation";
 		 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////		 
 		
@@ -750,15 +750,33 @@ function printSave(new_stu_id,new_receipt_no){
 			
 		dojo.byId("lb_epx_date").innerHTML = epx_date;
 		
-		
-		
-		
+		payment_method=dijit.byId('payment_method').get('value');
+		getHeaderReceipt(payment_method,"<?php echo $this->branch_info['branch_namekh']?>",label,new_receipt_no);
 		
 		dijit.byId("terms").show();	
 	}
-	
 }
-
+var url_getheaderreceipt = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-header-receipt')); ?>';
+function getHeaderReceipt(payment_method,branch_name,receipt_type,receipt_number){
+	
+	dojo.xhrPost({
+		url:url_getheaderreceipt,
+		content:{
+			'payment_method':payment_method,
+			'branch_name':branch_name,
+			'receipt_type':receipt_type,
+			'receipt_number':receipt_number,
+		},
+		handleAs:"json",
+		load: function(data) {
+			if(data){
+				dojo.byId('header_receipt').innerHTML = data;
+			}
+		},
+		error: function(err) {
+		}
+	});
+}
 
 
 
@@ -822,21 +840,10 @@ function getMonthByNumber(m){
 				.fonteng{font-size:12px;}
 				.hidelabel{opacity:0;}
 			</style>	
-			<table border="0"  class="print" cellspacing="0"  cellpadding="0" style="white-space: nowrap;font-size:12px;font-family:'Khmer OS Battambang';line-height: 21px;">
+			<table border="0"  class="print" cellspacing="0"  cellpadding="0" style="white-space: nowrap;font-size:12px;font-family:'Khmer OS Battambang';line-height: 19px;">
 				<tr>
 				    <td colspan="8"  align="center" style="">
-						<table width="100%" border="0" style="white-space:nowrap; font-family:Khmer OS Battambang;margin-top:-15px;font-weight:bold;line-height: 20px;">
-							<tr>
-								<td width="25%" align="left" style="font-size:11px;">
-									<div class="hidelabel showlabel" style="font-size:15px;"><?php if (!empty($this->branch_info['branch_namekh'])){ echo $this->branch_info['branch_namekh'];}?></div>
-									<?php echo date('l , jS / m / Y , H:i:s ',strtotime(Zend_Date::now()));?></span>
-								</td>
-								<td width="50%" align="center" class="hidelabel showlabel">
-									<img style="width: 20%;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>"><br /><br >
-								</td>
-								<td width="25%" class="hidelabel showlabel" align="center" style="font-size:17px;color:red;"><label id="lb_receipt_type" style="color:#000;font-size:16px;"> </label><div style="margin-top:-5px;">N<sup>o</sup> : <label id="lb_receipt_no" class="receiptno" ></div></label></td>
-							</tr>
-						</table>
+						<div id="header_receipt"></div>
 				    </td>
 				</tr>
 				
@@ -850,20 +857,7 @@ function getMonthByNumber(m){
 					<td width="5%"></td>
 					<td width="10%"></td>
 				</tr>
-				<tr >
-					<td colspan="8">
-						<div class="hidelabel showlabel" >
-						<table width="100%" style="white-space:nowrap; font-size:12px;font-family:'Khmer OS Battambang';line-height: 21px;margin-top: -25px;margin-bottom:5px;">
-							<tr>
-								<td width="40%"><img style="width: 100%;height:4px;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/double_underline.png'?>"></td>
-								<td width="20%" align="center" style="font-size:16px;">បង្កាន់ដៃទទួលប្រាក់ RECEIPT</td>
-								<td width="40%"><img style="width: 100%;height:4px;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/double_underline.png'?>"></td>
-							</tr>
-						</table>
-						</div>
-					</td>
-					
-				</tr>
+				
 				<tr>
 					<td> ឈ្មោះភាសាខ្មែរ/Name in Khmer</td>
 					<td>
@@ -949,7 +943,7 @@ function getMonthByNumber(m){
 					
 				<tr>
 					<td colspan="8" style="border:1px solid #000;">
-						<table width="100%" border="0" class="data2" style="white-space:nowrap; font-family:Khmer OS Battambang,Times New Roman;font-size:11px;line-height: 21px;">
+						<table width="100%" border="0" class="data2" style="white-space:nowrap; font-family:Khmer OS Battambang,Times New Roman;font-size:11px;line-height: 20px;margin-top: -7px;">
 							<tr>
 								<td width="8%"></td>
 								<td width="3%"></td>
@@ -1082,7 +1076,7 @@ function getMonthByNumber(m){
 				
 				<tr>
 					<td colspan="12">
-						<table width="100%" style="white-space:nowrap; font-size:12px;font-family:Khmer OS Muol;font-weight:bold;margin-top: -7px;">
+						<table width="100%" style="white-space:nowrap; font-size:12px;font-family:Khmer OS Muol;font-weight:bold;margin-top: -10px;">
 							<tr>
 								<td width="25%" align="center">ប្រធានគណនេយ្យ/Accounting Manager</td>
 								<td width="25%" align="center">អ្នកបង់ប្រាក់/Payer</td>
@@ -1121,14 +1115,14 @@ function getMonthByNumber(m){
 				</tr>	
 				<tr>
 					<td colspan="12" valign="top" >
-						<table width="100%" style="margin-top:-25px; font-family:Khmer OS Battambang, Times New Roman; font-size:10px;white-space:nowrap;line-height: 15px;">
+						<table width="100%" style="margin-top:-27px; font-family:Khmer OS Battambang, Times New Roman; font-size:10px;white-space:nowrap;line-height: 15px;">
 							<tr>
 								<td colspan="2" valign="top" style="font-family:Khmer OS Muol;"><u>បញ្ជាក់ៈ Note</u></td>
 							</tr>
 							
 							<tr>
 								<td width="70%" valign="top" >
-									<table width="100%" style="white-space:nowrap; font-size:10px;font-family:Khmer OS Battambang,Times New Roman;line-height: 15px;">
+									<table width="100%" style="white-space:nowrap; font-size:10px;font-family:Khmer OS Battambang,Times New Roman;line-height: 14px;margin-top: -7px;">
 										<tr>
 											
 											<?php 

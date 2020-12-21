@@ -135,39 +135,12 @@
 			<table border="0" width="100%" class="print" cellspacing="0" cellpadding="0" style="white-space: nowrap;font-size:12px;font-family:'Khmer OS Battambang';line-height: 23px;">
 				<tr>
 				    <td  align="center" style="">
-						<table width="100%" border="0" valign="center" style="white-space:nowrap; font-family:Khmer OS Battambang;margin-top:-15px;font-weight:bold;line-height: 20px;">
-							<tr>
-								<td width="25%" align="left" style="font-size:11px;">
-									<div class="hidelabel showlabel" style="font-size:15px;"><?php if (!empty($this->branch_info['branch_namekh'])){ echo $this->branch_info['branch_namekh'];}?></div>
-									<?php echo date('l , jS / m / Y , H:i:s ',strtotime(Zend_Date::now()));?>
-								</td>
-								<td width="50%" align="center" class="hidelabel showlabel">
-									<img style="width: 20%;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>">
-								</td>
-								<td width="25%" class="hidelabel showlabel" align="center" valign="center" style="font-size:19px;color:red;"><label id="lb_receipt_type" style="color:#000;font-size:16px;"></label><div style="margin-top:-5px;">N<sup>o</sup> : <label id="lb_receipt_no" class="receiptno" >0121</label></div></td>
-							</tr>
-						</table>
+						<div id="header_receipt"></div>
 				    </td>
 				</tr>
 				<tr>
-					<td>&nbsp;</td>
-				</tr>
-				<tr>
-					<td>
-						<div class="hidelabel showlabel" >
-						<table width="100%" style="white-space:nowrap; font-size:12px;font-family:'Khmer OS Battambang';line-height: 21px;margin-top: -25px;">
-							<tr>
-								<td width="40%"><img style="width: 100%;height:4px;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/double_underline.png'?>"></td>
-								<td width="20%" align="center" style="font-size:16px;">បង្កាន់ដៃទទួលប្រាក់ RECEIPT</td>
-								<td width="40%"><img style="width: 100%;height:4px;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/double_underline.png'?>"></td>
-							</tr>
-						</table>
-						</div>
-					</td>
-				</tr>
-				<tr>
 					<td  valign="top">
-						<table width="100%" style="font-family:Khmer OS Battambang, Times New Roman; font-size:12px;white-space:nowrap;line-height: 18px;">
+						<table width="100%" style="font-family:Khmer OS Battambang, Times New Roman; font-size:12px;white-space:nowrap;line-height: 18px;margin-top:-10px;">
 							<style>
 								.fontbig{
 									font-size: 15px;	
@@ -347,7 +320,7 @@
 							</tr>
 							<tr>
 								<td colspan="8">
-									<table width="100%" style="white-space:nowrap; font-size:12px;font-family:'Khmer OS Battambang';line-height: 21px;margin-top:-5px;">
+									<table width="100%" style="white-space:nowrap; font-size:12px;font-family:'Khmer OS Battambang';line-height: 20px;margin-top:-10px;">
 										<tr style="font-family:Khmer OS Muol,'Arial Black';">
 											<td align="center" width="25%">ប្រធានគណនេយ្យ/Accounting Manager</td>
 											<td align="center" width="25%">អ្នកបង់ប្រាក់/Payer</td>
@@ -386,14 +359,14 @@
 				</tr>
 				<tr>
 					<td valign="top" >
-						<table width="100%" style="margin-top:-20px; font-family:Khmer OS Battambang, Times New Roman; font-size:10px;white-space:nowrap;line-height: 15px;">
+						<table width="100%" style="margin-top:-25px; font-family:Khmer OS Battambang, Times New Roman; font-size:10px;white-space:nowrap;line-height: 15px;">
 							<tr>
 								<td colspan="2" valign="top" style="font-family:Khmer OS Muol;"><u>បញ្ជាក់ៈ Note</u></td>
 							</tr>
 							
 							<tr>
 								<td width="70%" valign="top" >
-									<table width="100%" style="white-space:nowrap; font-size:10px;font-family:Khmer OS Battambang,Times New Roman;line-height: 15px;">
+									<table width="100%" style="white-space:nowrap; font-size:10px;font-family:Khmer OS Battambang,Times New Roman;line-height: 14px;margin-top: -5px;">
 										<tr>
 											
 											<?php 
@@ -517,16 +490,17 @@ function getReceiptNumber(condition){
 		}
 	});
 }
-function printReceipt(new_receipt){
+function printReceipt(new_receipt_no){
 	if(dijit.byId('frm_teststudent').validate()) {
-		if(new_receipt==''){
-			dojo.byId("lb_receipt_no").innerHTML = '';
+		
+		if(new_receipt_no==''){
+			///dojo.byId("lb_receipt_no").innerHTML = '';
 			getReceiptNumber(1);
 		}else{
-			dojo.byId("lb_receipt_no").innerHTML = new_receipt;
+			//dojo.byId("lb_receipt_no").innerHTML = new_receipt_no;
 		}
 
-		dojo.byId("lb_receipt_type").innerHTML = 'Student Test';
+		label = 'Student Test';
 		
 		readMoneyInKhmer();
 		getDegreeType();
@@ -571,8 +545,33 @@ function printReceipt(new_receipt){
 		 }else{
 			 dojo.byId("lb_dob").innerHTML  = '';
 		}
+		
+		payment_method=dijit.byId('payment_method').get('value');
+		getHeaderReceipt(payment_method,"<?php echo $this->branch_info['branch_namekh']?>",label,new_receipt_no);
+		
 		dijit.byId("terms").show();	
 	}
+}
+var url_getheaderreceipt = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-header-receipt')); ?>';
+function getHeaderReceipt(payment_method,branch_name,receipt_type,receipt_number){
+	
+	dojo.xhrPost({
+		url:url_getheaderreceipt,
+		content:{
+			'payment_method':payment_method,
+			'branch_name':branch_name,
+			'receipt_type':receipt_type,
+			'receipt_number':receipt_number,
+		},
+		handleAs:"json",
+		load: function(data) {
+			if(data){
+				dojo.byId('header_receipt').innerHTML = data;
+			}
+		},
+		error: function(err) {
+		}
+	});
 }
 function readMoneyInKhmer(){
 	netTotal = dijit.byId("test_cost").get('value').toFixed(2);

@@ -85,6 +85,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
        
        $key = new Application_Model_DbTable_DbKeycode();
        $this->view->data=$key->getKeyCodeMiniInv(TRUE);
+	   
     }
     
     public function adddataonlyAction(){
@@ -427,6 +428,15 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     		$db = new Registrar_Model_DbTable_DbRegister();
     		$degree_type = $db->getDegreeType($data['degree']);
     		print_r(Zend_Json::encode($degree_type));
+    		exit();
+    	}
+    }
+	function getHeaderReceiptAction(){
+    	if($this->getRequest()->isPost()){
+    		$data = $this->getRequest()->getPost();
+    		$db = new Application_Form_FrmGlobal();
+    		$header = $db->getReceiptHeader($data['payment_method'],$data['branch_name'],$data['receipt_type'],$data['receipt_number']);
+    		print_r(Zend_Json::encode($header));
     		exit();
     	}
     }

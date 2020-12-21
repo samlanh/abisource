@@ -701,7 +701,7 @@ fieldset{  background:none;}
     		}
     		
 			 label = "Part Time English";
-			 dojo.byId("lb_receipt_type").innerHTML = label;
+			 //dojo.byId("lb_receipt_type").innerHTML = label;
 			 
 			 stu_type = dijit.byId('student_type').get('value');
 			 
@@ -711,7 +711,7 @@ fieldset{  background:none;}
 				 dojo.byId("lb_stu_type").innerHTML = "សិស្សចាស់/Old Stu.";;
 			 }
 			 
-			 dojo.byId("lb_receipt_no").innerHTML = dijit.byId("reciept_no").get('value');
+			 new_receipt_no = dijit.byId("reciept_no").get('value');
 			 dojo.byId("lb_stu_id").innerHTML = dijit.byId('old_studens').attr('displayedValue');
 			 
 			
@@ -822,11 +822,34 @@ fieldset{  background:none;}
 			
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////		 
 			 
+			payment_method=dijit.byId('payment_method').get('value');
+			getHeaderReceipt(payment_method,"<?php echo $this->branch_info['branch_namekh']?>",label,new_receipt_no); 
+			 
 			dijit.byId("terms").show();	
 		}
 		
 	}	
-	
+	var url_getheaderreceipt = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-header-receipt')); ?>';
+	function getHeaderReceipt(payment_method,branch_name,receipt_type,receipt_number){
+		
+		dojo.xhrPost({
+			url:url_getheaderreceipt,
+			content:{
+				'payment_method':payment_method,
+				'branch_name':branch_name,
+				'receipt_type':receipt_type,
+				'receipt_number':receipt_number,
+			},
+			handleAs:"json",
+			load: function(data) {
+				if(data){
+					dojo.byId('header_receipt').innerHTML = data;
+				}
+			},
+			error: function(err) {
+			}
+		});
+	}
 
 /* printSave for receipt fulldata	
 	
@@ -997,6 +1020,9 @@ fieldset{  background:none;}
 	}
 	function hideDialog(){
 		dijit.byId('terms').hide();
+	}
+	function getNewReceiptNo(){
+		
 	}
 </script>
 
@@ -1413,18 +1439,7 @@ fieldset{  background:none;}
 			<table border="0" width="100%" class="print" cellspacing="0"  cellpadding="0" style="white-space:nowrap; font-size:12px;font-family:'Khmer OS Battambang';line-height: 21px;">
 				<tr>
 				    <td colspan="12"  align="center" style="">
-						<table width="100%" style="white-space:nowrap; font-family:Khmer OS Battambang;margin-top:-10px;font-weight:bold;">
-							<tr>
-								<td width="25%" align="left" style="font-size:11px;">
-									<div class="hidelabel showlabel"  style="font-size:15px;"><?php if (!empty($this->branch_info['branch_namekh'])){ echo $this->branch_info['branch_namekh'];}?>
-									</div><?php echo date('l , jS / m / Y , H:i:s ',strtotime(Zend_Date::now()));?>
-								</td>
-								<td width="50%" align="center" class="hidelabel showlabel" >
-									<img style="width: 20%;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>"><br /><br >
-								</td>
-								<td width="25%" class="hidelabel showlabel"  align="center" style="font-size:17px;color:red;"><label id="lb_receipt_type" style="color:#000;font-size:14px;"> </label><div style="margin-top:-5px;">N<sup>o</sup> : <label id="lb_receipt_no" class="receiptno" ></div></label></td>
-							</tr>
-						</table>
+						<div id="header_receipt"></div>
 				    </td>
 				</tr>
 				
@@ -1442,20 +1457,7 @@ fieldset{  background:none;}
 					<td width="24.5%"></td>
 					<td width="24.5%"></td>
 				</tr>
-				<tr >
-					<td colspan="12">
-						<div class="hidelabel showlabel" >
-						<table width="100%" style="white-space:nowrap; font-size:12px;font-family:'Khmer OS Battambang';line-height: 21px;margin-top: -25px;margin-bottom:5px;">
-							<tr>
-								<td width="40%"><img style="width: 100%;height:4px;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/double_underline.png'?>"></td>
-								<td width="20%" align="center" style="font-size:16px;">បង្កាន់ដៃទទួលប្រាក់ RECEIPT</td>
-								<td width="40%"><img style="width: 100%;height:4px;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/double_underline.png'?>"></td>
-							</tr>
-						</table>
-						</div>
-					</td>
-					
-				</tr>
+				
 				<tr>
 					<td colspan="12">
 						<table width="100%" style="white-space:nowrap;font-size:12px;line-height:20px;">
@@ -1689,14 +1691,14 @@ fieldset{  background:none;}
 				</tr>	
 				<tr>
 					<td colspan="12"  valign="top">
-						<table width="100%" style="margin-top:-20px; font-family:Khmer OS Battambang, Times New Roman; font-size:10px;white-space:nowrap;line-height: 15px;">
+						<table width="100%" style="margin-top:-27px; font-family:Khmer OS Battambang, Times New Roman; font-size:10px;white-space:nowrap;line-height: 15px;">
 							<tr>
 								<td colspan="2" valign="top" style="font-family:Khmer OS Muol;"><u>បញ្ជាក់ៈ Note</u></td>
 							</tr>
 							
 							<tr>
 								<td width="70%" valign="top" >
-									<table width="100%" style="white-space:nowrap; font-size:10px;font-family:Khmer OS Battambang,Times New Roman;line-height: 15px;">
+									<table width="100%" style="white-space:nowrap; font-size:10px;font-family:Khmer OS Battambang,Times New Roman;line-height: 14px;margin-top: -5px;">
 										<tr>
 											
 											<?php 

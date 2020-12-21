@@ -64,8 +64,7 @@ class Registrar_uniformandbookController extends Zend_Controller_Action {
        $frm_unifrom_and_book=$frm->FrmRegistarWU();
        Application_Model_Decorator::removeAllDecorator($frm_unifrom_and_book);
        $this->view->frm_unifrom_and_book = $frm_unifrom_and_book;
-       $key = new Application_Model_DbTable_DbKeycode();
-       $this->view->keycode=$key->getKeyCodeMiniInv(TRUE);
+      
        $model = new Application_Form_FrmGlobal();
       
        $db = new Registrar_Model_DbTable_DbUniformAndBook();
@@ -80,6 +79,9 @@ class Registrar_uniformandbookController extends Zend_Controller_Action {
        
        $dbg = new Application_Model_DbTable_DbGlobal();
        $this->view->branch_info = $dbg->getBranchInfo();
+	   
+	   $key = new Application_Model_DbTable_DbKeycode();
+       $this->view->data=$key->getKeyCodeMiniInv(TRUE);
     }
     
     public function adddataonlyAction()
@@ -193,8 +195,6 @@ class Registrar_uniformandbookController extends Zend_Controller_Action {
     	$frm_register=$frm->FrmRegistarWU($payment);
     	Application_Model_Decorator::removeAllDecorator($frm_register);
     	$this->view->frm_register = $frm_register;
-    	$key = new Application_Model_DbTable_DbKeycode();
-    	$this->view->keycode=$key->getKeyCodeMiniInv(TRUE);
     	
     	$db = new Registrar_Model_DbTable_DbUniformAndBook();
     	$this->view->rs = $db->getAllStudentCode();
@@ -206,6 +206,9 @@ class Registrar_uniformandbookController extends Zend_Controller_Action {
         
         $dbg = new Application_Model_DbTable_DbGlobal();
         $this->view->branch_info = $dbg->getBranchInfo();
+		
+		$key = new Application_Model_DbTable_DbKeycode();
+        $this->view->data=$key->getKeyCodeMiniInv(TRUE);
     }
     function getGradeAction(){
     	if($this->getRequest()->isPost()){
