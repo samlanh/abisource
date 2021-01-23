@@ -32,7 +32,7 @@ class Registrar_Model_DbTable_DbCourStudey extends Zend_Db_Table_Abstract
 		
 		$register = new Registrar_Model_DbTable_DbRegister();
 		$stu_code = $register->getNewAccountNumber($data['dept'],0);
-		$receipt = $register->getRecieptNo(2,0);
+		$receipt = $register->getRecieptNo(2,0,$data['payment_method']);
 		
 		if($data['dob']==""){
 			$dob = null;

@@ -19,7 +19,7 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 		}
 		$array = array(
 			'branch_id'	=>$this->getBranchId(),
-			'receipt'	=>$this->getNewReceiptNumber(),
+			'receipt'	=>$this->getNewReceiptNumber(0,$data['payment_method']),
 			'kh_name'	=>$data['kh_name'],
 			'en_name'	=>$data['en_name'],
 			'sex'		=>$data['sex'],
@@ -168,7 +168,7 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 			$payment_method=' 2 OR payment_method=3 ';
 		}
 		
-		$sql="select count(id) from rms_student_test where payment_method=$payment_method AND branch_id = $branch_id  $create_date ";
+		$sql="select count(id) from rms_student_test where branch_id = $branch_id and (payment_method=$payment_method) $create_date ";
 		$result = $db->fetchOne($sql);
 		
 		$new_acc_no = (int)$result+1;

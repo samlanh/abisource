@@ -57,7 +57,7 @@ class Registrar_Model_DbTable_DbStudentLunchPayment extends Zend_Db_Table_Abstra
 		$db = $this->getAdapter();//ស្ពានភ្ជាប់ទៅកាន់Data Base
 		$db->beginTransaction();//ទប់ស្កាត់មើលការErrore , មានErrore វាមិនអោយចូល
 		$receipt = new Registrar_Model_DbTable_DbRegister();
-		$receipt_no = $receipt->getRecieptNo(4,0);
+		$receipt_no = $receipt->getRecieptNo(4,0,$data['payment_method']);
 		//$receipt_no = $data['receipt_no'];
 		
 		$this->_name = "rms_service";

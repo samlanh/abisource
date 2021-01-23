@@ -40,7 +40,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 		}
 		
 		$stu_code = $this->getNewAccountNumber($data['dept'],0);
-		$receipt_no = $this->getRecieptNo($payfor_type,0);
+		$receipt_no = $this->getRecieptNo($payfor_type,0,$data['payment_method']);
 		
 		//$stu_code=$data['stu_id'];
 		//$receipt_no=$data['reciept_no'];
@@ -1061,7 +1061,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 			$payment_method=' 2 OR payment_method=3 ';
 		}
     	
-    	$sql="SELECT count(id) FROM rms_student_payment where payment_method=$payment_method AND payfor_type = $payfor_type and branch_id = $branch_id $create_date LIMIT 1 ";
+    	$sql="SELECT count(id) FROM rms_student_payment where payfor_type = $payfor_type AND (payment_method=$payment_method) and branch_id = $branch_id $create_date LIMIT 1 ";
     	$acc_no = $db->fetchOne($sql);
     	$new_acc_no= (int)$acc_no+1;
     	$acc_no= strlen((int)$acc_no+1);

@@ -55,7 +55,7 @@ class Registrar_Model_DbTable_DbStudentServicePayment extends Zend_Db_Table_Abst
 		$db = $this->getAdapter();//ស្ពានភ្ជាប់ទៅកាន់Data Base
 		$db->beginTransaction();//ទប់ស្កាត់មើលការErrore , មានErrore វាមិនអោយចូល
 		$receipt = new Registrar_Model_DbTable_DbRegister();
-		$receipt_no = $receipt->getRecieptNo(3,0);
+		$receipt_no = $receipt->getRecieptNo(3,0,$data['payment_method']);
 
 		$this->_name = "rms_service";
 		if($data['student_type']==1){ // new student
