@@ -46,7 +46,7 @@
 	   	  	<td> <?php echo $frm->getElement("end_date");?></td>
 	   	  	<td> <?php echo $frm->getElement("from_receipt");?></td>
 	   	  	<td> <?php echo $frm->getElement("to_receipt");?></td>
-	   	  	<td> <?php echo $frm->getElement("payment_method");?></td>
+	   	  	
 			<td>
 				<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
 			</td>
@@ -130,7 +130,6 @@
 									<td style="border: 1px solid #000;"><?php echo $tr->translate("ថ្លៃកិបសំបុត្រកង់");?></td>
 									<td style="border: 1px solid #000;"><?php echo $tr->translate("លក់អេតចាយ");?></td>
 									<td style="border: 1px solid #000;"><?php echo $tr->translate("TOTAL");?></td>
-									<td style="border: 1px solid #000;">វិធី​សា​ស្រ្ត​ទូទាត</td>
 									<td style="border: 1px solid #000;"><?php echo $tr->translate("NOTE");?></td>
 									<td style="border: 1px solid #000;"><?php echo $tr->translate("USER");?></td>
 									<td style="border: 1px solid #000;"><?php echo $tr->translate("CREATE_DATE");?></td>
@@ -150,7 +149,6 @@
 								<td align="center" style="border: 1px solid #000;">&nbsp;<?php if($row['parking_bike_fee']>0){echo " $ ".$row['parking_bike_fee'];}?></td>
 								<td align="center" style="border: 1px solid #000;">&nbsp;<?php if($row['broken_thing_fee']>0){echo " $ ".$row['broken_thing_fee'];}?></td>
 								<td align="center" style="border: 1px solid #000;">&nbsp;<?php echo " $ ".$row['total_fee'];?></td>
-								<td align="center" style="border: 1px solid #000;">&nbsp;<?php echo $row['payment_method_title'];?></td>
 								<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['note'];?></td>
 								<td align="center" style="border: 1px solid #000;">&nbsp;<?php echo $row['user_name'];?></td>
 								<td align="center" style="border: 1px solid #000;">&nbsp;<?php echo date("d-M-Y",strtotime($row['create_date']));?></td>
