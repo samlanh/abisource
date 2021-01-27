@@ -161,7 +161,7 @@ class Accounting_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 		}
 		
 		$order=" order by id desc ";
-		echo $sql.$where.$order;
+		//echo $sql.$where.$order;
 		return $db->fetchAll($sql.$where.$order);
 	}	
 	
