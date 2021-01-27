@@ -156,11 +156,12 @@ class Accounting_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 		if(!empty($search['branch'])){
 			$where.=" AND branch_id=".$search['branch'];
 		}
-		if($search['status_search']!=""){
+		if($search['status_search']>-1){
 			$where.=" AND status=".$search['status_search'];
 		}
 		
 		$order=" order by id desc ";
+		echo $sql.$where.$order;
 		return $db->fetchAll($sql.$where.$order);
 	}	
 	

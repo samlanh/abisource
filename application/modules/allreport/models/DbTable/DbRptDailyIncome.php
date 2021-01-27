@@ -772,11 +772,7 @@ class Allreport_Model_DbTable_DbRptDailyIncome extends Zend_Db_Table_Abstract
 			    	paid,
 			    	cp.note,
 			    	cp.create_date,
-			    	cp.status,
-			    	
-			    	(SELECT name_kh FROM rms_view WHERE TYPE=18 AND key_code = cp.`payment_method` LIMIT 1) AS payment_method_title,
-			    	cp.`payment_method`,
-			    	cp.`payment_note`
+			    	cp.status
 			    	
 			    FROM
 			    	rms_customer as c,

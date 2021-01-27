@@ -21,7 +21,7 @@ class Accounting_StudenttestController extends Zend_Controller_Action
     			$search = array(
     					'txtsearch'		=>'',
     					'branch'		=>'',
-    					'status_search'	=>'',
+    					'status_search'	=>-1,
     					'start_date'	=> date('Y-m-d'),
     					'end_date'		=>date('Y-m-d'),
     			);

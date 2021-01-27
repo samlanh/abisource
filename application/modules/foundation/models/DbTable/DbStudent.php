@@ -44,7 +44,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			";
 		$sql.=$db->caseStatusShowImage('s.status');
 		$sql.="
-			FROM rms_student AS s  WHERE   s.stu_type IN (1,2,3) $branch_id
+			FROM rms_student AS s  WHERE s.stu_type IN (1,2,3) $branch_id
 		";
 		//AND s.status = 1 AND s.is_subspend=0 
 		$orderby = " ORDER BY stu_id DESC ";
@@ -85,6 +85,8 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		}
 		if(!empty($search['suspend_type'])){
 			$where.=" AND s.is_subspend=".$search['suspend_type'];
+		}else{
+			$where.=" AND s.is_subspend=0";
 		}
 		if($search['status_search']>-1){
 			$where.=" AND s.status=".$search['status_search'];
