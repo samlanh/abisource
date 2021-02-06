@@ -73,7 +73,7 @@ class Allreport_Model_DbTable_DbStudenttest extends Zend_Db_Table_Abstract
 			$where.= " AND payment_method = ".$search['payment_method'];
 		}
 		
-		$order=" order by id ASC ";
+		$order=" order by receipt ASC ";
 		return $db->fetchAll($sql.$where.$order);
 	}
  
