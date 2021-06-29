@@ -1283,12 +1283,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 	public function rptBracketServicelistAction(){
 	
 	}
-	
-	
 ////////////////////////////////////////////////////////////// daily income ///////////////////////////////////////////////////////////	
-	
-	
-	
 	public function rptDailyIncomeEnglishFulltimeAction(){
 		try{
 			if($this->getRequest()->isPost()){
@@ -1304,6 +1299,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 						'shift'			=>0,
 						'from_receipt'	=>'',
 						'to_receipt'	=>'',
+						'payment_method'=>0,
 						'start_date'	=>date("Y-m-d"),
 						'end_date'		=>date("Y-m-d"),
 				);
@@ -1311,9 +1307,6 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			
 			$db = new Allreport_Model_DbTable_DbRptDailyIncome();
 			$this->view->rs = $db->getDailyIncomeEnglishFulltime($search);
-	
-			//print_r($this->view->rs);
-				
 			$this->view->search = $search;
 			
 			$this->view->rate = $db->getRate();
@@ -1321,15 +1314,12 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			echo $e->getMessage();
 		}
-	
 	
 		$form=new Registrar_Form_FrmSearchInfor();
 		$form->FrmSearchRegister();
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
-		
 		$frm = new Application_Form_FrmPopupGlobal();
 		$this->view->footerReport = $frm->footerReportAccountInEnglish();
 	}
@@ -1349,6 +1339,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 						'shift'			=>0,
 						'from_receipt'	=>'',
 						'to_receipt'	=>'',
+						'payment_method'=>0,
 						'start_date'	=>date("Y-m-d"),
 						'end_date'		=>date("Y-m-d"),
 				);
@@ -1356,9 +1347,6 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 	
 			$db = new Allreport_Model_DbTable_DbRptDailyIncome();
 			$this->view->rs = $db->getDailyIncomeEnglishParttime($search);
-	
-			// 			print_r($this->view->rs);
-	
 			$this->view->search = $search;
 				
 			$this->view->rate = $db->getRate();
@@ -1366,7 +1354,6 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			echo $e->getMessage();
 		}
 	
 	
@@ -1395,6 +1382,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 					'shift'			=>0,
 					'from_receipt'	=>'',
 					'to_receipt'	=>'',
+					'payment_method'=>0,
 					'start_date'	=>date("Y-m-d"),
 					'end_date'		=>date("Y-m-d"),
 				);
@@ -1431,6 +1419,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 						'shift'			=>0,
 						'from_receipt'	=>'',
 						'to_receipt'	=>'',
+						'payment_method'=>0,
 						'start_date'	=>date("Y-m-d"),
 						'end_date'		=>date("Y-m-d"),
 				);
@@ -1445,7 +1434,6 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			echo $e->getMessage();
 		}
 	
 	
@@ -1471,6 +1459,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 						'shift'			=>0,
 						'from_receipt'	=>'',
 						'to_receipt'	=>'',
+						'payment_method'=>0,
 						'start_date'	=>date("Y-m-d"),
 						'end_date'		=>date("Y-m-d"),
 				);
@@ -1510,6 +1499,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 						'shift'			=>0,
 						'from_receipt'	=>'',
 						'to_receipt'	=>'',
+						'payment_method'=>0,
 						'start_date'	=>date("Y-m-d"),
 						'end_date'		=>date("Y-m-d"),
 				);
@@ -1523,9 +1513,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			echo $e->getMessage();
 		}
-	
 	
 		$form=new Registrar_Form_FrmSearchInfor();
 		$form->FrmSearchRegister();
@@ -1535,7 +1523,6 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$frm = new Application_Form_FrmPopupGlobal();
 		$this->view->footerReport = $frm->footerReportAccountStockInEnglish();
 	}
-	
 	
 	public function rptDailyIncomeParkingCanteenAction(){
 		try{
@@ -1547,6 +1534,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 						'branch'		=>0,
 						'user'			=>0,
 						'shift'			=>0,
+						'payment_method'=>0,
 						'start_date'	=>date("Y-m-d"),
 						'end_date'		=>date("Y-m-d"),
 				);
@@ -1560,7 +1548,6 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			echo $e->getMessage();
 		}
 	
 	
@@ -2271,6 +2258,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
     					'user'			=>'',
     					'branch'		=>'',
     					'shift'			=>0,
+    					'payment_method'=>0,
     			);
     		}
     		$this->view->search = $search;
@@ -2371,6 +2359,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 					'branch'	=>'',
 					'shift'		=>'',
 					'user'		=>'',
+					'payment_method'=>0,
 					'start_date'=>date('Y-m-d'),
 					'end_date'	=>date('Y-m-d'),
 				);
@@ -2566,7 +2555,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 	
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
-			echo $e->getMessage();
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 		$form=new Registrar_Form_FrmSearchInfor();
 		$form->FrmSearchRegister();
@@ -2583,14 +2572,13 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$id=$this->getRequest()->getParam('id');
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
-			//print_r($_data);exit();
 			try {
 				$db = new Allreport_Model_DbTable_DbSubmitDailyIncome();
 				$db->updateSubmitDailyIncome($_data,$id);
 				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/allreport/accounting/rpt-submit-daily-income");
 			} catch (Exception $e) {
-				echo $e->getMessage();
-				exit();
+				Application_Form_FrmMessage::message("Application Error");
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
 		$db = new Allreport_Model_DbTable_DbSubmitDailyIncome();

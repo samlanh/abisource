@@ -155,12 +155,7 @@ tr.row_control {
 					$stay=0;
 					$stu_name="";
 				?>		
-						
-						
 				<?php if(!empty($this->rs)){foreach ($this->rs as $rs){$i++;
-					
-// 						$study_material = $rs['grand_total_payment'] - $rs['total_payment'];
-						
 						$style = 'style="width:12px;"';
 						$img_src = $this->baseUrl()."/images/Green_tick.png";
 						$time_for_car = $rs['time_for_car'];
@@ -173,23 +168,18 @@ tr.row_control {
 				?>
 						
  					<tr id="row" align="center" class="hover" <?php if($rs['is_void']==1){echo "style='color:red;'";}?>>
- 					
 						<td class="padd"><?php echo $i;?></td>
 						<td class="padd"><?php echo $rs['receipt_number'];?></td>
 						<td class="padd"><?php echo $rs['stu_code'];?></td>
 						<td align="left" class="padd"><?php echo $rs['stu_khname'];?></td>
 						<td align="left" class="padd"><?php echo $rs['stu_enname'];?></td>
 						<td class="padd"><?php echo $rs['sex'];?></td>
-						
 						<td align="right"><?php if($rs['service_id']==93){echo "$ ".$rs['tuition_fee_after_discount']; if($rs['is_void']==0){$foodandstay = $foodandstay + $rs['grand_total_paid_amount'];}}?>&nbsp;</td>
 						<td><?php if($rs['service_id']==91){echo "$ ".$rs['tuition_fee_after_discount']; if($rs['is_void']==0){$food = $food + $rs['grand_total_paid_amount'];}}?>&nbsp;</td>
 						<td><?php if($rs['service_id']==92){echo "$ ".$rs['tuition_fee_after_discount']; if($rs['is_void']==0){$stay = $stay + $rs['grand_total_paid_amount'];}}?>&nbsp;</td>
-						
 						<td align="right" class="padd"><?php if($rs['other_fee']>0){echo "$ ".$rs['other_fee'];}?>&nbsp;</td>
-						
 						<td align="right" class="padd"><?php if($rs['grand_total_balance']>0){echo "$ ".$rs['grand_total_balance'];}?>&nbsp;</td>
 						<td align="right" class="padd"><?php echo "$ ".$rs['grand_total_paid_amount'];?>&nbsp;</td>
-						
 						<td class="padd"><?php echo $rs['payment_method_title'];?></td>
 						<td class="padd"><?php echo $rs['note'];?></td>
 						<td class="padd"><?php echo date("d-M-Y",strtotime($rs['create_date']));?></td>
@@ -199,24 +189,15 @@ tr.row_control {
 					<?php 
 						if($rs['is_void']==0){
 							$stu_id=$rs['student_id'];
-						
-							//$total_study_fee = $total_study_fee + $rs['tuition_fee_after_discount'];
-							
 							$total_other_fee = $total_other_fee + $rs['other_fee'];
-							
 							if($rs['is_complete']==0){
 								$total_balance = $total_balance + $rs['grand_total_balance'];
 							}
-							
 							$total_study_fee = $total_study_fee + $rs['tuition_fee_after_discount'];
-							
 							$grand_total = $grand_total + $rs['grand_total_paid_amount'];
 						}
 					?> 					
- 					
  				<?php }}
- 				
- 						//$grand_total = $total_study_fee + $total_other_fee - $total_balance;
  				?>
  				
 				</table>	
@@ -235,7 +216,6 @@ tr.row_control {
 											&nbsp;I. Income from Food and Stay fee
 										</td>
 									</tr>
-									
 									<tr class="hover">
 										<td>
 											 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1. Total amount of Food & Stay fee
@@ -244,7 +224,6 @@ tr.row_control {
 											<?php echo "$ ".number_format($foodandstay,2);?>
 										</td>
 									</tr>
-									
 									<tr class="hover">
 										<td>
 											 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4. Total amount of Food fee
@@ -253,7 +232,6 @@ tr.row_control {
 											<?php echo "$ ".number_format($food,2);?>
 										</td>
 									</tr>
-									
 									<tr class="hover">
 										<td>
 											 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5. Total amount of Stay fee
@@ -262,7 +240,6 @@ tr.row_control {
 											<?php echo "$ ".number_format($stay,2);?>
 										</td>
 									</tr>
-									
 									<tr class="hover">
 										<td>
 											&nbsp;II. Total amount of other fee
@@ -322,7 +299,6 @@ tr.row_control {
 											</div>
 										</td>
 									</tr>
-									
 									<tr>
 										<td>
 											Amount in Riel
@@ -341,7 +317,22 @@ tr.row_control {
 											For Date
 										</td>
 										<td>
-											<input type="text" name="for_date" id="for_date" dojoType="dijit.form.DateTextBox" value="now" constraints="{datePattern:'dd/MM/yyyy'}"/>
+											<input type="text" class="fullside" name="for_date" id="for_date" dojoType="dijit.form.DateTextBox" value="now" constraints="{datePattern:'dd/MM/yyyy'}"/>
+										</td>
+									</tr>
+									<tr class="row_control">
+										<td>
+											Payment Method
+										</td>
+										<td>
+										<?php 
+											$payment_method=$this->search['payment_method'];
+										?>
+											<select name="submitpayment_method" id="submitpayment_method" dojoType="dijit.form.FilteringSelect" class="fullside" required="true" autoComplete="false" queryExpr="*${0}*">
+												<option <?php if($payment_method>0 AND $payment_method==1){ echo"selected";}?> value="1" label="សាច់ប្រាក់">សាច់ប្រាក់</option>
+												<option <?php if($payment_method>0 AND $payment_method==2){ echo"selected";}?> value="2" label="ធនាគារ">ធនាគារ</option>
+												<option <?php if($payment_method>0 AND $payment_method==3){ echo"selected";}?> value="3" label="វេរប្រាក់">វេរប្រាក់</option>
+											</select>
 										</td>
 									</tr>
 									<tr class="row_control" style="display: none;">

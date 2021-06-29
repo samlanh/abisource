@@ -140,8 +140,7 @@ tr.row_control {
 		 					 </tr>
 					</thead>
 				<?php ////////////////////////////////// value //////////////////////////////////////////////////////////////////////////////////?>
-				
-					<?php 
+				<?php 
 						$i=0;
 						$amont_new_student=0;
 						$amont_old_student=0; 
@@ -153,18 +152,13 @@ tr.row_control {
 						$grand_total=0;
 						$stu_id=0;
 					?>		
-							
-							
 					<?php if(!empty($this->rs)){foreach ($this->rs as $rs){$i++;
 							$stu_name = $rs['stu_khname'];
 							if($stu_name == ""){
 								$stu_name = $rs['stu_enname'];
 							}
-							//$study_material = $rs['grand_total_payment'] - ($rs['total_payment'] + $rs['admin_fee'] + $rs['other_fee']);
 					?>
-							
 	 					<tr id="row" align="center" class="hover" <?php if($rs['is_void']==1){echo "style='color:red;'";}?>>
-	 					
 							<td class="padd"><?php echo $i;?></td>
 							<td class="padd"><?php echo $rs['receipt_number'];?></td>
 							<td class="padd"><?php echo $rs['stu_code'];?></td>
@@ -173,7 +167,6 @@ tr.row_control {
 							<td class="padd"><?php echo $rs['sex'];?></td>
 							<td class="padd"><?php echo $rs['grade'];?></td>
 							<td class="padd"><?php echo $rs['time'];?></td>						
-							
 							<td align="right" class="padd"><?php echo "$ ".$rs['tuition_fee'];?></td>
 							<td class="padd">
 								<?php if($rs['discount_percent']>0 && $rs['discount_fix']>0){
@@ -196,7 +189,6 @@ tr.row_control {
 							<td class="padd"><?php echo date("d-M-Y",strtotime($rs['create_date']));?></td>
 							<td class="padd"><?php if($rs['is_void']==1){echo "Void";};?></td>
 	 					</tr>
-	 					
 						<?php 
 							if($rs['is_void']==0){
 								$stu_id=$rs['student_id'];
@@ -219,12 +211,8 @@ tr.row_control {
 						?> 					
 	 					
 	 				<?php }}
-	 				
-	 					//$grand_total = $total_study_fee + $total_admin_fee + $total_study_material_fee + $total_other_fee - $total_balance;
 	 				?>
-	 				
 					</table>	
-				
 				<?php if(!empty($this->rs)){?>
 					<table border="0" width="100%">
 						<tr>
@@ -345,6 +333,21 @@ tr.row_control {
 										</td>
 										<td>
 											<input type="text" name="for_date" id="for_date" dojoType="dijit.form.DateTextBox" value="now" constraints="{datePattern:'dd/MM/yyyy'}"/>	
+										</td>
+									</tr>
+									<tr class="row_control">
+										<td>
+											វិធី​សា​ស្រ្ត​ទូទាត់
+										</td>
+										<td>
+										<?php 
+											$payment_method=$this->search['payment_method'];
+										?>
+											<select name="submitpayment_method" id="submitpayment_method" dojoType="dijit.form.FilteringSelect" class="fullside" required="true" autoComplete="false" queryExpr="*${0}*">
+												<option <?php if($payment_method>0 AND $payment_method==1){ echo"selected";}?> value="1" label="សាច់ប្រាក់">សាច់ប្រាក់</option>
+												<option <?php if($payment_method>0 AND $payment_method==2){ echo"selected";}?> value="2" label="ធនាគារ">ធនាគារ</option>
+												<option <?php if($payment_method>0 AND $payment_method==3){ echo"selected";}?> value="3" label="វេរប្រាក់">វេរប្រាក់</option>
+											</select>
 										</td>
 									</tr>
 									<tr class="row_control" style="display: none;">

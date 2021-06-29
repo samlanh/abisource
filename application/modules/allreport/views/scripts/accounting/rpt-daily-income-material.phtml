@@ -304,6 +304,21 @@ tr.row_control {
 											<input type="text" name="for_date" id="for_date" dojoType="dijit.form.DateTextBox" value="now" constraints="{datePattern:'dd/MM/yyyy'}"/>
 										</td>
 									</tr>
+									<tr class="row_control">
+										<td>
+											Payment Method
+										</td>
+										<td>
+										<?php 
+											$payment_method=$this->search['payment_method'];
+										?>
+											<select name="submitpayment_method" id="submitpayment_method" dojoType="dijit.form.FilteringSelect" class="fullside" required="true" autoComplete="false" queryExpr="*${0}*">
+												<option <?php if($payment_method>0 AND $payment_method==1){ echo"selected";}?> value="1" label="សាច់ប្រាក់">សាច់ប្រាក់</option>
+												<option <?php if($payment_method>0 AND $payment_method==2){ echo"selected";}?> value="2" label="ធនាគារ">ធនាគារ</option>
+												<option <?php if($payment_method>0 AND $payment_method==3){ echo"selected";}?> value="3" label="វេរប្រាក់">វេរប្រាក់</option>
+											</select>
+										</td>
+									</tr>
 									<tr class="row_control" style="display: none;">
 										<td>
 										</td>

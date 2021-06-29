@@ -169,7 +169,7 @@ tr.row_control {
 	 				</table>
 	 				
 				<?php if(!empty($this->row)){?>
-					<table width="60%" border="1" style="white-space: nowrap;margin: 0 auto; text-align: center;margin-top: 20px;border-collapse: collapse;border: 1px solid #000;">
+					<table width="60%" style="white-space: nowrap;margin: 0 auto; text-align: center;margin-top: 20px;border-collapse: collapse;border: 1px solid #000;">
 						<tr style="background: #c1d0f3;">
 							<td align="center">
 								Grand Total 
@@ -182,14 +182,12 @@ tr.row_control {
 							</td>
 							<td width="25%">
 								Amount in Riel
-								
 								<input type="hidden" name="total_amount" id="total_amount" value="<?php echo $grand_total;?>" dojoType="dijit.form.TextBox" />
 								<input type="hidden" name="amount_riel" id="amount_riel" dojoType="dijit.form.TextBox" />
 								<input type="hidden" name="shift_id" id="shift_id" value="<?php echo $this->search['shift'];?>" dojoType="dijit.form.TextBox" />
 								<input type="hidden" name="branch_id" id="branch_id" value="<?php echo $this->search['branch'];?>" dojoType="dijit.form.TextBox" />
 								<input type="hidden" name="user_id" id="user_id" value="<?php echo $this->search['user'];?>" dojoType="dijit.form.TextBox" />
 							</td>
-							
 						</tr>
 						<tr>
 							<td style="border: 1px solid #000;">
@@ -208,17 +206,41 @@ tr.row_control {
 									<label id="lb_amount_usd"></label>
 								</div>
 							</td>
-							
 							<td style="border: 1px solid #000;">
 								<label id="lb_amount_reil"></label>
 							</td>
 						</tr>
 						<tr class="row_control" style="display: none;" >
-							<td colspan="4" align="center">
+							<td></td>
+							<td align="center">For Date
+							<td>
 								<input type="text" name="for_date" id="for_date" dojoType="dijit.form.DateTextBox" value="now" constraints="{datePattern:'dd/MM/yyyy'}"/>	
+							</td>
+							<td></td>
+						</tr>
+						<tr class="row_control" style="display: none;" >
+							<td></td>
+							<td>Payment Method</td>
+							<td align="center">
+							<?php 
+								$payment_method=$this->search['payment_method'];
+							?>
+								<select name="submitpayment_method" id="submitpayment_method" dojoType="dijit.form.FilteringSelect" required="true" autoComplete="false" queryExpr="*${0}*">
+									<option <?php if($payment_method>0 AND $payment_method==1){ echo"selected";}?> value="1" label="សាច់ប្រាក់">សាច់ប្រាក់</option>
+									<option <?php if($payment_method>0 AND $payment_method==2){ echo"selected";}?> value="2" label="ធនាគារ">ធនាគារ</option>
+									<option <?php if($payment_method>0 AND $payment_method==3){ echo"selected";}?> value="3" label="វេរប្រាក់">វេរប្រាក់</option>
+								</select>
+							</td>
+							<td></td>
+						</tr>
+						<tr class="row_control" style="display: none;" >
+							<td></td>
+							<td></td>
+							<td align="center">
 								<input type="submit" name="save_close" id="save_close"  value="រក្សាទុក" label="<?php echo $tr->translate('SAVE_CLOSE');?>"  dojoType="dijit.form.Button" 
 									iconClass="dijitEditorIcon dijitEditorIconSave" />	
 							</td>
+							<td></td>
 						</tr>
 					</table>
 				<?php }?>

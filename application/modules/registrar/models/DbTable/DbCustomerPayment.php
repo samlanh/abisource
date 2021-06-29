@@ -152,34 +152,25 @@ class Registrar_Model_DbTable_DbCustomerPayment extends Zend_Db_Table_Abstract
 					
 					//"rent_date_paid"    => 	date("Y-m-d",strtotime($data['rent_date'])),
 					"rent_receipt_no"   => 	$this->getReceiptNo(0),
-					
 					"rent_paid"     	=> 	$data["rent_paid"],
 					"rent_start_date"   => 	date("Y-m-d",strtotime($data['rent_start_date'])),
 					"rent_end_date"   	=> 	date("Y-m-d",strtotime($data['rent_end_date'])),
-					
 					"hygiene_price"     => 	$data['hygiene_price'],
 					"hygiene_start_date"=> 	date("Y-m-d",strtotime($data['hygiene_start_date'])),
 					"hygiene_end_date"  => 	date("Y-m-d",strtotime($data['hygiene_end_date'])),
 					//"hygiene_note"  	=> 	$data['hygiene_note'],
-					
 					"other_price"     	=> 	$data['other_price'],
 // 					"other_start_date"	=> 	date("Y-m-d",strtotime($data['other_start_date'])),
 // 					"other_end_date"  	=> 	date("Y-m-d",strtotime($data['other_end_date'])),
 					//"other_note"  		=> 	$data['other_note'],
-					
 					"create_date"		=>	date('Y-m-d H:i:s'),
-					
 					"all_total_amount"  => 	$data["all_total_amount"],
 					"paid"     			=> 	$data["paid"],
 					"balance"     		=> 	$data["balance"],
-					
 					"note"  			=> 	$data['note'],
-					
 					"status"  			=> 	1,
-					
 					"branch_id"     	=> 	$this->getBranchId(),
 					"user_id"     		=> 	$this->getUserId(),
-					
 					"last_piad"  		=> 	1,
 			);
 			$this->_name="rms_customer_paymentdetail";
@@ -189,7 +180,7 @@ class Registrar_Model_DbTable_DbCustomerPayment extends Zend_Db_Table_Abstract
 			
 		}catch(Exception $e){
 			$db->rollBack();
-			echo $e->getMessage();exit();
+			
 		}
 	}
 	 

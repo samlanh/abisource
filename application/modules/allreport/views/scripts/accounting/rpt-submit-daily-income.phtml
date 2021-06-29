@@ -40,6 +40,7 @@
 		<tr>	
 			<td><?php echo $frm->getElement('start_date');?></td>
 			<td><?php echo $frm->getElement('end_date');?></td>
+			<td><?php echo $frm->getElement('payment_method');?></td>
 			<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button> </td>
 	    </tr>
 	</table>
@@ -108,7 +109,7 @@ tr.row_control {
 								<td class="padd">For Date</td>
 								<td class="padd">Shift</td>
 								<td class="padd">User</td>
-								
+								<td class="padd">Payment Method</td>
 								<td class="padd">Total Amount</td>
 								<td class="padd">Amount in Dollars</td>
 								<td class="padd">Amount in Riels</td>
@@ -159,11 +160,10 @@ tr.row_control {
 							<td class="padd">&nbsp;<?php echo date("d-m-Y",strtotime($rs['for_date']));?>&nbsp;</td>
 							<td class="padd">&nbsp;<?php echo $shift;?>&nbsp;</td>
 							<td class="padd">&nbsp;<?php echo $rs['user_name'];?>&nbsp;</td>
-							
+							<td class="padd">&nbsp;<?php echo $rs['payment_method'];?>&nbsp;</td>
 							<td class="padd">&nbsp;<?php echo "$ ".number_format($rs['total_amount'],2);?>&nbsp;</td>
 							<td class="padd">&nbsp;<?php echo "$ ".number_format($rs['amount_usd'],2);?>&nbsp;</td>
 							<td class="padd">&nbsp;<?php echo number_format($rs['amount_riel'],2)." ៛";?>&nbsp;</td>
-							
 							<td style="min-width: 50px;" class="padd">&nbsp;<a href="<?php echo $this->baseUrl().'/allreport/accounting/editsubmit/id/'.$rs['id']?>" target="_blank">Edit</a>&nbsp;</td>
 	 					 </tr>
 	 					 <?php 
@@ -173,29 +173,23 @@ tr.row_control {
 					}
 	 					 
 	 					 ?>
-	 					 
 	 					 <tr align="center" style="background: #e8e8e8;font-size: 16px;font-family: 'Times New Roman','Khmer OS Battambang';">
-	 					 	<td colspan="6">Total</td>
+	 					 	<td colspan="7">Total</td>
 	 					 	<td ><?php echo "$ ".number_format($grand_total,2);?></td>
 	 					 	<td colspan="2"></td>
 	 					 </tr>
-	 					 
 	 					 <tr align="center" style="background: yellow;font-size: 18px;font-family: 'Times New Roman','Khmer OS Battambang';">
-	 					 	<td colspan="6">Grand Total</td>
+	 					 	<td colspan="7">Grand Total</td>
 	 					 	<td style="border-left: 1px solid yellow;"></td>
 	 					 	<td ><?php echo "$ ".number_format($grand_total_in_dollar,2);?></td>
 	 					 	<td ><?php echo number_format($grand_total_in_riel,2)." ៛";?></td>
 	 					 </tr>
-	 					 
 	 				</table>
-	 				
 				</td>
 			</tr>	
-			
 			<tr>
 				<td colspan="3">&nbsp;</td>
 			</tr>
-			
 			<tr>
 				<td colspan="3">
 					<?php echo $this->footerReport;?>						

@@ -23,7 +23,7 @@
 	   	  	<td> <?php echo $frm->getElement("end_date");?></td>
 	   	  	<td> <?php echo $frm->getElement("from_receipt");?></td>
 	   	  	<td> <?php echo $frm->getElement("to_receipt");?></td>
-	   	  	
+	   	  	<td> <?php echo $frm->getElement("payment_method");?></td>
 	    	<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button> </td>
 	    </tr>
 	</table>
@@ -116,6 +116,7 @@
 								<td rowspan="2" class="padd">Name</td>
 								<td colspan="5" class="padd">Description</td>
 								<td rowspan="2" class="padd">Total in<br />USD</td>
+								<td rowspan="2" class="padd">Payment<br/>Method</td>
 								<td rowspan="2" class="padd">Remark</td>
 								<td rowspan="2" class="padd">Create Date</td>
 								<td rowspan="2" class="padd">Status</td>
@@ -153,19 +154,17 @@
 							<td class="padd"><?php echo "$ ".$rs['fire_exc_rate'];?></td>
 							<td class="padd"><?php echo "$ ".$rs['hygiene_price'];?></td>
 							<td class="padd"><?php echo "$ ".$rs['other_price'];?></td>
-							
 							<td class="padd"><?php echo "$ ".$rs['all_total_amount'];?></td>
+							<td class="padd"><?php echo $rs['payment_method_title'];?></td>
 							<td class="padd"><?php echo $rs['note'];?></td>
 							<td class="padd"><?php echo date("d-M-Y",strtotime($rs['create_date']));?></td>
 							<td class="padd"><?php if($rs['status']==0){echo "Void";};?></td>
 	 					</tr>
-	 						
 	 					<?php 
 		 					if($rs['status']==1){
 		 						$grand_total = $grand_total + $rs['paid'] ;
 		 					}
 	 					?>	
-	 						
 	 				<?php }}?>
 	 				
 					</table>	
@@ -184,24 +183,20 @@
 								</td>
 								<td width="25%">
 									Amount in Riel
-									
 									<input type="hidden" name="total_amount" id="total_amount" value="<?php echo $grand_total;?>" dojoType="dijit.form.TextBox" />
 									<input type="hidden" name="amount_riel" id="amount_riel" dojoType="dijit.form.TextBox" />
 									<input type="hidden" name="shift_id" id="shift_id" value="<?php echo $this->search['shift'];?>" dojoType="dijit.form.TextBox" />
 									<input type="hidden" name="branch_id" id="branch_id" value="<?php echo $this->search['branch'];?>" dojoType="dijit.form.TextBox" />
 									<input type="hidden" name="user_id" id="user_id" value="<?php echo $this->search['user'];?>" dojoType="dijit.form.TextBox" />
 								</td>
-								
 							</tr>
 							<tr>
 								<td style="border: 1px solid #000;">
 									<?php echo "&nbsp;$ ".number_format($grand_total,2)?>
 								</td>
-								
 								<td>
 									<?php echo $this->rate." ៛";?>
 								</td>
-								
 								<td style="border: 1px solid #000;">
 									<div id="input_usd">
 										<input type="text" name="amount_usd" id="amount_usd" value="0" class="fullside" onkeyup="calculateRemainReil();" dojoType="dijit.form.TextBox" />
@@ -210,7 +205,6 @@
 										<label id="lb_amount_usd"></label>
 									</div>
 								</td>
-								
 								<td style="border: 1px solid #000;">
 									<label id="lb_amount_reil"></label>
 								</td>
@@ -224,7 +218,6 @@
 							</tr>
 						</table>
 					<?php }?>
-					
 						<table width="100%">
 							<tr>
 								<td colspan="2">&nbsp;</td>

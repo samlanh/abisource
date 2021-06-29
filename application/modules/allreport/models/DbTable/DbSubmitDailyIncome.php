@@ -18,7 +18,6 @@ class Allreport_Model_DbTable_DbSubmitDailyIncome extends Zend_Db_Table_Abstract
 	function SubmitDailyIncome($data , $payfor_type , $degree_type){
 		
 		$db = $this->getAdapter();
-		
 		if(!empty($data['branch_id'])){
 			$branch = $data['branch_id'];
 		}else{
@@ -31,19 +30,18 @@ class Allreport_Model_DbTable_DbSubmitDailyIncome extends Zend_Db_Table_Abstract
 			$user = $this->getUserId();
 		}
 		
-		$sql="select 
+		$sql="SELECT 
 					id 
-				from 
+				FROM 
 					rms_submit_daily_income 
-				where 
+				WHERE 
 					payfor_type = $payfor_type 
 					and shift = ".$data['shift_id']."
 					and branch_id = $branch
 					and user_id = $user
 					and for_date = '".$data['for_date']."'
-					limit 1
-			";		
-		//echo $sql;exit();
+					and payment_method = '".$data['submitpayment_method']."'
+					limit 1 ";		
 		$exist = $db->fetchOne($sql);
 		
     	$arr = array(
@@ -56,7 +54,7 @@ class Allreport_Model_DbTable_DbSubmitDailyIncome extends Zend_Db_Table_Abstract
     			'branch_id'		=>$branch,
     			'user_id'		=>$user,
     			'for_date'		=>$data['for_date'],
-    			//'create_date'	=>date("Y-m-d"),
+    			'payment_method'=>$data['submitpayment_method'],
    		);
     	
     	if(!empty($exist)){
@@ -72,23 +70,20 @@ class Allreport_Model_DbTable_DbSubmitDailyIncome extends Zend_Db_Table_Abstract
     
     function getAllSubmitDailyIncome($search){
     	$db = $this->getAdapter();
-    	 
-    	//print_r($search);exit();
-    	 
     	$_db = new Application_Model_DbTable_DbGlobal();
     	$branch_id = $_db->getAccessPermission();
     	 
     	$sql = "SELECT
     				*,
-    				(select first_name from rms_users as u where user_id = u.id limit 1) as user_name,
-    				(select branch_namekh from rms_branch where br_id = branch_id limit 1) as branch_name
-				    from
+    				(SELECT first_name from rms_users as u where user_id = u.id limit 1) as user_name,
+    				(SELECT branch_namekh from rms_branch where br_id = branch_id limit 1) as branch_name,
+    				(SELECT name_kh FROM `rms_view` WHERE TYPE=18 AND key_code=rms_submit_daily_income.payment_method LIMIT 1) as payment_method
+				    FROM
 				    	rms_submit_daily_income 
-				    where
+				    WHERE
 				    	status=1
 				    	and shift>0
-    					$branch_id
-    			";
+    					$branch_id ";
     	
     	$where=' ';
     	 
@@ -111,11 +106,13 @@ class Allreport_Model_DbTable_DbSubmitDailyIncome extends Zend_Db_Table_Abstract
     	if($search['shift'] > 0){
     		$where.= " AND shift = ".$search['shift'];
     	}
+    	if($search['payment_method'] > 0){
+    		$where.= " AND payment_method = ".$search['payment_method'];
+    	}
     	
     	if($search['type'] > 0){
     		$where.= " AND payfor_type = ".$search['type'];
     	}
-    	//echo $sql.$where;
     	return $db->fetchAll($sql.$where.$order);
     }
     
@@ -131,6 +128,7 @@ class Allreport_Model_DbTable_DbSubmitDailyIncome extends Zend_Db_Table_Abstract
 	    			"amount_usd"	=>$data['amount_usd'],
 	    			"amount_riel"	=>$data['amount_riel'],
 	    			"shift"			=>$data['shift'],
+    				"payment_method"=>$data['payment_method'],
 	    			"for_date"		=>$data['for_date'],
     			);
     	$where = " id = $id";

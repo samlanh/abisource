@@ -160,7 +160,6 @@ tr.row_control {
 								if($stu_name == ""){
 									$stu_name = $rs['stu_khname'];
 								}
-								//$study_material = $rs['grand_total_payment'] - ($rs['total_payment'] + $rs['admin_fee'] + $rs['other_fee']);
 						?>
 								
 		 					<tr id="row" align="center" class="hover" <?php if($rs['is_void']==1){echo "style='color:red;'";}?>>
@@ -173,8 +172,6 @@ tr.row_control {
 								<td class="padd"><?php echo $rs['sex'];?></td>
 								<td class="padd"><?php echo $rs['grade'];?></td>
 								<td class="padd"><?php echo $rs['time'];?></td>						
-								
-								
 								<td align="right" class="padd"><?php echo "$ ".$rs['tuition_fee'];?></td>
 								<td class="padd">
 									<?php if($rs['discount_percent']>0 && $rs['discount_fix']>0){
@@ -187,10 +184,6 @@ tr.row_control {
 									?>
 								</td>
 								<td align="right" class="padd"><?php echo "$ ".$rs['tuition_fee_after_discount'];?></td>
-								<!-- 
-								<td align="right" class="padd"><?php //if($rs['admin_fee']>0){echo "$ ".$rs['admin_fee'];}?></td>
-								<td align="right" class="padd"><?php //if($rs['material_fee']>0){echo "$ ".$rs['material_fee'];}?></td>
-								 -->
 								<td align="right" class="padd"><?php if($rs['other_fee']>0){echo "$ ".$rs['other_fee'];}?></td>
 								<td align="right" class="padd"><?php if($rs['grand_total_balance']>0){echo "$ ".$rs['grand_total_balance'];}?></td>
 								<td align="right" class="padd"><?php echo "$ ".$rs['grand_total_paid_amount'];?></td>
@@ -199,15 +192,10 @@ tr.row_control {
 								<td class="padd"><?php echo date("d-M-Y",strtotime($rs['create_date']));?></td>
 								<td class="padd"><?php if($rs['is_void']==1){echo "Void";};?></td>
 		 					</tr>
-		 					
 							<?php 
 								if($rs['is_void']==0){
 									$stu_id=$rs['student_id'];
-								
-	// 								$total_admin_fee = $total_admin_fee + $rs['admin_fee'];
 									$total_admin_fee=0;
-									
-	// 								$total_study_material_fee = $total_study_material_fee + $rs['material_fee'];
 									$total_study_material_fee=0;
 									
 									$total_other_fee = $total_other_fee + $rs['other_fee'];
@@ -217,21 +205,13 @@ tr.row_control {
 									}
 									
 									$total_study_fee = $total_study_fee + $rs['tuition_fee_after_discount'];
-									
-									//$total_study_fee = $total_study_fee + $rs['grand_total_paid_amount'] - $total_other_fee;
-									
 									$grand_total = $grand_total + $rs['grand_total_paid_amount'];
 								}
 							?> 					
 		 					
 		 				<?php }}
-		 						
-		 						//$grand_total = $total_study_fee + $total_admin_fee + $total_study_material_fee + $total_other_fee - $total_balance;
 		 				?>
-		 				
-		 				
 						</table>	
-						
 						<?php if(!empty($this->rs)){?>
 							<table border="0" width="100%">
 								<tr>
@@ -246,7 +226,6 @@ tr.row_control {
 													&nbsp;I. Income from English program fee(English full time)
 												</td>
 												<td>
-													
 												</td>
 											</tr>
 											
@@ -258,24 +237,6 @@ tr.row_control {
 													<?php echo "$ ".number_format($total_study_fee,2);?>
 												</td>
 											</tr>
-											<!-- 
-											<tr class="hover">
-												<td>
-													&nbsp;II. Total amount of admin fee
-												</td>
-												<td>
-													<?php //echo "$ ".number_format($total_admin_fee,2);?>
-												</td>
-											</tr>
-											<tr class="hover">
-												<td>
-													&nbsp;III. Total amount of study material fee
-												</td>
-												<td>
-													<?php //echo "$ ".number_format($total_study_material_fee,2);?>
-												</td>
-											</tr>
-											 -->
 											<tr class="hover">
 												<td>
 													&nbsp;II. Total amount of other fee
@@ -353,6 +314,21 @@ tr.row_control {
 												</td>
 												<td>
 													<input type="text" name="for_date" id="for_date" dojoType="dijit.form.DateTextBox" value="now" constraints="{datePattern:'dd/MM/yyyy'}"/>	
+												</td>
+											</tr>
+											<tr class="row_control">
+												<td>
+													Payment Method
+												</td>
+												<td>
+												<?php 
+													$payment_method=$this->search['payment_method'];
+												?>
+													<select name="submitpayment_method" id="submitpayment_method" dojoType="dijit.form.FilteringSelect" class="fullside" required="true" autoComplete="false" queryExpr="*${0}*">
+														<option <?php if($payment_method>0 AND $payment_method==1){ echo"selected";}?> value="1" label="សាច់ប្រាក់">សាច់ប្រាក់</option>
+														<option <?php if($payment_method>0 AND $payment_method==2){ echo"selected";}?> value="2" label="ធនាគារ">ធនាគារ</option>
+														<option <?php if($payment_method>0 AND $payment_method==3){ echo"selected";}?> value="3" label="វេរប្រាក់">វេរប្រាក់</option>
+													</select>
 												</td>
 											</tr>
 											<tr class="row_control" style="display: none;">

@@ -15,9 +15,6 @@ public function init()
 		try{
 			if($this->getRequest()->isPost()){
 				$data=$this->getRequest()->getPost();
-	
-				//print_r($data);exit();
-	
 				$db = new Allreport_Model_DbTable_DbSubmitDailyIncome();
 				$db->SubmitDailyIncome($data,1,1);// 1=payfor_type(KFT) , 1=degree_type(KFT)
 				if(isset($data['save_close'])){
@@ -34,9 +31,6 @@ public function init()
 		try{
 			if($this->getRequest()->isPost()){
 				$data=$this->getRequest()->getPost();
-				
- 				//print_r($data);exit();
-				
 				$db = new Allreport_Model_DbTable_DbSubmitDailyIncome();
 				$db->SubmitDailyIncome($data,6,2);// 6=payfor_type(EFT) , 2=degree_type(EFT)
 				if(isset($data['save_close'])){
