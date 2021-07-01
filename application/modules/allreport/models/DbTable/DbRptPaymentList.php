@@ -829,6 +829,7 @@ class Allreport_Model_DbTable_DbRptPaymentList extends Zend_Db_Table_Abstract
 			    	and spd.service_id = 4
 			    	and sp.is_subspend=0
 			    	and spd.is_start=1
+					and s.is_subspend = 0
 			    	$branch_id
     		";
     
