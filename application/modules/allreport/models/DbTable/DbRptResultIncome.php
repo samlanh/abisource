@@ -189,11 +189,7 @@ class Allreport_Model_DbTable_DbRptResultIncome extends Zend_Db_Table_Abstract
     	}
     	if(!empty($search['txtsearch'])){
 	    	$s_where = array();
-	    	$s_search = addslashes(trim($search['txtsearch']));
-// 	    	$s_where[] = " st.stu_code LIKE '%{$s_search}%'";
-// 	    	$s_where[] = " st.stu_enname LIKE '%{$s_search}%'";
-// 	    	$s_where[] = " st.stu_khname LIKE '%{$s_search}%'";
-// 	    	$where .=' AND ( '.implode(' OR ',$s_where).')';
+// 	    	$s_search = addslashes(trim($search['txtsearch']));
     	}
     			 
     	if($search['branch'] > 0){
@@ -202,9 +198,6 @@ class Allreport_Model_DbTable_DbRptResultIncome extends Zend_Db_Table_Abstract
 	    if($search['user'] > 0){
 	    	$where.= " AND `user_id` = ".$search['user'];
 	    }
-	    
-	    //echo $sql.$where;
-	    
 	    return $db->fetchAll($sql.$where.$order);
 	     
 	}
@@ -308,6 +301,9 @@ class Allreport_Model_DbTable_DbRptResultIncome extends Zend_Db_Table_Abstract
 	    	$to_date = (empty($search['end_date']))? '1': "create_date <= '".$search['end_date']." 23:59:59'";
     	}
     	$where .= " AND ".$from_date." AND ".$to_date;
+    	if($search['payment_method'] > 0){
+    		$where.= " AND `payment_method` = ".$search['payment_method'];
+    	}
     	 
     	$order=" ORDER BY receipt ASC ";
     	 
@@ -385,7 +381,9 @@ class Allreport_Model_DbTable_DbRptResultIncome extends Zend_Db_Table_Abstract
     	if($search['user'] > 0){
     		$where.= " AND `user_id` = ".$search['user'];
     	}
-//     	echo $sql.$where;
+    	if($search['payment_method'] > 0){
+    		$where.= " AND `payment_method` = ".$search['payment_method'];
+    	}
     	return $db->fetchAll($sql.$where.$order);
     }
     
@@ -407,8 +405,7 @@ class Allreport_Model_DbTable_DbRptResultIncome extends Zend_Db_Table_Abstract
 			    	`rms_student_payment` AS sp
 			    WHERE
 			    	payfor_type = 6
-			    	$branch_id
-    			";
+			    	$branch_id ";
     
     	$where = " ";
     
@@ -429,6 +426,9 @@ class Allreport_Model_DbTable_DbRptResultIncome extends Zend_Db_Table_Abstract
     	}
     
     	$where = " AND ".$from_date." AND ".$to_date;
+    	if($search['payment_method'] > 0){
+    		$where.= " AND `payment_method` = ".$search['payment_method'];
+    	}
     
     	$order=" ORDER BY sp.receipt_number ASC ";
     
@@ -442,6 +442,7 @@ class Allreport_Model_DbTable_DbRptResultIncome extends Zend_Db_Table_Abstract
     	if($search['user'] > 0){
     		$where.= " AND `user_id` = ".$search['user'];
     	}
+    	
     		 
     	return $db->fetchAll($sql.$where.$order);
     }
@@ -486,6 +487,10 @@ class Allreport_Model_DbTable_DbRptResultIncome extends Zend_Db_Table_Abstract
     	}
     
     	$where = " AND ".$from_date." AND ".$to_date;
+    	
+    	if($search['payment_method'] > 0){
+    		$where.= " AND `payment_method` = ".$search['payment_method'];
+    	}
     
     	$order=" ORDER BY sp.receipt_number ASC ";
     
@@ -542,6 +547,9 @@ class Allreport_Model_DbTable_DbRptResultIncome extends Zend_Db_Table_Abstract
     	}
     
     	$where = " AND ".$from_date." AND ".$to_date;
+    	if($search['payment_method'] > 0){
+    		$where.= " AND `payment_method` = ".$search['payment_method'];
+    	}
     
     	$order=" ORDER BY sp.receipt_number ASC ";
     
@@ -598,6 +606,9 @@ class Allreport_Model_DbTable_DbRptResultIncome extends Zend_Db_Table_Abstract
     	}
     
     	$where = " AND ".$from_date." AND ".$to_date;
+    	if($search['payment_method'] > 0){
+    		$where.= " AND `payment_method` = ".$search['payment_method'];
+    	}
     
     	$order=" ORDER BY sp.receipt_number ASC ";
     
@@ -654,6 +665,9 @@ class Allreport_Model_DbTable_DbRptResultIncome extends Zend_Db_Table_Abstract
     	}
     
     	$where = " AND ".$from_date." AND ".$to_date;
+    	if($search['payment_method'] > 0){
+    		$where.= " AND `payment_method` = ".$search['payment_method'];
+    	}
     	
     	$order=" ORDER BY sp.receipt_number ASC ";
     
@@ -706,18 +720,9 @@ class Allreport_Model_DbTable_DbRptResultIncome extends Zend_Db_Table_Abstract
     	if($search['user'] > 0){
     		$where.= " AND `user_id` = ".$search['user'];
     	}
-    	
-    	//echo $sql.$where;
-    	
+    	if($search['payment_method'] > 0){
+    		$where.= " AND `payment_method` = ".$search['payment_method'];
+    	}
     	return $db->fetchAll($sql.$where);
     }
-    
-    
 }
-
-
-
-
-
-
-

@@ -1633,12 +1633,13 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 				$search=$this->getRequest()->getPost();
 			}else{
 				$search=array(
-						'txtsearch' =>'',
-						'start_date'=> date('Y-m-d'),
-						'end_date'	=>date('Y-m-d'),
-						'branch'	=>'',
-						'user'		=>'',
-						'shift'		=>0,
+					'txtsearch' =>'',
+					'start_date'=> date('Y-m-d'),
+					'end_date'	=>date('Y-m-d'),
+					'branch'	=>'',
+					'user'		=>'',
+					'payment_method'=>'',
+					'shift'		=>0,
 				);
 			}
 	

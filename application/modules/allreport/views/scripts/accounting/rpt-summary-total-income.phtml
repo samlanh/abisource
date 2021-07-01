@@ -19,6 +19,7 @@
 				 		<option value="3" <?php if($this->search['shift']==3){echo 'selected="selected"';}?>>07:00pm</option>
 				 	</select>
 				</td>
+				<td> <?php echo $frm->getElement("payment_method");?></td>
 		    	<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button> </td>
 		    </tr>
 		</table>
@@ -68,6 +69,7 @@
 				</td>
 				<td align="center" width="22%" style="white-space: nowrap;">
 					<?php if(!empty($this->branch)){echo "Branch : ".$this->branch."</br>";}?>
+					<label style="font-weight:bold;" id="lblpayment_method"></label>
 				</td>
 			</tr>
 			<tr>
@@ -91,23 +93,18 @@
 								$grand_total_in_riel=0;
 								$grand_total_in_dollar=0;
 								if(!empty($this->khmerft)){$last_length = count($this->khmerft);	foreach ($this->khmerft as $khmerft){
-									
 									$i++;
-									
 									if($khmerft['is_void']==0){
 										$total_khmerft_payment = $total_khmerft_payment + $khmerft['grand_total_paid_amount'];
 									}
-									
 									if($first_length==0){
 										$first_receipt = $khmerft['receipt_number'];
 										$first_length = 1;
 									}
-									
 									if($i == $last_length){
 										$last_receipt = $khmerft['receipt_number'];
 									}
 								}}
-								
 								
 								$total_khmerft_in_riel=0;
 								$total_khmerft_in_dolar=0;
@@ -117,7 +114,6 @@
 										$total_khmerft_in_dolar = $total_khmerft_in_dolar + $kft_money['amount_usd'];
 									}
 								}
-								
 							?>
 							<td>&nbsp;&nbsp;<?php echo "$ ".number_format($total_khmerft_payment,2);?></td>
 							<td>&nbsp;&nbsp;<?php echo "$ ".number_format($total_khmerft_in_dolar,2);?></td>
@@ -126,13 +122,11 @@
 						</tr>
 						
 				<?php ///////////////////////////////////////////// English Fulltime /////////////////////////////////////////////////////////// ?>	
-						
 						<tr>
 							<td>&nbsp;&nbsp;<?php echo "Total Amount Study English Full Time Fee ";?></td>
 							<?php 
 								$total_englishft_payment = 0;$first_length = 0;$first_receipt=0;$last_receipt=0;$i=0;
 								if(!empty($this->englishft)){$last_length = count($this->englishft);	foreach ($this->englishft as $englishft){
-									
 									$i++;
 									if($englishft['is_void']==0){
 										$total_englishft_payment = $total_englishft_payment + $englishft['grand_total_paid_amount'];
@@ -510,7 +504,11 @@
 <script type="text/javascript">
 
 	dojo.ready(function(){
-		document.getElementById('hide_amount_usd').style.display="none";
+		//document.getElementById('hide_amount_usd').style.display="none";
+		payment_method = dijit.byId("payment_method").get('value');
+		if(payment_method>0){
+			 dojo.byId("lblpayment_method").innerHTML = "ប្រភេទទូទាត់ : "+dijit.byId("payment_method").attr('displayedValue')
+		}
 	});
 
 	function calculateRemainReil(){
@@ -526,7 +524,7 @@
 	}
 	 					
 	function doPrint() {
-		document.getElementById('hide_amount_usd').style.display="block";
+		//document.getElementById('hide_amount_usd').style.display="block";
 		document.getElementById('amount_usd').style.display="none";
 		
 		window.frames["print_frame"].document.body.innerHTML=dojo.byId('divPrint').innerHTML;
@@ -535,7 +533,7 @@
 	    //hideDialog();
 	    //alert(1);
 	    document.getElementById('amount_usd').style.display="block";
-	    document.getElementById('hide_amount_usd').style.display="none";
+	    //document.getElementById('hide_amount_usd').style.display="none";
 	}
 	
 	function preview()
