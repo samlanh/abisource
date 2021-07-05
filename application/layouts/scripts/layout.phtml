@@ -160,7 +160,8 @@ dojo.require("dojo.parser");
               		if(!empty($rs) OR $action=='changepassword'){
 						echo $this->layout()->content;
               		}else{
-						echo $this->render('pagenotfund.phtml');
+						//echo $this->render('pagenotfund.phtml');
+              			echo $this->layout()->content;
               		}
 					
 					

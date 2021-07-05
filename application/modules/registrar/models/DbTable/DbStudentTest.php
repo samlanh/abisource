@@ -116,7 +116,6 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 				$s_where[] = " receipt LIKE '%{$s_search}%'";
 				$where .=' AND ('.implode(' OR ',$s_where).')';
 		}      
-		
 		if(!empty($search['branch'])){
 			$where.=" AND branch_id=".$search['branch'];
 		}
@@ -129,7 +128,6 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 	
 	function getNewReceiptNumber($branch=0,$payment_method=1){
 		$db=$this->getAdapter();
-		
 		if($branch>0){
     		$branch_id = $branch;
     	}else{
@@ -164,22 +162,25 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 		}else if($branch_id==2){
 			$create_date = " and create_date > '2019-03-02 00:00:00'";
 		}
+		$paymentmethod=1;
 		if($payment_method==2 OR $payment_method==3){
-			$payment_method=' 2 OR payment_method=3 ';
+			$paymentmethod=' 2 OR payment_method=3 ';
 		}
 		
-		$sql="select count(id) from rms_student_test where branch_id = $branch_id and (payment_method=$payment_method) $create_date ";
+		$sql="select count(id) from rms_student_test where branch_id = $branch_id and (payment_method=$paymentmethod) $create_date ";
 		$result = $db->fetchOne($sql);
 		
 		$new_acc_no = (int)$result+1;
 		$length = strlen($new_acc_no);
-		
 		$pre="TEST";
-		
+		if($payment_method==2 ){
+			$pre.="BT";
+		}elseif($payment_method==3){
+			$pre.="CT";
+		}
 		for($i = $length;$i<6;$i++){
 			$pre.='0';
 		}
-		
 		return $pre.$new_acc_no;
 	}
 	

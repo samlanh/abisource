@@ -1057,6 +1057,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 		}else if($branch_id==2){
 			$create_date = " and create_date > '2019-03-02 00:00:00'";
 		}
+		$paymentmethod=1;
 		if($payment_method==2 OR $payment_method==3){
 			$paymentmethod=' 2 OR payment_method=3 ';
 		}
@@ -1066,6 +1067,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	$new_acc_no= (int)$acc_no+1;
     	$acc_no= strlen((int)$acc_no+1);
     	$pre="";
+    	
     	
     	if($payfor_type==1){
     		$pre="K";
