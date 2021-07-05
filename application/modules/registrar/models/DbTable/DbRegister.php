@@ -1058,10 +1058,10 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 			$create_date = " and create_date > '2019-03-02 00:00:00'";
 		}
 		if($payment_method==2 OR $payment_method==3){
-			$payment_method=' 2 OR payment_method=3 ';
+			$paymentmethod=' 2 OR payment_method=3 ';
 		}
     	
-    	$sql="SELECT count(id) FROM rms_student_payment where payfor_type = $payfor_type AND (payment_method=$payment_method) and branch_id = $branch_id $create_date LIMIT 1 ";
+    	$sql="SELECT count(id) FROM rms_student_payment where payfor_type = $payfor_type AND (payment_method=$paymentmethod) and branch_id = $branch_id $create_date LIMIT 1 ";
     	$acc_no = $db->fetchOne($sql);
     	$new_acc_no= (int)$acc_no+1;
     	$acc_no= strlen((int)$acc_no+1);
@@ -1085,9 +1085,16 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	else if($payfor_type==5){
     		$pre="M";
     	}
+    	
+    	if($payment_method==2 ){
+    		$pre.="BT";
+    	}elseif($payment_method==3){
+    		$pre.="CT";
+    	}
     	for($i = $acc_no;$i<6;$i++){
     		$pre.='0';
     	}
+    	
     	return $pre.$new_acc_no;
     }
     

@@ -326,13 +326,4 @@ class Registrar_CoursestudyController extends Zend_Controller_Action {
     		exit();
     	}
     }
-    
-    
 }
-
-
-
-
-
-
-
