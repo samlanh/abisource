@@ -111,6 +111,7 @@ dojo.ready(function(){
 var url_get_data = '<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'get-khmerdata')); ?>';
 function getKhmerData(){
 	branch_id = dijit.byId("branch").get("value");
+	if(branch_id>0){	
 		loading();
 		dojo.xhrPost({
 			url:url_get_data,
@@ -127,6 +128,7 @@ function getKhmerData(){
 				alert(err);
 			}
 		});
+	}
 }
 var url_get_total_student = '<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'get-khmertotalstudent')); ?>';
 function getKhmerTotalStudent(){
