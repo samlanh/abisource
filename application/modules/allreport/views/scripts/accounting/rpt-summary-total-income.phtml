@@ -1,7 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	$frm =  $this->form_search;
-	//print_r($this->rs);
 ?>	
 <title><?php echo $tr->translate('Summary of Total Income');?></title>
 	<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-summary-total-income')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
@@ -24,11 +23,9 @@
 		    </tr>
 		</table>
 	</form>	
-	
 	<style>
 		.hover:hover{background: #ddd;}
 	</style>
-	
 	<div style="border: 1px dotted #000;background: #fff; margin: 0 auto;min-height: 27cm; padding: 0.5cm;">
 		<div id="divPrint">
 		<style>
@@ -504,7 +501,6 @@
 <script type="text/javascript">
 
 	dojo.ready(function(){
-		//document.getElementById('hide_amount_usd').style.display="none";
 		payment_method = dijit.byId("payment_method").get('value');
 		if(payment_method>0){
 			 dojo.byId("lblpayment_method").innerHTML = "ប្រភេទទូទាត់ : "+dijit.byId("payment_method").attr('displayedValue')

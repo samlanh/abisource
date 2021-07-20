@@ -103,7 +103,8 @@ tr.row_control {
 						<?php if($this->search['shift']>0){echo "Time : ".$shift[$this->search['shift']]." , "."Shift : ".$this->search['shift'];}?>
 					</td>
 					<td align="center" width="22%" style="white-space: nowrap;" >
-						<?php if($this->search['branch']>0 && !empty($this->rs)){echo "Branch : ".$this->rs[0]['branch_name']."</br>";}?>
+						<?php if($this->search['branch']>0 && !empty($this->rs)){echo "Branch : ".$this->rs[0]['branch_name']."<br>";}?>
+						<label style="font-weight:bold;" id="lblpayment_method"></label><br>
 						<?php if($this->search['user']>0 && !empty($this->rs)){echo "User : ".$this->rs[0]['user_name'];}?>
 					</td>
 					
@@ -365,6 +366,10 @@ tr.row_control {
 dojo.ready(function(){
 	document.getElementById('hide_amount_usd').style.display="none";
 	calculateRemainReil();
+	payment_method = dijit.byId("payment_method").get('value');
+	if(payment_method>0){
+		 dojo.byId("lblpayment_method").innerHTML = "ប្រភេទទូទាត់ : "+dijit.byId("payment_method").attr('displayedValue')
+	}
 });
 					
 function calculateRemainReil(){

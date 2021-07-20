@@ -40,9 +40,7 @@ tr.row_control {
 
 <div style="border: 1px dotted #000;background: #fff; margin: 0 auto;min-height: 27cm; padding: 0.5cm;">
 	<form  action="<?php echo $this->url(array('module'=>'allreport','controller'=>'submitdailyincome','action'=>'car')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-	
 	<script type="dojo/method" event="onSubmit">   
-
 		if(this.validate()) {
 			shift = dijit.byId('shift_id').get('value');
 			if(shift>0){
@@ -56,7 +54,6 @@ tr.row_control {
     		return false;
     	}
 	</script>
-	
 	<div id="divPrint">
 	<style>
 		table{ page-break-inside:auto }
@@ -88,7 +85,6 @@ tr.row_control {
 		<?php 
 			$shift = array(1=>"10:30am",2=>"04:30pm",3=>"07:00pm");
 		?>
-
 		<table style="background:#fff;width:90%; margin: 0 auto;width: 100%;font-family:'Times New Roman','Khmer OS Battambang';">
 			<tr>
 				
@@ -101,7 +97,8 @@ tr.row_control {
 					<?php if($this->search['shift']>0){echo "Time : ".$shift[$this->search['shift']]." , "."Shift : ".$this->search['shift'];}?>
 				</td>
 				<td align="center" width="22%" style="white-space: nowrap;">
-					<?php if($this->search['branch']>0 && !empty($this->rs)){echo "Branch : ".$this->rs[0]['branch_name']."</br>";}?>
+					<?php if($this->search['branch']>0 && !empty($this->rs)){echo "Branch : ".$this->rs[0]['branch_name']."<br>";}?>
+					<label style="font-weight:bold;" id="lblpayment_method"></label><br>
 					<?php if($this->search['user']>0 && !empty($this->rs)){echo "User : ".$this->rs[0]['user_name'];}?>
 				</td>
 				
@@ -383,13 +380,28 @@ tr.row_control {
 										</tr>
 										
 										<tr class="row_control" style="display: none;">
-												<td>
-													For Date
-												</td>
-												<td>
-													<input type="text" name="for_date" id="for_date" dojoType="dijit.form.DateTextBox" value="now" constraints="{datePattern:'dd/MM/yyyy'}"/>	
-												</td>
-											</tr>
+											<td>
+												For Date
+											</td>
+											<td>
+												<input type="text" name="for_date" id="for_date" dojoType="dijit.form.DateTextBox" value="now" constraints="{datePattern:'dd/MM/yyyy'}"/>	
+											</td>
+										</tr>
+										<tr class="row_control">
+										<td>
+											Payment Method
+										</td>
+										<td>
+										<?php 
+											$payment_method=$this->search['payment_method'];
+										?>
+										<select name="submitpayment_method" id="submitpayment_method" dojoType="dijit.form.FilteringSelect" class="fullside" required="true" autoComplete="false" queryExpr="*${0}*">
+											<option <?php if($payment_method>0 AND $payment_method==1){ echo"selected";}?> value="1" label="សាច់ប្រាក់">សាច់ប្រាក់</option>
+											<option <?php if($payment_method>0 AND $payment_method==2){ echo"selected";}?> value="2" label="ធនាគារ">ធនាគារ</option>
+											<option <?php if($payment_method>0 AND $payment_method==3){ echo"selected";}?> value="3" label="វេរប្រាក់">វេរប្រាក់</option>
+										</select>
+										</td>
+									</tr>
 											<tr class="row_control" style="display: none;">
 												<td>
 												</td>
@@ -424,6 +436,10 @@ tr.row_control {
 dojo.ready(function(){
 	document.getElementById('hide_amount_usd').style.display="none";
 	calculateRemainReil();
+	payment_method = dijit.byId("payment_method").get('value');
+	if(payment_method>0){
+		 dojo.byId("lblpayment_method").innerHTML = "ប្រភេទទូទាត់ : "+dijit.byId("payment_method").attr('displayedValue')
+	}
 });
 					
 function calculateRemainReil(){

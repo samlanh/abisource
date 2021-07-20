@@ -65,10 +65,7 @@ public function init()
 	public function carAction(){
 		try{
 			if($this->getRequest()->isPost()){
-				$data=$this->getRequest()->getPost();
-	
-				//print_r($data);exit();
-	
+				$data=$this->getRequest()->getPost();	
 				$db = new Allreport_Model_DbTable_DbSubmitDailyIncome();
 				$db->SubmitDailyIncome($data,3,0);// 3=payfor_type(Transport) , 0=degree_type(no need)
 				if(isset($data['save_close'])){
