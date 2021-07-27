@@ -768,6 +768,8 @@ class Allreport_Model_DbTable_DbRptDailyIncome extends Zend_Db_Table_Abstract
 			    	hygiene_price,
 			    	other_price,
 			    	
+					(SELECT name_kh FROM rms_view WHERE TYPE=18 AND key_code = cp.`payment_method` LIMIT 1) AS payment_method_title,
+					
 			    	all_total_amount,
 			    	paid,
 			    	cp.note,

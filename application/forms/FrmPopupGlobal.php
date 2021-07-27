@@ -149,7 +149,7 @@ protected $tr;
 		';
 		return $str;
 	}
-	function footerReportAccountStockInEnglish(){
+	function footerReportSummaryTotalIncome(){
 		$str='
 				<table width="100%" border="0" style="white-space: nowrap;font-size: 13px;">
 					<tr align="center">
@@ -157,6 +157,62 @@ protected $tr;
 						<td width="18%">Accountant Income</td>
 						<td width="16%">Accounting Manager</td>
 						<td width="18%">Cash Collector</td>
+						<td width="18%">School Principal</td>
+						<td width="15%">Cashier</td>
+					</tr>
+					<tr>
+						<td colspan="6">&nbsp;</td>
+					</tr>
+					<tr align="center">
+						<td>
+							<div style="font-size: 13px;line-height: 20px;">
+								Name:..............................<br />
+								Date:........../........../..........
+							</div>
+						</td>
+						<td>
+							<div style="font-size: 13px;line-height: 20px;">
+								Name:..............................<br />
+								Date:........../........../..........
+							</div>
+						</td>
+						<td>
+							<div style="font-size: 13px;line-height: 20px;">
+								Name:..............................<br />
+								Date:........../........../..........
+							</div>
+						</td>
+						<td>
+							<div style="font-size: 13px;line-height: 20px;">
+								Name:..............................<br />
+								Date:........../........../..........
+							</div>
+						</td>
+						<td>
+							<div style="font-size: 13px;line-height: 20px;">
+								Name:..............................<br />
+								Date:........../........../..........
+							</div>
+						</td>
+						<td>
+							<div style="font-size: 13px;line-height: 20px;">
+								Name:..............................<br />
+								Date:........../........../..........
+							</div>
+						</td>
+					</tr>
+				</table>
+		';
+		return $str;
+	}
+	function footerReportAccountStockInEnglish(){
+		$str='
+				<table width="100%" border="0" style="white-space: nowrap;font-size: 13px;">
+					<tr align="center">
+						<td width="15%">Auditor</td>
+						<td width="18%">Account</td>
+						<td width="16%">Stock</td>
+						<td width="18%">Accounting Manager</td>
 						<td width="18%">School Principal</td>
 						<td width="15%">Cashier</td>
 					</tr>

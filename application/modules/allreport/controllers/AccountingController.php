@@ -1695,7 +1695,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$this->view->form_search=$form;
 		
 		$frm = new Application_Form_FrmPopupGlobal();
-		$this->view->footerReport = $frm->footerReportAccountInEnglish();
+		$this->view->footerReport = $frm->footerReportSummaryTotalIncome();
 	}
 	
 	
