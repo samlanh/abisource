@@ -1879,6 +1879,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 						'user'		=>'',
 						'from_receipt'	=>'',
 						'to_receipt'	=>'',
+						'payment_method'=>0,
 						'start_date'=>date('Y-m-d'),
 						'end_date'	=>date('Y-m-d'),
 				);
@@ -2269,7 +2270,6 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			echo $e->getMessage();
 		}
 		$form=new Registrar_Form_FrmSearchInfor();
 		$form->FrmSearchRegister();

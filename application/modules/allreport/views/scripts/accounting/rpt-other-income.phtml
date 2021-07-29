@@ -142,8 +142,8 @@
 								<td align="left" style="border: 1px solid #000;">&nbsp;&nbsp;<?php echo $row['title'];?></td>
 								<td align="center" style="border: 1px solid #000;"><?php echo $row['income_category'];?></td>	
 								<td style="border: 1px solid #000;"><?php echo $row['total_amount'];?><?php if($row['curr_type']==1){echo ' $';}else{echo ' រៀល';}?></td>
-								<td align="left" style="border: 1px solid #000;">&nbsp;&nbsp;<?php echo $row['payment_method_title'];?></td>
 								<td align="left" style="border: 1px solid #000;">&nbsp;&nbsp;<?php echo $row['desc'];?></td>
+								<td align="left" style="border: 1px solid #000;">&nbsp;&nbsp;<?php echo $row['payment_method_title'];?></td>
 								<td style="border: 1px solid #000;"><?php echo $row['user'];?></td>
 								<td style="border: 1px solid #000;"><?php echo date('d-m-Y',strtotime($row['create_date']));?></td>
 								<td class="padd"><?php if($row['status']==0){echo "Void";};?></td>
