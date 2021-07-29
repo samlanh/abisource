@@ -118,6 +118,9 @@ class Allreport_Model_DbTable_DbRptResultIncome extends Zend_Db_Table_Abstract
     		$from_date =(empty($search['start_date']))? '1': "cp.create_date >= '".$search['start_date']." 16:30:01'";
     		$to_date = (empty($search['end_date']))? '1': "cp.create_date <= '".$search['end_date']." 23:59:59'";
     	}
+    	if($search['payment_method'] > 0){
+    		$where.= " AND `payment_method` = ".$search['payment_method'];
+    	}
     	
     	$where = " AND ".$from_date." AND ".$to_date;
     	
@@ -260,6 +263,9 @@ class Allreport_Model_DbTable_DbRptResultIncome extends Zend_Db_Table_Abstract
     	}
     	if($search['user'] > 0){
     		$where.= " AND `user_id` = ".$search['user'];
+    	}
+    	if($search['payment_method'] > 0){
+    		$where.= " AND `payment_method` = ".$search['payment_method'];
     	}
 //     	echo $sql.$where.$order;exit();
     	return $db->fetchAll($sql.$where.$order);
