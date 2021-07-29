@@ -38,6 +38,7 @@
 	   	  	<td> <?php echo $frm->getElement("end_date");?></td>
 	   	  	<td> <?php echo $frm->getElement("from_receipt");?></td>
 	   	  	<td> <?php echo $frm->getElement("to_receipt");?></td>
+	   	  	<td> <?php echo $frm->getElement("payment_method");?></td>
 			<td>
 				<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
 			</td>
@@ -126,6 +127,7 @@
 								<td style="border: 1px solid #000;"><?php echo $tr->translate('ប្រភេទចំណូល')?></td>
 								<td style="border: 1px solid #000;"><?php echo $tr->translate('TOTAL')?></td>
 								<td style="border: 1px solid #000;"><?php echo $tr->translate('NOTE')?></td>
+								<td style="border: 1px solid #000;"><?php echo $tr->translate('PAYMENT_METHOD')?></td>
 								<td style="border: 1px solid #000;"><?php echo $tr->translate('USER')?></td>
 								<td style="border: 1px solid #000;"><?php echo $tr->translate('CREATE_DATE')?></td>
 								<td style="border: 1px solid #000;"><?php echo $tr->translate('STATUS')?></td>
@@ -138,9 +140,9 @@
 								<td align="left" style="border: 1px solid #000;">&nbsp;&nbsp;<?php echo $row['name'];?></td>
 								<td align="left" style="border: 1px solid #000;">&nbsp;&nbsp;<?php echo $row['phone'];?></td>
 								<td align="left" style="border: 1px solid #000;">&nbsp;&nbsp;<?php echo $row['title'];?></td>
-								
 								<td align="center" style="border: 1px solid #000;"><?php echo $row['income_category'];?></td>	
 								<td style="border: 1px solid #000;"><?php echo $row['total_amount'];?><?php if($row['curr_type']==1){echo ' $';}else{echo ' រៀល';}?></td>
+								<td align="left" style="border: 1px solid #000;">&nbsp;&nbsp;<?php echo $row['payment_method_title'];?></td>
 								<td align="left" style="border: 1px solid #000;">&nbsp;&nbsp;<?php echo $row['desc'];?></td>
 								<td style="border: 1px solid #000;"><?php echo $row['user'];?></td>
 								<td style="border: 1px solid #000;"><?php echo date('d-m-Y',strtotime($row['create_date']));?></td>
@@ -209,9 +211,32 @@
 							</tr>
 							<tr class="row_control" style="display: none;" >
 								<td colspan="4" align="center">
-									<input type="text" name="for_date" id="for_date" dojoType="dijit.form.DateTextBox" value="now" constraints="{datePattern:'dd/MM/yyyy'}"/>	
-									<input type="submit" name="save_close" id="save_close"  value="រក្សាទុក" label="<?php echo $tr->translate('SAVE_CLOSE');?>"  dojoType="dijit.form.Button" 
-										iconClass="dijitEditorIcon dijitEditorIconSave" />	
+									<table>
+											<tr class="row_control" style="display: none;" >
+												<td>Payment Method</td>
+												<td align="center">
+												<?php 
+													$payment_method=$this->search['payment_method'];
+												?>
+													<select name="submitpayment_method" id="submitpayment_method" dojoType="dijit.form.FilteringSelect" required="true" autoComplete="false" queryExpr="*${0}*">
+														<option <?php if($payment_method>0 AND $payment_method==1){ echo"selected";}?> value="1" label="សាច់ប្រាក់">សាច់ប្រាក់</option>
+														<option <?php if($payment_method>0 AND $payment_method==2){ echo"selected";}?> value="2" label="ធនាគារ">ធនាគារ</option>
+														<option <?php if($payment_method>0 AND $payment_method==3){ echo"selected";}?> value="3" label="វេរប្រាក់">វេរប្រាក់</option>
+													</select>
+												</td>
+											</tr>
+											<tr>
+												<td>For Date</td>
+												<td colspan="3">
+													<input type="text" name="for_date" id="for_date" dojoType="dijit.form.DateTextBox" value="now" constraints="{datePattern:'dd/MM/yyyy'}"/>	
+												</td>
+											</tr>
+											<tr>
+												<td></td>
+												<td colspan="3"><input type="submit" name="save_close" id="save_close"  value="រក្សាទុក" label="<?php echo $tr->translate('SAVE_CLOSE');?>"  dojoType="dijit.form.Button" 
+														iconClass="dijitEditorIcon dijitEditorIconSave" />	</td>
+											</tr>
+									</table>
 								</td>
 							</tr>
 						</table>

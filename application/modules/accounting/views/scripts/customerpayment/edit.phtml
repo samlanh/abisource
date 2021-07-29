@@ -291,6 +291,20 @@ dojo.require("dojo.data.ItemFileWriteStore");
 							<td><input type="text" name="balance" class="fullside" id="balance" value="<?php echo number_format($row['balance'],2);?>"  dojoType="dijit.form.NumberTextBox" readOnly="true"/> </td>
 					    </tr>
 					    <tr>
+							<td><?php echo $tr->translate("PAYMENT_METHOD");?></td>
+							<td>
+								<select name="payment_method" id="payment_method" readonly dojoType="dijit.form.FilteringSelect" class="fullside" required="true" autoComplete="false" queryExpr="*${0}*" onchange='getNewReceiptNo("");'>
+								    <option value="1" <?php if($row['payment_method']==1){echo "selected";}?>>សាច់ប្រាក់</option>
+								    <option value="2" <?php if($row['payment_method']==2){echo "selected";}?>>ធនាគារ</option>
+								    <option value="3" <?php if($row['payment_method']==3){echo "selected";}?>>វេរប្រាក់</option>
+								</select>
+							</td>
+					    </tr>
+					     <tr>
+							<td><?php echo $tr->translate("PAYIMENT_NOTE");?></td>
+							<td><input type="text" name="payment_note" id="payment_note" readonly <?php echo $row['payment_note'];?> class="fullside"  dojoType="dijit.form.TextBox" /> </td>
+					    </tr>
+					    <tr>
 							<td><?php echo $tr->translate("CREATE_DATE");?></td>
 							<td><input type="text" name="create_date" class="fullside" id="create_date" value="<?php echo date("Y-m-d",strtotime($row['create_date']));?>"  dojoType="dijit.form.DateTextBox" constraints="{datePattern:'dd/MM/yyyy'}" value="now"/> </td>
 						</tr>

@@ -86,6 +86,14 @@
 								<input type="text" class="fullside" name="readmoney" readonly id="readmoney" dojoType="dijit.form.TextBox" />
 							</td>
 						</tr>
+						<tr>	
+							<td><?php echo $tr->translate("PAYMENT_METHOD");?></td>
+							<td><?php echo $frm->getElement('payment_method');?></td>
+						</tr>
+						<tr>	
+							<td><?php echo $tr->translate("PAYIMENT_NOTE");?></td>
+							<td><?php echo $frm->getElement('note_payment');?></td>
+						</tr>
 						<tr>
 							<td><?php echo $tr->translate("FOR_DATE")?></td>
 							<td><?php echo $frm->getElement('Date');?></td>
@@ -143,11 +151,13 @@ var cate_income_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Jso
 	var url_getreceiptno = '<?php echo $this->url(array('module'=>'registrar','controller'=>'income','action'=>'get-receipt-no')); ?>';
 	function getNewReceiptNo(do_print){
 		branch_id = dijit.byId('branch_id').get('value');
+		payment_method = dijit.byId('payment_method').get('value');
 		if(branch_id>0){
 			dojo.xhrPost({
 				url:url_getreceiptno,
 				content:{
 					'branch_id':branch_id,
+					'payment_method':payment_method,
 					},
 				handleAs:"json",
 				load: function(data) {

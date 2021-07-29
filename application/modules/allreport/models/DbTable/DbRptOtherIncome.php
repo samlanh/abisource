@@ -18,7 +18,8 @@ class Allreport_Model_DbTable_DbRptOtherIncome extends Zend_Db_Table_Abstract
     				(select branch_namekh from rms_branch where br_id = branch_id) as branch,
 	    			(select category_name from rms_cate_income_expense where rms_cate_income_expense.id = cat_id) as income_category,
 	    			(SELECT name_en FROM `rms_view` WHERE rms_view.type=8 and rms_view.key_code = curr_type) AS curr_name,
-	    			(select CONCAT(last_name) from rms_users as u where u.id = user_id)  as user
+	    			(SELECT name_kh FROM `rms_view` WHERE TYPE=18 AND key_code=ln_income.payment_method LIMIT 1) as payment_method_title,
+	    			(SELECT CONCAT(last_name) from rms_users as u where u.id = user_id)  as user
     			 from 
     				ln_income  
     			WHERE 

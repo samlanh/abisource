@@ -154,8 +154,27 @@ Class Registrar_Form_Frmexpense extends Zend_Dojo_Form {
 		if(!empty($rows))foreach($rows AS $row) $opt[$row['id']]=$row['name'];
 		$_fixed_id->setMultiOptions($opt);
 		
+		$payment_method = new Zend_Dojo_Form_Element_FilteringSelect('payment_method');
+		$payment_method->setAttribs(array('dojoType'=>'dijit.form.FilteringSelect',
+			'class'=>'fullside',
+			'required'=>'true',
+			'autoComplete'=>'false',
+			'queryExpr'=>'*${0}*',
+			'class'=>'fullside',
+			'onchange'=>'getNewReceiptNo("");',
+		));
+		
+		$opts = $_db->getViewListById(18,1);
+		$payment_method->setMultiOptions($opts);
+		
+		$note_payment = new Zend_Dojo_Form_Element_Textarea('note_payment');
+		$note_payment->setAttribs(array(
+				'dojoType'=>'dijit.form.Textarea',
+				'style'=>'min-height:40px;font-family:Khmer os Battambang',
+				'class'=>'fullside'
+		));
+		
 		if($data!=null){
-			//print_r($data);
 			$_branch_id->setValue($data['branch_id']);
 			$_category->setValue($data['cat_id']);
 			$_currency_type->setValue($data['curr_type']);
@@ -169,7 +188,8 @@ Class Registrar_Form_Frmexpense extends Zend_Dojo_Form {
 			$title->setValue($data['title']);
 			$_stutas->setValue($data['status']);
 			$id->setValue($data['id']);
-			//$_branch_id->setValue($data['branch_id']);
+			$payment_method->setValue($data['payment_method']);
+			$note_payment->setValue($data['payment_note']);
 			if (!empty($data['name'])){
 				$name->setValue($data['name']);
 			}
@@ -179,14 +199,9 @@ Class Registrar_Form_Frmexpense extends Zend_Dojo_Form {
 			if (!empty($data['sex'])){
 				$_sex->setValue($data['sex']);
 			}
-			
-			//$convert_to_dollar->setValue($data['amount_in_dollar']);
-			//$_sex->setValue($data['sex']);
-			//$name->setValue($data['name']);
-			//$phone->setValue($data['phone']);
 		}
 		
-		$this->addElements(array($_fixed_id,$name,$phone,$_sex,$_branch_id,$_category,$_cat_expend,$invoice,$_currency_type,$title,$_Date ,$_stutas,$_Description,
+		$this->addElements(array($note_payment,$payment_method,$_fixed_id,$name,$phone,$_sex,$_branch_id,$_category,$_cat_expend,$invoice,$_currency_type,$title,$_Date ,$_stutas,$_Description,
 				$total_amount,$convert_to_dollar,$for_date,$id,));
 		return $this;
 		

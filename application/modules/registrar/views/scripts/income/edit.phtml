@@ -96,6 +96,14 @@
 								<input type="text" class="fullside" name="readmoney" readonly id="readmoney" dojoType="dijit.form.TextBox" />
 							</td>
 						</tr>
+						<tr>	
+							<td><?php echo $tr->translate("PAYMENT_METHOD");?></td>
+							<td><?php echo $frm->getElement('payment_method');?></td>
+						</tr>
+						<tr>	
+							<td><?php echo $tr->translate("PAYIMENT_NOTE");?></td>
+							<td><?php echo $frm->getElement('note_payment');?></td>
+						</tr>
 						<tr>
 							<td><?php echo $tr->translate("FOR_DATE")?></td>
 							<td><?php echo $frm->getElement('Date');?></td>
@@ -159,7 +167,10 @@ dojo.ready(function(){
 		dijit.byId("total_amount").set('readOnly',true);
 		dijit.byId("Description").set('readOnly',true);
 		dijit.byId("Date").set('readOnly',true);
-		
+
+		dijit.byId("payment_method").set('readOnly',true);
+		dijit.byId("note_payment").set('readOnly',true);
+
 		dijit.byId("name").set('readOnly',true);
 		dijit.byId("sex").set('readOnly',true);
 		dijit.byId("phone").set('readOnly',true);

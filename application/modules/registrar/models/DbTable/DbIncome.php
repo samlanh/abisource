@@ -18,12 +18,15 @@ class registrar_Model_DbTable_DbIncome extends Zend_Db_Table_Abstract
 				'phone'			=>$data['phone'],
 				'desc'			=>$data['Description'],
 				'status'		=>$data['Stutas'],
-				
 				'invoice'		=>$this->getReceiptNo($data['branch_id']),
 				'cat_id'		=>$data['cate_income'],
 				'title'			=>$data['title'],
 				'total_amount'	=>$data['total_amount'],
 				'for_date'		=>$data['Date'],
+				
+				'payment_method'	=>$data['payment_method'],
+				'payment_note'		=>$data['note_payment'],
+				
 				
 				'user_id'		=>$this->getUserId(),
 				'create_date'	=>date('Y-m-d H:i:s'),
@@ -44,6 +47,8 @@ class registrar_Model_DbTable_DbIncome extends Zend_Db_Table_Abstract
 				'title'			=>$data['title'],
 				'total_amount'	=>$data['total_amount'],
 				'for_date'		=>$data['Date'],
+				'payment_method'	=>$data['payment_method'],
+				'payment_note'		=>$data['note_payment'],
 				
 				'user_id'		=>$this->getUserId(),
 				'user_id'		=>$this->getUserId(),
@@ -149,7 +154,7 @@ class registrar_Model_DbTable_DbIncome extends Zend_Db_Table_Abstract
 		return $this->insert($array);
 	}
 
-	function getReceiptNo($branch=0){
+	function getReceiptNo($branch=0,$payment_method=1){
 		$db = $this->getAdapter();
 		
 		if($branch>0){
@@ -187,22 +192,26 @@ class registrar_Model_DbTable_DbIncome extends Zend_Db_Table_Abstract
 			$create_date = " and create_date > '2019-03-02 00:00:00'";
 		}
 		
-		$sql= "select count(id) from ln_income where branch_id = $branch_id $create_date limit 1 ";
+		$paymentmethod=1;
+		if($payment_method==2 OR $payment_method==3){
+			$paymentmethod=' 2 OR payment_method=3 ';
+		}
+		
+		$sql= "select count(id) from ln_income where branch_id = $branch_id $create_date AND (payment_method=$paymentmethod) limit 1 ";
 		
 		$acc_no =  $db->fetchOne($sql);
 		
 		$new_acc_no= (int)$acc_no+1;
 		$acc_no= strlen($new_acc_no);
 		$pre="I";
+		if($payment_method==2 ){
+			$pre.="BT";
+		}elseif($payment_method==3){
+			$pre.="CT";
+		}
 		for($i = $acc_no;$i<6;$i++){
 			$pre.='0';
 		}
 		return $pre.$new_acc_no;
-		
-	}
-	
-	
-	
-	
-	
+	}	
 }

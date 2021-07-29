@@ -172,6 +172,9 @@ class Registrar_Model_DbTable_DbCustomerPayment extends Zend_Db_Table_Abstract
 					"branch_id"     	=> 	$this->getBranchId(),
 					"user_id"     		=> 	$this->getUserId(),
 					"last_piad"  		=> 	1,
+					
+					"payment_method"	=> 	$data['payment_method'],
+					"payment_note"		=> 	$data['payment_note'],
 			);
 			$this->_name="rms_customer_paymentdetail";
 			$this->insert($arr_payment);
@@ -284,7 +287,6 @@ class Registrar_Model_DbTable_DbCustomerPayment extends Zend_Db_Table_Abstract
 			$db->commit();
 		}catch(Exception $e){
 			$db->rollBack();
-			echo $e->getMessage();
 		}
 	}
 	
@@ -321,7 +323,7 @@ class Registrar_Model_DbTable_DbCustomerPayment extends Zend_Db_Table_Abstract
 		return $prefix.$new_amount;
 	} 
 	
-	function getReceiptNo($branch=0){
+	function getReceiptNo($branch=0,$payment_method=1){
 		$db=$this->getAdapter();
 		
 		if($branch>0){
@@ -358,20 +360,29 @@ class Registrar_Model_DbTable_DbCustomerPayment extends Zend_Db_Table_Abstract
 		}else if($branch_id==2){
 			$create_date = " and create_date > '2019-03-02 00:00:00'";
 		}
+		$paymentmethod=1;
+		if($payment_method==2 OR $payment_method==3){
+			$paymentmethod=' 2 OR payment_method=3 ';
+		}
 		
-		$sql="SELECT count(id) FROM rms_customer_paymentdetail WHERE branch_id = $branch_id $create_date limit 1 ";
+		$sql="SELECT count(id) FROM rms_customer_paymentdetail WHERE branch_id = $branch_id $create_date AND (payment_method=$paymentmethod)limit 1 ";
 		$amount=$db->fetchOne($sql);
 		
 		$new_amount = $amount + 1;
 		
 		$length = strlen($new_amount);
 		
-		$prefix = 'R';
+		$pre = 'R';
+		if($payment_method==2 ){
+			$pre.="BT";
+		}elseif($payment_method==3){
+			$pre.="CT";
+		}
 		
 		for($i=$length;$i<6;$i++){
-			$prefix.='0';
+			$pre.='0';
 		}
-		return $prefix.$new_amount;
+		return $pre.$new_amount;
 	}
 	
 	function getOldCustomer(){

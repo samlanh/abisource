@@ -72,8 +72,6 @@ class Registrar_CustomerPaymentController extends Zend_Controller_Action {
     		}
     	}
     	
-    	//$this->view->cus_id=$db->getCusId();
-    	//$this->view->receipt_no=$db->getReceiptNo();
     	$this->view->cus=$db->getOldCustomer();
     	$this->view->reil=$db->getReilMoney();
     	
@@ -215,7 +213,7 @@ class Registrar_CustomerPaymentController extends Zend_Controller_Action {
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
     		$db = new Registrar_Model_DbTable_DbCustomerPayment();
-    		$receipt_no= $db->getReceiptNo($data['branch_id']);
+    		$receipt_no= $db->getReceiptNo($data['branch_id'],$data['payment_method']);
     		print_r(Zend_Json::encode($receipt_no));
     		exit();
     	}

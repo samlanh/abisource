@@ -120,9 +120,6 @@ public function init()
 		try{
 			if($this->getRequest()->isPost()){
 				$data=$this->getRequest()->getPost();
-	
-				//print_r($data);exit();
-	
 				$db = new Allreport_Model_DbTable_DbSubmitDailyIncome();
 				$db->SubmitDailyIncome($data,7,0);// 7=payfor_type(canteen) , 0=degree_type(no need)
 				if(isset($data['save_close'])){
@@ -139,10 +136,8 @@ public function init()
 		try{
 			if($this->getRequest()->isPost()){
 				$data=$this->getRequest()->getPost();
-	
-				//print_r($data);exit();
-	
 				$db = new Allreport_Model_DbTable_DbSubmitDailyIncome();
+				$data['submitpayment_method']=1;
 				$db->SubmitDailyIncome($data,8,0);// 8=payfor_type(parking) , 0=degree_type(no need)
 				if(isset($data['save_close'])){
 					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/allreport/accounting/rpt-parking-payment");

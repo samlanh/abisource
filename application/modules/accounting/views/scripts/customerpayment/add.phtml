@@ -274,6 +274,20 @@
 							<td><input type="text" name="balance" class="fullside" id="balance" value="0"  dojoType="dijit.form.NumberTextBox" readOnly="true"/> </td>
 						</tr>
 						<tr>
+							<td><?php echo $tr->translate("PAYMENT_METHOD");?></td>
+							<td>
+								<select name="payment_method" id="payment_method" dojoType="dijit.form.FilteringSelect" class="fullside" required="true" autoComplete="false" queryExpr="*${0}*" onchange='getReceiptByBranch("");'>
+								    <option value="1" label="សាច់ប្រាក់">សាច់ប្រាក់</option>
+								    <option value="2" label="ធនាគារ">ធនាគារ</option>
+								    <option value="3" label="វេរប្រាក់">វេរប្រាក់</option>
+								</select>
+							</td>
+					    </tr>
+					    <tr>
+							<td><?php echo $tr->translate("PAYIMENT_NOTE");?></td>
+							<td><input type="text" name="payment_note" id="payment_note" class="fullside"  dojoType="dijit.form.TextBox" /> </td>
+					    </tr>
+						<tr>
 							<td><?php echo $tr->translate("CREATE_DATE");?></td>
 							<td><input type="text" name="create_date" class="fullside" id="create_date" required="true" dojoType="dijit.form.DateTextBox" constraints="{datePattern:'dd/MM/yyyy'}" value=""/> </td>
 						</tr>
@@ -392,16 +406,16 @@
 		var url_receipt = '<?php echo $this->url(array('module'=>'accounting','controller'=>'customerpayment','action'=>'get-receipt-by-branch')); ?>';
 		function getReceiptByBranch(){
 			branch_id = dijit.byId('branch').get('value');
-			//alert(branch_id);
+			payment_method = dijit.byId('payment_method').get('value');
 			if(branch_id>0){
 				dojo.xhrPost({
 					url:url_receipt,
 					content:{
-						'branch_id':branch_id
+						'branch_id':branch_id,
+						'payment_method':payment_method
 						},
 					handleAs:"json",
 					load: function(data) {
-						//alert(data);
 						dijit.byId('receipt_no').attr('value',data);   
 					},
 					error: function(err) {

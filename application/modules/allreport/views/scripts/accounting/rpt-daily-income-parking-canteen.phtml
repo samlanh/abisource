@@ -100,8 +100,8 @@
 					<?php if($this->search['shift']>0){echo "Time : ".$shift[$this->search['shift']]." , "."Shift : ".$this->search['shift'];}?>
 				</td>
 				<td align="center" width="22%" style="white-space: nowrap;">
-					<?php if($this->search['branch']>0 && !empty($this->rs)){echo "Branch : ".$this->rs[0]['branch_name']."<br>";}?>
-					<label style="font-weight:bold;" id="lblpayment_method"></label><br>
+					<?php if($this->search['branch']>0 && !empty($this->rs)){echo "Branch : ".$this->rs[0]['branch_name'];}?>
+					<br><label style="font-weight:bold;" id="lblpayment_method"></label><br>
 					<?php if($this->search['user']>0 && !empty($this->rs)){echo "User : ".$this->rs[0]['user_name'];}?>
 				</td>
 				
@@ -130,14 +130,11 @@
 								<td rowspan="1" class="padd">Other</td>
 		 					 </tr>
 		 				</thead>
-	 					 
 				<?php ////////////////////////////////// value //////////////////////////////////////////////////////////////////////////////////?>
-				
 					<?php 
 						$i=0;
 						$grand_total=0;
 					?>		
-							
 					<?php if(!empty($this->rs)){foreach ($this->rs as $rs){$i++;
 						$name = $rs['first_name'];
 						if($name==""){
@@ -149,7 +146,6 @@
 							<td class="padd"><?php echo $rs['rent_receipt_no'];?></td>
 							<td class="padd"><?php echo $rs['customer_code'];?></td>
 							<td align="left" class="padd"><?php echo $name;?></td>
-							
 							<td class="padd"><?php echo "$ ".$rs['rent_paid'];?></td>
 							<td class="padd"><?php echo "$ ".$rs['water_exc_rate'];?></td>
 							<td class="padd"><?php echo "$ ".$rs['fire_exc_rate'];?></td>
@@ -167,9 +163,7 @@
 		 					}
 	 					?>	
 	 				<?php }}?>
-	 				
 					</table>	
-					
 					<?php if(!empty($this->rs)){?>
 						<table width="60%" border="1" style="line-height: 18px; white-space: nowrap;margin: 0 auto; text-align: center;margin-top: 20px;border-collapse: collapse;border: 1px solid #000;">
 							<tr style=" font-size:13px; background: #c1d0f3;">
@@ -211,9 +205,29 @@
 								</td>
 							</tr>
 							<tr class="row_control" style="display: none;" >
-								<td colspan="4" align="center">
+								<td>For Date</td>
+								<td  align="center">
 									<input type="text" name="for_date" id="for_date" dojoType="dijit.form.DateTextBox" value="now" constraints="{datePattern:'dd/MM/yyyy'}"/>	
-									<input type="submit" name="save_close" id="save_close"  value="រក្សាទុក" label="<?php echo $tr->translate('SAVE_CLOSE');?>"  dojoType="dijit.form.Button" 
+								</td>
+							</tr>
+							<tr class="row_control" >
+								<td>
+									Payment Method
+								</td>
+								<td>
+								<?php 
+									$payment_method=$this->search['payment_method'];
+								?>
+									<select name="submitpayment_method" id="submitpayment_method" dojoType="dijit.form.FilteringSelect" class="fullside" required="true" autoComplete="false" queryExpr="*${0}*">
+									    <option <?php if($payment_method>0 AND $payment_method==1){ echo"selected";}?> value="1" label="សាច់ប្រាក់">សាច់ប្រាក់</option>
+									    <option <?php if($payment_method>0 AND $payment_method==2){ echo"selected";}?> value="2" label="ធនាគារ">ធនាគារ</option>
+									    <option <?php if($payment_method>0 AND $payment_method==3){ echo"selected";}?> value="3" label="វេរប្រាក់">វេរប្រាក់</option>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td><input type="submit" name="save_close" id="save_close"  value="រក្សាទុក" label="<?php echo $tr->translate('SAVE_CLOSE');?>"  dojoType="dijit.form.Button" 
 										iconClass="dijitEditorIcon dijitEditorIconSave" />	
 								</td>
 							</tr>
@@ -229,7 +243,6 @@
 								</td>
 							</tr>
 						</table>
-					
 					</td>
 				</tr>
 		</table>
@@ -239,6 +252,12 @@
 </div>
 <script type="text/javascript">
 dojo.ready(function(){
+	dojo.ready(function(){
+		payment_method = dijit.byId("payment_method").get('value');
+		if(payment_method>0){
+			 dojo.byId("lblpayment_method").innerHTML = "ប្រភេទទូទាត់ : "+dijit.byId("payment_method").attr('displayedValue')
+		}
+	});
 	document.getElementById('hide_amount_usd').style.display="none";
 	calculateRemainReil();
 });
@@ -248,31 +267,24 @@ function calculateRemainReil(){
 	amount_usd = dijit.byId("amount_usd").get('value');
 	exchange_rate = '<?php echo $this->rate?>';
 	total_reil = ((total_amount - amount_usd)*exchange_rate).toFixed(2);
-	//alert(total_reil);
 
 	var result = 100 * Math.ceil(total_reil / 100);
 	
-	//alert(rounded);
 	var total_reil = result.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
 
 	dijit.byId('amount_riel').attr('value',result);
 	
 	dojo.byId("lb_amount_usd").innerHTML = " $ " + amount_usd;
 	dojo.byId("lb_amount_reil").innerHTML = " ៛ " + total_reil;
-	
 }
 					
 function doPrint() {
-	//alert(1);
-	
 	document.getElementById('hide_amount_usd').style.display="block";
 	document.getElementById('amount_usd').style.display="none";
 	
 	window.frames["print_frame"].document.body.innerHTML=dojo.byId('divPrint').innerHTML;
     window.frames["print_frame"].window.focus();
     window.frames["print_frame"].window.print();
-    //hideDialog();
-    //alert(1);
     document.getElementById('amount_usd').style.display="block";
     document.getElementById('hide_amount_usd').style.display="none";
 }
@@ -296,4 +308,3 @@ function exportExcel(){
 	$('#exportExcel').tableExport({type:'excel',escape:'false'});
 }
 </script>
- 

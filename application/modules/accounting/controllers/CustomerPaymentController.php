@@ -198,7 +198,7 @@ class Accounting_CustomerPaymentController extends Zend_Controller_Action {
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
     		$db = new Registrar_Model_DbTable_DbCustomerPayment();
-    		$cus_id= $db->getReceiptNo($data['branch_id']);
+    		$cus_id= $db->getReceiptNo($data['branch_id'],$data['payment_method']);
     		print_r(Zend_Json::encode($cus_id));
     		exit();
     	}

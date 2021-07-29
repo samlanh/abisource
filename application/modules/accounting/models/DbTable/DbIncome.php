@@ -36,6 +36,8 @@ class Accounting_Model_DbTable_DbIncome extends Zend_Db_Table_Abstract
 					'status'		=>$data['Stutas'],
 					'branch_id'		=>$data['branch_id'],
 					'user_id'		=>$this->getUserId(),
+					'payment_method'	=>$data['payment_method'],
+					'payment_note'		=>$data['note_payment'],
 					
 					'create_date'	=>$create_date,
 					'reg_from'		=>1,// from accounting
@@ -76,6 +78,8 @@ class Accounting_Model_DbTable_DbIncome extends Zend_Db_Table_Abstract
 						'status'		=>$data['Stutas'],
 						'branch_id'		=>$data['branch_id'],
 						//'user_id'		=>$this->getUserId(),
+						'payment_method'	=>$data['payment_method'],
+						'payment_note'		=>$data['note_payment'],
 					
 						'create_date'	=>$create_date,
 				);

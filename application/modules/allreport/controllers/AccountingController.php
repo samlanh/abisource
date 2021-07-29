@@ -1572,6 +1572,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 						'branch'	=>'',
 						'user'		=>'',
 						'shift'		=>0,
+						'payment_method'=>0,
 				);
 			}
 			

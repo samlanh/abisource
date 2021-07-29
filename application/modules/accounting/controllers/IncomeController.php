@@ -157,15 +157,5 @@ class Accounting_IncomeController extends Zend_Controller_Action
     		print_r(Zend_Json::encode($receipt));
     		exit();
     	}
-    }
-    
-    
-
+    }     
 }
-
-
-
-
-
-
-

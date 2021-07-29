@@ -61,7 +61,6 @@ class Registrar_IncomeController extends Zend_Controller_Action
 			} catch (Exception $e) {
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 				Application_Form_FrmMessage::message("INSERT_FAIL");
-				echo $e->getMessage();
 			}
 		}
     	$pructis=new Registrar_Form_Frmexpense();
@@ -135,7 +134,7 @@ class Registrar_IncomeController extends Zend_Controller_Action
     	if($this->getRequest()->isPost()){
     		$data = $this->getRequest()->getPost();
     		$db = new Registrar_Model_DbTable_DbIncome();
-    		$receipt = $db->getReceiptNo($data['branch_id']);
+    		$receipt = $db->getReceiptNo($data['branch_id'],$data['payment_method']);
     		print_r(Zend_Json::encode($receipt));
     		exit();
     	}

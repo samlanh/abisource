@@ -98,7 +98,6 @@ class Accounting_Model_DbTable_DbCustomerPayment extends Zend_Db_Table_Abstract
     }
  
 	public function addCusPayment($data){
-// 		print_r($data);exit();
 		$db = $this->getAdapter();
 		$db->beginTransaction();
 		try{
@@ -198,6 +197,8 @@ class Accounting_Model_DbTable_DbCustomerPayment extends Zend_Db_Table_Abstract
 					"branch_id" 		=> 	$data["branch"],
 					"user_id"     		=> 	$this->getUserId(),
 					"last_piad"  		=> 	1,
+					"payment_method"	=> 	$data['payment_method'],
+					"payment_note"		=> 	$data['payment_note'],
 			);
 			$this->_name="rms_customer_paymentdetail";
 			$this->insert($arr_payment);
@@ -205,7 +206,6 @@ class Accounting_Model_DbTable_DbCustomerPayment extends Zend_Db_Table_Abstract
 			
 		}catch(Exception $e){
 			$db->rollBack();
-			echo $e->getMessage();
 		}
 	}
 	 
@@ -304,6 +304,8 @@ class Accounting_Model_DbTable_DbCustomerPayment extends Zend_Db_Table_Abstract
 					"branch_id"     	=> 	$this->getBranchId(),
 					//"user_id"     		=> 	$this->getUserId(),
 					"last_piad"  		=> 	1,
+					"payment_method"	=> 	$data['payment_method'],
+					"payment_note"		=> 	$data['payment_note'],
 			);
 			$this->_name="rms_customer_paymentdetail";
 			$where=" id=".$data['id'];
