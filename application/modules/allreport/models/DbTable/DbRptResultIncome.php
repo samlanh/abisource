@@ -144,6 +144,9 @@ class Allreport_Model_DbTable_DbRptResultIncome extends Zend_Db_Table_Abstract
     	if($search['user'] > 0){
     		$where.= " AND `user_id` = ".$search['user'];
     	}
+    	if($search['payment_method'] > 0){
+    		$where.= " AND `payment_method` = ".$search['payment_method'];
+    	}
     	return $db->fetchAll($sql.$where.$order);
     	
     }

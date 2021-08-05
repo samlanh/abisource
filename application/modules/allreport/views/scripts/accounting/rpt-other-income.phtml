@@ -100,6 +100,8 @@
 					</td>
 					<td align="center" width="22%" style="white-space: nowrap;">
 						<?php if($this->search['branch']>0 && !empty($this->row)){echo "Branch : ".$this->row[0]['branch'];}?>
+						<br />
+						<label style="font-weight:bold;" id="lblpayment_method"></label>
 					</td>
 				</tr>
 				
@@ -264,6 +266,13 @@
 <script type="text/javascript">
 
 	dojo.ready(function(){
+		dojo.ready(function(){
+			payment_method = dijit.byId("payment_method").get('value');
+			if(payment_method>0){
+				 dojo.byId("lblpayment_method").innerHTML = "ប្រភេទទូទាត់ : "+dijit.byId("payment_method").attr('displayedValue')
+			}
+		});
+		
 		document.getElementById('hide_amount_usd').style.display="none";
 		calculateRemainReil();
 	});

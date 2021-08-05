@@ -2212,14 +2212,14 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 				$search=$this->getRequest()->getPost();
 			}else{
 				$search=array(
-						'txtsearch' =>'',
-						'branch'	=>'',
-						'shift'		=>'',
-						'user'		=>'',
-						'from_receipt'	=>'',
-						'to_receipt'	=>'',
-						'start_date'=>date('Y-m-d'),
-						'end_date'	=>date('Y-m-d'),
+					'txtsearch' =>'',
+					'branch'	=>'',
+					'shift'		=>'',
+					'user'		=>'',
+					'from_receipt'	=>'',
+					'to_receipt'	=>'',
+					'start_date'=>date('Y-m-d'),
+					'end_date'	=>date('Y-m-d'),
 				);
 			}
 			$db = new Allreport_Model_DbTable_DbRptParkingPayment();
@@ -2241,7 +2241,6 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			echo $e->getMessage();
 		}
 	}
 	function rptDailyIncomeStudenttestAction(){
@@ -2347,7 +2346,6 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			echo $e->getMessage();
 		}
 	}
 	

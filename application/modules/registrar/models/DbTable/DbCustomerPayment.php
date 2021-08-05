@@ -127,7 +127,7 @@ class Registrar_Model_DbTable_DbCustomerPayment extends Zend_Db_Table_Abstract
 			}
 			
 			//exit();
-			
+			$receipt = $this->getReceiptNo(0,$data['payment_method']);
 			
 			$arr_payment=array(
 					"cus_id"     		=> 	$cus_id,
@@ -151,7 +151,7 @@ class Registrar_Model_DbTable_DbCustomerPayment extends Zend_Db_Table_Abstract
 					"fire_end_date"     => 	date("Y-m-d",strtotime($data['fire_end_date'])),
 					
 					//"rent_date_paid"    => 	date("Y-m-d",strtotime($data['rent_date'])),
-					"rent_receipt_no"   => 	$this->getReceiptNo(0),
+					"rent_receipt_no"   => 	$receipt,
 					"rent_paid"     	=> 	$data["rent_paid"],
 					"rent_start_date"   => 	date("Y-m-d",strtotime($data['rent_start_date'])),
 					"rent_end_date"   	=> 	date("Y-m-d",strtotime($data['rent_end_date'])),

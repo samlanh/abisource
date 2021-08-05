@@ -210,7 +210,7 @@ protected $tr;
 				<table width="100%" border="0" style="white-space: nowrap;font-size: 13px;">
 					<tr align="center">
 						<td width="15%">Auditor</td>
-						<td width="18%">Account</td>
+						<td width="18%">Accountant Income</td>
 						<td width="16%">Stock</td>
 						<td width="18%">Accounting Manager</td>
 						<td width="18%">School Principal</td>

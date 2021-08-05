@@ -11,6 +11,7 @@ class registrar_Model_DbTable_DbIncome extends Zend_Db_Table_Abstract
 		return $session_user->branch_id;
 	}
 	function addIncome($data){
+		$receipt = $this->getReceiptNo($data['branch_id'],$data['payment_method']);
 		$array = array(
 				'branch_id'		=>$data['branch_id'],
 				'name'			=>$data['name'],
@@ -18,7 +19,7 @@ class registrar_Model_DbTable_DbIncome extends Zend_Db_Table_Abstract
 				'phone'			=>$data['phone'],
 				'desc'			=>$data['Description'],
 				'status'		=>$data['Stutas'],
-				'invoice'		=>$this->getReceiptNo($data['branch_id']),
+				'invoice'		=>$receipt,
 				'cat_id'		=>$data['cate_income'],
 				'title'			=>$data['title'],
 				'total_amount'	=>$data['total_amount'],
