@@ -7,8 +7,8 @@
 	<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-result-income')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 		<table width="100%">
 		    <tr>
-		    	<td> <?php echo $frm->getElement("start_date");?></td>
-	   	  	    <td> <?php echo $frm->getElement("end_date");?></td>
+		    	<td><?php echo $frm->getElement("start_date");?></td>
+	   	  	    <td><?php echo $frm->getElement("end_date");?></td>
 		    	<td><?php echo $frm->getElement('branch');?></td>
 		    	<td><?php echo $frm->getElement('user');?></td>
 		    	<td>
@@ -19,6 +19,7 @@
 				 		<option value="3" <?php if($this->search['shift']==3){echo 'selected="selected"';}?>>07:00pm</option>
 				 	</select>
 				</td>
+				<td><?php echo $frm->getElement("payment_method");?></td>
 		    	<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button> </td>
 		    </tr>
 		</table>
@@ -66,6 +67,7 @@
 				</td>
 				<td width="22%" align="center" style="white-space: nowrap;">
 					<?php if(!empty($this->branch)){echo "Branch : ".$this->branch."</br>";}?>
+					<label style="font-weight:bold;" id="lblpayment_method"></label>
 				</td>
 			</tr>
 			<tr>
@@ -516,7 +518,13 @@
 		
 <script type="text/javascript">
 	dojo.ready(function(){
-		document.getElementById('hide_amount_usd').style.display="none";
+		payment_method = dijit.byId("payment_method").get('value');
+		if(payment_method>0){
+			 dojo.byId("lblpayment_method").innerHTML = "ប្រភេទទូទាត់ : "+dijit.byId("payment_method").attr('displayedValue')
+		}
+		//document.getElementById('hide_amount_usd').style.display="none";
+		
+		
 	});
 	
 	function calculateRemainReil(){
@@ -534,7 +542,7 @@
 	}
 	 					
 	function doPrint() {
-		document.getElementById('hide_amount_usd').style.display="block";
+		//document.getElementById('hide_amount_usd').style.display="block";
 		document.getElementById('amount_usd').style.display="none";
 		
 		window.frames["print_frame"].document.body.innerHTML=dojo.byId('divPrint').innerHTML;
@@ -543,7 +551,7 @@
 	    //hideDialog();
 	    //alert(1);
 	    document.getElementById('amount_usd').style.display="block";
-	    document.getElementById('hide_amount_usd').style.display="none";
+	    //document.getElementById('hide_amount_usd').style.display="none";
 	}
 	function preview()
 	{ 

@@ -54,6 +54,9 @@ class Allreport_Model_DbTable_DbRptIncomeStatement extends Zend_Db_Table_Abstrac
     		$to_date = (empty($search['end_date']))? '1': "sp.create_date <= '".$search['end_date']." 23:59:59'";
     	}
     	$where .= " AND ".$from_date." AND ".$to_date;
+    	if(!empty($search['payment_method'])){
+    		$where.= " AND sp.`payment_method` = ".$search['payment_method'];
+    	}
     	
     	$order=" ORDER BY (SELECT ser_cate_id FROM `rms_program_name` WHERE spd.`service_id`=rms_program_name.`service_id`) ASC ";
     	
@@ -82,7 +85,7 @@ class Allreport_Model_DbTable_DbRptIncomeStatement extends Zend_Db_Table_Abstrac
     
     function getAllRentPayment($search){
     	$db = $this->getAdapter();
-//     	print_r($search);exit();
+
     	$_db = new Application_Model_DbTable_DbGlobal();
     	$branch_id = $_db->getAccessPermission("cp.`branch_id`");
     	 
@@ -117,6 +120,10 @@ class Allreport_Model_DbTable_DbRptIncomeStatement extends Zend_Db_Table_Abstrac
     	else if($search['shift']==3){
     		$from_date =(empty($search['start_date']))? '1': "cp.create_date >= '".$search['start_date']." 16:30:01'";
     		$to_date = (empty($search['end_date']))? '1': "cp.create_date <= '".$search['end_date']." 23:59:59'";
+    	}
+    	
+    	if(!empty($search['payment_method'])){
+    		$where.= " AND `payment_method` = ".$search['payment_method'];
     	}
     	
     	$where = " AND ".$from_date." AND ".$to_date;
@@ -308,6 +315,10 @@ class Allreport_Model_DbTable_DbRptIncomeStatement extends Zend_Db_Table_Abstrac
 	    	$to_date = (empty($search['end_date']))? '1': "create_date <= '".$search['end_date']." 23:59:59'";
     	}
     	$where .= " AND ".$from_date." AND ".$to_date;
+    	
+    	if(!empty($search['payment_method'])){
+    		$where.= " AND `payment_method` = ".$search['payment_method'];
+    	}
     	 
     	$order=" ORDER BY id ASC ";
     	 
@@ -706,8 +717,9 @@ class Allreport_Model_DbTable_DbRptIncomeStatement extends Zend_Db_Table_Abstrac
     	if($search['user'] > 0){
     		$where.= " AND `user_id` = ".$search['user'];
     	}
-    	
-    	//echo $sql.$where;
+    	if(!empty($search['payment_method'])){
+    		$where.= " AND `payment_method` = ".$search['payment_method'];
+    	}
     	
     	return $db->fetchAll($sql.$where);
     }

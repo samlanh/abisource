@@ -55,6 +55,10 @@ class Allreport_Model_DbTable_DbRptResultIncome extends Zend_Db_Table_Abstract
     	}
     	$where .= " AND ".$from_date." AND ".$to_date;
     	
+    	if(!empty($search['payment_method'])){
+    		$where.= " AND sp.`payment_method` = ".$search['payment_method'];
+    	}
+    	
     	$order=" ORDER BY (SELECT ser_cate_id FROM `rms_program_name` WHERE spd.`service_id`=rms_program_name.`service_id`) ASC ";
     	
     	if(empty($search)){
@@ -75,7 +79,6 @@ class Allreport_Model_DbTable_DbRptResultIncome extends Zend_Db_Table_Abstract
     	if($search['user'] > 0){
     		$where.= " AND sp.`user_id` = ".$search['user'];
     	}
-//     	echo $sql.$where.$order;exit();
     	return $db->fetchAll($sql.$where.$order);
     	 
     }
