@@ -154,9 +154,6 @@ tr.row_control {
 				?>		
 				<?php if(!empty($this->rs)){foreach ($this->rs as $rs){$i++;
 						$style = 'style="width:12px;"';
-						$img_src = $this->baseUrl()."/images/Green_tick.png";
-						$time_for_car = $rs['time_for_car'];
-						$time_id = explode(',', $time_for_car);
 						
 						$stu_name = $rs['stu_enname'];
 						if($stu_name == ""){
@@ -184,6 +181,7 @@ tr.row_control {
  					</tr>
  					
 					<?php 
+					
 						if($rs['is_void']==0){
 							$stu_id=$rs['student_id'];
 							$total_other_fee = $total_other_fee + $rs['other_fee'];

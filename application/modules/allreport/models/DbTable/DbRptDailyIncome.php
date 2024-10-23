@@ -383,66 +383,27 @@ class Allreport_Model_DbTable_DbRptDailyIncome extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
     
     	$_db = new Application_Model_DbTable_DbGlobal();
-    	$branch_id = $_db->getAccessPermission("sp.`branch_id`");
-    
-    	$sql = "SELECT
-			    	sp.*,
-			    	sp.id,
-			    	
-			    	(select branch_namekh from rms_branch where br_id = sp.branch_id LIMIT 1) as branch_name,
-			    	(select last_name from rms_users as u where u.id = sp.user_id LIMIT 1) as user_name,
-			    	
-			    	sp.`student_id`,
-			    	(select stu_code from rms_service where rms_service.stu_id = sp.student_id and rms_service.type=4 LIMIT 1) as stu_code ,
-			    	st.`stu_enname`,
-			    	st.`stu_khname`,
-			    	(SELECT name_en FROM rms_view WHERE TYPE=2 AND key_code = st.`sex` LIMIT 1) AS sex,
-			    	(select title from rms_program_name as p where p.service_id = s.service_id LIMIT 1) as service_name,
-			    	(select carid from rms_car where rms_car.id = s.car_id LIMIT 1) as car_id,
-			    	
-			    	st.`tel`,
-			    	sp.`create_date`,
-			    	sp.`is_new`,
-			    	sp.`receipt_number`,
-			    	
-			    	sp.time_for_car,
-			    	 
-			    	sp.`tuition_fee`,
-			    	sp.`discount_percent`,
-			    	sp.`discount_fix`,
-			    	sp.`total_payment`,
-			    	sp.`admin_fee`,
-			    	sp.`other_fee`,
-			    	 
-			    	sp.`grand_total_payment`,
-			    	sp.`grand_total_paid_amount`,
-			    	sp.`grand_total_balance`,
-			    	sp.`note`,
-			    	sp.is_subspend,
-			    	 
-			    	spd.`start_date`,
-			    	spd.`validate`,
-			    	spd.`payment_term`,
-			    	spd.is_complete,
-			    	spd.qty,
-			    	
-			    	(SELECT name_kh FROM rms_view WHERE TYPE=18 AND key_code = sp.`payment_method` LIMIT 1) AS payment_method_title,
-			    	sp.`payment_method`,
-			    	sp.`payment_note`
-			    	
-			    FROM
-			    	`rms_student_payment` AS sp,
-			    	`rms_student_paymentdetail` AS spd,
-			    	`rms_student` AS st,
-			    	rms_service as s
-			    WHERE
-			    	sp.id=spd.`payment_id`
-			    	and s.stu_id = st.stu_id
-			    	AND st.`stu_id`=sp.`student_id`
-			    	AND sp.`payfor_type`=3
-			    	AND spd.`type`=3
-			    	and s.type=4
-			    	$branch_id
+    	$branch_id = $_db->getAccessPermission("st.`branch_id`");
+    	$sql = "SELECT 
+					(SELECT branch_namekh FROM rms_branch WHERE br_id = st.branch_id LIMIT 1) AS branch_name,
+					st.`stu_enname`,
+					st.`stu_khname`,
+					st.`tel`,
+					(SELECT name_en FROM rms_view WHERE TYPE=2 AND key_code = st.`sex` LIMIT 1) AS sex,
+					sc.stu_code,
+					sc.car_number AS car_id,
+					(SELECT title FROM rms_program_name AS p WHERE p.service_id = sc.service_id LIMIT 1) AS service_name,
+					sp.* 
+					FROM 
+					(`rms_student` st
+						INNER JOIN 
+					`v_dailytransport` sp
+						ON st.`stu_id`=sp.`student_id`)
+					LEFT JOIN v_student_carnumber AS sc
+					ON sc.stu_id=st.stu_id
+					WHERE 
+					1
+			       $branch_id
     		";
     
     	$where = " ";
@@ -478,7 +439,7 @@ class Allreport_Model_DbTable_DbRptDailyIncome extends Zend_Db_Table_Abstract
     	if(!empty($search['txtsearch'])){
 	    	$s_where = array();
 	    	$s_search = addslashes(trim($search['txtsearch']));
-    		$s_where[] = " s.stu_code LIKE '%{$s_search}%'";
+    		$s_where[] = " sc.stu_code LIKE '%{$s_search}%'";
     		$s_where[] = " st.stu_enname LIKE '%{$s_search}%'";
     		$s_where[] = " st.stu_khname LIKE '%{$s_search}%'";
     		$s_where[] = " sp.receipt_number LIKE '%{$s_search}%'";
@@ -486,7 +447,7 @@ class Allreport_Model_DbTable_DbRptDailyIncome extends Zend_Db_Table_Abstract
     	}
     	 
     	if($search['branch'] > 0){
-    		$where.= " AND sp.`branch_id` = ".$search['branch'];
+    		$where.= " AND st.`branch_id` = ".$search['branch'];
     	}
     	if($search['user'] > 0){
     		$where.= " AND sp.`user_id` = ".$search['user'];
@@ -495,7 +456,6 @@ class Allreport_Model_DbTable_DbRptDailyIncome extends Zend_Db_Table_Abstract
     	if(!empty($search['payment_method'])){
     		$where.= " AND sp.`payment_method` = ".$search['payment_method'];
     	}
-    	
     	return $db->fetchAll($sql.$where.$order);
     
     }
@@ -505,68 +465,76 @@ class Allreport_Model_DbTable_DbRptDailyIncome extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
     
     	$_db = new Application_Model_DbTable_DbGlobal();
-    	$branch_id = $_db->getAccessPermission("sp.`branch_id`");
+    	$branch_id = $_db->getAccessPermission("st.`branch_id`");
     
-    	$sql = "SELECT
-			    	sp.*,
-			    	sp.id,
+    	// $sql = "SELECT
+		// 	    	sp.*,
+		// 	    	sp.id,
+		// 	    	(select branch_namekh from rms_branch where br_id = sp.branch_id LIMIT 1) as branch_name,
+		// 	    	(select last_name from rms_users as u where u.id = sp.user_id LIMIT 1) as user_name,
 			    	
-			    	(select branch_namekh from rms_branch where br_id = sp.branch_id LIMIT 1) as branch_name,
-			    	(select last_name from rms_users as u where u.id = sp.user_id LIMIT 1) as user_name,
+		// 	    	sp.`student_id`,
+		// 	    	(select stu_code from rms_service where rms_service.stu_id = sp.student_id and rms_service.type=5 LIMIT 1) as stu_code ,
+		// 	    	st.`stu_enname`,
+		// 	    	st.`stu_khname`,
+		// 	    	st.`tel`,
+		// 	    	(SELECT name_en FROM rms_view WHERE TYPE=2 AND key_code = st.`sex` LIMIT 1) AS sex,
+		// 	    	sp.`create_date`,
+		// 	    	sp.`receipt_number`,
+		// 	    	sp.`tuition_fee`,
+		// 	    	sp.`discount_percent`,
+		// 	    	sp.`total_payment`,
+		// 	    	sp.`admin_fee`,
+		// 	    	sp.`other_fee`,
+		// 	    	sp.`grand_total_payment`,
+		// 	    	sp.`grand_total_paid_amount`,
+		// 	    	sp.`grand_total_balance`,
+		// 	    	sp.`note`,
+		// 	    	spd.service_id,
+		// 	    	spd.`start_date`,
+		// 	    	spd.`validate`,
+		// 	    	spd.`payment_term`,
+		// 	    	spd.is_complete,
+		// 	    	(SELECT name_kh FROM rms_view WHERE TYPE=18 AND key_code = sp.`payment_method` LIMIT 1) AS payment_method_title,
+		// 	    	sp.`payment_method`,
+		// 	    	sp.`payment_note`
 			    	
-			    	sp.`student_id`,
-			    	(select stu_code from rms_service where rms_service.stu_id = sp.student_id and rms_service.type=5 LIMIT 1) as stu_code ,
-			    	st.`stu_enname`,
-			    	st.`stu_khname`,
-			    	(SELECT name_en FROM rms_view WHERE TYPE=2 AND key_code = st.`sex` LIMIT 1) AS sex,
-			    
-			    	(select carid from rms_car where rms_car.id = (select car_id from rms_program_name where rms_program_name.service_id = spd.service_id)  LIMIT 1) as car_id,
-			    
-			    	st.`tel`,
-			    	sp.`create_date`,
-			    	sp.`is_new`,
-			    	sp.`receipt_number`,
-			    
-			    	sp.time_for_car,
-			    	 
-			    	sp.`tuition_fee`,
-			    	sp.`discount_percent`,
-			    	sp.`total_payment`,
-			    	sp.`admin_fee`,
-			    	sp.`other_fee`,
-			    	 
-			    	sp.`grand_total_payment`,
-			    	sp.`grand_total_paid_amount`,
-			    	sp.`grand_total_balance`,
-			    	sp.`note`,
-			    	sp.is_subspend,
-			    	 
-			    	spd.service_id,
-			    	spd.`start_date`,
-			    	spd.`validate`,
-			    	spd.`payment_term`,
-			    	spd.qty,
-			    	spd.is_complete,
-			    	
-			    	(SELECT name_kh FROM rms_view WHERE TYPE=18 AND key_code = sp.`payment_method` LIMIT 1) AS payment_method_title,
-			    	sp.`payment_method`,
-			    	sp.`payment_note`
-			    	
-			    FROM
-			    	`rms_student_payment` AS sp,
-			    	`rms_student_paymentdetail` AS spd,
-			    	`rms_student` AS st,
-			    	rms_service as s
-			    WHERE
-			    	sp.id=spd.`payment_id`
-			    	and s.stu_id = st.stu_id
-			    	AND st.`stu_id`=sp.`student_id`
-			    	AND sp.`payfor_type`=4
-			    	AND spd.`type`=5
-			    	and s.type=5
-			    	$branch_id
-    		";
-    
+		// 	    FROM
+		// 	    	`rms_student_payment` AS sp,
+		// 	    	`rms_student_paymentdetail` AS spd,
+		// 	    	`rms_student` AS st,
+		// 	    	rms_service as s
+		// 	    WHERE
+		// 	    	sp.id=spd.`payment_id`
+		// 	    	and s.stu_id = st.stu_id
+		// 	    	AND st.`stu_id`=sp.`student_id`
+		// 	    	AND sp.`payfor_type`=4
+		// 	    	AND spd.`type`=5
+		// 	    	and s.type=5
+		// 	    	$branch_id
+    	// 	";
+
+			$sql = "SELECT 
+					(SELECT branch_namekh FROM rms_branch WHERE br_id = st.branch_id LIMIT 1) AS branch_name,
+					st.`stu_enname`,
+					st.`stu_khname`,
+					st.`tel`,
+					(SELECT name_en FROM rms_view WHERE TYPE=2 AND key_code = st.`sex` LIMIT 1) AS sex,
+					sf.stu_code,
+					sp.service_id,
+					(SELECT title FROM rms_program_name AS p WHERE p.service_id = sp.service_id LIMIT 1) AS service_name,
+					sp.* 
+					FROM 
+					(`rms_student` st
+						INNER JOIN 
+					`v_dailyfood` sp
+						ON st.`stu_id`=sp.`student_id`)
+					LEFT JOIN v_student_food AS sf
+					ON sf.stu_id=st.stu_id
+					WHERE 
+					1
+			$branch_id ";
+
     	$where = " ";
     
     	if($search['shift']==0){
@@ -600,7 +568,7 @@ class Allreport_Model_DbTable_DbRptDailyIncome extends Zend_Db_Table_Abstract
 	    if(!empty($search['txtsearch'])){
 		    $s_where = array();
 	    	$s_search = addslashes(trim($search['txtsearch']));
-    		$s_where[] = " s.stu_code LIKE '%{$s_search}%'";
+    		$s_where[] = " sf.stu_code LIKE '%{$s_search}%'";
     		$s_where[] = " st.stu_enname LIKE '%{$s_search}%'";
     		$s_where[] = " st.stu_khname LIKE '%{$s_search}%'";
     		$s_where[] = " sp.receipt_number LIKE '%{$s_search}%'";
@@ -608,7 +576,7 @@ class Allreport_Model_DbTable_DbRptDailyIncome extends Zend_Db_Table_Abstract
     	}
     
     	if($search['branch'] > 0){
-    		$where.= " AND sp.`branch_id` = ".$search['branch'];
+    		$where.= " AND st.`branch_id` = ".$search['branch'];
     	}
     	if($search['user'] > 0){
     		$where.= " AND sp.`user_id` = ".$search['user'];
@@ -616,6 +584,8 @@ class Allreport_Model_DbTable_DbRptDailyIncome extends Zend_Db_Table_Abstract
     	if(!empty($search['payment_method'])){
     		$where.= " AND sp.`payment_method` = ".$search['payment_method'];
     	}
+		// echo $sql . $where . $order;
+		// exit();
     	return $db->fetchAll($sql.$where.$order);
     
     }
