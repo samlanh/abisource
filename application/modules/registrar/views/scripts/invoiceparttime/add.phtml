@@ -934,17 +934,17 @@ function printSave(new_stu_id,new_receipt_no){
 				.fonteng{font-size:12px;}
 				
 			</style>	
-			<table border="0" width="100%" class="print" cellspacing="0"  cellpadding="0" style="white-space:nowrap; font-size:12px;font-family:'Khmer OS Battambang';line-height: 21px;">
+			<table border="0" width="100%" class="print" cellspacing="0"  cellpadding="0" style="white-space:nowrap; font-size:12px;font-family:'Khmer OS Battambang';line-height: 21px;margin-top: -10px;">
 				<tr>
 				    <td colspan="12"  align="center" style="">
-						<table width="100%" style="white-space:nowrap; font-family:Khmer OS Battambang;margin-top:-10px;font-weight:bold;">
+						<table width="100%" style="white-space:nowrap; font-family:Khmer OS Battambang;margin-top:-5px;font-weight:bold;">
 							
 							<tr>
 								<td width="25%" align="left" style="font-size:11px;">
 									<div style="font-size:15px;"><?php if (!empty($this->branch_info['branch_namekh'])){ echo $this->branch_info['branch_namekh'];}?></div><?php echo date('l , jS / m / Y , H:i:s ',strtotime(Zend_Date::now()));?>
 								</td>
-								<td width="50%" align="center">
-									<img style="width: 20%;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>"><br /><br >
+								<td width="50%" align="center" valign="bottom">
+									<img style="width: 20%;"  alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>"><br /><br >
 								</td>
 								<td width="25%" align="center" style="font-size:17px;color:red;"><label id="lb_receipt_type" style="color:#000;font-size:14px;"> </label><div style="margin-top:-5px;">N<sup>o</sup> : <label id="lb_receipt_no" class="receiptno" ></div></label></td>
 							</tr>
@@ -968,10 +968,10 @@ function printSave(new_stu_id,new_receipt_no){
 				</tr>
 				<tr >
 					<td colspan="12">
-						<table width="100%" style="white-space:nowrap; font-size:12px;font-family:'Khmer OS Battambang';line-height: 21px;margin-top: -25px;margin-bottom:5px;">
+						<table width="100%" style="white-space:nowrap; font-size:12px;font-family:'Khmer OS Battambang';line-height: 21px;margin-top: -30px;margin-bottom:5px;">
 							<tr>
 								<td width="40%"><img style="width: 100%;height:4px;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/double_underline.png'?>"></td>
-								<td width="20%" align="center" style="font-size:16px;">វិក័យបត្រ INVOICE</td>
+								<td width="20%"  align="center" style="font-size:16px;">វិក័យបត្រ INVOICE</td>
 								<td width="40%"><img style="width: 100%;height:4px;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/double_underline.png'?>"></td>
 							</tr>
 						</table>
@@ -980,7 +980,7 @@ function printSave(new_stu_id,new_receipt_no){
 				</tr>
 				<tr>
 					<td colspan="12">
-						<table width="100%" style="white-space:nowrap;font-size:12px;line-height:20px;">
+						<table width="100%" style="white-space:nowrap;font-size:12px;line-height:20px;margin-top: -12px;">
 							<tr>
 								<td width="15%">ឈ្មោះភាសាខ្មែរ/Name in Khmer</td>
 								<td width="20%">
@@ -1044,7 +1044,7 @@ function printSave(new_stu_id,new_receipt_no){
 				
 				<tr>
 					<td colspan="12">
-						<table width="100%" border="0" style="white-space:nowrap;font-size:12px;line-height:20px;margin-bottom:7px;">
+						<table width="100%" border="0" style="white-space:nowrap;font-size:12px;line-height:20px;margin-bottom:0px;">
 							<tr>
 								<td width="15%">លេខទូរសព្ទ/Phone Number</td>
 								<td width="35%" align="left">
@@ -1272,10 +1272,10 @@ function printSubmit(){
 	window.frames["print_frame"].document.body.innerHTML=dojo.byId('divPrint').innerHTML;
     window.frames["print_frame"].window.focus();
     window.frames["print_frame"].window.print();
-    loadingBlock();
-	dijit.byId('save_new').set('disabled',true);
-	dijit.byId('bt_print').set('disabled',true);
-	$('#office_receipt').submit();
+    //loadingBlock();
+	//dijit.byId('save_new').set('disabled',true);
+	//dijit.byId('bt_print').set('disabled',true);
+	//$('#office_receipt').submit();
 }
 function hideDialog(){
 	dijit.byId('terms').hide();

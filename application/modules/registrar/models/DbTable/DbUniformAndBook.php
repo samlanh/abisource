@@ -47,6 +47,7 @@ class Registrar_Model_DbTable_DbUniformAndBook extends Zend_Db_Table_Abstract
 		$receipt_no = $register->getRecieptNo(5,0,$data['payment_method']);
 		
 		try{
+			$this->_name='rms_student_payment';
 			$arr=array(
 				'branch_id'			=>$this->getBranchId(),
 				'student_id'		=>$data['stu_name'],
@@ -79,6 +80,7 @@ class Registrar_Model_DbTable_DbUniformAndBook extends Zend_Db_Table_Abstract
 	    					'fee'			=>$data['price_'.$i],
 	    					'qty'			=>$data['qty_'.$i],
 	    					'discount_percent'=>$data['discount_'.$i],
+							'discount_fix'	=>$data['discount_fix_'.$i],
 	    					'subtotal'		=>$data['subtotal_'.$i],
 	    					'paidamount'	=>$data['subtotal_'.$i],
 	    					'balance'		=>0,
@@ -164,6 +166,7 @@ class Registrar_Model_DbTable_DbUniformAndBook extends Zend_Db_Table_Abstract
     						'qty'			=>$data['qty_'.$i],
     						'paidamount'	=>$data['subtotal_'.$i],
     						'discount_percent'=>$data['discount_'.$i],
+							'discount_fix'=>$data['discount_fix_'.$i],
     						'note'			=>$data['remark'.$i],
     						'subtotal'		=>$data['subtotal_'.$i],
     						'is_parent'		=>0,

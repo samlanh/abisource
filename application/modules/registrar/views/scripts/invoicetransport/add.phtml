@@ -655,7 +655,7 @@ function getMonthByNumber(m){
 			<table border="0"  class="print" cellspacing="0"  cellpadding="0" style="white-space: nowrap;font-size:12px;font-family:'Khmer OS Battambang';line-height: 21px;">
 				<tr>
 				    <td colspan="8"  align="center" style="">
-						<table width="100%" border="0" style="white-space:nowrap; font-family:Khmer OS Battambang;margin-top:-15px;font-weight:bold;line-height: 20px;">
+						<table width="100%" border="0" style="white-space:nowrap; font-family:Khmer OS Battambang;margin-top:-17px;font-weight:bold;line-height: 15px;">
 							<tr>
 								<td width="25%" align="left" style="font-size:11px;">
 									<div style="font-size:15px;"><?php if (!empty($this->branch_info['branch_namekh'])){ echo $this->branch_info['branch_namekh'];}?></div><?php echo date('l , jS / m / Y , H:i:s ',strtotime(Zend_Date::now()));?>
@@ -914,7 +914,7 @@ function getMonthByNumber(m){
 				
 				<tr>
 					<td colspan="12">
-						<table width="100%" style="white-space:nowrap; font-size:12px;font-family:Khmer OS Muol;font-weight:bold;">
+						<table width="100%" style="white-space:nowrap; font-size:12px;font-family:Khmer OS Muol;font-weight:bold;margin-top: -12px;">
 							<tr>
 								<td width="20%" align="center">ប្រធានសាខា/Branch Manager</td>
 								<td width="20%" align="center">បេឡា/Cashier</td>
@@ -930,7 +930,7 @@ function getMonthByNumber(m){
 							<tr>
 								<td align="center" style="font-size:12px;"></td>
 								<td align="center">
-									<div style=" font-size: 12px;margin-top: 22px;"> 
+									<div style=" font-size: 12px;margin-top: 0px;"> 
 										<?php 
 										   $session_user=new Zend_Session_Namespace('auth');
 										   $last_name=$session_user->last_name;

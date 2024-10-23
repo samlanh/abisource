@@ -493,16 +493,6 @@ function getReceiptNumber(condition){
 function printReceipt(new_receipt_no){
 	if(dijit.byId('frm_teststudent').validate()) {
 		
-		if(new_receipt_no==''){
-			///dojo.byId("lb_receipt_no").innerHTML = '';
-			getReceiptNumber(1);
-		}else{
-			//dojo.byId("lb_receipt_no").innerHTML = new_receipt_no;
-		}
-
-		label = 'Student Test';
-		
-		readMoneyInKhmer();
 		getDegreeType();
 		checked =  "<img style='width: 15px;height:15px;margin-bottom:-3px;' src='<?php echo $this->baseUrl().'/images/checked.png'?>'>";
 		uncheck = "<img style='width: 15px;height:15px;margin-bottom:-3px;' src='<?php echo $this->baseUrl().'/images/uncheck.png'?>'>";
@@ -520,6 +510,19 @@ function printReceipt(new_receipt_no){
 			dojo.byId("parttime_eng").innerHTML = checked;
 			dojo.byId("other_opt").innerHTML = uncheck;
 		}
+		
+		if(new_receipt_no==''){
+			///dojo.byId("lb_receipt_no").innerHTML = '';
+			getReceiptNumber(1);
+		}else{
+			//dojo.byId("lb_receipt_no").innerHTML = new_receipt_no;
+		}
+
+		label = 'Student Test';
+		
+		readMoneyInKhmer();
+		
+		
 		
 		dojo.byId("lb_studentkh").innerHTML = "&nbsp;"+dijit.byId("kh_name").get('value');
 		dojo.byId("lb_studenten").innerHTML = "&nbsp;"+dijit.byId("en_name").get('value');

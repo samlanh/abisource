@@ -68,6 +68,7 @@ class Accounting_Model_DbTable_DbProductPayment extends Zend_Db_Table_Abstract
 		}
 		
 		try{
+			$this->_name='rms_student_payment';
 			$arr=array(
 				'branch_id'			=>$data['branch'],
 				'student_id'		=>$data['student_name'],
@@ -102,6 +103,7 @@ class Accounting_Model_DbTable_DbProductPayment extends Zend_Db_Table_Abstract
     					'fee'			=>$data['price_'.$i],
     					'qty'			=>$data['qty_'.$i],
     					'discount_percent'=>$data['discount_'.$i],
+						'discount_fix'	=>$data['discount_fix_'.$i],
     					'subtotal'		=>$data['subtotal_'.$i],
     					'paidamount'	=>$data['subtotal_'.$i],
     					'balance'		=>0,
@@ -171,6 +173,9 @@ class Accounting_Model_DbTable_DbProductPayment extends Zend_Db_Table_Abstract
 				$where = " id = ".$data['payment_id'];
 				$this->update($arr, $where);
 				
+				$db->commit();
+				return 0;
+				
 				$this->_name='rms_student_paymentdetail';
 				$where = "payment_id = ".$data['payment_id'];
 				$this->delete($where);
@@ -188,6 +193,7 @@ class Accounting_Model_DbTable_DbProductPayment extends Zend_Db_Table_Abstract
 		    					'fee'			=>$data['price_'.$i],
 		    					'qty'			=>$data['qty_'.$i],
 		    					'discount_percent'=>$data['discount_'.$i],
+								'discount_fix'=>$data['discount_fix_'.$i],
 		    					'subtotal'		=>$data['subtotal_'.$i],
 		    					'paidamount'	=>$data['subtotal_'.$i],
 		    					'balance'		=>0,

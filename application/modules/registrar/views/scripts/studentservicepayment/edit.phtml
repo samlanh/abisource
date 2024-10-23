@@ -13,30 +13,7 @@ fieldset{  background:none;}
 <form id='office_receipt' action="<?php echo $this->url(array('module'=>'registrar','controller'=>'studentservicepayment','action'=>'edit')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 	<script type="dojo/method" event="onSubmit">   
 		if(this.validate()) {
-			stu_type = dijit.byId('student_type').get('value');
-			if(stu_type==1){
-				stu_id = dijit.byId('student_name_new').get('value');
-				if(stu_id<1 || stu_id==''){
-					alert("<?php echo $tr->translate("PLEASE_SELECT_STUDENT")?> !!! ");
-					dijit.byId('student_name_new').focus();
-					return false;
-				}
-			}else if(stu_type==3){
-				stu_id = dijit.byId('student_name_old').get('value');
-				if(stu_id<1 || stu_id==''){
-					alert("<?php echo $tr->translate("PLEASE_SELECT_STUDENT")?> !!! ");
-					dijit.byId('student_name_old').focus();
-					return false;
-				}
-			}else if(stu_type==4){
-				stu_id = dijit.byId('drop_name').get('value');
-				if(stu_id<1 || stu_id==''){
-					alert("<?php echo $tr->translate("PLEASE_SELECT_STUDENT")?> !!! ");
-					dijit.byId('drop_name').focus();
-					return false;
-				}
-			}
-
+			
 			total_payment = dijit.byId('total_payment').get('value');
 			paid_amount = dijit.byId('paid_amount').get('value');
 			if(paid_amount>total_payment){
@@ -1808,7 +1785,7 @@ function printSubmit(){
 				.fonteng{font-size:12px;}
 				.hidelabel{opacity:0;}
 			</style>	
-			<table border="0"  class="print" cellspacing="0"  cellpadding="0" style="white-space: nowrap;font-size:12px;font-family:'Khmer OS Battambang';line-height: 19px;">
+			<table border="0"  class="print" cellspacing="0"  cellpadding="0" style="white-space: nowrap;font-size:12px;font-family:'Khmer OS Battambang';line-height: 19px;margin-top: -10px;">
 				<tr>
 				    <td colspan="8"  align="center" style="">
 						<div id="header_receipt"></div>

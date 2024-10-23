@@ -18,7 +18,7 @@ class Home_IndexController extends Zend_Controller_Action
     			'grade_all'  => "",
     			);
     	$db = new Registrar_Model_DbTable_DbRptStudentNearlyEndService();
-    	$abc = $this->view->row = $db->getAllStudentNearlyEndService($search);
+    	$abc = $this->view->row = array();//$db->getAllStudentNearlyEndService($search);
     }
 
     public function viewAction()

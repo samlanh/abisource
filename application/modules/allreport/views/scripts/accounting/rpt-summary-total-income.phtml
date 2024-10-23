@@ -424,6 +424,7 @@
 							<td>&nbsp;&nbsp;<?php echo "Total Amount Student Test";?></td>
 							<?php 
 								$total_student_test_payment = 0;$first_length = 0;$first_receipt=0;$last_receipt=0;$i=0;
+								//print_r($this->student_test);
 								if(!empty($this->student_test)){$last_length = count($this->student_test); foreach ($this->student_test as $student_test){
 									
 									$i++;
@@ -453,7 +454,7 @@
 							<td>&nbsp;&nbsp;<?php echo "$ ".number_format($total_student_test_payment,2);?></td>
 							<td>&nbsp;&nbsp;<?php echo "$ ".number_format($total_student_test_in_dolar,2);?></td>
 							<td>&nbsp;&nbsp;<?php echo number_format($total_student_test_in_riel,2)." ៛";?></td>
-							<td align="center">&nbsp;&nbsp;<?php if(!empty($this->student_test_amount_money)){echo "Swift : ".$first_receipt." to ".$last_receipt;}?></td>
+							<td align="center">&nbsp;&nbsp;<?php if(!empty($this->student_test)){echo "Swift : ".$first_receipt." to ".$last_receipt;}?></td>
 						</tr>		
 	 					
 	 					

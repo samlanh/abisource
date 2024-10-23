@@ -284,29 +284,31 @@ class Accounting_Model_DbTable_DbStudentServicePayment extends Zend_Db_Table_Abs
 					$this->update($arr1,$where1);
 				}
 				
-				
-				if(!empty($data['parent_id'])){
-					$arr = array(
-							'is_start'=>1
-					);
-					$this->_name='rms_student_paymentdetail';
-					$where=" id = ".$data['parent_id'];
-					$this->update($arr,$where);
+				if(!empty($data['is_return'])){ //ដំណើរការបុងចាស់វិញ
+					
+					if(!empty($data['parent_id'])){
+						$arr = array(
+								'is_start'=>1
+						);
+						$this->_name='rms_student_paymentdetail';
+						$where=" id = ".$data['parent_id'];
+						$this->update($arr,$where);
+					}
+			
+			
+					///////////////////////////////// rms_service ////////////////////////////////////////////
+			
+					if($data['student_type']==4){
+						$this->_name='rms_service';
+			
+						$arr = array(
+								'is_suspend'=>2,
+						);
+						$where = " type = 4 and stu_id = ".$data['student_name_old'];
+						$this->update($arr, $where);
+					}
+					
 				}
-		
-		
-				///////////////////////////////// rms_service ////////////////////////////////////////////
-		
-				if($data['student_type']==4){
-					$this->_name='rms_service';
-		
-					$arr = array(
-							'is_suspend'=>2,
-					);
-					$where = " type = 4 and stu_id = ".$data['student_name_old'];
-					$this->update($arr, $where);
-				}
-		
 				////////////////////////////////////////////////////////////////////////////////////////////
 		
 				$db->commit();
@@ -358,6 +360,13 @@ class Accounting_Model_DbTable_DbStudentServicePayment extends Zend_Db_Table_Abs
 				
 				
 				$this->_name='rms_student_paymentdetail';
+				if($data['balance']>0){
+					$is_complete = 0;
+					$comment = 'មិនទាន់បង់';
+				}else{
+					$is_complete = 1;
+					$comment = 'បង់រួច';
+				}
 				$arr = array(
 						'service_id'	=>$data['service'],
 						'payment_term'	=>$data['term'],
@@ -370,6 +379,9 @@ class Accounting_Model_DbTable_DbStudentServicePayment extends Zend_Db_Table_Abs
 						'paidamount'	=>$data['paid_amount'],
 						'balance'		=>$data['balance'],
 						'note'			=>$data['other'],
+						
+						'is_complete'	=>$is_complete,
+						'comment'		=>$comment,
 						
 						'is_start'		=>$data['is_start'],
 						

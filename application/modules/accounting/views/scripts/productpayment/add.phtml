@@ -104,7 +104,7 @@
 						</tr>
 						<tr>
 							<td colspan="4">
-								<table id="table_row" style="border-collapse: collapse; border:1px solid #ccc;">
+								<table id="table_row" width="100%" style="border-collapse: collapse; border:1px solid #ccc;">
 										<tr id="head-title" class="head-td" align="right"></tr>
 								</table>
 							</td>
@@ -356,25 +356,26 @@ function addRow() {
 		if(title!=1){
 			temp+='<th><?php echo $tr->translate("DEL");?></th>';
 			temp+='<th><?php echo $tr->translate("N_O");?></th>';
-			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("PRODUCT_SERVICES");?></th>';
+			temp+='<th><?php echo $tr->translate("PRODUCT");?></th>';
 			temp+='<th><?php echo $tr->translate("REMARK");?></th>';
-			temp+='<th id="lbl_titlemetion" width="250px"><?php echo $tr->translate("AMOUNT");?></th>';
-			temp+='<th id="lbl_titlemetion" width="250px"><?php echo $tr->translate("PRICE");?></th>';
-			temp+='<th id="lbl_titlemetion" width="250px"><?php echo $tr->translate("DISCOUNT");?> %</th>';
-			temp+='<th id="lbl_titlemetion" width="250px"><?php echo $tr->translate("SUBTOTAL");?></th>';
+			temp+='<th><?php echo $tr->translate("AMOUNT");?></th>';
+			temp+='<th><?php echo $tr->translate("PRICE");?></th>';
+			temp+='<th><?php echo $tr->translate("DISCOUNT");?>(%)</th>';
+			temp+='<th><?php echo $tr->translate("DISCOUNT");?>($)</th>';
+			temp+='<th><?php echo $tr->translate("SUBTOTAL");?></th>';
 			
 			dojo.query("#head-title").append(temp);
 			title=1;
 		}
-			template+='<td width="50px" align="center"><img onclick="deleteRecord('+col+');calculateDiscount('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
-			template+='<td width="50px" align="center">'+no+'</td>';
-			template+='<td width="300px"><select class="fullside" dojoType="dijit.form.FilteringSelect" autoComplete="false" queryExpr="*${0}*" onchange="getprice('+col+');" id="service_'+col+'" name="service_'+col+'">'+service+'</select></td>';			
-			template+='<td width="600px"> <input type="text" style="width: 100%;" class="fullside" name="remark'+col+'" id="remark'+col+'" dojoType="dijit.form.TextBox" placeholder="ផ្សេងៗ" style="width:160px;" /><label id="subsub"></label></td>';
-			column = 0;
-			template+='<td width="250px"> <input type="text" style="width: 100%;" class="fullside"  onkeyup="calculateDiscount('+col+');" name="qty_'+col+'" id="qty_'+col+'" value="1" dojoType="dijit.form.NumberTextBox" /><label id="qty"></label></td>';
-			template+='<td width="250px"> <input type="text" style="width: 100%;" class="fullside" required="true" onkeyup="calculateDiscount('+col+');" name="price_'+col+'" id="price_'+col+'" dojoType="dijit.form.NumberTextBox" /><label id="subsub"></label></td>';
-			template+='<td width="250px"> <input type="text" style="width: 100%;" class="fullside" onkeyup="calculateDiscount('+col+');" name="discount_'+col+'" value="<?php echo 0;?>" id="discount_'+col+'" dojoType="dijit.form.NumberTextBox" /><label id="subsub"></label></td>';
-			template+='<td width="250px"> <input type="text" style="width: 100%;" class="fullside"  readonly="readonly" name="subtotal_'+col+'" id="subtotal_'+col+'" dojoType="dijit.form.NumberTextBox"/><label id="qty"></label></td>';
+			template+='<td width="5%" align="center"><img onclick="deleteRecord('+col+');calculateDiscount('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
+			template+='<td width="5%" align="center">'+no+'</td>';
+			template+='<td width="15%"><select class="fullside" dojoType="dijit.form.FilteringSelect" autoComplete="false" queryExpr="*${0}*" onchange="getprice('+col+');" id="service_'+col+'" name="service_'+col+'">'+service+'</select></td>';			
+			template+='<td width="30%"> <input type="text" style="width: 100%;" class="fullside" name="remark'+col+'" id="remark'+col+'" dojoType="dijit.form.TextBox" placeholder="ផ្សេងៗ" style="width:160px;" /></td>';
+			template+='<td width="7%"> <input type="text" style="width: 100%;" class="fullside"  onkeyup="calculateDiscount('+col+');" name="qty_'+col+'" id="qty_'+col+'" value="1" dojoType="dijit.form.NumberTextBox" /></td>';
+			template+='<td width="10%"> <input type="text" style="width: 100%;" class="fullside" required="true" readonly="readonly" onkeyup="calculateDiscount('+col+');" name="price_'+col+'" id="price_'+col+'" dojoType="dijit.form.NumberTextBox" /></td>';
+			template+='<td width="9%"> <input type="text" style="width: 100%;" class="fullside" onkeyup="calculateDiscount('+col+');" name="discount_'+col+'" value="<?php echo 0;?>" id="discount_'+col+'" dojoType="dijit.form.NumberTextBox" /></td>';
+			template+='<td width="9%"> <input type="text" style="width: 100%;" class="fullside" onkeyup="calculateDiscount('+col+');" name="discount_fix_'+col+'" value="<?php echo 0;?>" id="discount_fix_'+col+'" dojoType="dijit.form.NumberTextBox" /></td>';
+			template+='<td width="10%"> <input type="text" style="width: 100%;" class="fullside"  readonly="readonly" name="subtotal_'+col+'" id="subtotal_'+col+'" dojoType="dijit.form.NumberTextBox"/><label id="qty"></label></td>';
 			
 
 		tmp='<tr id="row'+col+'">';
@@ -401,7 +402,20 @@ function calculateDiscount(index){
 	
 	discount = dijit.byId('discount_'+index).get('value');
 	discount = isNaN(discount)?0:discount;
-	dijit.byId('subtotal_'+index).attr('value',total-(total*discount/100));
+	
+	discount_fix = dijit.byId('discount_fix_'+index).get('value');
+	discount_fix = isNaN(discount_fix)?0:discount_fix;
+	if(discount_fix>total){
+		alert("Error");
+		dijit.byId('discount_fix_'+index).focus();
+		dijit.byId('discount_fix_'+index).attr('value',0);
+		calculateDiscount(index);
+	}
+	pc=discount/100;
+	ds=(total-discount_fix)*pc;
+	grand_total=(total-discount_fix) - ds;
+	
+	dijit.byId('subtotal_'+index).attr('value',grand_total);
 	netTotal();
 }
 

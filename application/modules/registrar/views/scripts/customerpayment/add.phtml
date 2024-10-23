@@ -602,10 +602,11 @@ function getMonthByNumber(m){
 }
 
 
-function printSave(new_stu_id,new_receipt_no){		
+function printSave(new_receipt_no){		
 	if(dijit.byId('frm_rent_payment').validate()) {
 		 
-		 dojo.byId("lb_receipt_no").innerHTML = dijit.byId("receipt_no").get('value');
+		 //dojo.byId("lb_receipt_no").innerHTML = dijit.byId("receipt_no").get('value');
+		 new_receipt_no=dijit.byId("receipt_no").get('value');
 		 
 		 if(dijit.byId("customer_type").get('value')==0){
 			cus_name = dijit.byId("old_cus").attr('displayedValue');
@@ -884,9 +885,35 @@ function printSave(new_stu_id,new_receipt_no){
 			dojo.byId("checkbox_other").innerHTML = "<img style='width: 15px;height:15px;margin-bottom:-3px;' src='<?php echo $this->baseUrl().'/images/uncheck.png'?>'>";
 		 }
 		 
+		label = "Canteen"; 
+		payment_method=dijit.byId('payment_method').get('value'); 
+		getHeaderReceipt(payment_method,"<?php echo $this->branch_info['branch_namekh']?>",label,new_receipt_no);
+		 
 		dijit.byId("terms").show();	
 	}
 	
+}
+
+var url_getheaderreceipt = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-header-receipt')); ?>';
+function getHeaderReceipt(payment_method,branch_name,receipt_type,receipt_number){
+	//alert(1);
+	dojo.xhrPost({
+		url:url_getheaderreceipt,
+		content:{
+			'payment_method':payment_method,
+			'branch_name':branch_name,
+			'receipt_type':receipt_type,
+			'receipt_number':receipt_number,
+		},
+		handleAs:"json",
+		load: function(data) {
+			if(data){
+				dojo.byId('header_receipt').innerHTML = data;
+			}
+		},
+		error: function(err) {
+		}
+	});
 }
 
 function hideDialog() {		
@@ -946,34 +973,9 @@ function hideDialog() {
 			</style>	
 			<table border="0" width="100%" class="print" cellspacing="0"  cellpadding="0" style="white-space:nowrap; font-size:14px;font-family:'Khmer OS Battambang';line-height: 22px;margin-top:-5px;">
 				<tr>
-				    <td colspan="6"  align="center" style="">
-						<table width="100%" border="0" style="white-space:nowrap; font-family:Khmer OS Battambang;margin-top:-12px;font-weight:bold;">
-							<tr>
-								<td width="35%" align="left" style="font-size:14px;">
-									<div class="hidelabel showlabel" style="font-size:17px;">
-										<?php if (!empty($this->branch_info['branch_namekh'])){ echo $this->branch_info['branch_namekh'];}?>
-									</div>
-									<?php echo date('l , jS / m / Y , H:i:s ',strtotime(Zend_Date::now()));?>
-								</td>
-								<td class="hidelabel showlabel" width="30%" align="center">
-									<img style="width: 35%;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>"><br /><br >
-								</td>
-								<td class="hidelabel showlabel" width="35%" align="center" style="font-size:22px;color:red;"><div style="margin-top:-5px;">N<sup>o</sup> : <label id="lb_receipt_no" class="receiptno" ></div></label></td>
-							</tr>
-						</table>
+				    <td colspan="8"  align="center" style="">
+						<div id="header_receipt"></div>
 				    </td>
-				</tr>
-				
-				<tr >
-					<td colspan="6">
-						<table width="100%" style="white-space:nowrap; font-size:12px;font-family:'Khmer OS Battambang';line-height: 21px;margin-top: -25px;">
-							<tr class="hidelabel showlabel">
-								<td width="40%"><img style="width: 100%;height:4px;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/double_underline.png'?>"></td>
-								<td width="20%" align="center" style="font-size:16px;">បង្កាន់ដៃទទួលប្រាក់ RECEIPT</td>
-								<td width="40%"><img style="width: 100%;height:4px;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/double_underline.png'?>"></td>
-							</tr>
-						</table>
-					</td>
 				</tr>
 				
 				<tr align="center">

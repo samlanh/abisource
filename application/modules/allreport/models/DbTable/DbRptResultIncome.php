@@ -190,7 +190,7 @@ class Allreport_Model_DbTable_DbRptResultIncome extends Zend_Db_Table_Abstract
     		$to_date = (empty($search['end_date']))? '1': "pd.create_date <= '".$search['end_date']." 23:59:59'";
     	}
     	$where = " AND ".$from_date." AND ".$to_date;
-    	 
+    	
     	$order=" ORDER BY pd.receipt_no ASC ";
     
     	if(empty($search)){
@@ -207,6 +207,9 @@ class Allreport_Model_DbTable_DbRptResultIncome extends Zend_Db_Table_Abstract
 	    if($search['user'] > 0){
 	    	$where.= " AND `user_id` = ".$search['user'];
 	    }
+		if($search['payment_method'] > 0){
+    		$where.= " AND `payment_method` = ".$search['payment_method'];
+    	} 
 	    return $db->fetchAll($sql.$where.$order);
 	     
 	}
@@ -391,10 +394,10 @@ class Allreport_Model_DbTable_DbRptResultIncome extends Zend_Db_Table_Abstract
     		$where.= " AND sp.`branch_id` = ".$search['branch'];
     	}
     	if($search['user'] > 0){
-    		$where.= " AND `user_id` = ".$search['user'];
+    		$where.= " AND sp.`user_id` = ".$search['user'];
     	}
     	if($search['payment_method'] > 0){
-    		$where.= " AND `payment_method` = ".$search['payment_method'];
+    		$where.= " AND sp.`payment_method` = ".$search['payment_method'];
     	}
     	return $db->fetchAll($sql.$where.$order);
     }

@@ -399,66 +399,67 @@ class Accounting_Model_DbTable_DbCourStudey extends Zend_Db_Table_Abstract
 					$this->update($arr1,$where1);
 				}
 				
-				
-				if(!empty($data['parent_id'])){
-					$arr = array(
-							'is_start'=>1
-					);
-					$this->_name='rms_student_paymentdetail';
-					$where=" id = ".$data['parent_id'];
-					$this->update($arr,$where);
-				}
-		
-				//////////////////////// study history ///////////////////////////
-		
-				$this->_name='rms_study_history';
-		
-				$sql="select id,id_record_finished from rms_study_history where payment_id = ".$data['payment_id']." and stu_id = ".$data['old_studens'] ;
-				$result = $db->fetchRow($sql);
-				if(!empty($result['id_record_finished'])){
-		
-					$sql1 = "select * from rms_study_history where id = ".$result['id_record_finished'];
-					$row = $db->fetchRow($sql1);
-					if(!empty($row)){
-		
-						$this->_name='rms_student';
-		
+				if(!empty($data['is_return'])){ //ដំណើរការបុងចាស់វិញ
+					
+					if(!empty($data['parent_id'])){
 						$arr = array(
-								'stu_type'		=>$row['stu_type'],
-								'stu_code'		=>$row['stu_code'],
-								'academic_year'	=>$row['academic_year'],
-								'degree'		=>$row['degree'],
-								'grade'			=>$row['grade'],
-								'session'		=>$row['session'],
-								'room'			=>$row['room'],
+								'is_start'=>1
 						);
-						$where2 = " stu_id = ".$row['stu_id'];
-						$this->update($arr, $where2);
+						$this->_name='rms_student_paymentdetail';
+						$where=" id = ".$data['parent_id'];
+						$this->update($arr,$where);
 					}
-		
+			
+					//////////////////////// study history ///////////////////////////
+			
 					$this->_name='rms_study_history';
-					$array = array(
-							'is_finished_grade'=>0,
-							'is_finished_degree'=>0,
-					);
-					$where = " id = ".$result['id_record_finished'];
-					$this->update($array, $where);
-		
-					$where1 = "id = ".$result['id'];
-					$this->delete($where1);
+			
+					$sql="select id,id_record_finished from rms_study_history where payment_id = ".$data['payment_id']." and stu_id = ".$data['old_studens'] ;
+					$result = $db->fetchRow($sql);
+					if(!empty($result['id_record_finished'])){
+			
+						$sql1 = "select * from rms_study_history where id = ".$result['id_record_finished'];
+						$row = $db->fetchRow($sql1);
+						if(!empty($row)){
+			
+							$this->_name='rms_student';
+			
+							$arr = array(
+									'stu_type'		=>$row['stu_type'],
+									'stu_code'		=>$row['stu_code'],
+									'academic_year'	=>$row['academic_year'],
+									'degree'		=>$row['degree'],
+									'grade'			=>$row['grade'],
+									'session'		=>$row['session'],
+									'room'			=>$row['room'],
+							);
+							$where2 = " stu_id = ".$row['stu_id'];
+							$this->update($arr, $where2);
+						}
+			
+						$this->_name='rms_study_history';
+						$array = array(
+								'is_finished_grade'=>0,
+								'is_finished_degree'=>0,
+						);
+						$where = " id = ".$result['id_record_finished'];
+						$this->update($array, $where);
+			
+						$where1 = "id = ".$result['id'];
+						$this->delete($where1);
+					}
+					///////////////////////////////// rms_student ////////////////////////////////////////////
+			
+					if($data['student_type']==4){
+						$this->_name='rms_student';
+			
+						$arr = array(
+								'is_subspend'=>2,
+						);
+						$where = " stu_id = ".$data['old_studens'];
+						$this->update($arr, $where);
+					}
 				}
-				///////////////////////////////// rms_student ////////////////////////////////////////////
-		
-				if($data['student_type']==4){
-					$this->_name='rms_student';
-		
-					$arr = array(
-							'is_subspend'=>2,
-					);
-					$where = " stu_id = ".$data['old_studens'];
-					$this->update($arr, $where);
-				}
-		
 		
 		
 				////////////////////////////////////////////////////////////////////////////////////////////
@@ -530,7 +531,14 @@ class Accounting_Model_DbTable_DbCourStudey extends Zend_Db_Table_Abstract
 				
 				
 				$this->_name='rms_student_paymentdetail';
-				
+				$complete=1;
+				if($data['remaining']>0){
+					$complete=0;
+					$comment="មិនទាន់បង់";
+				}else{
+					$complete=1;
+					$comment="បង់រួច";
+				}
 				$arr = array(
 						'start_date'	=>$data['start_date'],
 						'validate'		=>$data['end_date'],
@@ -545,7 +553,10 @@ class Accounting_Model_DbTable_DbCourStudey extends Zend_Db_Table_Abstract
 						'subtotal'			=>$data['total'],
 						'paidamount'		=>$data['books'],
 						'balance'			=>$data['remaining'],
-							
+						
+						'is_complete'		=>$complete,
+						'comment'			=>$comment,
+						
 						'note'				=>$data['not'],
 						
 						'is_start'			=>$data['is_start'],

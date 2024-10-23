@@ -304,7 +304,7 @@ Class Registrar_Form_FrmCourseStudy extends Zend_Dojo_Form {
 				'dojoType'=>'dijit.form.NumberTextBox',
 				'required'=>'true','class'=>'fullside',
 				'onkeyup'=>'getDisccount();getTotale();netTotal();',
-				//'readOnly'=>'true'
+				'readOnly'=>'true'
 				));
 
 		$_disc_percent = new Zend_Dojo_Form_Element_NumberTextBox('discount');
@@ -496,8 +496,8 @@ Class Registrar_Form_FrmCourseStudy extends Zend_Dojo_Form {
 			$drop_studens->setValue($data['stu_id']);
 			$drop_stu_name->setValue($data['stu_id']);
 			
-			$note_payment->setValue($data['payment_method']);
-			$payment_method->setValue($data['payment_note']);
+			$note_payment->setValue($data['payment_note']);
+			$payment_method->setValue($data['payment_method']);
 		}
 		$this->addElements(array(
 				$note_payment,$payment_method,

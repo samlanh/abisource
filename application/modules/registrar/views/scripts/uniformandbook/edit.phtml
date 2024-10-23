@@ -186,7 +186,8 @@ function dijitValue(){
 				temp+='<th><?php echo $tr->translate("REMARK");?></th>';
 				temp+='<th><?php echo $tr->translate("AMOUNT");?></th>';
 				temp+='<th><?php echo $tr->translate("PRICE");?></th>';
-				temp+='<th><?php echo $tr->translate("DISCOUNT");?></th>';
+				temp+='<th><?php echo $tr->translate("DISCOUNT");?>(%)</th>';
+				temp+='<th><?php echo $tr->translate("DISCOUNT");?>($)</th>';
 				temp+='<th><?php echo $tr->translate("SUBTOTAL");?></th>';
 				
 				dojo.query("#head-title").append(temp);
@@ -194,12 +195,13 @@ function dijitValue(){
 			}
 				template+='<td width="5%" align="center"><img onclick="deleteRecord('+col+');calculateDiscount('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 				template+='<td width="5%" align="center">'+no+'<input type="hidden" name="product_type_'+col+'" id="product_type_'+col+'" dojoType="dijit.form.TextBox" /></td>';
-				template+='<td width="15%"><select class="fullside" onchange="getprice('+col+');getProductType('+col+');"  dojoType="dijit.form.FilteringSelect" id="service_'+col+'" name="service_'+col+'">'+service+'</select></td>';			
-				template+='<td width="35%"> <input type="text" class="fullside" name="remark'+col+'" value="" id="remark'+col+'" dojoType="dijit.form.TextBox" placeholder="ផ្សេងៗ"  /><label id="subsub"></label></td>';
-				template+='<td width="10%"> <input class="fullside" type="text" onkeyup="calculateDiscount('+col+');getValidate('+col+');" name="qty_'+col+'" value="1" id="qty_'+col+'" dojoType="dijit.form.NumberTextBox" /><label id="qty"></label></td>';
-				template+='<td width="10%"> <input class="fullside" type="text" required="true" onkeyup="calculateDiscount('+col+');" name="price_'+col+'" value="" id="price_'+col+'" dojoType="dijit.form.NumberTextBox" /><label id="subsub"></label></td>';
-				template+='<td width="10%"> <input class="fullside" type="text"  onkeyup="calculateDiscount('+col+');" value="<?php echo 0;?>"  name="discount_'+col+'" id="discount_'+col+'" dojoType="dijit.form.NumberTextBox" /><label id="subsub"></label></td>';
-				template+='<td width="10%"> <input class="fullside" type="text" readonly="readonly" name="subtotal_'+col+'" value="" id="subtotal_'+col+'" dojoType="dijit.form.NumberTextBox" /><label id="qty"></label></td>';
+				template+='<td width="15%"><select class="fullside" dojoType="dijit.form.FilteringSelect" autoComplete="false" queryExpr="*${0}*" onchange="getprice('+col+');getProductType('+col+');" id="service_'+col+'" name="service_'+col+'">'+service+'</select></td>';			
+				template+='<td width="30%"> <input type="text" style="width: 100%;" class="fullside" name="remark'+col+'" id="remark'+col+'" dojoType="dijit.form.TextBox" placeholder="ផ្សេងៗ" style="width:160px;" /></td>';
+				template+='<td width="7%"> <input type="text" style="width: 100%;" class="fullside"  onkeyup="calculateDiscount('+col+');" name="qty_'+col+'" id="qty_'+col+'" value="1" dojoType="dijit.form.NumberTextBox" /><label id="qty"></label></td>';
+				template+='<td width="10%"> <input type="text" style="width: 100%;" class="fullside" readonly="readonly"  onkeyup="calculateDiscount('+col+');" name="price_'+col+'" id="price_'+col+'" dojoType="dijit.form.NumberTextBox" /></td>';
+				template+='<td width="9%"> <input type="text" style="width: 100%;" class="fullside" onkeyup="calculateDiscount('+col+');" name="discount_'+col+'" value="<?php echo 0;?>" id="discount_'+col+'" dojoType="dijit.form.NumberTextBox" /></td>';
+				template+='<td width="9%"> <input type="text" style="width: 100%;" class="fullside" onkeyup="calculateDiscount('+col+');" name="discount_fix_'+col+'" value="<?php echo 0;?>" id="discount_fix_'+col+'" dojoType="dijit.form.NumberTextBox" /></td>';
+				template+='<td width="10%"> <input type="text" style="width: 100%;" class="fullside"  readonly="readonly" name="subtotal_'+col+'" id="subtotal_'+col+'" dojoType="dijit.form.NumberTextBox"/><label id="qty"></label></td>';
 				
 			tmp='<tr id="row'+col+'">';
 			tmp+="</tr>";
@@ -214,17 +216,30 @@ function dijitValue(){
 	 }
 	 
 	function calculateDiscount(index){
-			price = dijit.byId('price_'+index).get('value');
-			qty = dijit.byId('qty_'+index).get('value');
-			qty=isNaN(qty)?1:qty;
-			if(qty==1){dijit.byId('qty_'+index).attr('value',qty);}
-			total = price*qty;
-			
-			discount = dijit.byId('discount_'+index).get('value');
-			discount=isNaN(discount)?0:discount;
-			dijit.byId('subtotal_'+index).attr('value',total-(total*discount/100));
-			//dijit.byId('paidamount_'+index).attr('value',total-(total*discount/100));
-			netTotal();
+		price = dijit.byId('price_'+index).get('value');
+		//alert(price);
+		qty = dijit.byId('qty_'+index).get('value');
+		qty=isNaN(qty)?1:qty;
+		if(qty==1){dijit.byId('qty_'+index).attr('value',qty);}
+		total = price*qty;
+		
+		discount = dijit.byId('discount_'+index).get('value');
+		discount = isNaN(discount)?0:discount;
+		
+		discount_fix = dijit.byId('discount_fix_'+index).get('value');
+		discount_fix = isNaN(discount_fix)?0:discount_fix;
+		if(discount_fix>total){
+			alert("Error");
+			dijit.byId('discount_fix_'+index).focus();
+			dijit.byId('discount_fix_'+index).attr('value',0);
+			calculateDiscount(index);
+		}
+		pc=discount/100;
+		ds=(total-discount_fix)*pc;
+		grand_total=(total-discount_fix) - ds;
+		
+		dijit.byId('subtotal_'+index).attr('value',grand_total);
+		netTotal();
 	}
 	
 	function netTotal() {
@@ -363,11 +378,12 @@ function dijitValue(){
 			template+='<td width="5%" align="center"><img onclick="" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 			template+='<td width="5%" align="center">'+no+'<input type="hidden" name="product_type_'+col+'" id="product_type_'+col+'" dojoType="dijit.form.TextBox" /></td>';
 			template+='<td width="15%"><select onchange="" readOnly class="fullside" autoComplete="false" queryExpr="*${0}*" dojoType="dijit.form.FilteringSelect" onchange="getProductType('+col+');" id="service_'+col+'" name="service_'+col+'">'+service+'</select></td>';	
-			template+='<td width="35%"> <input type="text" readOnly class="fullside" name="remark'+col+'" value="" id="remark'+col+'" dojoType="dijit.form.TextBox" placeholder="ផ្សេងៗ" /><label id="subsub"></label></td>';		
-			template+='<td width="10%"> <input type="text" readOnly style="width: 100%;" class="fullside" onkeyup="calculateDiscount('+col+',1);getValidate('+col+');" name="qty_'+col+'" value="" id="qty_'+col+'" dojoType="dijit.form.NumberTextBox" /><label id="qty"></label></td>';
-			template+='<td width="10%"> <input type="text" readOnly style="width: 100%;" class="fullside" required="true" onkeyup="calculateDiscount('+col+',1);" name="price_'+col+'" value="" id="price_'+col+'" dojoType="dijit.form.NumberTextBox" /><label id="subsub"></label></td>';
-			template+='<td width="10%"> <input type="text" readOnly style="width: 100%;" class="fullside" onkeyup="calculateDiscount('+col+',1);" value=""  name="discount_'+col+'" id="discount_'+col+'" dojoType="dijit.form.NumberTextBox" /><label id="subsub"></label></td>';
-			template+='<td width="10%"> <input type="text" style="width: 100%;" class="fullside" readonly="readonly" name="subtotal_'+col+'" value="" id="subtotal_'+col+'" dojoType="dijit.form.NumberTextBox"/><label id="qty"></label></td>';
+			template+='<td width="35%"> <input type="text" readOnly class="fullside" name="remark'+col+'" value="" id="remark'+col+'" dojoType="dijit.form.TextBox" placeholder="ផ្សេងៗ" /></td>';		
+			template+='<td width="10%"> <input type="text" readOnly style="width: 100%;" class="fullside" onkeyup="calculateDiscount('+col+',1);getValidate('+col+');" name="qty_'+col+'" value="" id="qty_'+col+'" dojoType="dijit.form.NumberTextBox" /></td>';
+			template+='<td width="10%"> <input type="text" readOnly style="width: 100%;" class="fullside" required="true" onkeyup="calculateDiscount('+col+',1);" name="price_'+col+'" value="" id="price_'+col+'" dojoType="dijit.form.NumberTextBox" /></td>';
+			template+='<td width="10%"> <input type="text" readOnly style="width: 100%;" class="fullside" onkeyup="calculateDiscount('+col+',1);" value=""  name="discount_'+col+'" id="discount_'+col+'" dojoType="dijit.form.NumberTextBox" /></td>';
+			template+='<td width="10%"> <input type="text" readOnly style="width: 100%;" class="fullside" onkeyup="calculateDiscount('+col+',1);" value=""  name="discount_fix_'+col+'" id="discount_fix_'+col+'" dojoType="dijit.form.NumberTextBox" /></td>';
+			template+='<td width="10%"> <input type="text" style="width: 100%;" class="fullside" readonly="readonly" name="subtotal_'+col+'" value="" id="subtotal_'+col+'" dojoType="dijit.form.NumberTextBox"/></td>';
 		tmp='<tr id="row'+col+'">';
 		tmp+="</tr>";
 		dojo.query("#table_row").append(tmp);
@@ -383,6 +399,7 @@ function dijitValue(){
 		dijit.byId('price_'+col).attr('value','<?php echo $row['fee']?>');
 		dijit.byId('qty_'+col).attr('value','<?php echo $row['qty']?>');
 		dijit.byId('discount_'+col).attr('value','<?php echo $row['discount_percent']?>');
+		dijit.byId('discount_fix_'+col).attr('value','<?php echo $row['discount_fix']?>');
 		dijit.byId('remark'+col).attr('value','<?php echo $row['note']?>');
 		dijit.byId('subtotal_'+col).attr('value','<?php echo $row['subtotal']?>');
 		getProductType(col);
@@ -988,7 +1005,7 @@ function dijitValue(){
 				.fonteng{font-size:12px;}
 				.hidelabel{opacity:0;}
 			</style>	
-			<table border="0" width="100%" class="print" cellspacing="0"  cellpadding="0" style="white-space: nowrap;font-size:12px;font-family:'Khmer OS Battambang';line-height: 21px;">
+			<table border="0" width="100%" class="print" cellspacing="0"  cellpadding="0" style="white-space: nowrap;font-size:12px;font-family:'Khmer OS Battambang';line-height: 21px;margin-top: -7px;">
 				<tr>
 				    <td colspan="8"  align="center" style="">
 						<div id="header_receipt"></div>

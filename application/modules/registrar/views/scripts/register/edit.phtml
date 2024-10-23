@@ -757,7 +757,7 @@ fieldset{  background:none;}
 			 dojo.byId("lb_admin_fee").innerHTML = "$ "+admin_fee;
 			 material_fee = dijit.byId("material_fee").get('value');
 			 material_fee = isNaN(material_fee)?0:material_fee;
-			 dojo.byId("lb_total_product_fee").innerHTML = "$ "+material_fee;
+			 dojo.byId("lb_total_product_fee").innerHTML = "$ "+material_fee + "+$ " + dijit.byId('remark').get('value');
 			 dojo.byId("lb_grand_total").innerHTML = "$ "+dijit.byId('grand_total').get('value');
 			 dojo.byId("lb_total_balance").innerHTML = "$ "+dijit.byId('total_balance').get('value');
 			 dojo.byId("lb_total_paid").innerHTML = " &nbsp;&nbsp;$ "+dijit.byId('total_received').get('value');

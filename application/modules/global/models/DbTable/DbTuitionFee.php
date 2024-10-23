@@ -38,7 +38,7 @@ class Global_Model_DbTable_DbTuitionFee extends Zend_Db_Table_Abstract
 	    }
 	    
 	    $dbp = new Application_Model_DbTable_DbGlobal();
-	    $where.=$dbp->getAccessPermission();
+	    //$where.=$dbp->getAccessPermission();
 	    
 	    $order=" GROUP BY t.branch_id,t.from_academic,t.to_academic,t.generation,t.time ORDER BY t.id DESC  ";
 	    

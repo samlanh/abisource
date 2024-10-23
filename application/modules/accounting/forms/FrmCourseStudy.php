@@ -276,7 +276,7 @@ Class Accounting_Form_FrmCourseStudy extends Zend_Dojo_Form {
 				'dojoType'=>'dijit.form.NumberTextBox',
 				'required'=>'true','class'=>'fullside',
 				'onkeyup'=>'getDisccount();getTotale();netTotal();',
-				//'readOnly'=>'true'
+				'readOnly'=>'true'
 				));
 
 		$_disc = new Zend_Dojo_Form_Element_NumberTextBox('discount');
