@@ -1555,8 +1555,6 @@ class Allreport_Model_DbTable_DbRptPaymentList extends Zend_Db_Table_Abstract
 					sp.`receipt_number`,
 					(select en_name from rms_dept where dept_id = st.`degree` limit 1) as degree,
 					(select major_enname from rms_major where major_id =  sp.`grade` limit 1) as grade,
-					
-					(select room_name from rms_room where rms_room.room_id = sp.`room_id` limit 1) as room,
 					sp.`time`,
 					
 					sp.`tuition_fee`,

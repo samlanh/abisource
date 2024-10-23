@@ -1,7 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	$frm =  $this->form_search;
-	//print_r($this->rs[0]);
 ?>	
 <title><?php echo $tr->translate('Daily Income English Fulltime Fee');?></title>
 
@@ -165,7 +164,6 @@ tr.row_control {
 						if($stu_name == ""){
 							$stu_name = $rs['stu_khname'];
 						}
-						//$study_material = $rs['grand_total_payment'] - ($rs['total_payment'] + $rs['admin_fee'] + $rs['other_fee']);
 				?>
 						
  					<tr id="row" align="center" class="hover" <?php if($rs['is_void']==1){echo "style='color:red;'";}?>>
@@ -178,12 +176,6 @@ tr.row_control {
 						<td class="padd"><?php echo $rs['sex'];?></td>
 						<td class="padd"><?php echo $rs['grade'];?></td>
 						<td class="padd"><?php echo $rs['time'];?></td>						
-						
-					<?php /*?>	
-						
-						<td class="padd"><?php if($rs['is_new']==1 AND $stu_id!=$rs['student_id']){echo "Yes";$amont_new_student = $amont_new_student + 1;}?></td>
-						<td class="padd"><?php if($rs['is_new']==0 AND $stu_id!=$rs['student_id']){echo "Yes";$amont_old_student = $amont_old_student + 1;}?></td>
-					<?php */?>	
 						
 						<td align="right" class="padd"><?php echo "$ ".$rs['tuition_fee'];?></td>
 						<td class="padd">
@@ -219,8 +211,6 @@ tr.row_control {
 						if($rs['is_void']==0){
 							$stu_id=$rs['student_id'];
 						
-							//$total_study_fee = $total_study_fee + $rs['tuition_fee_after_discount'];
-							
 							$total_admin_fee = $total_admin_fee + $rs['admin_fee'];
 							
 							$total_study_material_fee = $total_study_material_fee + $rs['material_fee'];
