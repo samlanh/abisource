@@ -12,12 +12,7 @@
 		    	<td><?php echo $frm->getElement('branch');?></td>
 		    	<td><?php echo $frm->getElement('user');?></td>
 		    	<td>
-				 	<select name="shift"  id="shift" dojoType="dijit.form.FilteringSelect" class="fullside" >
-				 		<option value="0" <?php if($this->search['shift']==0){echo 'selected="selected"';}?>><?php echo $tr->translate('Shift');?></option>
-				 		<option value="1" <?php if($this->search['shift']==1){echo 'selected="selected"';}?>>10:30am</option>
-				 		<option value="2" <?php if($this->search['shift']==2){echo 'selected="selected"';}?>>04:30pm</option>
-				 		<option value="3" <?php if($this->search['shift']==3){echo 'selected="selected"';}?>>07:00pm</option>
-				 	</select>
+				 	<?php echo $frm->getElement('shift');?>
 				</td>
 				<td><?php echo $frm->getElement("payment_method");?></td>
 		    	<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button> </td>
@@ -52,7 +47,9 @@
 			}
 			#row{ font-size:12px; height: 30px;border: 1px solid #000;font-family:'Times New Roman','Khmer OS Battambang';  }
 		</style>
-		
+		<?php 
+			$shift = array(1=>"10:30am",2=>"03:00pm",3=>"07:00pm");
+		?>
 		<table style="background:#fff;width:90%; margin: 0 auto;width: 100%;font-family:'Times New Roman','Khmer OS Battambang';">
 			<tr>
 				<td width="22%" align="center">
@@ -64,6 +61,7 @@
 					<?php if (!empty($this->search['start_date'])){?>
 					<br />From <?php echo date('d-m-Y',strtotime($this->search['start_date']));?> To <?php echo date('d-m-Y',strtotime($this->search['end_date']));?></strong><br />
 					<?php }?>
+					<?php if($this->search['shift']>0){echo "Time : ".$shift[$this->search['shift']]." , "."Shift : ".($this->search['shift']-1);}?>
 				</td>
 				<td width="22%" align="center" style="white-space: nowrap;">
 					<?php if(!empty($this->branch)){echo "Branch : ".$this->branch."</br>";}?>

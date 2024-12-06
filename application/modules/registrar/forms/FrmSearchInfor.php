@@ -475,6 +475,19 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form
 		$suspend_type->setMultiOptions($suspend_typeOpt);
 		$suspend_type->setValue($request->getParam("suspend_type"));
 		
+		$shift = new Zend_Dojo_Form_Element_FilteringSelect('shift');
+		$shift->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'required'=>'true','class'=>'fullside',
+		));
+		$shift_opt = array(
+				0=>$this->tr->translate("Shift"),
+				2=>$this->tr->translate("ម៉ោង 03:00 pm"),
+				3=>$this->tr->translate("ម៉ោង 07:00 pm"),
+		);
+		$shift->setMultiOptions($shift_opt);
+		$shift->setValue($request->getParam("shift"));
+		
 		
 		$_payment_method = new Zend_Dojo_Form_Element_FilteringSelect('payment_method');
 		$_payment_method->setAttribs(array('dojoType'=>$this->filter,
@@ -494,8 +507,8 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form
 		$this->addElements(array($cus_name,$from_receipt,$to_receipt,$lunch_service,$transport_service,$_degree_ft,$_degree_kh_ft,$_degree_en_ft,$_grade_en_ft,$_grade_kh_ft,$_room,$_branch,$_degree_all,$service_product,$start_date,$user,$end_date,$sess_gep,$_title,$_degree_gep,$generation,$_session,$_time,$_grade_all,$_grade_ft,$_grade_kid,
 				$_status,$_grade_gep,$service,$pay_term,
 				$suspend_type,
-				$_payment_method
-				
+				$_payment_method,
+				$shift
 				));
 		return $this;
 	} 

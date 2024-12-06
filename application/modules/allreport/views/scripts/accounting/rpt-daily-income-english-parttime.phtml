@@ -2,7 +2,7 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	$frm =  $this->form_search;
 ?>	
-<title><?php echo $tr->translate('Daily Income Part Time Fee)');?></title>
+<title><?php echo $tr->translate('Daily Income Part Time Fee');?></title>
 <form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-daily-income-english-parttime')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 	<table width="100%">
 	    <tr>
@@ -15,12 +15,7 @@
 	    </tr>
 	    <tr>	
 	    	<td>
-			 	<select name="shift"  id="shift" dojoType="dijit.form.FilteringSelect" class="fullside" >
-			 		<option value="0" <?php if($this->search['shift']==0){echo 'selected="selected"';}?>><?php echo $tr->translate("Shift");?></option>
-			 		<option value="1" <?php if($this->search['shift']==1){echo 'selected="selected"';}?>>10:30am</option>
-			 		<option value="2" <?php if($this->search['shift']==2){echo 'selected="selected"';}?>>04:30pm</option>
-			 		<option value="3" <?php if($this->search['shift']==3){echo 'selected="selected"';}?>>07:00pm</option>
-			 	</select>
+			 	<?php echo $frm->getElement('shift');?>
 			</td>
 	    	<td> <?php echo $frm->getElement("start_date");?></td>
 	   	  	<td> <?php echo $frm->getElement("end_date");?></td>
@@ -91,7 +86,7 @@ tr.row_control {
 			</style>
 
 		<?php 
-			$shift = array(1=>"10:30am",2=>"04:30pm",3=>"07:00pm");
+			$shift = array(1=>"10:30am",2=>"03:00pm",3=>"07:00pm");
 		?>
 
 			<table style="background:#fff;width:90%; margin: 0 auto;width: 100%;font-family:'Times New Roman','Khmer OS Battambang';">
@@ -104,7 +99,7 @@ tr.row_control {
 						<?php if (!empty($this->search["start_date"])){?>
 						<strong style="font-family: 'Times New Roman','Khmer OS Battambang';color:#000; font-size: 13px;">For Date <?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> to <?php echo date("d-M-Y",strtotime($this->search["end_date"]));?></strong> <br />   
 						<?php }?>
-						<?php if($this->search['shift']>0){echo "Time : ".$shift[$this->search['shift']]." , "."Shift : ".$this->search['shift'];}?>
+						<?php if($this->search['shift']>0){echo "Time : ".$shift[$this->search['shift']]." , "."Shift : ".($this->search['shift']-1);}?>
 					</td>
 					<td align="center" width="22%" style="white-space: nowrap;" >
 						<?php if($this->search['branch']>0 && !empty($this->rs)){echo "Branch : ".$this->rs[0]['branch_name']."<br>";}?>

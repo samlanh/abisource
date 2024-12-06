@@ -21,12 +21,7 @@
 		 <td> <?php echo $frm->getElement("degree_all");?></td>
 		 <td> <?php echo $frm->getElement("grade_all");?></td>
 		 <td>
-		 	<select name="shift"  id="shift" dojoType="dijit.form.FilteringSelect" class="fullside" >
-		 		<option value="0" <?php if($this->search['shift']==0){echo 'selected="selected"';}?>><?php echo $tr->translate("Shift");?></option>
-		 		<option value="1" <?php if($this->search['shift']==1){echo 'selected="selected"';}?>>10:30</option>
-		 		<option value="2" <?php if($this->search['shift']==2){echo 'selected="selected"';}?>>16:30</option>
-		 		<option value="3" <?php if($this->search['shift']==3){echo 'selected="selected"';}?>>19:00</option>
-		 	</select>
+		 	<?php echo $frm->getElement('shift');?>
 		 </td>	
 		 
 		 <td> <button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
@@ -37,6 +32,9 @@
 <style>
 .hover:hover{ background: #ddd;}
 </style>
+		<?php 
+			$shift = array(1=>"10:30am",2=>"03:00pm",3=>"07:00pm");
+		?>
 <div style="border: 1px dotted #000;background: #fff; margin: 0 auto;min-height: 27cm;">
 		<div id="divPrint"  >
 			<table style="background:#fff; margin: 0 auto; width: 100%; padding: 1cm;font-family: 'Hanuman';">
@@ -47,6 +45,7 @@
 					<td width="60%" align="center">
 						<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><u><?php echo $tr->translate("របាយការណ៍បានបង់ប្រាក់របស់សិស្ស"); ?></u></strong><br />
 						<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 13px;font-family:'Khmer MEF2';">For Date <?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> to <?php echo date("d-M-Y",strtotime($this->search["end_date"]));?></strong><br />
+						<?php if($this->search['shift']>0){echo "Time : ".$shift[$this->search['shift']]." , "."Shift : ".($this->search['shift']-1);}?>
 					</td>
 					<td align="right" width="20%">&nbsp;</td>
 				</tr>
